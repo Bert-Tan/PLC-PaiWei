@@ -3,5 +3,5 @@
 
   session_start();
   session_destroy();
-  header( "location: " . URL_ROOT . "./admin/index.php" );
+  header( "location: " . URL_ROOT . "/admin/index.php" );
 ?>
