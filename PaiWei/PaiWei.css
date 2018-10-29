@@ -1,0 +1,77 @@
+.engClass {
+	font-size: 0.8em;
+}
+
+#myMenuTbl {
+	table-layout: fixed;
+}
+
+.pwTbl:hover {
+	background-color: #009900;
+	color: yellow;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+#myDataTitle {
+	margin-top: 10vh;
+	text-align: center;
+	letter-spacing: 20px;
+}
+
+/**********************************************************
+ *			Data Table Styles																	*
+ **********************************************************/
+
+#myHdrWrapper, #myDataWrapper, #myDataFooter {
+	width: 100%;
+}
+
+#myDataWrapper {
+	overflow-y: auto;
+	height: 75vh;
+}
+
+#myDataHdr, #myData, #myDataFooter { /* used as Table IDs */
+	width: 100%;
+	border-collapse: collapse;
+	border: none;
+}
+
+#myDataHdr th, #myData td, #myDataFooter th {
+	border: 1px solid silver;
+	margin: 0;
+	padding: 2px 5px;
+	height: 22px;
+	line-height: 1.2em;
+	vertical-align: middle;
+}
+
+.oprCol {
+  text-align: center;
+}
+
+input {
+  font-size: 1.0em;
+}
+
+input[type=button], input[type=submit] {
+  background-color: aqua;
+  text-align: center;
+  display: inline-block;
+  border: 1px solid blue;
+  border-radius: 3px;
+}
+
+td > span {
+	display: block;
+}
+
+td > span[contenteditable=true] {
+	background-color: #ffffcc;
+}
+
+
+
+
+
