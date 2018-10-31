@@ -21,8 +21,6 @@
 	$_rpt = array();
 	$_totCount = 0;
 	$_blnkCount = 0;
-	$_retreatDate = "2019-03-31"; // Can be read from the DB
-	$_retreatDateMinus1Yr = date("Y-m-d", strtotime( $_retreatDate . " -1 year" ) );
 	
 	function removeBOM( $str="" ) { 
 	  if(substr($str, 0, 3) == pack("C*", 0xef,0xbb,0xbf)) { 
@@ -135,12 +133,14 @@
 		for ( $i = 0; $i < sizeof( $_tupFldVs ); $i++ ) {
 			$_attrN = trim($_tupFldNs[$i]);
 			$_attrV = trim($_tupFldVs[$i]);
-			if ( ( $_attrN == 'deceasedDate' ) && !chkDeceasedDate( $_retreatDate, $_attrV ) ) {
+			if ( $_attrN == 'deceasedDate' && !chkDate( $_attrV ) ) {
 				$_errCount++;
-				$_errRec[] = __FUNCTION__ . "() Line " . __LINE__ . ":\tError on Record {$_totCount}; Deceased Date must be after {$_retreatDateMinus1Yr}!";
+				$_errRec[] = __FUNCTION__ . "() Line " . __LINE__
+								 . ":\tError on Record {$_totCount}; Deceased Date must be a valid date between
+								 . \"{$_SESSION[ 'pwPlqDate' ]}\" and \"{$_SESSION[ 'rtrtDate' ]}\"!";
 				$_attrErr = true;
-				break;
-			}
+				break;				
+			} // attribute is deceasedDate
 			$_tupAttrNVs[ $_attrN ] = $_attrV; // this particular attribute's (Name, Value)
 		} // formulate tuple attribute's (Name, Value) pairs in associative array format
 		if ( $_attrErr ) {

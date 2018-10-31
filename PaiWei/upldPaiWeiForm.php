@@ -80,7 +80,7 @@ input[type=submit] {
 				<li>每一個資料字段本身必須是一行連續的文字，不可再有換行;</li>
 				<li>若資料字段本身中仍需有標點，則字段本身必須用雙引號 ( “ ) 將其囊括；<br/>如 “示範，字段一“，“示範，字段二“。</li>
 			</ol>
-			最好的辦法是 <a href="./Templates/pwTemplate.xlsx" class="soon"><b>下載此樣式檔案</b></a>，並參考
+			最好的辦法是 <a href="./Templates/pwTemplate.xlsx"><b>下載此樣式檔案</b></a>，並參考
 			<a href="./Templates/pwTemplate.xlsx" class="soon"><b>用戶指南</b></a>，然後用微軟的 EXCEL 來書寫牌位，存檔，
 			再上載資料檔案即可。謝謝！
 		</div><br/>
@@ -130,7 +130,7 @@ input[type=submit] {
 				<li>A field data must be enclosed by double-quotes (i.e., " ) if it contains other punctuations.
 					For example, "field 1 text 1; field 1, text 2".</li>
 			</ol>
-			The best approach is to <a href="./Templates/pwTemplate.xlsx" class="soon"><b>download this template</b></a>, refer to
+			The best approach is to <a href="./Templates/pwTemplate.xlsx"><b>download this template</b></a>, refer to
 			the <a href="./Templates/pwTemplate.xlsx" class="soon"><b>User Guide</b></a>, to use MS EXCEL to compile and generate
 			the CSV files，and then upload them. Thank you.
 		</div><br/>

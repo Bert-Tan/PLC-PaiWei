@@ -12,6 +12,7 @@ var _dbInfo = {}, _ajaxData = {};
 var _tblName = null, _tblSize = 0;
 var _pilotDataRow = null;	// to be used for adding rows
 var _pwPlqDate = null;
+var _rtrtDate = null;
 
 var _delBtns = null;
 var _editBtns = null;
@@ -47,6 +48,45 @@ function readSessParam() {
 	return true;
 } // readSessParam()
 
+function leapYear( yr ) {
+	return( ( yr % 100 === 0 ) ? ( yr % 400 === 0 ) : ( yr % 4 === 0 ) );
+} // function leapYear()
+
+function chkDate ( dateString ) { // in YYYY-MM-DD format
+	var d = dateString.split( '-' ); // d[0] => YYYY, d[1] => MM, d[2] = DD
+	var dd = 0;
+	var rtD = new Date( _rtrtDate );
+	var plqD = new Date( _pwPlqDate );
+	var pwD = new Date( dateString );
+	var rtYr = rtD.getFullYear();
+	
+	if ( (d[0] != rtYr) && ( d[0] != ( rtYr-1 ) ) ) return false;
+	
+	switch ( d[1] ) {
+		case '02':
+			var dd = leapYear( d[0] ) ? 29 : 28;
+			break;
+		case '01':
+		case '03':
+		case '05':
+		case '07':
+		case '08':
+		case '10':
+		case '12':
+			dd = 31;
+			break;
+		case '04':
+		case '06':
+		case '09':
+		case '11':
+			dd = 30;
+			break;
+		default:
+			return false;
+	} // switch on MM
+	return ( ( ( 1 <= d[2] ) && ( d[2] <= dd ) ) && ( ( plqD <= pwD ) && ( pwD < rtD ) ) );
+} // function chkDate()
+
 function chgEdit2Upd ( editBtn ) {
 	var updBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "更新" : "Update";
 	editBtn.unbind(); // unbind myself from the Edit Button Handler
@@ -70,7 +110,7 @@ function isJSON( str ) {
     return true;
 } // isJSON()
 
-function loadTblData( tblName, pgNbr, numRec, sessUsr, /* dataOnly */ ) {
+function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter is eliminated */
 	// before introducing page-by-page surfing, the dataonly parameter isn't really needed
 	var dataArea = $(".dataArea");
 	var tblHdrWrapper =	'<div id="myHdrWrapper"></div>';
@@ -131,7 +171,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr, /* dataOnly */ ) {
 		}, // End of SUCCESS Handler
 		
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 133\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 174\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler
 	}); // ajax call	
 } // loadTblData()
@@ -174,7 +214,7 @@ function myPaiWeiUpLoad ( e ) {
 			return;
     }, // End of Success Handler 
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 176\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 217\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler		
 	}); // AJAX Call
 } // myPaiWeiUpLoad()
@@ -301,7 +341,7 @@ function lookupBtnHdlr() {
 			} // for loop
 		}, // success handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 295\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 344\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
 	}); // AJAX CALL
 } // lookupBtnHdlr() 
@@ -404,7 +444,7 @@ function insBtnHdlr() {
 			} // for loop
 		}, // End of Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 392\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 447\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
 	}); // AJAX CALL
 } // insBtnHdlr()
@@ -450,7 +490,7 @@ function delBtnHdlr() {
 			} // for loop
 		}, // End of Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 438\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 493\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler	
 	});	// AJAX Call
 } // delBtnHdlr()
@@ -530,7 +570,7 @@ function updBtnHdlr() {
 			thisRow.find("span").attr( "contenteditable", "false" );
 			thisRow.find("span").unbind();
 			chgUpd2Edit( updBtn );
-			alert( "Line 518\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 573\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler					
 	}); // AJAX Call
 } // updBtnHdlr()
@@ -542,19 +582,12 @@ function dataChgHdlr() {
 	var newV = $(this).text().trim().replace( /<br>$/gm, '');
 	var oldV = $(this).attr("data-oldV").trim();
 	var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "Date Format: YYYY-MM-DD";
-	var errText = ( _sessLang == SESS_LANG_CHN ) ? "往生日期必須晚於" + _pwPlqDate
-																							 : "Deceased Date must be after " + _pwPlqDate;
+	var errText = ( _sessLang == SESS_LANG_CHN ) ? 
+								"往生日期必須屆於 " + _pwPlqDate + " 及 " + _rtrtDate + " 之間。"  
+							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format";
 
 	if ( ( _tblName == 'DaPaiWei' ) && ( $(this).attr("data-fldN") == 'deceasedDate' ) ) {
-		x = newV.match( /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/ );
-		if (x == null) {
-			alert( alertText );
-			$(this).html( oldV );
-			return;
-		}
-		var dx = new Date( newV );
-		var dPlq = new Date( _pwPlqDate );
-		if ( dx < dPlq ) {
+		if ( !chkDate( newV ) ) {
 			alert( errText );
 			$(this).html( oldV );
 			return;			
@@ -600,7 +633,7 @@ $(document).ready(function() {
 			url: "./ajax-pwDB.php",
 			method: 'POST',
 			data: _ajaxData,
-			success: function( rsp ) { // alert ( rsp ); // Success Handler 
+			success: function( rsp ) { // Success Handler
 				var rspV = JSON.parse ( rsp );
 				for ( var X in rspV ) {
 					switch ( X ) {
@@ -614,6 +647,7 @@ $(document).ready(function() {
 							return;
 						case 'pwPlqDate':
 							_pwPlqDate = rspV[ X ]; // alert ( _pwPlqDate );
+							_rtrtDate = rspV[ 'rtrtDate' ];
 							$("th.pwTbl").on( 'click', pwTblHdlr ); // bind Pai Wei menu items to the click handler
 							$("#upld").on( 'click', upldHdlr ); // bind upload anchor to its handler
 							break;					
@@ -629,11 +663,11 @@ $(document).ready(function() {
 				} // for loop
 			}, // Success Handler
 			error: function (jqXHR, textStatus, errorThrown) {
-				alert( "Line 438\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+				alert( "Line 666\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 			} // End of ERROR Handler							
 		}); // AJAX call			
-//		$(".future").on( 'click', futureAlert );
-//		$(".soon").on( 'click', soonAlert );
+		$(".future").on( 'click', futureAlert );
+		$(".soon").on( 'click', soonAlert );
 	} // readSessParam()
 
 })

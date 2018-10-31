@@ -79,13 +79,14 @@ function _dbName_2_htmlName ( $_dbName ) {
 
 function readPwParam( $_dbInfo ) {
 	/*
-	 * Ajax Receiver switch on 'URL', 'inActive', 'pwPlqDate', 'errCount'
+	 * Ajax Receiver switches on 'URL', 'notActive', 'pwPlqDate', 'errCount'
 	 */
 	global $_db, $_SESSION, $_errCount, $_errRec;
 	$rpt = array();
 	
 	if ( isset($_SESSION[ 'pwPlqDate' ]) ) {
 		$rpt[ 'pwPlqDate' ] = $_SESSION[ 'pwPlqDate' ];
+		$rpt[ 'rtrtDate' ] = $_SESSION[ 'rtrtDate' ];
 		return $rpt;
 	}
 	$tblName = $_dbInfo[ 'tblName' ];
@@ -105,8 +106,10 @@ function readPwParam( $_dbInfo ) {
 			return $rpt;
 		case 1:
 			$rtrtDate = $rslt->fetch_all(MYSQLI_ASSOC)[0][ 'rtrtDate' ];
+			$rpt[ 'rtrtDate' ] = date( "Y-m-d", strtotime( $rtrtDate ) );
 			$rpt[ 'pwPlqDate' ] = date( "Y-m-d", strtotime( $rtrtDate . " -1 year" ) );
 			$_SESSION[ 'pwPlqDate' ] = $rpt[ 'pwPlqDate' ];
+			$_SESSION[ 'rtrtDate' ] = $rtrtDate;
 			return $rpt;
 		default:
 			$_errCount++;
