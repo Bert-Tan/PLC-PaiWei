@@ -88,7 +88,7 @@ function chkDate ( dateString ) { // in YYYY-MM-DD format
 } // function chkDate()
 
 function chgEdit2Upd ( editBtn ) {
-	var updBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "更新" : "Update";
+	var updBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "保存更動" : "Update";
 	editBtn.unbind(); // unbind myself from the Edit Button Handler
 	editBtn.attr( "value", updBtnVal ); // change myself to become an 'Update' button
 	editBtn.on( 'click', updBtnHdlr );	
@@ -250,7 +250,7 @@ function addRowBtnHdlr() {
 	var newRowDataCells = newRow.find("span");
 	var lastTd = newRow.find("td:last");
 	var cellText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入牌位資料" : "Please Enter Name Plaque Text";
-	var	dateText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "Please Enter Deceased Date";
+	var	dateText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "Please Enter YYYY-MM-DD";
 	
 	$(".errMsg").remove();
 	if ( ( dirtyCells > 0 ) && ( !confirm( 'Unsaved Data will be LOST!!\n' ) ) ) return;
@@ -258,12 +258,12 @@ function addRowBtnHdlr() {
 	newRow.attr( "data-keyN", _pilotDataRow.attr("data-keyN") ); // copy the Key Name
 	newRow.attr( "id", '' ) ; // no tuple Key value 
 	newRowDataCells.text( cellText );
-	newRowDataCells.attr( { 'contenteditable' : 'true', 'data-oldV' : cellText } );
+	newRowDataCells.attr( { 'contenteditable' : 'true', 'data-oldV' : '', 'data-pmptV' : '' } );
 	if ( _tblName == 'DaPaiWei' ) {
 		newRow.find("span[data-fldN='deceasedDate']").text( dateText );
-		newRow.find("span[data-fldN='deceasedDate']").attr( 'data-oldV', dateText );
 	}
 	newRowDataCells.on( 'blur', dataChgHdlr ); // bind the <td><span> to data change handler
+	newRowDataCells.on( 'focus', onFocusHdlr ); // bind the <td><span> to on 'focus' handler
 	lastTd.html( insBtn ); // place the 'Insert' button
 	lastTd.find("input[type=button]").on( 'click', insBtnHdlr ); // bind to Insert Button click handler
 	
@@ -314,6 +314,7 @@ function lookupBtnHdlr() {
 						location.replace( rspV[ X ] );
 						return;
 					case 'myData': // The Server returns a data table
+						$("#myDataWrapper").find("*").unbind();
 						$("#myDataWrapper").html( rspV[ X ] );
 						_pilotDataRow = $("#myData tbody > tr:first").clone();
 						break;
@@ -358,7 +359,8 @@ function srchBtnHdlr() {
 	var newRowDataCells = newRow.find("span");
 	var lastTd = newRow.find("td:last");
 	var cellText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入查詢資料" : "Please Enter Look Up Text";
-
+	var	dateText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "Please Enter YYYY-MM-DD";
+	
 	$(".errMsg").remove();
 	if ( _sessMode == SESS_MODE_SRCH ) {
 		var alert_txt = ( _sessLang == SESS_LANG_CHN ) ? "已經在搜索狀態!" : "Already in Search Mode!";
@@ -370,8 +372,12 @@ function srchBtnHdlr() {
 	newRow.attr( "data-keyN", _pilotDataRow.attr("data-keyN") ); // copy the Key Name
 	newRow.attr( "id", '' ) ; // no tuple Key value 
 	newRowDataCells.text( cellText );
-	newRowDataCells.attr( { 'contenteditable' : 'true', 'data-oldV' : cellText } );
+	newRowDataCells.attr( { 'contenteditable' : 'true', 'data-oldV' : '', 'data-pmptV' : '' } );
+	if ( _tblName == 'DaPaiWei' ) {
+		newRow.find("span[data-fldN='deceasedDate']").text( dateText );
+	}
 	newRowDataCells.on( 'blur', dataChgHdlr ); // bind the <td><span> to data change handler
+	newRowDataCells.on( 'focus', onFocusHdlr ); // bind the <td><span> to on 'focus' handler
 	lastTd.html( lookupBtn ); // place the 'Lookup' button
 	lastTd.find("input[type=button]").on( 'click', lookupBtnHdlr ); // bind to Lookup Button click handler
 	tbody.find("*").unbind();	
@@ -424,6 +430,7 @@ function insBtnHdlr() {
 					case 'insSUCCESS': // rspV[X] holds the tupID 
 						thisRow.attr("data-keyN", 'ID' ); thisRow.attr( 'id', rspV[ X ] );
 						thisRow.find("span").attr( "contenteditable", "false" ); // disable edit
+						thisRow.find("span").unbind( 'focus' );
 						cellsChanged.each(function(i) {
 							$(this).attr( "data-oldV", $(this).text() ); // remember the current value
 							$(this).attr( "data-changed", "false" );
@@ -582,29 +589,27 @@ function dataChgHdlr() {	// on 'blur' handler
 	var newV = $(this).text().trim().replace( /<br>$/gm, '');
 	var oldV = $(this).attr("data-oldV").trim();
 	var emptyText = ( _sessLang == SESS_LANG_CHN ) ? "牌位資料不應空白！" : "Data field shall not be empty!";
-	var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "Date Format: YYYY-MM-DD";
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? 
 								"往生日期必須屆於 " + _pwPlqDate + " 及 " + _rtrtDate + " 之間。"  
 							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format";
 
 	if ( newV.length == 0 ) {
-		alert( emptyText );
-		if ( oldV.length > 0 ) {
+		if ( oldV.length > 0 ) { // existing data editing
+			alert( emptyText );
 			$(this).text( oldV );
-			return;
+		} else {	// new row data entry
+			$(this).text( $(this).attr("data-pmptV").trim() );
 		}
-		// new row data entry
-		var pmptV = $(this).attr("data-pmptV");
-		if ( typeof pmptV !== undefined && pmptV !== false ) {
-			$(this).text( pmptV );
-			return;
-		}
-		// Something went wrong
+		return;
 	}
 	if ( $(this).attr("data-fldN") == 'deceasedDate' ) {
 		if ( !chkDate( newV ) ) {
 			alert( errText );
-			$(this).text( oldV );
+			if ( oldV.length > 0 ) {
+				$(this).text( oldV );
+			} else {
+				$(this).text( $(this).attr( 'data-pmptV' ).trim() );
+			}
 			return;			
 		}
 	} // DaPaiWei and checking deceased Date
@@ -614,6 +619,17 @@ function dataChgHdlr() {	// on 'blur' handler
 		$(this).attr("data-changed", "true");
 	}	
 } // dataChgHdlr()
+
+/********************************************************************************
+ * Event Handler - When a data cell gets focused																*
+ ********************************************************************************/
+function onFocusHdlr() {	// on 'focus' handler
+	var newV = $(this).text().trim().replace( /<br>$/gm, '');
+
+	$(this).attr( 'data-pmptV', newV ); //
+	$(this).text( '' ); // blank out the field for input
+	return;
+} // function onFocusHdlr()
 
 /**********************************************************
  * Binders																								*
