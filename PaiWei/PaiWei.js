@@ -370,7 +370,7 @@ function srchBtnHdlr() {
 	newRow.attr( "data-keyN", _pilotDataRow.attr("data-keyN") ); // copy the Key Name
 	newRow.attr( "id", '' ) ; // no tuple Key value 
 	newRowDataCells.text( cellText );
-	newRowDataCells.attr( { 'contenteditable' : 'true', 'data-oldV' : '' } );
+	newRowDataCells.attr( { 'contenteditable' : 'true', 'data-oldV' : cellText } );
 	newRowDataCells.on( 'blur', dataChgHdlr ); // bind the <td><span> to data change handler
 	lastTd.html( lookupBtn ); // place the 'Lookup' button
 	lastTd.find("input[type=button]").on( 'click', lookupBtnHdlr ); // bind to Lookup Button click handler
@@ -578,23 +578,38 @@ function updBtnHdlr() {
 /********************************************************************************
  * Event Handler - When a cell data is changed																	*
  ********************************************************************************/
-function dataChgHdlr() {
+function dataChgHdlr() {	// on 'blur' handler
 	var newV = $(this).text().trim().replace( /<br>$/gm, '');
 	var oldV = $(this).attr("data-oldV").trim();
+	var emptyText = ( _sessLang == SESS_LANG_CHN ) ? "牌位資料不應空白！" : "Data field shall not be empty!";
 	var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "Date Format: YYYY-MM-DD";
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? 
 								"往生日期必須屆於 " + _pwPlqDate + " 及 " + _rtrtDate + " 之間。"  
 							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format";
 
-	if ( ( _tblName == 'DaPaiWei' ) && ( $(this).attr("data-fldN") == 'deceasedDate' ) ) {
+	if ( newV.length == 0 ) {
+		alert( emptyText );
+		if ( oldV.length > 0 ) {
+			$(this).text( oldV );
+			return;
+		}
+		// new row data entry
+		var pmptV = $(this).attr("data-pmptV");
+		if ( typeof pmptV !== undefined && pmptV !== false ) {
+			$(this).text( pmptV );
+			return;
+		}
+		// Something went wrong
+	}
+	if ( $(this).attr("data-fldN") == 'deceasedDate' ) {
 		if ( !chkDate( newV ) ) {
 			alert( errText );
-			$(this).html( oldV );
+			$(this).text( oldV );
 			return;			
 		}
 	} // DaPaiWei and checking deceased Date
 
-	$(this).html( newV );
+	$(this).text( newV );
 	if ( newV != oldV ) {
 		$(this).attr("data-changed", "true");
 	}	
