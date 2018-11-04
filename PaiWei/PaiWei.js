@@ -18,6 +18,7 @@ var _delBtns = null;
 var _editBtns = null;
 var _addRowBtn = null;
 var _srchBtn = null;
+var _alertUnsaved = null;
 
 /**********************************************************
  * Support functions																			*
@@ -185,7 +186,7 @@ function pwTblHdlr() {
 	$(".errMsg").remove();
 	_tblName = $(this).attr("data-tbl");	
 /*	if ( $(this).hasClass("active") ) return; */
-	if ( ( dirtyCells > 0 ) && ( !confirm( 'Unsaved Data will be LOST!!\n' ) ) ) return;
+	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
 	
 	$(".pwTbl").removeClass("active");
 	$(this).addClass("active");
@@ -253,7 +254,7 @@ function addRowBtnHdlr() {
 	var	dateText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "Please Enter YYYY-MM-DD";
 	
 	$(".errMsg").remove();
-	if ( ( dirtyCells > 0 ) && ( !confirm( 'Unsaved Data will be LOST!!\n' ) ) ) return;
+	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
 	
 	newRow.attr( "data-keyN", _pilotDataRow.attr("data-keyN") ); // copy the Key Name
 	newRow.attr( "id", '' ) ; // no tuple Key value 
@@ -367,7 +368,7 @@ function srchBtnHdlr() {
 		alert( alert_txt );
 		return;
 	}
-	if ( ( dirtyCells > 0 ) && ( !confirm( 'Unsaved Data will be LOST!!\n' ) ) ) return;
+	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
 
 	newRow.attr( "data-keyN", _pilotDataRow.attr("data-keyN") ); // copy the Key Name
 	newRow.attr( "id", '' ) ; // no tuple Key value 
@@ -461,7 +462,11 @@ function insBtnHdlr() {
  **********************************************************/
 function delBtnHdlr() {
 	var tblFlds = {};
-
+	var delAlert = ( _sessLang == SESS_LANG_CHN ) ? '刪除的資料將無法恢復，請確認！'
+																								: 'Deleted row cannot be undoen, please confirm！';
+																								
+	if ( !confirm( delAlert ) ) return;
+																							
 	_ajaxData = {}; _dbInfo = {};
 	thisRow = $(this).closest("tr");
 	tblFlds [ thisRow.attr("data-keyN") ] = thisRow.attr("id");
@@ -681,6 +686,8 @@ $(document).ready(function() {
 							_rtrtDate = rspV[ 'rtrtDate' ];
 							$("th.pwTbl").on( 'click', pwTblHdlr ); // bind Pai Wei menu items to the click handler
 							$("#upld").on( 'click', upldHdlr ); // bind upload anchor to its handler
+							_alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！'
+																														 : 'Unsaved Data will be LOST!';
 							break;					
 						case 'errCount':
 							x = rspV [ X ];
