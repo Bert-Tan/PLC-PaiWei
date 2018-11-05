@@ -54,38 +54,43 @@ function leapYear( yr ) {
 } // function leapYear()
 
 function chkDate ( dateString ) { // in YYYY-MM-DD format
-	var d = dateString.split( '-' ); // d[0] => YYYY, d[1] => MM, d[2] = DD
-	var dd = 0;
 	var rtD = new Date( _rtrtDate );
 	var plqD = new Date( _pwPlqDate );
-	var pwD = new Date( dateString );
 	var rtYr = rtD.getFullYear();
-	
-	if ( (d[0] != rtYr) && ( d[0] != ( rtYr-1 ) ) ) return false;
-	
-	switch ( d[1] ) {
-		case '02':
+	var patString = "^(" + (rtYr-1) + "|" + rtYr + ")-(0?[1-9]|1[0-2])-(0?[1-9]|[12]\\d|3[01])$";
+	var pattern = new RegExp( patString );
+
+	if ( !dateString.match( pattern ) ) return false;
+
+	var d = dateString.split( '-' ); // d[0] => YYYY, d[1] => MM, d[2] = DD
+	var dd = 0;
+	var pwD = new Date( d[0], d[1]-1, d[2] );
+
+	if ( ( Number(d[0]) != rtYr) && ( Number(d[0]) != ( rtYr-1 ) ) ) return false;
+
+	switch ( Number( d[1] ) ) {
+		case 2:
 			var dd = leapYear( d[0] ) ? 29 : 28;
 			break;
-		case '01':
-		case '03':
-		case '05':
-		case '07':
-		case '08':
-		case '10':
-		case '12':
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
 			dd = 31;
 			break;
-		case '04':
-		case '06':
-		case '09':
-		case '11':
+		case 4:
+		case 6:
+		case 9:
+		case 11:
 			dd = 30;
 			break;
 		default:
 			return false;
 	} // switch on MM
-	return ( ( ( 1 <= d[2] ) && ( d[2] <= dd ) ) && ( ( plqD <= pwD ) && ( pwD < rtD ) ) );
+	return ( ( ( 1 <= Number(d[2]) ) && ( Number(d[2]) <= dd ) ) && ( ( plqD <= pwD ) && ( pwD < rtD ) ) );
 } // function chkDate()
 
 function chgEdit2Upd ( editBtn ) {
@@ -595,15 +600,16 @@ function dataChgHdlr() {	// on 'blur' handler
 	var oldV = $(this).attr("data-oldV").trim();
 	var emptyText = ( _sessLang == SESS_LANG_CHN ) ? "牌位資料不應空白！" : "Data field shall not be empty!";
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? 
-								"往生日期必須屆於 " + _pwPlqDate + " 及 " + _rtrtDate + " 之間。"  
+								"往生日期（年-月-日）必須屆於 " + _pwPlqDate + "(含) 及 " + _rtrtDate + "(不含) 之間。"  
 							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format";
 
 	if ( newV.length == 0 ) {
 		if ( oldV.length > 0 ) { // existing data editing
 			alert( emptyText );
 			$(this).text( oldV );
-		} else {	// new row data entry
+		} else {	// new row data entry; user did not input anything
 			$(this).text( $(this).attr("data-pmptV").trim() );
+				$(this).attr( 'data-pmptV', '');
 		}
 		return;
 	}
@@ -612,8 +618,9 @@ function dataChgHdlr() {	// on 'blur' handler
 			alert( errText );
 			if ( oldV.length > 0 ) {
 				$(this).text( oldV );
-			} else {
+			} else {	// new row data entry; user did not input anything
 				$(this).text( $(this).attr( 'data-pmptV' ).trim() );
+				$(this).attr( 'data-pmptV', '');
 			}
 			return;			
 		}
@@ -630,8 +637,9 @@ function dataChgHdlr() {	// on 'blur' handler
  ********************************************************************************/
 function onFocusHdlr() {	// on 'focus' handler
 	var newV = $(this).text().trim().replace( /<br>$/gm, '');
-
-	$(this).attr( 'data-pmptV', newV ); //
+	var pmptV = $(this).attr("data-pmptV").trim().replace( /<br>$/gm, '');
+	if ( pmptV.length > 0 ) return; // Already done once; user has input data & comes back to it
+	$(this).attr( 'data-pmptV', newV ); // save it before blanking out
 	$(this).text( '' ); // blank out the field for input
 	return;
 } // function onFocusHdlr()
