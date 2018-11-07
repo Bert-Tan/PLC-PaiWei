@@ -1,1 +1,2 @@
-Options +FollowSymLinks
+Options +FollowSymLinks -Indexes
+
