@@ -3,8 +3,7 @@
  **********************************************************/
 var SESS_LANG_CHN = 1;	// These variables are used as CONSTANTS
 var SESS_MODE_EDIT = 0;
-var SESS_MODE_INS = 1;
-var SESS_MODE_SRCH = 2;
+var SESS_MODE_SRCH = 1;
 
 var _sessUsr = null, _sessPass = null, _sessType = null, _sessLang = null;
 var _sessMode = SESS_MODE_EDIT; // default
@@ -191,7 +190,7 @@ function pwTblHdlr() {
 
 	$(".errMsg").remove();
 	_tblName = $(this).attr("data-tbl");	
-/*	if ( $(this).hasClass("active") ) return; */
+
 	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
 	
 	$(".pwTbl").removeClass("active");
@@ -274,13 +273,13 @@ function addRowBtnHdlr() {
 	lastTd.html( insBtn ); // place the 'Insert' button
 	lastTd.find("input[type=button]").on( 'click', insBtnHdlr ); // bind to Insert Button click handler
 	
-	if ( _sessMode != SESS_MODE_INS ) {
+	if ( _sessMode == SESS_MODE_SRCH ) {
 		$("#myDataWrapper").find("*").unbind()
 		tbody.find("tr").remove(); // remove all data rows
 		$("#myDataFooter").remove(); // remove the footer
-		_sessMode = SESS_MODE_INS;
+		_sessMode = SESS_MODE_EDIT;
 	}
-	// tbody.find(".lookupBtn").closest("tr").remove();
+
 	tbody.append( newRow );
 } // addRowBtnHdlr()
 
@@ -288,6 +287,7 @@ function addRowBtnHdlr() {
  * Event Handler	- When the Lookup Button is clicked			*
  **********************************************************/
 function lookupBtnHdlr() {
+	var inputSrchData = ( _sessLang == SESS_LANG_CHN ) ? '請請輸入查詢資料！' : 'Please enter search pattern!';
 	var notFoundText = ( _sessLang == SESS_LANG_CHN ) ? '沒有找到所要找的牌位，請輸入或上載牌位資料。'
 																									: 'No record found! Please Input or Upload Data.';
 	var notFoundMSG = '<h1 class="centerMe errMsg">' + notFoundText + '</h1>';
@@ -296,7 +296,10 @@ function lookupBtnHdlr() {
 	var cellsChanged = thisRow.find("span[data-changed=true]");
 
 	_ajaxData = {}; _dbInfo = {};
-	if ( cellsChanged.length == 0 ) return;
+	if ( cellsChanged.length == 0 ) {
+		alert( inputSrchData );
+		return;
+	}
 	
 	cellsChanged.each(function(i) {
 		tblFlds [ $(this).attr("data-fldN") ] = $(this).text();
@@ -401,7 +404,7 @@ function insBtnHdlr() {
 	var insBtn = $(this);
 	var editBtnText = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
 	var delBtnText = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Delete';
-	var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入牌位資料" : "Please Enter Name Plaque Text";
+	var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入完整的牌位資料" : "Please enter complete plaque data";
 	var myEditBtns = '<input class="editBtn" type="button" value="' + editBtnText + '">&nbsp;&nbsp;' +
 									'<input class="delBtn" type="button" value="' + delBtnText + '">';
 	var thisRow = $(this).closest("tr");
