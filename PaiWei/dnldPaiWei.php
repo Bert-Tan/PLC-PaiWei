@@ -2,12 +2,13 @@
 	require_once("../pgConstants.php");
 	require_once("dbSetup.php");
 	require_once("PaiWei_DBfuncs.php");
-	
+
+	define ( 'BLANKDATA', "BLANK"); // filler for allowed blank field
+	$_blank = "%" . BLANKDATA . "%"; // regExp to blank out the blank data field		
 	$_tblName = $_POST [ 'dbTblName' ];
 	
 	$_tblFlds = getPaiWeiTblFlds( $_tblName ); // $_tblFlds[0] contains ID which is not needed
 
-//	if ( $_tblName != 'W001A_4' && $_tblName != 'DaPaiWei' ) {
 	switch ( $_tblName ) {
 		case 'W001A_4':
 			$_selFlds = "concat( ifnull($_tblFlds[1], ''), ' ', ifnull($_tblFlds[2], '') ) AS $_tblFlds[2], "
@@ -21,10 +22,6 @@
 			$_selFlds = implode( ', ', array_slice( $_tblFlds, 1 ) );
 			break;
 	} // switch on $_tblName
-//	} else {
-//		$_selFlds = "concat( ifnull($_tblFlds[1], ''), ' ', ifnull($_tblFlds[2], '') ) AS $_tblFlds[2], "
-//							. "concat( ifnull($_tblFlds[3], ''), ' ', ifnull($_tblFlds[4], '') ) AS $_tblFlds[4]  ";
-//	}
 
 	if ( $_POST[ 'dnldUsrName' ] == 'ALL' ) {
 		$_sql = "SELECT $_selFlds FROM {$_tblName} ORDER BY ID;";
@@ -46,6 +43,7 @@
 	fputs( $_FP, $_BOM ); // write the BOM character which is expected by the PaiWei printing SW
 	foreach ( $_Rows as $_Row ) { // write to the file line-by-line
 		$_Line = '"' . implode( "\"\t\"", $_Row ) . '"';
+		$_Line = preg_replace( $_blank, '', $_Line );
 		if ( --$_lineCount > 0 ) $_Line .= "\r\n";
 		fputs( $_FP, $_Line );
 	}

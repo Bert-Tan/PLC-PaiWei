@@ -21,6 +21,7 @@
 	$_rpt = array();
 	$_totCount = 0;
 	$_blnkCount = 0;
+	define ( 'BLANKDATA', "BLANK"); // filler for allowed blank field
 	
 	function removeBOM( $str="" ) { 
 	  if(substr($str, 0, 3) == pack("C*", 0xef,0xbb,0xbf)) { 
@@ -127,7 +128,8 @@
 		unset( $_tupAttrNVs ); $_tupAttrNVs = array(); // ( Name, Value) pairs in an associative array format
 		if ( !parseCSV_XLS( $line, $_tupFldVs ) ) {
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . "() Line " . __LINE__ . ":\tCSV Format Error on Record {$_totCount}; content:\t\"{$line}\"\n";
+			$_errRec[] = basename(__FILE__) . "() Line " . __LINE__
+								. ":\tCSV Format Error on Record {$_totCount}; content:\t\"{$line}\"\n";
 			continue; // skip the line
 		}
 		for ( $i = 0; $i < sizeof( $_tupFldVs ); $i++ ) {
@@ -135,12 +137,22 @@
 			$_attrV = trim($_tupFldVs[$i]);
 			if ( $_attrN == 'deceasedDate' && !chkDate( $_attrV ) ) {
 				$_errCount++;
-				$_errRec[] = __FUNCTION__ . "() Line " . __LINE__
+				$_errRec[] = basename(__FILE__) . "() Line " . __LINE__
 								 . ":\tError on Record {$_totCount}; Deceased Date must be a valid date between
 								 . \"{$_SESSION[ 'pwPlqDate' ]}\" and \"{$_SESSION[ 'rtrtDate' ]}\"!";
 				$_attrErr = true;
 				break;				
 			} // attribute is deceasedDate
+			if ( preg_match( "%^\s*$%", $_attrV ) == 1 ) { // Field value is empty
+				if ( $_attrN != 'W_Title' && $_attrN != 'R_Title' ) {
+					$_errCount++;
+					$_errRec[] = basename(__FILE__) . "() Line " . __LINE__
+										. ":\tError on Record {$_totCount}; incomplete data!";
+					$_attrErr = true; // no field can be empty except these two
+					break;
+				} 
+				$_attrV = BLANKDATA; // field is either W_Title or R_Title, for which blank is allowed
+			} // Field value is empty
 			$_tupAttrNVs[ $_attrN ] = $_attrV; // this particular attribute's (Name, Value)
 		} // formulate tuple attribute's (Name, Value) pairs in associative array format
 		if ( $_attrErr ) {

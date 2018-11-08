@@ -19,6 +19,7 @@ var _editBtns = null;
 var _addRowBtn = null;
 var _srchBtn = null;
 var _alertUnsaved = null;
+var _blankData = "BLANK"; // blank data filler for W_Title & R_Title fields; they can be blank
 
 /**********************************************************
  * Support functions																			*
@@ -338,9 +339,9 @@ function lookupBtnHdlr() {
 						break;
 					case 'errCount': 
 						var msgText = '';
-						rspV[ 'errRec' ].foreach( element => {
+						rspV[ 'errRec' ].forEach( function( element ) {
 							msgText += element;
-						} );
+						});
 						var errMSG = '<h1 class="centerMe errMsg">' + msgText + '</h1>';
 						$("#myDataWrapper").append( errMSG ); // reset to default					
 						break;
@@ -437,6 +438,7 @@ function insBtnHdlr() {
 						thisRow.attr("data-keyN", 'ID' ); thisRow.attr( 'id', rspV[ X ] );
 						thisRow.find("span").attr( "contenteditable", "false" ); // disable edit
 						thisRow.find("span").unbind( 'focus' );
+						thisRow.find("span").removeAttr('data-pmptV');
 						cellsChanged.each(function(i) {
 							$(this).attr( "data-oldV", $(this).text() ); // remember the current value
 							$(this).attr( "data-changed", "false" );
@@ -468,7 +470,7 @@ function insBtnHdlr() {
 function delBtnHdlr() {
 	var tblFlds = {};
 	var delAlert = ( _sessLang == SESS_LANG_CHN ) ? '刪除的資料將無法恢復，請確認！'
-																								: 'Deleted row cannot be undoen, please confirm！';
+																								: 'A deleted row cannot be undone, please confirm！';
 																								
 	if ( !confirm( delAlert ) ) return;
 																							
@@ -598,11 +600,17 @@ function updBtnHdlr() {
 function dataChgHdlr() {	// on 'blur' handler
 	var newV = $(this).text().trim().replace( /<br>$/gm, '');
 	var oldV = $(this).attr("data-oldV").trim();
-	var emptyText = ( _sessLang == SESS_LANG_CHN ) ? "牌位資料不應空白！" : "Data field shall not be empty!";
+	var emptyText = ( _sessLang == SESS_LANG_CHN ) ? "該項牌位資料不應空白！" : "This field shall not be empty!";
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? 
 								"往生日期（年-月-日）必須屆於 " + _pwPlqDate + "(含) 及 " + _rtrtDate + "(不含) 之間。"  
 							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format";
-
+	var fldN = $(this).attr("data-fldN");
+	
+	if ( newV.length == 0 && ( fldN == 'W_Title' || fldN == 'R_Title' ) ) { // Blank is allowed
+		$(this).text( _blankData ); // blank filler
+		newV = newV = $(this).text();
+	}
+	// Allowed blank fields have been taken care of - now the regular logic follows
 	if ( newV.length == 0 ) {
 		if ( oldV.length > 0 ) { // existing data editing
 			alert( emptyText );
@@ -613,7 +621,7 @@ function dataChgHdlr() {	// on 'blur' handler
 		}
 		return;
 	}
-	if ( $(this).attr("data-fldN") == 'deceasedDate' ) {
+	if ( fldN == 'deceasedDate' ) {
 		if ( !chkDate( newV ) ) {
 			alert( errText );
 			if ( oldV.length > 0 ) {

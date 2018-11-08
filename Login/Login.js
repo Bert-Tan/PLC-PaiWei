@@ -28,19 +28,22 @@
 			uNamePrompt = $("#uName").attr("data-oldV"); uNameV = $("#uName").val();
 			uEmailPrompt = $("#uEmail").attr("data-oldV"); uEmailV = $("#uEmail").val();
 			uPassPrompt = $("#uPass").attr("data-oldV"); uPassV = $("#uPass").val();
+			uNamePReg = new RegExp ( uNamePrompt ); uNameVReg = new RegExp( uNameV );
+			uEmailPReg = new RegExp ( uEmailPrompt ); uEmailVReg = new RegExp( uEmailV );
+			uPassPReg = new RegExp ( uPassPrompt ); uPassVReg = new RegExp( uPassV );
 
-			if	( uNamePrompt.includes ( uNameV ) || uNameV.includes ( uNamePrompt ) || uNameV.length == 0 )	{
+			if	( uNamePrompt.match ( uNameVReg ) || uNameV.match ( uNamePReg ) || uNameV.length == 0 )	{
 				// CANNOT be partial to each other
 				alert( uNamePrompt + "!");
 				return false;
 			}
-			if ( uPassPrompt.includes ( uPassV ) || uPassV.includes ( uPassPrompt ) || uPassV.length == 0 ) {
+			if ( uPassPrompt.match ( uPassVReg ) || uPassV.match ( uPassPReg ) || uPassV.length == 0 ) {
 				// CANNOT be partial to each other
 				alert( uPassPrompt + "!");
 				return false;
 			}
 			if	( ( document.getElementById("uNew").checked == true ) &&
-						( uEmailPrompt.includes( uEmailV ) || uEmailV.includes( uEmailPrompt ) ) || uEmailV.length == 0 ) {
+						( uEmailPrompt.match( uEmailVReg ) || uEmailV.match( uEmailPReg ) ) || uEmailV.length == 0 ) {
 				alert( uEmailPrompt );
 				return false;
 			}
@@ -52,7 +55,8 @@
 		 */
 		$("#uSubEmail").click(function() {
 			uEmailPrompt = $("#uEmail").attr("data-oldV"); uEmailV = $("#uEmail").val();
-			if ( uEmailPrompt.includes( uEmailV ) || uEmailV.includes( uEmailPrompt ) || uEmailV.length == 0 ) {
+			uEmailPReg = new RegExp ( uEmailPrompt ); uEmailVReg = new RegExp( uEmailV );
+			if ( uEmailPrompt.match( uEmailVReg ) || uEmailV.match( uEmailPReg ) || uEmailV.length == 0 ) {
 				alert( uEmailPrompt );
 				return false;
 			}
@@ -64,7 +68,8 @@
 		 */
 		$("#uSubUpd").click(function() {
 			uPassPrompt = $("#uPass").attr("data-oldV"); uPassV = $("#uPass").val();
-			if ( uPassPrompt.includes( uPassV ) || uPassV.includes( uPassPrompt ) || uPassV.length == 0 ) {
+			uPassPReg = new RegExp ( uPassPrompt ); uPassVReg = new RegExp( uPassV );
+			if ( uPassPrompt.match( uPassVReg ) || uPassV.match( uPassPReg ) || uPassV.length == 0 ) {
 				alert( uPassPrompt );
 				return false;
 			}
