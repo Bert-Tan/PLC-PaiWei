@@ -9,13 +9,13 @@
 			</td>
 			<!-- END data_cell -->
 			<!-- BEGIN dataEditCol -->
-			<td class="oprCol" style="width: 24%;">
+			<td class="oprCol" style="width: 28%;">
 				<input class="editBtn" type="button" value="{editBtnTxt}">&nbsp;&nbsp;
 				<input class="delBtn" type="button" value="{delBtnTxt}">
 			</td>
 			<!-- END dataEditCol -->
 			<!-- BEGIN UsrSelColumn -->
-			<td class="oprCol" style="width: 24%;">
+			<td class="oprCol" style="width: 28%;">
 				<select name="usr2Manage" ID="usr2Manage" style="left: 1.5vw; height: 25px;" disabled>
 					<option value="">--Select User--</OPTION>
 					<!-- BEGIN Option -->
