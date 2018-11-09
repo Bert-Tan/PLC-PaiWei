@@ -95,16 +95,29 @@ function chkDate ( dateString ) { // in YYYY-MM-DD format
 
 function chgEdit2Upd ( editBtn ) {
 	var updBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "保存更動" : "Update";
+	var canBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "取消更動" : "Cancel";
+	var canBtn = editBtn.clone();
+	
 	editBtn.unbind(); // unbind myself from the Edit Button Handler
 	editBtn.attr( "value", updBtnVal ); // change myself to become an 'Update' button
-	editBtn.on( 'click', updBtnHdlr );	
+	editBtn.removeClass( 'editBtn' ).addClass( 'updBtn' ); // change my class
+	editBtn.on( 'click', updBtnHdlr );
+	canBtn.attr( "value", canBtnVal );
+	canBtn.removeClass( 'editBtn' ).addClass( 'canBtn' );
+	canBtn.on( 'click', canBtnHdlr )
+	editBtn.after( canBtn );
+	editBtn.siblings(".canBtn").before( "&nbsp;&nbsp;&nbsp;" ); // space it
 } // chgEdit2Upd()
 
 function chgUpd2Edit ( updBtn ) {
 	var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "更改" : "Edit";
-	updBtn.unbind(); // unbind myself from the Edit Button Handler
-	updBtn.attr( "value", editBtnVal ); // change myself to become an 'Edit' button
-	updBtn.on( 'click', editBtnHdlr );		
+
+	updBtn.unbind();
+	updBtn.attr( "value", editBtnVal ); // change my name to 'Edit' button
+	updBtn.removeClass( 'updBtn' ).addClass( 'editBtn' );
+	updBtn.on( 'click', editBtnHdlr );
+	updBtn.siblings(".canBtn").unbind().remove(); // unbind, remove the Cancel Button
+	updBtn.get(0).nextSibling.remove(); // remove the inserted blank space
 } // chgUpd2Edit()
 
 function isJSON( str ) {
@@ -526,6 +539,22 @@ function editBtnHdlr() {
 	cells.on( 'blur', dataChgHdlr );
 	chgEdit2Upd( $(this) ); // change myself to become an 'Update' button
 } // editBtnHdlr()
+
+/**********************************************************
+ * Event Handler	- When a Cancel Edit Button is clicked				*
+ **********************************************************/
+function canBtnHdlr() {
+	var noChg = ( _sessLang == SESS_LANG_CHN) ? "資料沒有更動！" : "No data change to cancel!";
+	var cells = $(this).closest("tr").find("span[data-changed=true]");
+	if ( cells.length == 0 ) {
+		alert( noChg );
+		return;
+	}
+	cells.each( function () { // Restore the old value
+		$(this).text( $(this).attr( "data-oldV" ) );
+		$(this).attr( 'data-changed', "false" );
+	}); // forEach
+} // canBtnHdlr()
 
 /**********************************************************
  * Event Handler	- When an Update Button is clicked			*

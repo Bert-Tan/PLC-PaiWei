@@ -132,7 +132,7 @@ function constructTblData ( $rows, $dbTblName ) { // $rows =  $mysqlresult->fetc
 		$rows[0] = $row;
 	}
 	
-	$cellWidth = (int)( 80 / ( sizeof($rows[0]) - 1 ) );
+	$cellWidth = (int)( 76 / ( sizeof($rows[0]) - 1 ) );
 	
   $tpl = new HTML_Template_IT("./Templates");
   $tpl->loadTemplatefile("pwTblData.tpl", true, true);
@@ -185,7 +185,7 @@ function constructTblHeader( $dbTblName ) {
   $tpl->setVariable("htmlTblName", _dbName_2_htmlName( $dbTblName ) ) ;
   $tpl->setVariable("Who", $_sessUsr ) ;
 
-	$cellWidth = (int)( 80 / ( sizeof($fldN) - 1) );
+	$cellWidth = (int)( 76 / ( sizeof($fldN) - 1) );
 	$i = 0;
 	foreach ( $fldN as $key ) {
 		// first field is the tuple key; not visible to the users

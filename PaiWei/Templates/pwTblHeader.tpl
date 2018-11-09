@@ -7,13 +7,13 @@
 			<th style="width: {cellWidth}">{htmlFldName}</th>
 			<!-- END hdr_cell -->
 			<!-- BEGIN dataEditCol -->
-			<th class="oprCol" style="width: 20%;">
+			<th class="oprCol" style="width: 24%;">
 				<input type="button" id="addRowBtn" value="{addBtnTxt}">&nbsp;
 				<input type="button" id="srchBtn" value="{srchBtnTxt}">
 			</th>
 			<!-- END dataEditCol -->
 			<!-- BEGIN fillerCol -->
-			<th class="oprCol" style="width: 20%;">
+			<th class="oprCol" style="width: 24%;">
 			</th>
 			<!-- END fillerCol -->
     </tr>
