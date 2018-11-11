@@ -111,7 +111,6 @@ function chgEdit2Upd ( editBtn ) {
 
 function chgUpd2Edit ( updBtn ) {
 	var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "更改" : "Edit";
-
 	updBtn.unbind();
 	updBtn.attr( "value", editBtnVal ); // change my name to 'Edit' button
 	updBtn.removeClass( 'updBtn' ).addClass( 'editBtn' );
@@ -544,16 +543,15 @@ function editBtnHdlr() {
  * Event Handler	- When a Cancel Edit Button is clicked				*
  **********************************************************/
 function canBtnHdlr() {
-	var noChg = ( _sessLang == SESS_LANG_CHN) ? "資料沒有更動！" : "No data change to cancel!";
 	var cells = $(this).closest("tr").find("span[data-changed=true]");
-	if ( cells.length == 0 ) {
-		alert( noChg );
-		return;
+	if ( cells.length > 0 ) {
+		cells.each( function () { // Restore the old value
+			$(this).text( $(this).attr( "data-oldV" ) );
+			$(this).attr( "data-changed", "false" );
+		}); // forEach
 	}
-	cells.each( function () { // Restore the old value
-		$(this).text( $(this).attr( "data-oldV" ) );
-		$(this).attr( 'data-changed', "false" );
-	}); // forEach
+	$(this).closest("tr").find("span").attr( "contenteditable", "false" );
+	chgUpd2Edit( $(this).siblings(".updBtn") );
 } // canBtnHdlr()
 
 /**********************************************************
