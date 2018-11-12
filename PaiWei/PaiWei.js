@@ -35,18 +35,53 @@ function readCookie(name) {
 } // readCookie()
 
 function readSessParam() {
-	_sessUsr = readCookie( 'usrName' );
-	_sessPass = readCookie( 'usrPass' );
-	_sessType = readCookie( 'sessType' );
-	_sessLang = readCookie( 'sessLang' );
-	
-	if ( _sessUsr == null ) return false;
-	
-	_sessUsr = decodeURI( _sessUsr );
-	_sessPass = decodeURI( _sessPass );
-	_sessType = decodeURI( _sessType );
-	_sessLang = decodeURI( _sessLang );
-	return true;
+	_ajaxData = {}; _dbInfo = {};
+	_dbInfo[ 'tblName' ] = "pwParam";
+	_ajaxData[ 'dbReq' ] = 'dbREADpwParam';
+	_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
+	$.ajax({
+		url: "./ajax-pwDB.php",
+		method: 'POST',
+		data: _ajaxData,
+		success: function( rsp ) { // Success Handler
+			var rspV = JSON.parse ( rsp );
+			for ( var X in rspV ) {
+				switch ( X ) {
+					case 'URL':
+						location.replace( rspV[ X ] );
+						return false;
+					case 'notActive':	// No retreat active; put out msg
+						alertMsg = ( _sessLang == SESS_LANG_CHN ) ? '本念佛堂近期內沒有法會！'
+																  : 'Currently, there is NO Planned Retreat!';
+						alert ( alertMsg );
+						return false;
+					case 'pwPlqDate':
+						_pwPlqDate = rspV[ X ];
+						_rtrtDate = rspV[ 'rtrtDate' ];
+						_sessUsr = rspV[ 'usrName'  ];
+						_sessPass = rspV[ 'usrPass' ];
+						_sessType = rspV[ 'sessType' ];
+						_sessLang = rspV[ 'sessLang' ];
+						_alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！'
+																	   : 'Unsaved Data will be LOST!';
+						$("th.pwTbl").on( 'click', pwTblHdlr ); // bind Pai Wei menu items to the click handler
+						$("#upld").on( 'click', upldHdlr ); // bind upload anchor to its handler
+					   return true;					
+					case 'errCount':
+						x = rspV [ X ];
+						eMSG = '';
+						for ( i=0; i < x; i++ ) {
+							eMSG += rspV [ 'errRec' ][i] + "\n";
+						}
+						alert( eMSG );
+						return false;						
+				} // switch()
+			} // for loop
+		}, // Success Handler
+		error: function (jqXHR, textStatus, errorThrown) {
+			alert( "Line 94\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+		} // End of ERROR Handler							
+	}); // AJAX call
 } // readSessParam()
 
 function leapYear( yr ) {
@@ -136,7 +171,6 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? '沒有找到所選擇的法會的牌位，請輸入或上載牌位資料。'
 																							 : 'No record found! Please input or upload Data';
 	var errMsg =	'<H1 class="centerMe errMsg">' + errText + '</h1>';
-
 	_ajaxData = {}; _dbInfo = {};
 
   dataArea.empty();
@@ -197,7 +231,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 /**********************************************************
  * Event Handler	- When a Pai Wei menu item is clicked		*
  **********************************************************/
-function pwTblHdlr() {
+function pwTblHdlr() { 
 	var dirtyCells = $("tbody span[data-changed=true]").length;
 
 	$(".errMsg").remove();
@@ -207,7 +241,7 @@ function pwTblHdlr() {
 	
 	$(".pwTbl").removeClass("active");
 	$(this).addClass("active");
-	
+
 	loadTblData( _tblName, 1, 30, _sessUsr, false );
 	
 	return;	
@@ -706,52 +740,11 @@ function ready_edit() {
  * Document Ready																					*
  **********************************************************/
 $(document).ready(function() {
-	if ( readSessParam() ) { // A session is established
-		_ajaxData = {}; _dbInfo = {};
-		_dbInfo[ 'tblName' ] = "pwParam";
-		_ajaxData[ 'dbReq' ] = 'dbREADpwParam';
-		_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
-		$.ajax({
-			url: "./ajax-pwDB.php",
-			method: 'POST',
-			data: _ajaxData,
-			success: function( rsp ) { // Success Handler
-				var rspV = JSON.parse ( rsp );
-				for ( var X in rspV ) {
-					switch ( X ) {
-						case 'URL':
-							location.replace( rspV[ X ] );
-							return;
-						case 'notActive':	// No retreat active; put out msg
-							alertMsg = ( _sessLang == SESS_LANG_CHN ) ? '本念佛堂近期內沒有法會！'
-																												: 'Currently, there is NO Planned Retreat!';
-							alert ( alertMsg );
-							return;
-						case 'pwPlqDate':
-							_pwPlqDate = rspV[ X ]; // alert ( _pwPlqDate );
-							_rtrtDate = rspV[ 'rtrtDate' ];
-							$("th.pwTbl").on( 'click', pwTblHdlr ); // bind Pai Wei menu items to the click handler
-							$("#upld").on( 'click', upldHdlr ); // bind upload anchor to its handler
-							_alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！'
-																														 : 'Unsaved Data will be LOST!';
-							break;					
-						case 'errCount':
-							x = rspV [ X ];
-							eMSG = '';
-							for ( i=0; i < x; i++ ) {
-								eMSG += rspV [ 'errRec' ][i] + "\n";
-							}
-							alert( eMSG );
-							return;						
-					} // switch()
-				} // for loop
-			}, // Success Handler
-			error: function (jqXHR, textStatus, errorThrown) {
-				alert( "Line 666\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
-			} // End of ERROR Handler							
-		}); // AJAX call			
-		$(".future").on( 'click', futureAlert );
-		$(".soon").on( 'click', soonAlert );
-	} // readSessParam()
-
-})
+	readSessParam();
+	/*
+	 * Due to AJAX asynchronous nature, binding handlers to buttons are done in
+	 * readSessParam() when ajax receives the response from the Server.
+	 */
+	$(".future").on( 'click', futureAlert );
+	$(".soon").on( 'click', soonAlert );
+}) // document ready

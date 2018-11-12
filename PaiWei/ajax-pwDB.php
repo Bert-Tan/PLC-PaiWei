@@ -85,8 +85,15 @@ function readPwParam( $_dbInfo ) {
 	$rpt = array();
 	
 	if ( isset($_SESSION[ 'pwPlqDate' ]) ) {
+		/*
+		 * The session is active and the parameters had been read before
+		 */
 		$rpt[ 'pwPlqDate' ] = $_SESSION[ 'pwPlqDate' ];
 		$rpt[ 'rtrtDate' ] = $_SESSION[ 'rtrtDate' ];
+		$rpt[ 'usrName'] = $_SESSION[ 'usrName' ];
+		$rpt[ 'usrPass' ] = $_SESSION[ 'usrPass' ];
+		$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
+		$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
 		return $rpt;
 	}
 	$tblName = $_dbInfo[ 'tblName' ];
@@ -110,6 +117,10 @@ function readPwParam( $_dbInfo ) {
 			$rpt[ 'pwPlqDate' ] = date( "Y-m-d", strtotime( $rtrtDate . " -1 year" ) );
 			$_SESSION[ 'pwPlqDate' ] = $rpt[ 'pwPlqDate' ];
 			$_SESSION[ 'rtrtDate' ] = $rtrtDate;
+			$rpt[ 'usrName'] = $_SESSION[ 'usrName' ];
+			$rpt[ 'usrPass' ] = $_SESSION[ 'usrPass' ];
+			$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
+			$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
 			return $rpt;
 		default:
 			$_errCount++;

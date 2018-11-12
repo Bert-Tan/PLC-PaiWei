@@ -119,13 +119,15 @@
 					$_SESSION[ 'sessType' ] = $sessType;
 					$_SESSION[ 'sessLang' ] = $sessLang;
 					$_SESSION[ 'LAST_ACTIVITY' ] = $_SERVER[ 'REQUEST_TIME' ];
-		
+/*
+ * Eliminated the use of cookies as of November 12, 2018	
 					$domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;
 					setrawcookie( 'usrName', rawurlencode($myUsrName), 0, '/', $domain, false );
 					setrawcookie( 'usrPass', rawurlencode($myPass), 0, '/', $domain, false );
 					setrawcookie( 'UsrEmail', rawurlencode($myEmail), 0, '/', $domain, false );
 					setrawcookie( 'sessType', rawurlencode($sessType), 0, '/', $domain, false );
 					setrawcookie( 'sessLang', rawurlencode($sessLang), 0, '/', $domain, false );
+ */
 					header( $hdrLoc ); // script will not return
 				}
 				$paintReset = true;
