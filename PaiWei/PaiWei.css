@@ -63,13 +63,22 @@ input[type=button], input[type=submit] {
   border-radius: 3px;
 }
 
-td > span {
-	display: block;
+tbody tr:nth-child(odd) input[type=text] {
+	width: 100%;
+	background-color: #ffffe6;
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
-td > span[contenteditable=true] {
+tbody tr:nth-child(even) input[type=text] {
+	width: 100%;
 	background-color: #ffffcc;
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
+
 
 
 

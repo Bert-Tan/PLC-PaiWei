@@ -79,7 +79,7 @@ function readSessParam() {
 			} // for loop
 		}, // Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 94\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 82\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
 	}); // AJAX call
 } // readSessParam()
@@ -141,17 +141,21 @@ function chgEdit2Upd ( editBtn ) {
 	canBtn.removeClass( 'editBtn' ).addClass( 'canBtn' );
 	canBtn.on( 'click', canBtnHdlr )
 	editBtn.after( canBtn );
-	editBtn.siblings(".canBtn").before( "&nbsp;&nbsp;&nbsp;" ); // space it
+	editBtn.siblings(".canBtn").before( "&nbsp;&nbsp;" ); // space it
 } // chgEdit2Upd()
 
 function chgUpd2Edit ( updBtn ) {
 	var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "更改" : "Edit";
-	updBtn.unbind();
-	updBtn.attr( "value", editBtnVal ); // change my name to 'Edit' button
+	var td = updBtn.parent();
+	var htmlString = '';
+	td.find("*").unbind();
+	td.find(".canBtn").remove();	
+	updBtn.attr( "value", editBtnVal ); // change myself to 'Edit' button & class
 	updBtn.removeClass( 'updBtn' ).addClass( 'editBtn' );
-	updBtn.on( 'click', editBtnHdlr );
-	updBtn.siblings(".canBtn").unbind().remove(); // unbind, remove the Cancel Button
-	updBtn.get(0).nextSibling.remove(); // remove the inserted blank space
+	htmlString = td.html().replace(/(&nbsp;)+/g, '&nbsp;&nbsp;');
+	td.html( htmlString );
+	td.find(".editBtn").on( 'click', editBtnHdlr );
+	td.find(".delBtn").on( 'click', delBtnHdlr );
 } // chgUpd2Edit()
 
 function isJSON( str ) {
@@ -223,7 +227,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 		}, // End of SUCCESS Handler
 		
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 174\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 226\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler
 	}); // ajax call	
 } // loadTblData()
@@ -232,7 +236,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
  * Event Handler	- When a Pai Wei menu item is clicked		*
  **********************************************************/
 function pwTblHdlr() { 
-	var dirtyCells = $("tbody span[data-changed=true]").length;
+	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
 
 	$(".errMsg").remove();
 	_tblName = $(this).attr("data-tbl");	
@@ -266,7 +270,7 @@ function myPaiWeiUpLoad ( e ) {
 			return;
     }, // End of Success Handler 
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 217\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 269\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler		
 	}); // AJAX Call
 } // myPaiWeiUpLoad()
@@ -294,12 +298,12 @@ function upldHdlr () { // load the upload form and bind it to the form submit ha
  * Event Handler	- When the Add_a_Row Button is clicked	*
  **********************************************************/
 function addRowBtnHdlr() {
-	var dirtyCells = $("tbody span[data-changed=true]").length;
+	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
 	var insBtnText = ( _sessLang == SESS_LANG_CHN ) ? "加入" : "Insert";
 	var insBtn = '<input class="insBtn" type="button" value="' + insBtnText + '">';
 	var tbody = $("#myData tbody");
 	var newRow = _pilotDataRow.clone();
-	var newRowDataCells = newRow.find("span");
+	var newRowDataCells = newRow.find("input[type=text]");
 	var lastTd = newRow.find("td:last");
 	var cellText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入牌位資料" : "Please Enter Name Plaque Text";
 	var	dateText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "Please Enter YYYY-MM-DD";
@@ -307,15 +311,16 @@ function addRowBtnHdlr() {
 	$(".errMsg").remove();
 	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
 	
-	newRow.attr( "data-keyN", _pilotDataRow.attr("data-keyN") ); // copy the Key Name
+	newRow.attr( "data-keyn", _pilotDataRow.attr("data-keyn") ); // copy the Key Name
 	newRow.attr( "id", '' ) ; // no tuple Key value 
-	newRowDataCells.text( cellText );
-	newRowDataCells.attr( { 'contenteditable' : 'true', 'data-oldV' : '', 'data-pmptV' : '' } );
+	newRowDataCells.val( cellText );
+	newRowDataCells.attr( { 'data-oldv' : '', 'data-pmptv' : '' } );
+	newRowDataCells.prop( 'disabled', false );
 	if ( _tblName == 'DaPaiWei' ) {
-		newRow.find("span[data-fldN='deceasedDate']").text( dateText );
+		newRow.find("input[data-fldn='deceasedDate']").val( dateText );
 	}
-	newRowDataCells.on( 'blur', dataChgHdlr ); // bind the <td><span> to data change handler
-	newRowDataCells.on( 'focus', onFocusHdlr ); // bind the <td><span> to on 'focus' handler
+	newRowDataCells.on( 'blur', dataChgHdlr ); // bind to the data change handler
+	newRowDataCells.on( 'focus', onFocusHdlr ); // bind to the on 'focus' handler
 	lastTd.html( insBtn ); // place the 'Insert' button
 	lastTd.find("input[type=button]").on( 'click', insBtnHdlr ); // bind to Insert Button click handler
 	
@@ -339,7 +344,7 @@ function lookupBtnHdlr() {
 	var notFoundMSG = '<h1 class="centerMe errMsg">' + notFoundText + '</h1>';
 	var tblFlds = {};
 	var thisRow = $(this).closest("tr");
-	var cellsChanged = thisRow.find("span[data-changed=true]");
+	var cellsChanged = thisRow.find("input[type=text][data-changed=true]");
 
 	_ajaxData = {}; _dbInfo = {};
 	if ( cellsChanged.length == 0 ) {
@@ -348,7 +353,7 @@ function lookupBtnHdlr() {
 	}
 	
 	cellsChanged.each(function(i) {
-		tblFlds [ $(this).attr("data-fldN") ] = $(this).text();
+		tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
 	});
 	_dbInfo[ 'tblName' ] = _tblName;
 	_dbInfo[ 'tblFlds' ] = tblFlds;
@@ -398,7 +403,7 @@ function lookupBtnHdlr() {
 			} // for loop
 		}, // success handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 344\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 402\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
 	}); // AJAX CALL
 } // lookupBtnHdlr() 
@@ -407,12 +412,12 @@ function lookupBtnHdlr() {
  * Event Handler	- When the Search Button is clicked			*
  **********************************************************/
 function srchBtnHdlr() {
-	var dirtyCells = $("tbody span[data-changed=true]").length;
+	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
 	var lookupBtnText = ( _sessLang == SESS_LANG_CHN ) ? "查詢" : "Look Up";
 	var lookupBtn = '<input class="lookupBtn" type="button" value="' + lookupBtnText + '">';
 	var tbody = $("#myData tbody"); 
 	var newRow = _pilotDataRow.clone();
-	var newRowDataCells = newRow.find("span");
+	var newRowDataCells = newRow.find("input[type=text]");
 	var lastTd = newRow.find("td:last");
 	var cellText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入查詢資料" : "Please Enter Look Up Text";
 	var	dateText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "Please Enter YYYY-MM-DD";
@@ -425,15 +430,16 @@ function srchBtnHdlr() {
 	}
 	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
 
-	newRow.attr( "data-keyN", _pilotDataRow.attr("data-keyN") ); // copy the Key Name
+	newRow.attr( "data-keyn", _pilotDataRow.attr("data-keyn") ); // copy the Key Name
 	newRow.attr( "id", '' ) ; // no tuple Key value 
-	newRowDataCells.text( cellText );
-	newRowDataCells.attr( { 'contenteditable' : 'true', 'data-oldV' : '', 'data-pmptV' : '' } );
+	newRowDataCells.val( cellText );
+	newRowDataCells.attr( { 'data-oldv' : '', 'data-pmptv' : '' } );
+	newRowDataCells.prop( 'disabled', false );
 	if ( _tblName == 'DaPaiWei' ) {
-		newRow.find("span[data-fldN='deceasedDate']").text( dateText );
+		newRow.find("input[data-fldn='deceasedDate']").val( dateText );
 	}
-	newRowDataCells.on( 'blur', dataChgHdlr ); // bind the <td><span> to data change handler
-	newRowDataCells.on( 'focus', onFocusHdlr ); // bind the <td><span> to on 'focus' handler
+	newRowDataCells.on( 'blur', dataChgHdlr ); // bind to the data change handler
+	newRowDataCells.on( 'focus', onFocusHdlr ); // bind to the on 'focus' handler
 	lastTd.html( lookupBtn ); // place the 'Lookup' button
 	lastTd.find("input[type=button]").on( 'click', lookupBtnHdlr ); // bind to Lookup Button click handler
 	tbody.find("*").unbind();	
@@ -454,10 +460,10 @@ function insBtnHdlr() {
 	var myEditBtns = '<input class="editBtn" type="button" value="' + editBtnText + '">&nbsp;&nbsp;' +
 									'<input class="delBtn" type="button" value="' + delBtnText + '">';
 	var thisRow = $(this).closest("tr");
-	var cellsChanged = thisRow.find("span[data-changed=true]");
+	var cellsChanged = thisRow.find("input[data-changed=true]");
 	var tblFlds = {};
 
-	if ( cellsChanged.length != thisRow.find("span").length ) { // incomplete data input
+	if ( cellsChanged.length != thisRow.find("input[type=text]").length ) { // incomplete data input
 		alert( alertText );
 		return;
 	}
@@ -465,7 +471,7 @@ function insBtnHdlr() {
 	_ajaxData = {}; _dbInfo = {};	
 	if ( cellsChanged.length == 0 ) return;
 	cellsChanged.each(function(i) { // (name, value) pair
-		tblFlds [ $(this).attr("data-fldN") ] = $(this).text();
+		tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
 	});
 	_dbInfo[ 'tblName' ] = _tblName;
 	_dbInfo[ 'tblFlds' ] = tblFlds;
@@ -484,12 +490,12 @@ function insBtnHdlr() {
 						location.replace( rspV[ X ] );
 						return;
 					case 'insSUCCESS': // rspV[X] holds the tupID 
-						thisRow.attr("data-keyN", 'ID' ); thisRow.attr( 'id', rspV[ X ] );
-						thisRow.find("span").attr( "contenteditable", "false" ); // disable edit
-						thisRow.find("span").unbind( 'focus' );
-						thisRow.find("span").removeAttr('data-pmptV');
+						thisRow.attr("data-keyn", 'ID' ); thisRow.attr( 'id', rspV[ X ] );
+						thisRow.find("input[type=text]").prop( "disabled", true ); // disable edit
+						thisRow.find("input[type=text]").unbind( 'focus' );
+						thisRow.find("input[type=text]").removeAttr('data-pmptv');
 						cellsChanged.each(function(i) {
-							$(this).attr( "data-oldV", $(this).text() ); // remember the current value
+							$(this).attr( "data-oldv", $(this).val() ); // remember the current value
 							$(this).attr( "data-changed", "false" );
 						}); // each
 						lastTd = thisRow.find("td:last"); insBtn.unbind(); insBtn.remove();
@@ -508,7 +514,7 @@ function insBtnHdlr() {
 			} // for loop
 		}, // End of Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 447\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 513\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
 	}); // AJAX CALL
 } // insBtnHdlr()
@@ -519,13 +525,13 @@ function insBtnHdlr() {
 function delBtnHdlr() {
 	var tblFlds = {};
 	var delAlert = ( _sessLang == SESS_LANG_CHN ) ? '刪除的資料將無法恢復，請確認！'
-																								: 'A deleted row cannot be undone, please confirm！';
+												  : 'A deleted row cannot be undone, please confirm！';
 																								
 	if ( !confirm( delAlert ) ) return;
 																							
 	_ajaxData = {}; _dbInfo = {};
 	thisRow = $(this).closest("tr");
-	tblFlds [ thisRow.attr("data-keyN") ] = thisRow.attr("id");
+	tblFlds [ thisRow.attr("data-keyn") ] = thisRow.attr("id");
 	_dbInfo[ 'tblName' ] = _tblName;
 	_dbInfo[ 'tblFlds' ] = tblFlds;
 	_dbInfo[ 'pwRqstr' ] = _sessUsr;
@@ -558,7 +564,7 @@ function delBtnHdlr() {
 			} // for loop
 		}, // End of Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 493\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 563\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler	
 	});	// AJAX Call
 } // delBtnHdlr()
@@ -567,8 +573,8 @@ function delBtnHdlr() {
  * Event Handler	- When an Edit Button is clicked				*
  **********************************************************/
 function editBtnHdlr() {
-	var cells = $(this).closest("tr").find("span");
-	cells.attr( "contenteditable", "true" );
+	var cells = $(this).closest("tr").find("input[type=text]");
+	cells.prop( "disabled", false );
 	cells.on( 'blur', dataChgHdlr );
 	chgEdit2Upd( $(this) ); // change myself to become an 'Update' button
 } // editBtnHdlr()
@@ -577,14 +583,14 @@ function editBtnHdlr() {
  * Event Handler	- When a Cancel Edit Button is clicked				*
  **********************************************************/
 function canBtnHdlr() {
-	var cells = $(this).closest("tr").find("span[data-changed=true]");
+	var cells = $(this).closest("tr").find("input[data-changed=true]");
 	if ( cells.length > 0 ) {
 		cells.each( function () { // Restore the old value
-			$(this).text( $(this).attr( "data-oldV" ) );
+			$(this).val( $(this).attr( "data-oldv" ) );
 			$(this).attr( "data-changed", "false" );
 		}); // forEach
 	}
-	$(this).closest("tr").find("span").attr( "contenteditable", "false" );
+	$(this).closest("tr").find("input[type=text]").prop( "disabled", true );
 	chgUpd2Edit( $(this).siblings(".updBtn") );
 } // canBtnHdlr()
 
@@ -595,19 +601,19 @@ function updBtnHdlr() {
 	var tblFlds = {};
 	var updBtn = $(this);
 	var thisRow = $(this).closest("tr");
-	var cellsChanged = thisRow.find("span[data-changed=true]");
+	var cellsChanged = thisRow.find("input[data-changed=true]");
 
 	_ajaxData = {}; _dbInfo = {};	
 	if ( cellsChanged.length == 0 ) {
-		thisRow.find("span").attr( "contenteditable", "false" ); // disable Edit
-		thisRow.find("span").unbind();
+		thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
+		thisRow.find("input[type=text]").unbind();
 		chgUpd2Edit( updBtn );
 		return;
 	}
 
-	tblFlds [ thisRow.attr("data-keyN") ] = thisRow.attr("id");
+	tblFlds [ thisRow.attr("data-keyn") ] = thisRow.attr("id");
 	cellsChanged.each( function(i) { // get changed field name and value
-		tblFlds [ $(this).attr("data-fldN") ] = $(this).text();
+		tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
 	}); // each
 	_dbInfo[ 'tblName' ] = _tblName;
 	_dbInfo[ 'tblFlds' ] = tblFlds;
@@ -627,33 +633,33 @@ function updBtnHdlr() {
 						return;
 					case 'updSUCCESS':
 						cellsChanged.each(function(i) {
-							$(this).attr( "data-oldV", $(this).text() ); // remember the current value
+							$(this).attr( "data-oldv", $(this).val() ); // remember the current value
 						}); // cellsChanged
 						alert( 'Record Updated!' );
 						break;
 					case 'errCount':
 						cellsChanged.each(function(i) {
-							$(this).text( $(this).attr( "data-oldV" ) ); // restore its old value
+							$(this).val( $(this).attr( "data-oldv" ) ); // restore its old value
 						}); // cellsChanged
 						alert( "Update Failed:\n" + rspV[ 'errRec' ] );
 						break;
 				} // switch
 			} // for loop
 			cellsChanged.attr("data-changed", "false");
-			thisRow.find("span").attr( "contenteditable", "false" ); // disable edit
-			thisRow.find("span").unbind();
+			thisRow.find("input[type=text]").prop( "disabled", true ); // disable edit
+			thisRow.find("input[type=text]").unbind();
 			chgUpd2Edit( updBtn );
 			return;					
 		}, // End of Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
 			cellsChanged.each(function(i) {
-				$(this).text( $(this).attr( "data-oldV" ) ); // restore its old value
+				$(this).val( $(this).attr( "data-oldv" ) ); // restore its old value
 				$(this).attr( "data-changed", "false" );
 			});
-			thisRow.find("span").attr( "contenteditable", "false" );
-			thisRow.find("span").unbind();
+			thisRow.find("input[type=text]").prop( "disabled", true );
+			thisRow.find("input[type=text]").unbind();
 			chgUpd2Edit( updBtn );
-			alert( "Line 573\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 658\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler					
 	}); // AJAX Call
 } // updBtnHdlr()
@@ -662,26 +668,26 @@ function updBtnHdlr() {
  * Event Handler - When a cell data is changed																	*
  ********************************************************************************/
 function dataChgHdlr() {	// on 'blur' handler
-	var newV = $(this).text().trim().replace( /<br>$/gm, '');
-	var oldV = $(this).attr("data-oldV").trim();
+	var newV = $(this).val().trim().replace( /<br>$/gm, '');
+	var oldV = $(this).attr("data-oldv").trim();
 	var emptyText = ( _sessLang == SESS_LANG_CHN ) ? "該項牌位資料不應空白！" : "This field shall not be empty!";
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? 
 								"往生日期（年-月-日）必須屆於 " + _pwPlqDate + "(含) 及 " + _rtrtDate + "(不含) 之間。"  
 							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format";
-	var fldN = $(this).attr("data-fldN");
+	var fldN = $(this).attr("data-fldn");
 	
 	if ( newV.length == 0 && ( fldN == 'W_Title' || fldN == 'R_Title' ) ) { // Blank is allowed
-		$(this).text( _blankData ); // blank filler
-		newV = newV = $(this).text();
+		$(this).val( _blankData ); // blank filler
+		newV = $(this).val();
 	}
 	// Allowed blank fields have been taken care of - now the regular logic follows
 	if ( newV.length == 0 ) {
 		if ( oldV.length > 0 ) { // existing data editing
 			alert( emptyText );
-			$(this).text( oldV );
+			$(this).val( oldV );
 		} else {	// new row data entry; user did not input anything
-			$(this).text( $(this).attr("data-pmptV").trim() );
-				$(this).attr( 'data-pmptV', '');
+			$(this).val( $(this).attr("data-pmptv").trim() );
+			$(this).attr( 'data-pmptv', '');
 		}
 		return;
 	}
@@ -689,16 +695,16 @@ function dataChgHdlr() {	// on 'blur' handler
 		if ( !chkDate( newV ) ) {
 			alert( errText );
 			if ( oldV.length > 0 ) {
-				$(this).text( oldV );
+				$(this).val( oldV );
 			} else {	// new row data entry; user did not input anything
-				$(this).text( $(this).attr( 'data-pmptV' ).trim() );
+				$(this).val( $(this).attr( 'data-pmptv' ).trim() );
 				$(this).attr( 'data-pmptV', '');
 			}
 			return;			
 		}
 	} // DaPaiWei and checking deceased Date
 
-	$(this).text( newV );
+	$(this).val( newV );
 	if ( newV != oldV ) {
 		$(this).attr("data-changed", "true");
 	}	
@@ -708,11 +714,11 @@ function dataChgHdlr() {	// on 'blur' handler
  * Event Handler - When a data cell gets focused																*
  ********************************************************************************/
 function onFocusHdlr() {	// on 'focus' handler
-	var newV = $(this).text().trim().replace( /<br>$/gm, '');
-	var pmptV = $(this).attr("data-pmptV").trim().replace( /<br>$/gm, '');
+	var newV = $(this).val().trim().replace( /<br>$/gm, '');
+	var pmptV = $(this).attr("data-pmptv").trim().replace( /<br>$/gm, '');
 	if ( pmptV.length > 0 ) return; // Already done once; user has input data & comes back to it
-	$(this).attr( 'data-pmptV', newV ); // save it before blanking out
-	$(this).text( '' ); // blank out the field for input
+	$(this).attr( 'data-pmptv', newV ); // save it before blanking out
+	$(this).val( '' ); // blank out the field for input
 	return;
 } // function onFocusHdlr()
 

@@ -1,11 +1,11 @@
 <!-- BEGIN data_tbl -->
-<table id="myData" data-tblName="{dbTblName}">
+<table id="myData" data-tblname="{dbTblName}">
   <tbody>
   	<!-- BEGIN data_row -->
-    <tr data-keyN="{tupKeyN}" id="{tupKeyV}">
+    <tr data-keyn="{tupKeyN}" id="{tupKeyV}">
 			<!-- BEGIN data_cell -->
 			<td style="width: {cellWidth}">
-			  <span contenteditable=false data-fldN="{dbFldN}" data-oldV="{dbFldV}">{dbFldV}</span>
+			  <input disabled type="text" data-fldn="{dbFldN}" data-oldv="{dbFldV}" value="{dbFldV}">
 			</td>
 			<!-- END data_cell -->
 			<!-- BEGIN dataEditCol -->
