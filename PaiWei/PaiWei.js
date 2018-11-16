@@ -301,6 +301,12 @@ function addRowBtnHdlr() {
 	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
 	var insBtnText = ( _sessLang == SESS_LANG_CHN ) ? "加入" : "Insert";
 	var insBtn = '<input class="insBtn" type="button" value="' + insBtnText + '">';
+	var recTxt1 = ( _sessLang == SESS_LANG_CHN ) ? "叩薦" : "Sincerely Recommend";
+	var recTxt2 = ( _sessLang == SESS_LANG_CHN ) ? "敬薦" : "Recommend";
+	var selEle = "<select class=\"rec\" style=\"float:right;\">" + 
+					"<option>" + recTxt1 + "<\/option>" + 
+					"<option>" + recTxt2 + "<\/option>" +
+				 "<\/select>";
 	var tbody = $("#myData tbody");
 	var newRow = _pilotDataRow.clone();
 	var newRowDataCells = newRow.find("input[type=text]");
@@ -317,8 +323,9 @@ function addRowBtnHdlr() {
 	newRowDataCells.attr( { 'data-oldv' : '', 'data-pmptv' : '' } );
 	newRowDataCells.prop( 'disabled', false );
 	if ( _tblName == 'DaPaiWei' ) {
-		newRow.find("input[data-fldn='deceasedDate']").val( dateText );
+		newRow.find("input[data-fldn=deceasedDate]").val( dateText );
 	}
+	newRow.find("input[data-fldn=W_Requestor]").after( selEle );
 	newRowDataCells.on( 'blur', dataChgHdlr ); // bind to the data change handler
 	newRowDataCells.on( 'focus', onFocusHdlr ); // bind to the on 'focus' handler
 	lastTd.html( insBtn ); // place the 'Insert' button
@@ -461,13 +468,25 @@ function insBtnHdlr() {
 									'<input class="delBtn" type="button" value="' + delBtnText + '">';
 	var thisRow = $(this).closest("tr");
 	var cellsChanged = thisRow.find("input[data-changed=true]");
+	var recV = null;
+	var rName = null;
 	var tblFlds = {};
+
+//alert( "Line 470: " + thisRow.find("select.rec option:selected").val() );
+//return;
 
 	if ( cellsChanged.length != thisRow.find("input[type=text]").length ) { // incomplete data input
 		alert( alertText );
 		return;
 	}
 	
+	if ( _tblName == 'W001A_4' || _tblName == 'DaPaiWei') { // 叩薦 or 敬薦
+		recV = thisRow.find("select.rec option:selected").val();
+		rName = thisRow.find("input[data-fldn=W_Requestor]").val();
+		thisRow.find("input[data-fldn=W_Requestor]").val( rName + ' ' + recV );
+		recV = new RegExp(" " + recV + "$/g" ); // used to revert when unsuccessful
+	} // appending 叩薦 or 敬薦
+
 	_ajaxData = {}; _dbInfo = {};	
 	if ( cellsChanged.length == 0 ) return;
 	cellsChanged.each(function(i) { // (name, value) pair
@@ -498,6 +517,7 @@ function insBtnHdlr() {
 							$(this).attr( "data-oldv", $(this).val() ); // remember the current value
 							$(this).attr( "data-changed", "false" );
 						}); // each
+						thisRow.find("select.rec").remove();
 						lastTd = thisRow.find("td:last"); insBtn.unbind(); insBtn.remove();
 						lastTd.html( myEditBtns ); // change to edit & delete buttons
 						lastTd.find(".editBtn").on( 'click', editBtnHdlr ); // bind to the edit click handler
@@ -506,9 +526,13 @@ function insBtnHdlr() {
 						return;							
 					case 'errCount':
 						alert ( rspV [ 'errRec' ] );
+						rName = thisRow.find("input[data-fldn=W_Requestor]").val().replace( recV, '');
+						thisRow.find("input[data-fldn=W_Requestor]").val( rName );
 						break;
 					case 'dupCount':
 						alert ( rspV [ 'dupRec' ] );
+						rName = thisRow.find("input[data-fldn=W_Requestor]").val().replace( recV, '');
+						thisRow.find("input[data-fldn=W_Requestor]").val( rName );
 						break;
 				} // switch
 			} // for loop
