@@ -10,6 +10,8 @@ var _sessMode = SESS_MODE_EDIT; // default
 var _dbInfo = {}, _ajaxData = {};
 var _tblName = null, _tblSize = 0;
 var _pilotDataRow = null;	// to be used for adding rows
+var _wTitleInput = null;	// handling 稱謂
+var _rTitleInput = null;
 var _pwPlqDate = null;
 var _rtrtDate = null;
 
@@ -18,22 +20,13 @@ var _editBtns = null;
 var _addRowBtn = null;
 var _srchBtn = null;
 var _alertUnsaved = null;
-var _blankData = "BLANK"; // blank data filler for W_Title & R_Title fields; they can be blank
+var _blankData = null; // blank data filler for W_Title & R_Title fields; they can be blank
+var _wtList = null;	// W_Title & R_Title selection list
+var _rtList = null;
 
 /**********************************************************
  * Support functions																			*
  **********************************************************/
-function readCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for(var i=0;i < ca.length;i++) {
-    var c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-  }
-  return null;
-} // readCookie()
-
 function readSessParam() {
 	_ajaxData = {}; _dbInfo = {};
 	_dbInfo[ 'tblName' ] = "pwParam";
@@ -62,8 +55,11 @@ function readSessParam() {
 						_sessPass = rspV[ 'usrPass' ];
 						_sessType = rspV[ 'sessType' ];
 						_sessLang = rspV[ 'sessLang' ];
+						_wtList = rspV[ 'wtList' ];
+						_rtList = rspV[ 'rtList' ];
 						_alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！'
 																	   : 'Unsaved Data will be LOST!';
+						_blankData = ( _sessLang == SESS_LANG_CHN ) ? "空白" : "BLANK";
 						$("th.pwTbl").on( 'click', pwTblHdlr ); // bind Pai Wei menu items to the click handler
 						$("#upld").on( 'click', upldHdlr ); // bind upload anchor to its handler
 					   return true;					
@@ -79,7 +75,7 @@ function readSessParam() {
 			} // for loop
 		}, // Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 82\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 77\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
 	}); // AJAX call
 } // readSessParam()
@@ -227,7 +223,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 		}, // End of SUCCESS Handler
 		
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 226\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 225\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler
 	}); // ajax call	
 } // loadTblData()
@@ -270,7 +266,7 @@ function myPaiWeiUpLoad ( e ) {
 			return;
     }, // End of Success Handler 
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 269\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 268\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler		
 	}); // AJAX Call
 } // myPaiWeiUpLoad()
@@ -303,7 +299,7 @@ function addRowBtnHdlr() {
 	var insBtn = '<input class="insBtn" type="button" value="' + insBtnText + '">';
 	var recTxt1 = ( _sessLang == SESS_LANG_CHN ) ? "叩薦" : "Sincerely Recommend";
 	var recTxt2 = ( _sessLang == SESS_LANG_CHN ) ? "敬薦" : "Recommend";
-	var selEle = "<select class=\"rec\" style=\"float:right;\">" + 
+	var selEle = "<select class=\"rec\" style=\"float:right; font-size:1.1em;\">" + 
 					"<option>" + recTxt1 + "<\/option>" + 
 					"<option>" + recTxt2 + "<\/option>" +
 				 "<\/select>";
@@ -322,10 +318,16 @@ function addRowBtnHdlr() {
 	newRowDataCells.val( cellText );
 	newRowDataCells.attr( { 'data-oldv' : '', 'data-pmptv' : '' } );
 	newRowDataCells.prop( 'disabled', false );
-	if ( _tblName == 'DaPaiWei' ) {
+	// if ( _tblName == 'DaPaiWei' ) {
 		newRow.find("input[data-fldn=deceasedDate]").val( dateText );
-	}
+	// }
 	newRow.find("input[data-fldn=W_Requestor]").after( selEle );
+	/*
+	 * Replace W_Title and R_Title input fields with dropdown items selection;
+	 * Remember/save the orginal input fields
+	 */
+	_wTitleInput = newRow.find("input[data-fldn=W_Title]").replaceWith( _wtList );
+	_rTitleInput = newRow.find("input[data-fldn=R_Title]").replaceWith( _rtList );
 	newRowDataCells.on( 'blur', dataChgHdlr ); // bind to the data change handler
 	newRowDataCells.on( 'focus', onFocusHdlr ); // bind to the on 'focus' handler
 	lastTd.html( insBtn ); // place the 'Insert' button
@@ -410,7 +412,7 @@ function lookupBtnHdlr() {
 			} // for loop
 		}, // success handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 402\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 414\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
 	}); // AJAX CALL
 } // lookupBtnHdlr() 
@@ -472,23 +474,26 @@ function insBtnHdlr() {
 	var rName = null;
 	var tblFlds = {};
 
-//alert( "Line 470: " + thisRow.find("select.rec option:selected").val() );
-//return;
-
+	if ( cellsChanged.length == 0 ) return;
 	if ( cellsChanged.length != thisRow.find("input[type=text]").length ) { // incomplete data input
 		alert( alertText );
 		return;
 	}
 	
-	if ( _tblName == 'W001A_4' || _tblName == 'DaPaiWei') { // 叩薦 or 敬薦
+	if ( _tblName == 'W001A_4' || _tblName == 'DaPaiWei') {
+		// taking care of 叩薦 or 敬薦; combine it with the Requestor's Name
 		recV = thisRow.find("select.rec option:selected").val();
 		rName = thisRow.find("input[data-fldn=W_Requestor]").val();
 		thisRow.find("input[data-fldn=W_Requestor]").val( rName + ' ' + recV );
 		recV = new RegExp(" " + recV + "$/g" ); // used to revert when unsuccessful
-	} // appending 叩薦 or 敬薦
+		// now taking care of the 稱謂 fields; they were input as selections
+		wtV = thisRow.find("select.wTitle option:selected").val();
+		rtV = thisRow.find("select.rTitle option:selected").val();
+		tblFlds[ thisRow.find("select.wTitle").attr('data-fldn') ] = wtV;
+		tblFlds[ thisRow.find("select.rTitle").attr('data-fldn') ] = rtV;
+	} // appending 叩薦 or 敬薦; taking care of 稱謂 fields
 
 	_ajaxData = {}; _dbInfo = {};	
-	if ( cellsChanged.length == 0 ) return;
 	cellsChanged.each(function(i) { // (name, value) pair
 		tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
 	});
@@ -510,14 +515,21 @@ function insBtnHdlr() {
 						return;
 					case 'insSUCCESS': // rspV[X] holds the tupID 
 						thisRow.attr("data-keyn", 'ID' ); thisRow.attr( 'id', rspV[ X ] );
-						thisRow.find("input[type=text]").prop( "disabled", true ); // disable edit
-						thisRow.find("input[type=text]").unbind( 'focus' );
-						thisRow.find("input[type=text]").removeAttr('data-pmptv');
 						cellsChanged.each(function(i) {
 							$(this).attr( "data-oldv", $(this).val() ); // remember the current value
 							$(this).attr( "data-changed", "false" );
 						}); // each
-						thisRow.find("select.rec").remove();
+						// now the 稱謂 fields
+						if ( _tblName == 'W001A_4' || _tblName == 'DaPaiWei') {
+							thisRow.find("select.rec").remove(); // 叩薦，敬薦 selection; remove it
+							_wTitleInput.attr( "data-oldv", wtV ); _wTitleInput.val( wtV );
+							_rTitleInput.attr( "data-oldv", rtV ); _rTitleInput.val( rtV );
+							thisRow.find("select.wTitle").replaceWith( _wTitleInput );
+							thisRow.find("select.rTitle").replaceWith( _rTitleInput );
+						}
+						thisRow.find("input[type=text]").prop( "disabled", true ); // disable edit
+						thisRow.find("input[type=text]").unbind();
+						thisRow.find("input[type=text]").removeAttr('data-pmptv');
 						lastTd = thisRow.find("td:last"); insBtn.unbind(); insBtn.remove();
 						lastTd.html( myEditBtns ); // change to edit & delete buttons
 						lastTd.find(".editBtn").on( 'click', editBtnHdlr ); // bind to the edit click handler
@@ -538,7 +550,7 @@ function insBtnHdlr() {
 			} // for loop
 		}, // End of Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 513\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 552\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
 	}); // AJAX CALL
 } // insBtnHdlr()
@@ -588,7 +600,7 @@ function delBtnHdlr() {
 			} // for loop
 		}, // End of Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 563\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 602\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler	
 	});	// AJAX Call
 } // delBtnHdlr()
@@ -683,7 +695,7 @@ function updBtnHdlr() {
 			thisRow.find("input[type=text]").prop( "disabled", true );
 			thisRow.find("input[type=text]").unbind();
 			chgUpd2Edit( updBtn );
-			alert( "Line 658\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 697\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler					
 	}); // AJAX Call
 } // updBtnHdlr()

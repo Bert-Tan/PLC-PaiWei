@@ -3,8 +3,8 @@
 	require_once("dbSetup.php");
 	require_once("PaiWei_DBfuncs.php");
 
-	define ( 'BLANKDATA', "BLANK"); // filler for allowed blank field
-	$_blank = "%" . BLANKDATA . "%"; // regExp to blank out the blank data field		
+	$_blankData = "(空白|BLANK)";
+	$_blank = "%" . $_blankData . "%"; // regExp to blank out the blank data field		
 	$_tblName = $_POST [ 'dbTblName' ];
 	
 	$_tblFlds = getPaiWeiTblFlds( $_tblName ); // $_tblFlds[0] contains ID which is not needed

@@ -77,6 +77,33 @@ function _dbName_2_htmlName ( $_dbName ) {
 	return ( $_htmlNames[ $_dbName ][ $_sessLang ]  );
 } // _dbName_2_htmlName()
 
+function readPWTitleList( $tblName ) {
+	global $_db, $_sessLang, $_errCount, $_errRec;
+
+	$lang = ( $_sessLang == SESS_LANG_CHN ) ? "Chn" : "Eng";
+	$sql = "LOCK TABLES {$tblName} READ;";
+	$_db->query( $sql );
+	$sql = "SELECT tName FROM {$tblName} WHERE tLang = \"{$lang}\";";
+	$rslt = $_db->query( $sql );
+	$_db->query( "UNLOCK TABLES;" );
+	$tNames = $rslt->fetch_all(MYSQLI_NUM);
+	$tpl = new HTML_Template_IT("./Templates");
+	$tpl->loadTemplatefile("titleChoice.tpl", true, true);	
+	$listClass = ( $tblName == 'pwParam_wtList' ) ? 'wTitle' : 'rTitle';
+	$pTitle = ( $tblName == 'pwParam_wtList' ) ? "W_Title" : "R_Title";
+	$tpl->setCurrentBlock("Selection");
+	$tpl->setVariable("selClass", $listClass );
+	$tpl->setVariable("pTitle", $pTitle );
+	foreach ( $tNames as $tName ) {
+		$tpl->setCurrentBlock("Options");
+		$tpl->setVariable("optV", $tName[ 0 ] );
+		$tpl->parse("Options");
+	}
+	$tpl->parse("Selection");
+	$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
+	return preg_replace( "/(^\t*)/", "  ", $tmp );
+} // function readPWTitleList()
+
 function readPwParam( $_dbInfo ) {
 	/*
 	 * Ajax Receiver switches on 'URL', 'notActive', 'pwPlqDate', 'errCount'
@@ -94,6 +121,8 @@ function readPwParam( $_dbInfo ) {
 		$rpt[ 'usrPass' ] = $_SESSION[ 'usrPass' ];
 		$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
 		$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
+		$rpt[ 'wtList' ] = $_SESSION[ 'wtList' ];
+		$rpt[ 'rtList' ] = $_SESSION[ 'rtList' ];
 		return $rpt;
 	}
 	$tblName = $_dbInfo[ 'tblName' ];
@@ -121,6 +150,10 @@ function readPwParam( $_dbInfo ) {
 			$rpt[ 'usrPass' ] = $_SESSION[ 'usrPass' ];
 			$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
 			$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
+			$_SESSION[ 'wtList' ] = readPWTitleList( 'pwParam_wtList' );
+			$_SESSION[ 'rtList' ] = readPWTitleList( 'pwParam_rtList' );
+			$rpt[ 'wtList' ] = $_SESSION[ 'wtList' ];
+			$rpt[ 'rtList' ] = $_SESSION[ 'rtList' ];
 			return $rpt;
 		default:
 			$_errCount++;
