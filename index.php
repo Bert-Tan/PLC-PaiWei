@@ -50,9 +50,9 @@
 			<thead>
 				<tr>
 					<th><a href="./Login/Login.php?l=c" class="myLinkButton" style="line-height: 1.3em;">一般用戶登錄<br/>(中文)</a></th>
-					<th><a href="./UsrPortal/UsrGuide.php" class="myLinkButton soon" style="line-height: 1.3em;">用戶指南<br/>(中文)</a></th>
+					<th><a href="./UsrPortal/UG.php" class="myLinkButton" style="line-height: 1.3em;">用戶指南<br/>(中文)</a></th>
 					<th><a href="./Login/Login.php?l=e" class="myLinkButton" style="line-height: 1.3em;">User Login<br/>(English)</a></th>
-					<th><a href="./Login/eUsrGuide.php" class="myLinkButton future" style="line-height: 1.3em;">User Guide<br/>(English)</a></th>
+					<th><a href="./UsrPortal/eUG.php" class="myLinkButton" style="line-height: 1.3em;">User Guide<br/>(English)</a></th>
 					<th><a href="./Login/aLogin.php" class="myLinkButton future" style="line-height: 2.6em;">管理員登錄</a></th>
 				</tr>
 			</thead>

@@ -17,7 +17,7 @@
 				DEFINE ( 'PEAR_INCL', '/Users/berttan/pear/share/pear' );
 				DEFINE ( 'PDF_INCL', '/Library/WebServer/Documents/tcpdf');
 				DEFINE ( 'ARCHIVEDIR', '/Users/berttan/MacPLC/Archive' );
-				DEFINE ( 'IDLE_THRESHOLD', 900 ); // Session idle time
+				DEFINE ( 'IDLE_THRESHOLD', 3600 ); // Session idle time
 				break;
 		case 'LIN': /* Linux - Web Server*/
 			  error_reporting( E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED & ~E_WARNING );
@@ -27,7 +27,7 @@
 				DEFINE ( 'PEAR_INCL', '/home/amitabha/php' );
 				DEFINE ( 'PDF_INCL', '/home/amitabha/tcpdf' );
 				DEFINE ( 'ARCHIVEDIR', '/home/amitabha/Archive' );
-				DEFINE ( 'IDLE_THRESHOLD', 600 );	// Session idle time - normal 30 min; 10 min for ChiFang testing
+				DEFINE ( 'IDLE_THRESHOLD', 1800 );
 				break;
 	}
 
