@@ -1,5 +1,5 @@
 /**********************************************************
- * Global variables																				*
+ *                    Global variables                    *
  **********************************************************/
 var SESS_LANG_CHN = 1;	// These variables are used as CONSTANTS
 var SESS_MODE_EDIT = 0;
@@ -25,7 +25,7 @@ var _wtList = null;	// W_Title & R_Title selection list
 var _rtList = null;
 
 /**********************************************************
- * Support functions																			*
+ *                    Support functions                   *
  **********************************************************/
 function readSessParam() {
 	_ajaxData = {}; _dbInfo = {};
@@ -62,6 +62,7 @@ function readSessParam() {
 						_blankData = ( _sessLang == SESS_LANG_CHN ) ? "空白" : "BLANK";
 						$("th.pwTbl").on( 'click', pwTblHdlr ); // bind Pai Wei menu items to the click handler
 						$("#upld").on( 'click', upldHdlr ); // bind upload anchor to its handler
+						$("#ugld").on( 'click', ugLoader ); // bind User Guide to its handler
 					   return true;					
 					case 'errCount':
 						x = rspV [ X ];
@@ -229,7 +230,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 } // loadTblData()
 
 /**********************************************************
- * Event Handler	- When a Pai Wei menu item is clicked		*
+ * Event Handler - When a Pai Wei menu item is clicked    *
  **********************************************************/
 function pwTblHdlr() { 
 	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
@@ -247,9 +248,9 @@ function pwTblHdlr() {
 	return;	
 } // function pwTblHdlr()
 
-/********************************************************************************
- * Event Handler when the PaiWei Upload Form is submitted												*
- ********************************************************************************/
+/************************************************************
+ * Event Handler - when the PaiWei Upload Form is submitted *
+ ************************************************************/
 function myPaiWeiUpLoad ( e ) {
 	e.preventDefault();
 	var myFormData = new FormData ( this ); // myFormData.append( 'pwUsr', _sessionUsr );
@@ -272,7 +273,7 @@ function myPaiWeiUpLoad ( e ) {
 } // myPaiWeiUpLoad()
 
 /**********************************************************
- * Event Handler	- When the Upload Request is clicked		*
+ * Event Handler - When the Upload Request is clicked     *
  **********************************************************/
 function upldHdlr () { // load the upload form and bind it to the form submit handler
 	$(".dataArea").load("./upldPaiWeiForm.php #forUpld", function( rsp ) {
@@ -289,9 +290,19 @@ function upldHdlr () { // load the upload form and bind it to the form submit ha
 	});
 	return false; // so, the hyperlink won't fire
 } // upldHdlr()
- 
+
 /**********************************************************
- * Event Handler	- When the Add_a_Row Button is clicked	*
+ * Event Handler - When the User Guide is requested       *
+ **********************************************************/
+function ugLoader () { // load the PaiWei User Guide
+	$(".dataArea").load("./UG.php #ugDesc", function ( rsp ) {
+		return false; // so the link won't fire
+	});
+	return false; // so the link won't fire
+} // ugLoader()
+
+/**********************************************************
+ * Event Handler - When the Add_a_Row Button is clicked   *
  **********************************************************/
 function addRowBtnHdlr() {
 	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
@@ -344,7 +355,7 @@ function addRowBtnHdlr() {
 } // addRowBtnHdlr()
 
 /**********************************************************
- * Event Handler	- When the Lookup Button is clicked			*
+ * Event Handler - When the Lookup Button is clicked      *
  **********************************************************/
 function lookupBtnHdlr() {
 	var inputSrchData = ( _sessLang == SESS_LANG_CHN ) ? '請請輸入查詢資料！' : 'Please enter search pattern!';
@@ -418,7 +429,7 @@ function lookupBtnHdlr() {
 } // lookupBtnHdlr() 
  
 /**********************************************************
- * Event Handler	- When the Search Button is clicked			*
+ * Event Handler - When the Search Button is clicked	  *
  **********************************************************/
 function srchBtnHdlr() {
 	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
@@ -459,7 +470,7 @@ function srchBtnHdlr() {
 } // srchBtnHdlr()
 
 /**********************************************************
- * Event Handler	- When an Insert Button is clicked			*
+ * Event Handler - When an Insert Button is clicked       *
  **********************************************************/
 function insBtnHdlr() {
 	var insBtn = $(this);
@@ -556,7 +567,7 @@ function insBtnHdlr() {
 } // insBtnHdlr()
  
 /**********************************************************
- * Event Handler	- When a Delete Button is clicked				*
+ * Event Handler - When a Delete Button is clicked        *
  **********************************************************/
 function delBtnHdlr() {
 	var tblFlds = {};
@@ -606,7 +617,7 @@ function delBtnHdlr() {
 } // delBtnHdlr()
 
 /**********************************************************
- * Event Handler	- When an Edit Button is clicked				*
+ * Event Handler - When an Edit Button is clicked         *
  **********************************************************/
 function editBtnHdlr() {
 	var cells = $(this).closest("tr").find("input[type=text]");
@@ -616,7 +627,7 @@ function editBtnHdlr() {
 } // editBtnHdlr()
 
 /**********************************************************
- * Event Handler	- When a Cancel Edit Button is clicked				*
+ * Event Handler - When a Cancel Edit Button is clicked   *
  **********************************************************/
 function canBtnHdlr() {
 	var cells = $(this).closest("tr").find("input[data-changed=true]");
@@ -631,7 +642,7 @@ function canBtnHdlr() {
 } // canBtnHdlr()
 
 /**********************************************************
- * Event Handler	- When an Update Button is clicked			*
+ * Event Handler - When an Update Button is clicked       *
  **********************************************************/
 function updBtnHdlr() {
 	var tblFlds = {};
@@ -700,9 +711,9 @@ function updBtnHdlr() {
 	}); // AJAX Call
 } // updBtnHdlr()
 
-/********************************************************************************
- * Event Handler - When a cell data is changed																	*
- ********************************************************************************/
+/**********************************************************
+ * Event Handler - When a cell data is changed            *
+ **********************************************************/
 function dataChgHdlr() {	// on 'blur' handler
 	var newV = $(this).val().trim().replace( /<br>$/gm, '');
 	var oldV = $(this).attr("data-oldv").trim();
@@ -746,9 +757,9 @@ function dataChgHdlr() {	// on 'blur' handler
 	}	
 } // dataChgHdlr()
 
-/********************************************************************************
- * Event Handler - When a data cell gets focused																*
- ********************************************************************************/
+/**********************************************************
+ * Event Handler - When a data cell gets focused          *
+ **********************************************************/
 function onFocusHdlr() {	// on 'focus' handler
 	var newV = $(this).val().trim().replace( /<br>$/gm, '');
 	var pmptV = $(this).attr("data-pmptv").trim().replace( /<br>$/gm, '');
@@ -759,7 +770,7 @@ function onFocusHdlr() {	// on 'focus' handler
 } // function onFocusHdlr()
 
 /**********************************************************
- * Binders																								*
+ * Binders                                                *
  **********************************************************/
 function ready_edit() {
 	if ( _delBtns != null ) _delBtns.unbind(); // unbind the old ones
@@ -779,7 +790,7 @@ function ready_edit() {
 } // ready_edit()
 
 /**********************************************************
- * Document Ready																					*
+ * Document Ready                                         *
  **********************************************************/
 $(document).ready(function() {
 	readSessParam();

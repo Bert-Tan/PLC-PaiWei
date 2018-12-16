@@ -1,6 +1,6 @@
 <?php
 /**********************************************************
- *					User Pai Wei Application Main Page						*
+ *           User Pai Wei Application Main Page           *
  **********************************************************/
  
 	require_once( '../pgConstants.php' );
@@ -58,8 +58,10 @@
 
 	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
 	$upldUrl = URL_ROOT . "/admin/PaiWei/upldPaiWeiForm.php";
+	$ugUrl = URL_ROOT . "/admin/PaiWei/UG.php";
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$upldUrl .= ( $useChn ) ? "?l=c" : "?l=e";
+	$ugUrl .= ( $useChn ) ? "?l=c" : "?l=e";
 	
 	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
 		header( $hdrLoc );
@@ -67,10 +69,10 @@
 
 ?>
 
-<!DOCTYPE pl>
+<!DOCTYPE html>
 <html>
 <head>
-<title>淨土念佛堂法會牌位申請主頁</title>
+<title><?php echo xLate( 'htmlTitle' ); ?></title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="https://www.amitabhalibrary.org/css/base.css">
 <link rel="stylesheet" type="text/css" href="../css/admin.css">
@@ -120,7 +122,7 @@ input[type=submit] {
 					<th class="pwTbl" data-tbl="W001A_4"><?php echo xLate( 'pwW' ); ?></th>
 					<th class="pwTbl" data-tbl="L001A"><?php echo xLate( 'pwL' ); ?></th>
 					<th class="pwTbl" data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th>
-					<th class="soon"><?php echo xLate( 'pwUG' ); ?></th>
+					<th><a href="<?php echo $ugUrl; ?>" class="myLinkButton" id="ugld"><?php echo xLate( 'pwUG' ); ?></th>
 				</tr>
 				<tr>
 					<th class="pwTbl" data-tbl="DaPaiWei"><?php echo xLate( 'pwBIG' ); ?></th>

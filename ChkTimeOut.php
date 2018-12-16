@@ -25,10 +25,12 @@
 			echo json_encode(  $rpt , JSON_UNESCAPED_UNICODE );
 			$_db->close();
 			exit;
+		case "UG.php": // do not perform timeout force relogin
+			goto EndOfChkTimeOut;
 		} // switch
 		// Other including scripts
-    session_destroy();
-    header( "location: " . $hdrURL );
+    	session_destroy();
+    	header( "location: " . $hdrURL );
 	}
 
 EndOfChkTimeOut:
