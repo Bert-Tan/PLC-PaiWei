@@ -62,7 +62,7 @@ function readSessParam() {
 						_blankData = ( _sessLang == SESS_LANG_CHN ) ? "空白" : "BLANK";
 						$("th.pwTbl").on( 'click', pwTblHdlr ); // bind Pai Wei menu items to the click handler
 						$("#upld").on( 'click', upldHdlr ); // bind upload anchor to its handler
-						$("#ugld").on( 'click', ugLoader ); // bind User Guide to its handler
+						$(".ugld").on( 'click', ugLoader ); // bind User Guide to its handler
 					   return true;					
 					case 'errCount':
 						x = rspV [ X ];
@@ -190,6 +190,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 		data:	_ajaxData,
 		success: function ( rsp ) { // SUCCESS handler
 			var rspV = JSON.parse( rsp );
+			$(".dataArea").css("overflow-y", "initial");
 			for ( var X in rspV ) {
 				switch( X ) {
 					case 'URL':
@@ -241,6 +242,8 @@ function pwTblHdlr() {
 	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
 	
 	$(".pwTbl").removeClass("active");
+	$("#upld").removeClass("active");
+	$(".ugld").removeClass("active");
 	$(this).addClass("active");
 
 	loadTblData( _tblName, 1, 30, _sessUsr, false );
@@ -276,6 +279,9 @@ function myPaiWeiUpLoad ( e ) {
  * Event Handler - When the Upload Request is clicked     *
  **********************************************************/
 function upldHdlr () { // load the upload form and bind it to the form submit handler
+	$(".pwTbl").removeClass("active");
+	$(".ugld").removeClass("active");
+	$(this).addClass("active");
 	$(".dataArea").load("./upldPaiWeiForm.php #forUpld", function( rsp ) {
 		if ( isJSON( rsp ) ) {
 			rspV = JSON.parse( rsp );
@@ -286,7 +292,7 @@ function upldHdlr () { // load the upload form and bind it to the form submit ha
 		$("form#upldForm").on( 'submit', myPaiWeiUpLoad );
 
 		$(this).find(".future").on( 'click', futureAlert );
-		$(this).find(".soon").on( 'click', soonAlert );
+		$(this).find(".ugld").on( 'click', ugLoader );
 	});
 	return false; // so, the hyperlink won't fire
 } // upldHdlr()
@@ -295,9 +301,17 @@ function upldHdlr () { // load the upload form and bind it to the form submit ha
  * Event Handler - When the User Guide is requested       *
  **********************************************************/
 function ugLoader () { // load the PaiWei User Guide
+	$(".pwTbl").removeClass("active");
+	$("#upld").removeClass("active");
+	$(this).addClass("active");
+	$(".pwTbl").removeClass("active");
 	$(".dataArea").load("./UG.php #ugDesc", function ( rsp ) {
+		$(this).find("table").addClass("UGsteps");
+		$(this).find("tr").css("background-color", "transparent");
+		$(this).find("img").addClass("UGstepImg");
 		return false; // so the link won't fire
 	});
+	$(".dataArea").css("overflow-y", "auto");
 	return false; // so the link won't fire
 } // ugLoader()
 

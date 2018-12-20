@@ -106,6 +106,24 @@ input[type=submit] {
 	vertical-align: middle;
 	font-size: 1.2em;	
 }
+
+.UGsteps {
+	font-size: 0.9em;
+}
+
+.UGsteps th, td {
+	vertical-align: top;
+}
+
+.UGsteps th {
+	width: 15%;
+}
+
+.UGstepImg {
+	width: 90%;
+	height: auto;
+	border: 1px solid black;
+}
 </style>
 
 </head>
@@ -122,7 +140,7 @@ input[type=submit] {
 					<th class="pwTbl" data-tbl="W001A_4"><?php echo xLate( 'pwW' ); ?></th>
 					<th class="pwTbl" data-tbl="L001A"><?php echo xLate( 'pwL' ); ?></th>
 					<th class="pwTbl" data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th>
-					<th><a href="<?php echo $ugUrl; ?>" class="myLinkButton" id="ugld"><?php echo xLate( 'pwUG' ); ?></th>
+					<th><a href="<?php echo $ugUrl; ?>" class="myLinkButton ugld"><?php echo xLate( 'pwUG' ); ?></th>
 				</tr>
 				<tr>
 					<th class="pwTbl" data-tbl="DaPaiWei"><?php echo xLate( 'pwBIG' ); ?></th>
