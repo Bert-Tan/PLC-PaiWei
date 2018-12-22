@@ -119,7 +119,7 @@ input[type=submit] {
 						</tr>
 						<tr><th>歷代祖先蓮位</th>
 							<td>
-								為爲啟情人的歷代祖先申請設立牌位迴向祈福；請註明祖先姓氏，如 『譚』氏。
+								為爲啟情人的歷代祖先申請設立牌位迴向祈福；請註明祖先姓氏，如 『譚』氏，及啟請者的全名。
 							</td>
 						</tr>
 						<tr><th>祈福消災牌位</th>
@@ -248,8 +248,7 @@ input[type=submit] {
 	} else { // English version
 ?>
 		<h2 style="margin-top: 4vh; text-align: center; letter-spacing: normal;">
-			User Guide to Request for Merit Dedication Name Plaques during Retreats (*** Work In Prog. ***) 
-		</h2>
+			User Guide to Request for Merit Dedication Name Plaques during Retreats</h2>
         <span style="display: block; width: 95%; margin: auto; padding-top: 2vh; font-size: 1.3em;
 			font-weight: bold; line-height: 1.1em;"><!-- Intro phrase -->
             Users can apply for specific Merit Dedication Name Plaques during Retreats from this page:
@@ -259,12 +258,145 @@ input[type=submit] {
         <div style="width: 95%; margin:auto; font-size: 1.3em;"><!-- BEGIN Step-by-step Guide -->
             <ol>
                 <li>
-					When you click "Name Plaque Application for Merit Dedication in Retreats",
+					When you click the "Name Plaque Application for Merit Dedication in Retreats",
 					you will see the "Retreat Merit Dedication Request Page" with selections as below：<br/><br/>
-					<img src="./img/epwMain.png" alt="">
+					<img src="./img/e_pwMain.png" alt=""><br/><br/>
+					<table>
+						<tr><th>Deceased</th>
+							<td>For dedicating merits to the requestor's parents, relatives, teachers, friends, sons, daughters,
+								younger generations, even pets. If they deceased within 12 months from the
+								retreat date, please use "Recently Deceased."
+							</td>
+						</tr>
+						<tr><th>Ancestors</th>
+							<td>For dedicating merits to the requestor's ancentors; you will just need to
+								input your ancestor's surname, for example, "Johnson," and your full name.
+							</td>
+						</tr>
+						<tr><th>Well Blessing</th>
+							<td>For well blessing to the requestor's parents, relatives, teachers, friends,
+								sons, daughters, younger generations, requestor-self, even pets.<br/>
+								Please input well-blessing recipient's full name.
+							</td>
+						</tr>
+						<tr><th>Karmic Creditors</th>
+							<td>For dedicating merits to the requestor's karmic creditors in all life cycles.<br/>
+								Please input the requestor's full name.
+							</td>
+						</tr>
+						<tr><th>Site Gardians</th>
+							<td>For dedicating merits to the site guardians (protecting beings) of the sites
+								of your concern, e.g., residence, vacation home, work place.<br/>
+								Plesae input the address of the sites of your concern.
+							</td>
+						</tr>
+						<tr><th>Upload CSV Files</th>
+							<td>To upload pre-edited Name Plaque files in CSV (comma separated values) format.
+								The files must meet the format requirements.
+							</td>
+						</tr>
+					</table>
+				</li><br/>
+				<li>When you click on any of the above name plaque selection, you will be able to edit or delete
+					the name plaques of that type already in the system, search for specific ones of the same, or
+					input new name plaque requests. We will take the "Recently Deceased" as an illustration example.<br/><br/>
+					<img src="./img/e_editDaPaiWei.png" alt=""><br/><br/>
+					<table>
+						<tr><th>Delete</th>
+							<td>Click "Delete": This particular Name Plaque entry from the database。</td>
+						</tr>
+						<tr><th>Edit</th>
+							<td>The Name Plaque entry data is protected. When you click "Edit", every field is
+								changeable.	When you done editing, please click "Update" to save changes in the
+								database.
+							</td>
+						</tr>
+					</table><br/>
+					<img src="./img/e_saveChgDaPaiWei.png" alt=""><br/><br/>
+					<table>
+						<tr><th>Search</th>
+							<td>Click on "Search" allows you to search for the Name Plaques to edit or delete</td>
+						</tr>
+						<tr><th>AddInputRow</th>
+							<td>Click on "AddInputRow", a blank input row will be appended to the end of the
+								data table; you may enter new Name Plaque data here.</td>
+						</tr>
+					</table><br/>
+					<img src="./img/e_newDaPaiWei.png" alt=""><br/><br/>
+					<table>
+						<tr><th></th>
+							<td>The "Title of the Deceased" and "Requestor's Title" describe the title and
+								relationship between the deceased and the requestor. They are dropdown
+								selection lists and have enumerated as exhaustively as possible the possible
+								values. If yours is not found, please select BLANK or any value, then,
+								use the "Edit" to change to what fits your situation. In case this happens,
+								please also kindly let us know so we can augment the lists.
+							</td>
+						</tr>
+					</table>
+				</li><br/>
+				<li>If you would like to upload a pre-edited data file, it must comply with the following:<br/>
+					<ol type="a">
+						<li>The file is UTF-8 encoded;</li>
+						<li>Every line contains one and only one Name Plaque data entry;</li>
+						<li>Data fields in a line must be comma separated, i.e., CSV format;</li>
+						<li>Every data field must have only one continuous text (no multiple lines);</li>
+						<li>If a data field needs to have commas,
+							it must be enclosed by double quotes, ( " ); for example, "text1, text2".</li>
+					</ol>
+				</li><br/>
+				<li>Please follow the steps below to construct a CSV file proper for upload.
+					<ol type="a">
+						<li><a href="./Templates/e_pwTemplate.xlsx"><b>Download this template</b></a></li>
+						<li>This is an MS EXCEL template file; every tab supports a Name Plaque type above.
+							Select the tab for the Name Plaque type you want to input the Name Plaque data.<br/><br/>
+							<img src="./img/e_inputXLS.png" alt="">
+						</li><br/>
+						<li>Press and hold the [Ctrl] key (or [cmd] key for Mac), click/select all colored
+							illustration arrows as below:<br/><br/>
+							<img src="./img/e_allImgXLS.png" alt="">
+						</li><br/>
+						<li>Click [Del] key to remove all of them; now you have a clean input sheet
+							for entering the Name Plaque data as desired.
+						</li>
+						<li>When complete, click the "File" on the upper-left and hove over "Save As..." in
+							the dropdown items, as below:<br/><br/>
+							<img src="./img/saveAsSel.png" alt="" style="width: 500px; height: auto;">
+						</li><br/>
+						<li>Click "Save As..." and you will see the dialog box as below;
+							Please enter the filename in the "Save As:" field, and select "CSV UTF-8" from the dropdown
+							list of the "File Format:" field; then, click "Save" on the bottom right.<br/><br/>
+							<img src="./img/saveAsCSV.png" alt="" style="width: 700px; height: auto;">
+						</li><br/>
+						<li>MS EXCEL will remind you that only the Active Sheet can be saved in the desired format:<br/><br/>
+							<img src="./img/saveActive.png" alt="" style="width: 400px; height: auto;">
+						</li><br/>
+						<li>Click "OK" and your input sheet is save in the CSV format and in the given filename and folder.
+						</li>
+						<li>Repeat the above steps across every tab if you have more than one input sheets.</li>
+					</ol>
+				</li><br/>
+				<li>To upload pre-edited Name Plaque data files, please follow the steps below:
+					<ol type="a">
+						<li>Click "Upload CSV Files" on the upper right corner of the page,
+							the following dialog box appears:<br/><br/>
+							<img src="./img/e_upldBox.png" alt="" style="width: 600px; height: auto;">
+						</li><br/>
+						<li>Click "Browse" on the left and surf to the folder and select the file you want to upload.<br/><br/>
+							<img src="./img/e_upldFile.png" alt="" style="width: 600px; height: auto;">
+						</li><br/>
+						<li>Select a Name Plaque type from the dropdown list on the right.<br/><br/>
+							<img src="./img/e_upldPaiWei.png" alt="" style="width: 600px; height: auto;">
+						</li><br/>
+						<li>Click "Upload", and the data will be stored in the database.
+						</li>
+					</ol>
 				</li>
             </ol>
         </div><!-- END Step-by-step Guide -->
+		<h2 style="margin-top: 4vh; text-align: center; letter-spacing: 1px;">
+			Thanks much for requesting for Merit Dedication Name Plaques. Amituofo!
+		</h2>
 		</div><!-- END for loading into the DataArea in PaiWei.php -->
 <?php
 	} // English version
