@@ -44,18 +44,19 @@
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate()
 
-	session_start();
-	if ( !isset( $sessLang ) ) $sessLang = SESS_LANG_CHN; // default
-	if ( isset( $_GET[ 'l'] ) ) {
-		$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN;
-	} else if ( isset( $_SESSION[ 'sessLang' ] ) ) {
-		$sessLang = $_SESSION[ 'sessLang' ];
-	}	
-	$_SESSION[ 'sessLang' ] = $sessLang;
-	
 	$hdrLoc = "location: " . URL_ROOT . "/admin/UsrPortal/index.php";
-	$useChn = ( $sessLang == SESS_LANG_CHN );
-	$hdrLoc	.= ( $useChn ) ? "?l=c" : "?l=e";
+	session_start();
+	if ( isset( $_SESSION[ 'usrName' ] ) ) { // already logged in
+		header( $hdrLoc ); // the redirected PHP file will figure out the language
+	}
+
+	$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN;
+	if ( !isset($_SESSION[ 'sessLang' ]) ) {
+		$_SESSION[ 'sessLang' ] = $sessLang;
+	} else {
+		$sessLang = $_SESSION[ 'sessLang' ];
+	}
+	$useChn = ( $sessLang == SESS_LANG_CHN );	
 
 	unset($usrReq);
 	$myDir = basename( dirname( __FILE__ ) );
@@ -119,15 +120,6 @@
 					$_SESSION[ 'sessType' ] = $sessType;
 					$_SESSION[ 'sessLang' ] = $sessLang;
 					$_SESSION[ 'LAST_ACTIVITY' ] = $_SERVER[ 'REQUEST_TIME' ];
-/*
- * Eliminated the use of cookies as of November 12, 2018	
-					$domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;
-					setrawcookie( 'usrName', rawurlencode($myUsrName), 0, '/', $domain, false );
-					setrawcookie( 'usrPass', rawurlencode($myPass), 0, '/', $domain, false );
-					setrawcookie( 'UsrEmail', rawurlencode($myEmail), 0, '/', $domain, false );
-					setrawcookie( 'sessType', rawurlencode($sessType), 0, '/', $domain, false );
-					setrawcookie( 'sessLang', rawurlencode($sessLang), 0, '/', $domain, false );
- */
 					header( $hdrLoc ); // script will not return
 				}
 				$paintReset = true;
