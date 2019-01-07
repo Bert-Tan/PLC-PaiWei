@@ -50,19 +50,30 @@
 		header( $hdrLoc ); // the redirected PHP file will figure out the language
 	}
 
+<<<<<<< HEAD
 	$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN;
+=======
+	$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN; // set Lang from the CGI parameter
+>>>>>>> UI
 	if ( !isset($_SESSION[ 'sessLang' ]) ) {
 		$_SESSION[ 'sessLang' ] = $sessLang;
 	} else {
 		$sessLang = $_SESSION[ 'sessLang' ];
+<<<<<<< HEAD
 	}
 	$useChn = ( $sessLang == SESS_LANG_CHN );	
+=======
+	}	
+	$useChn = ( $sessLang == SESS_LANG_CHN );
+	$hLtrS = ( $useChn ) ? "12px;" : "normal;"; // letter spacing for <h*> elements
+>>>>>>> UI
 
 	unset($usrReq);
 	$myDir = basename( dirname( __FILE__ ) );
 	$myBasename = basename( __FILE__ );
 	$resetURLroot = ( $_os == 'DAR' ) ? "http://www.localplc.org/admin" : "https://www.amitabhalibrary.org/admin";
 	$href_url = $resetURLroot . "/$myDir" . "/$myBasename";
+	$msgTxt = '';
 	if (isset($_GET[ 'my_Req' ])) { // $_GET[ 'my_Req' ] may have Chinese characters; use 'usr_Req'!
 		unset( $myID ); unset( $myUsrName ); unset( $myPass ); unset( $myEmail );
 		unset( $myToken ); $rtnV = array(); $usrReq = $_GET[ 'usr_Req' ];
@@ -95,8 +106,11 @@
 						echo $msg->get(); exit;
 					} else {
 						plcSendMail ( $myEmail, "Login/Password Recovery", $msg->get() );
+						$msgTxt = ( $useChn)
+							? "恢復密碼的網鍊已經送到您註冊過的郵電地址，請由那網鍊處重新設立密碼。"
+							: "A link was sent to your registered email address; please follow it to reset.";
 					}
-				} // sending reset link
+				} // $myID set
 				break;
 			case 'chk_Token':	// Token submitted; paint Reset Form after validation, otherwise Email Entry Form
 				$myID = $_GET[ 'usr_ID' ];
@@ -125,6 +139,12 @@
 				$paintReset = true;
 				break;
 		} // switch on usr_Req
+		if ( $_errCount > 0 ) {
+			$msgTxt = ( $useChn ) ?
+				"恢復登錄密碼遭遇下列錯誤；請重復或<a href=\"mailto:library@amitabhalibrary.org\">通知本網站管理員</a> 。謝謝！" :
+				"Error occurred! Please retry or <a href=\"mailto:library@amitabhalibrary.org\">Report.</a> Thank you!";
+		}
+		if ( strlen( $msgTxt ) > 0 ) $hTop = "5vh";
 	} // End of handling Login Recovery
 ?>
 
@@ -159,51 +179,14 @@
 <!-- ***** BEGIN dataArea -->
 	<div class="dataArea">
 		<h2 id="myDataTitle"
-			style="
-			<?php
-				if ( $_errCount > 0 ) { echo 'margin-top: 5vh;'; }
-				if ( !$useChn ) { echo "letter-spacing: normal;"; }					
-			?>">
+			style="margin-top: <?php echo $hTop; ?>; letter-spacing: <?php echo $hLtrS; ?>;">
 			<?php echo xLate( 'h2Title' ); ?>
 		</h2>
 <!-- ***** BEGIN Acknowledgement Area ***** -->
 <?php
-	switch( $usrReq ) {
-		case 'fgt_Pass': // User forgot Password; nothing to acknowledge
-			break;				
-		case 'chk_Email': // Acknowledge the user to check Email for the reset link
-			if ( isset( $myID ) ) {
-?>
-		<div class="loginAck" style="font-size: 1.2em; border-color: #00b300;">
-			<?php
-				if ( $useChn ) {
-					echo "恢復密碼的網鍊已經送到您註冊過的郵電地址，請由那網鍊處重新設立密碼。";
-				} else {
-					echo "The reset link was sent to your registered email address; please follow it to reset password.";
-				}
-			?>
-		</div>
-<?php
-				break;
-			} // if $myID is not set; fall through to ack the Error
-		case 'chk_Token':
-		case 'upd_Pass':
-			if ( $_errCount > 0 ) {
-?>
-		<div class="loginAck" style="font-size: 1.2em;">
-			<?php
-				if ( $useChn ) {
-					echo "重新設立密碼遭遇下列錯誤；請向本網站管理員<a href=\"mailto:library@amitabhalibrary.org\">報告此錯誤</a>。謝謝！<br/>";
-				} else {
-					echo "Error occurred! Please <a href=\"mailto:library@amitabhalibrary.org\">Report.</a> Thank you!<br/>";
-				}
-				echo putErrMsg();
-			?>
-		</div>
-<?php
-			}
-			break;
-	} // switch()
+	if ( strlen( $msgTxt ) > 0 ) {
+		echo putMsg( "60%", "normal", "left", "normal", $msgTxt );
+	}
 ?>
 <!-- ***** END Acknowledgement Area ***** -->
 <!-- ***** BEGIN Input Area ***** -->

@@ -51,7 +51,11 @@
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate()
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> UI
 	$hdrLoc = "location: " . URL_ROOT . "/admin/UsrPortal/index.php";
 	$rstLink = "./LoginRestore.php?my_Req=fgt_Pass&usr_Req=fgt_Pass";
 	session_start(); // create or retrieve
@@ -60,16 +64,27 @@
 	}
 
 	$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN; // set Lang from the CGI parameter
+<<<<<<< HEAD
 
+=======
+>>>>>>> UI
 	if ( !isset($_SESSION[ 'sessLang' ]) ) {
 		$_SESSION[ 'sessLang' ] = $sessLang;
 	} else {
 		$sessLang = $_SESSION[ 'sessLang' ];
 	}
+<<<<<<< HEAD
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$rstLink .= ( $useChn ) ? "&l=c" : "&l=e";
+=======
+	
+	$useChn = ( $sessLang == SESS_LANG_CHN );
+	$rstLink .= ( $useChn ) ? "&l=c" : "&l=e";
+	$hLtrS = ( $useChn ) ? "12px" : "normal"; // letter spacing for <h*> element
+>>>>>>> UI
 	
 	$sessType = SESS_TYP_USR;
+	$msgTxt = '';
 	if (isset($_POST[ 'usr_Req' ])) {
 		$myUsrName = $_POST[ 'usr_Name' ];
 		$myPass = $_POST[ 'usr_Pass' ];
@@ -79,14 +94,19 @@
 		} else {
 			registerUser( $myUsrName, $myPass, $myEmail, $useChn );
 		}
-		if ( $_errCount == 0 ) {
+		if ( $_errCount == 0 ) { // login successful
 			$_SESSION[ 'usrName' ] = $myUsrName;
 			$_SESSION[ 'usrPass' ] = $myPass;
 			$_SESSION[ 'usrEmail' ] = ($myEmail != null) ? $myEmail : $rtnV[ 'usrEmail' ] ;
 			$_SESSION[ 'sessType' ] = $sessType;
 			$_SESSION[ 'LAST_ACTIVITY' ] = $_SERVER[ 'REQUEST_TIME' ];
 			header( $hdrLoc );
-		} // login successful
+		} else { // formulate message and style
+			$hTop = "5vh";
+			$msgTxt = ( $useChn ) ?
+				"登錄遭遇下列錯誤；請重新登錄或 <a href=\"mailto:library@amitabhalibrary.org\">通知本網站管理員</a> 。謝謝！" :
+				"Error occurred! Please retry or <a href=\"mailto:library@amitabhalibrary.org\">Report.</a> Thank you!";
+		}
 	} // user request
 	unset($_POST);
 ?>
@@ -120,27 +140,11 @@
 		<div id="pgLogOut" class="centerMeV"><a href="./Logout.php"><?php echo xLate( 'logOut' ); ?></a></div>
 	</div>
 	<div class="dataArea">
-		<h2 id="myDataTitle"
-			style="
-			<?php
-				if ( $_errCount > 0 ) { echo 'margin-top: 5vh;'; }
-				if ( !$useChn ) { echo "letter-spacing: normal;"; }					
-			?>">
+		<h2 id="myDataTitle" style="margin-top: <?php echo $hTop; ?>; letter-spacing: <?php echo $hLtrS; ?>;">
 			<?php echo xLate( 'h2Title' ); ?></h2>
 <?php
-	if ( $_errCount > 0 ) {
-?>
-		<div class="loginAck" style="font-size: 1.2em;">
-			<?php
-				if ( $useChn ) {
-					echo "登錄遭遇下列錯誤；請重新登錄或請向本網站管理員<a href=\"mailto:library@amitabhalibrary.org\">報告此錯誤</a>。謝謝！<br/>";
-				} else {
-					echo "Error occurred! Please retry or <a href=\"mailto:library@amitabhalibrary.org\">Report.</a> Thank you!<br/>";
-				}
-				echo putErrMsg();
-			?>
-		</div>
-<?php
+	if ( strlen( $msgTxt ) > 0 ) {
+		echo putMsg( "60%", "normal", "left", "normal", $msgTxt );
 	}
 ?>
 		<form action="" method="post">

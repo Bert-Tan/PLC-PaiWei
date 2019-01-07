@@ -75,6 +75,10 @@ tbody tr:nth-child(even) {
 	position: absolute; left: 50%; transform:translateX(-50%);
 }
 
+.q_centerMe {
+	position: absolute; top: 25%; left: 50%; transform:translate(-50%, -50%);
+}
+
 .dataTbl {	/* data table generic characteristics */
 	table-layout: fixed;
 	border-collapse: collapse;
@@ -125,14 +129,12 @@ tbody tr:nth-child(even) {
 }
 
 .msgBox {
-	width: 30%;
+	width: 40%;				/* changeable */
 	margin: auto;
-	margin-top: 15vh;
-	border: 7px solid red; /* border-color changeable depending on msg type */
+	border: 7px solid red; /* border-color changeable */
 	border-radius: 7px;
 	padding: 1vh 2vw;
-	font-size: 1.5em;
-	font-weight: bold;
-	text-align: center;
-	letter-spacing: normal;
+	font-size: 1.2em;
+	text-align: left;		/* changeable */
+	letter-spacing: normal;	/* changeable */
 }
