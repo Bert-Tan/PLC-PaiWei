@@ -51,11 +51,7 @@
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate()
-<<<<<<< HEAD
-
-=======
 	
->>>>>>> UI
 	$hdrLoc = "location: " . URL_ROOT . "/admin/UsrPortal/index.php";
 	$rstLink = "./LoginRestore.php?my_Req=fgt_Pass&usr_Req=fgt_Pass";
 	session_start(); // create or retrieve
@@ -64,24 +60,15 @@
 	}
 
 	$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN; // set Lang from the CGI parameter
-<<<<<<< HEAD
-
-=======
->>>>>>> UI
 	if ( !isset($_SESSION[ 'sessLang' ]) ) {
 		$_SESSION[ 'sessLang' ] = $sessLang;
 	} else {
 		$sessLang = $_SESSION[ 'sessLang' ];
 	}
-<<<<<<< HEAD
-	$useChn = ( $sessLang == SESS_LANG_CHN );
-	$rstLink .= ( $useChn ) ? "&l=c" : "&l=e";
-=======
 	
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$rstLink .= ( $useChn ) ? "&l=c" : "&l=e";
 	$hLtrS = ( $useChn ) ? "12px" : "normal"; // letter spacing for <h*> element
->>>>>>> UI
 	
 	$sessType = SESS_TYP_USR;
 	$msgTxt = '';
