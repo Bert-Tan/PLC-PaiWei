@@ -1,8 +1,19 @@
-<!--
- **********************************************************
- *										 Admin Main Page										*
- **********************************************************
--->
+<?php
+ /**********************************************************
+  *                     Admin Main Page                    *
+  **********************************************************/
+
+	require_once("./pgConstants.php");
+	require_once("Login/Login_Funcs.php");
+	$msgTxt = '';
+	if ( isset($_GET[ 'r' ]) ) {
+		$_errCount++;
+		$_errRec[] = "登&nbsp;錄&nbsp;時&nbsp;段&nbsp;已&nbsp;過&nbsp;期！<br/>Session has expired!";
+	} else {
+		$msgTxt = "歡迎您到淨土念佛堂牌用戶主頁！<br/>Welcome to the Pure Land Center User Portal!";
+	}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +27,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$(".future").on( 'click', futureAlert );
-		$(".soon").on( 'click', soonAlert );
+//		$(".soon").on( 'click', soonAlert );
 	})
 </script>
 
@@ -60,24 +71,8 @@
 		<div id="pgLogOut" class="centerMeV"><a href="./Login/Logout.php" class="myLinkButton">用戶<br/>撤出</a></div>	
 	</div>
 	<div class="dataArea">
-<?php
-	if ( isset($_GET[ 'r' ]) ) {
-?>
-		<div class="msgBox" style="width: 30%; border-color: red;">
-			登&nbsp;錄&nbsp;時&nbsp;段&nbsp;已&nbsp;過&nbsp;期！<br/>
-			Session has expired!		
-		</div>
-<?php
-	} else {
-?>
-		<div class="msgBox" style="width: 40%; border-color: #00b300;">
-			歡迎您到淨土念佛堂牌用戶主頁！<br/>
-			Welcome to the Pure Land Center User Portal!		
-		</div>
-<?php
-	}
-?>
-		<div class="centerMe" id="myDataTitle"
+		<?php echo putMsg( "40%", "normal", "center", "bold", $msgTxt ); ?>
+		<div class="centerMe"
 			style="font-size: 2em; font-weight: bold; text-align: center;">
 			請&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;錄
 			<br/>Please Login In

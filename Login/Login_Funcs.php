@@ -24,15 +24,27 @@
 		return "{$_scratch[ 'YYYY' ][0]} 年 " . "{$MM_in_Chn} 月 " . "{$_scratch[ 'dd' ][0]} 日";
 	} // MMddyyyy2Chn()
 		
-	function putErrMsg() {
+	function putMsg( $bxW, $txtLS, $txtA, $fontW, $xtra ) {
+		// style: Width, Letter-spacing, text-alignment, font-weight
 		global $_errCount,  $_errRec;
-		$msg = '';
+
+		$msg = ( strlen( $xtra ) <= 0 ) ? '' : $xtra;
+		$mbxBC = ( $_errCount > 0 ) ? "red" : "#00b300";
+		$lineNbrg = ( $_errCount > 1 );
 		for ( $i = 0; $i < $_errCount; $i++ ) {
-			$msg .= $_errRec[ $i ];
-			$msg .= ( $i < ( $_errCount - 1 ) ) ? "<br/>" : '';	
+			$lineBreak = ( strlen( $msg ) > 0 ) ? "<br/>" : '';
+			$lineNbr = "[ " . ($i + 1) . " ] ";
+			$msg .= $lineBreak . ( $lineNbrg ? $lineNbr : '' ) . $_errRec[ $i ];
 		}
-		return $msg;
-	} // putErrMsg()
+		$msgBox =
+			"<div class=\"msgBox q_centerMe\" id=\"ackMsg\"
+				style=\"display: block; border-color: {$mbxBC}; width: {$bxW};
+				text-align: {$txtA}; letter-spacing: {$txtLS}; font-weight: {$fontW};\">
+				{$msg}
+			 </div>	
+			";
+		return $msgBox;
+	} // putMsg()
 
 	function usersDropdown( $admFlag, $rspChn ) {
 		//
@@ -47,23 +59,27 @@
 		}
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
-			$errMsg = ( $rspChn ) ? "資料庫錯誤" : "DB Error";
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}:\t$_db->error";
+			if (!DEBUG) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
 			return false;
 		}
 		$num_Usrs = $rslt->num_rows;
 		$rows = $rslt->fetch_all( MYSQLI_ASSOC );
 		$rslt->free();
 		$tpl = new HTML_Template_IT("./Templates");
-	  $tpl->loadTemplatefile("UsersDropdown.tpl", true, true);
-	  foreach ( $rows as $row ) { 
-		  $tpl->setCurrentBlock("selOption");  
-	  	$tpl->setVariable( "usrName" , $row[ 'usrName' ] );
-	  	$tpl->setVariable( "ID" , $row[ 'ID' ] );
-	  	$tpl->parse("selOption");
-	  }
-	  return $tpl->get();
+		$tpl->loadTemplatefile("UsersDropdown.tpl", true, true);
+		foreach ( $rows as $row ) { 
+			$tpl->setCurrentBlock("selOption");  
+	  		$tpl->setVariable( "usrName" , $row[ 'usrName' ] );
+	  		$tpl->setVariable( "ID" , $row[ 'ID' ] );
+	  		$tpl->parse("selOption");
+	  	}
+		return $tpl->get();
 	} // usersDropdown()
 	
 	function updPass( $usrID, $usrEmail, $usrPass, $rspChn ) {
@@ -75,15 +91,19 @@
 		$sql = "SELECT * FROM Usr WHERE `ID` = \"{$usrID}\" AND `UsrEmail` = \"{$escEmail}\";";
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
-			$errMsg = ( $rspChn ) ? "資料庫錯誤" : "DB Error";
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}:\t$_db->error";
+			if (!DEBUG) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
 			return false;
 		}
 		if ( $rslt->num_rows == 0 ) {
 			$errMsg = ( $rspChn ) ? "資料庫可能損壞了；沒找到登錄資料！" : "Possible DB Corruption; No Record Found!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}";
+			$_errRec[] = $errMsg;
 			return false;
 		}
 		$row = $rslt->fetch_all( MYSQLI_ASSOC )[0];
@@ -91,15 +111,19 @@
 		$sql = "UPDATE Usr SET `UsrPass` = \"{$hashed_pass}\" WHERE `ID` = {$usrID};";
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
-			$errMsg = ( $rspChn ) ? "資料庫錯誤" : "DB Error";
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}:\t$_db->error";
+			if (!DEBUG) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
 			return false;
 		}
 		if ( $_db->affected_rows == 0 ) {
 			$errMsg = ( $rspChn ) ? "資料庫可能損壞了；無法更新登錄密碼！" : "Possible DB Corruption; Failed Updating Password!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}";
+			$_errRec[] = $errMsg;
 			return false;
 		}
 		return true;
@@ -111,15 +135,19 @@
 		$sql = "SELECT Expires FROM UsrRst WHERE `ID` = \"{$usrID}\" AND `Token` = \"{$usrToken}\" ;";
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
-			$errMsg = ( $rspChn ) ? "資料庫錯誤" : "DB Error";
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}:\t$_db->error";
+			if (!DEBUG) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
 			return false;
 		}
 		if ( $rslt->num_rows == 0 ) {
 			$errMsg = ( $rspChn ) ? "沒找到恢復密碼的請求！" : "No Password Reset Record Found!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}";
+			$_errRec[] = $errMsg;
 			return false;
 		}
 		$row = $rslt->fetch_all( MYSQLI_ASSOC )[0];
@@ -127,30 +155,38 @@
 		$sql = "DELETE FROM UsrRst WHERE `ID` = \"{$usrID}\" ;"; // No longer needed
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
-			$errMsg = ( $rspChn ) ? "資料庫錯誤" : "DB Error";
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}:\t$_db->error";
+			if (!DEBUG) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
 			return false;
 		}
 		if ( time() > strtotime( $dbExpires ) ) {
 			$errMsg = ( $rspChn ) ? "恢復密碼的請求已過期！" : "Reset Timer Expired!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}";
+			$_errRec[] = $errMsg;
 			return false;
 		}
 		$sql = "SELECT * FROM Usr WHERE `ID` = \"{$usrID}\" ;";
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
-			$errMsg = ( $rspChn ) ? "資料庫錯誤" : "DB Error";
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}:\t$_db->error";
+			if (!DEBUG) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
 			return false;
 		}
 		if ( $rslt->num_rows == 0 ) {
 			$errMsg = ( $rspChn ) ? "資料庫可能損壞了；找到恢復密碼的請求，但沒有找到您登錄資料"
-														: "Possible DB Corruption - CANNOT Find Requested Login Record!";
+								  : "Possible DB Corruption - CANNOT Find Requested Login Record!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}!";
+			$_errRec[] = $errMsg;
 			return false;
 		}	
 		$row = $rslt->fetch_all( MYSQLI_ASSOC )[0];
@@ -168,16 +204,20 @@
 		$sql = "SELECT ID FROM Usr WHERE `UsrEmail` = \"{$escEmail}\";";
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
-			$errMsg = ( $rspChn ) ? "資料庫錯誤" : "DB Error";
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}:\t$_db->error";
+			if (!DEBUG) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
 			return false;
 		}
 
 		if ( $rslt->num_rows == 0 ) {
-			$errMsg = ( $rspChn ) ? "沒找到郵箱地址" : "Entered Email Address Not Found";
+			$errMsg = ( $rspChn ) ? "沒找到郵箱地址!" : "Entered Email Address Not Found!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}!";
+			$_errRec[] = $errMsg;
 			return false;
 		}
 
@@ -188,9 +228,13 @@
 		$sql = "INSERT INTO UsrRst ( ID, Token, Expires ) VALUES ( {$myID}, \"{$myToken}\", \"{$myExpiration}\" );";
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
-			$errMsg = ( $rspChn ) ? "資料庫錯誤" : "DB Error";
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}:\t$_db->error";
+			if (!DEBUG) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
 			return false;
 		}
 		$rtnV [ 'ID' ] = $myID;
@@ -212,22 +256,26 @@
 
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
-			$errMsg = ( $rspChn ) ? "資料庫錯誤" : "DB Error";
+			$errMsg = ( $rspChn ) ? "登錄失敗，資料庫內部錯誤" : "Login Failed; DB internal error";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}:\t$_db->error";
+			if ( ! DEBUG ) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
 			return false;
 		}
 		if ( $rslt->num_rows == 0 ) {
 			$errMsg = ( $rspChn ) ? "沒有 '{$escName}' 的登錄資料！" : "No Record Found for '{$escName}'!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}" . "<br/>";
+			$_errRec[] = $errMsg;
 			return false;
 		}
 		$row = $rslt->fetch_all( MYSQLI_ASSOC )[0];
 		if ( !password_verify( $escPass, $row[ 'UsrPass' ] ) ) {
 			$errMsg = ( $rspChn ) ? "登錄失敗，密碼不合！" : "Login Failed; Password Mismatch!";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\t{$errMsg}" . "<br/>";
+			$_errRec[] = $errMsg;
 			return false;
 		}
 		$rtnV[ 'usrEmail' ]  = $row[ 'UsrEmail' ];
@@ -244,14 +292,19 @@
 				"VALUES ( \"{$escName}\", \"{$hashed_pswd}\", \"{$escEmail}\" );";
 		$_db->query( $sql );
 		if ( $_db->errno ) {
-			$errMsg = ( $rspChn ) ? "資料庫錯誤" : "DB Error";
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤，<a href=\"mailto:library@amitabhalibrary.org\">請告知本館</a>"
+								  : "DB Internal Error; <a href=\"mailto:library@amitabhalibrary.org\">Please Report</a>";
 			$_errCount++;
-			$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":\t{$errMsg}:\t$_db->error";
+			if ( !DEBUG ) {
+				$_errRec[] = ( $rspChn ) ? "新用戶註冊失敗！" : "New user registration failed!";
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}	
 			return false;
 		}
 		return true;
 	} // registerUser()
-
+/*
 	function authenticateSession( $rspChn ) { // session_start() has created or retrieved the Session
 		// $_SESSION, $_COOKIE, and $_POST are the places where the login information exists
 		$rtnV = array();
@@ -283,4 +336,5 @@
 			return false;
 		}
 	} // authenticateSession()
+*/
 ?>
