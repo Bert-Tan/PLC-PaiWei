@@ -20,6 +20,23 @@
 		}
 	}
 	
+	function onFocusHdlr() {
+		var newV = $(this).val().trim().replace( /<br>$/gm, '');
+		var pmptV = $(this).attr("data-pmptV").trim().replace( /<br>$/gm, '');
+		if ( pmptV.length > 0 ) return; // was here before
+		$(this).attr('data-pmptV', newV );
+		$(this).val('');
+		return;
+	} // onFocusHdlr()
+
+	function onBlurHdlr() {
+		var currV = $(this).val().trim().replace( /<br>$/gm, '');
+		if ( currV.length == 0 ) {
+			$(this).val( $(this).attr("data-pmptV").trim() );
+			$(this).attr( 'data-pmptV', '');
+		}
+	} // onBlurHdlr()
+
 	$(document).ready(function() {
 		/*
 		 * Normal Login Scenario
@@ -74,5 +91,8 @@
 				return false;
 			}
 			return true;
-		});		 
+		});	
+		
+		$("input[type=text], input[type=password]").on( 'focus', onFocusHdlr );
+		$("input[type=text], input[type=password]").on( 'blur', onBlurHdlr );
 	});

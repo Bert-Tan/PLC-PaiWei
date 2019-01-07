@@ -202,7 +202,7 @@
 ?>
 					<tr>
 			  		<td><?php echo xLate( 'uregEmail' ); ?><br/>
-			  			<input type="text" name="usr_Email" id="uEmail"
+			  			<input type="text" name="usr_Email" id="uEmail" data-pmptV=""
 			  						 data-oldV="<?php echo $emailPrompt; ?>"
 			  						 value="<?php echo $emailPrompt; ?>" size=35 required>
 			  		</td>
@@ -220,7 +220,7 @@
 							<input type="text" name="usr_Name" id="uName" value="<?php echo $myUsrName; ?>" readonly>
 						</td>
 						<td><?php echo xLate( 'uPass' ); ?><br/>
-							<input type="password" name="usr_Pass" id="uPass"
+							<input type="password" name="usr_Pass" id="uPass" data-pmptV=""
 										 data-oldV="<?php echo $passPrompt; ?>"
 										 value="<?php echo $passPrompt; ?>" size=35 required>
 				    </td>
