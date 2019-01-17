@@ -87,6 +87,7 @@
 			$_SESSION[ 'usrEmail' ] = ($myEmail != null) ? $myEmail : $rtnV[ 'usrEmail' ] ;
 			$_SESSION[ 'sessType' ] = $sessType;
 			$_SESSION[ 'LAST_ACTIVITY' ] = $_SERVER[ 'REQUEST_TIME' ];
+			$hTop = "10vh";
 			header( $hdrLoc );
 		} else { // formulate message and style
 			$hTop = "5vh";
