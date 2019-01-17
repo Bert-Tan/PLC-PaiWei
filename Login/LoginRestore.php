@@ -144,7 +144,7 @@
 				"恢復登錄密碼遭遇下列錯誤；請重復或<a href=\"mailto:library@amitabhalibrary.org\">通知本網站管理員</a> 。謝謝！" :
 				"Error occurred! Please retry or <a href=\"mailto:library@amitabhalibrary.org\">Report.</a> Thank you!";
 		}
-		if ( strlen( $msgTxt ) > 0 ) $hTop = "5vh";
+		$hTop = ( strlen( $msgTxt ) > 0 ) ? "5vh" : "10vh";
 	} // End of handling Login Recovery
 ?>
 
