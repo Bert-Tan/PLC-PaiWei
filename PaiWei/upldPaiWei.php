@@ -18,7 +18,7 @@
 	require_once( 'PaiWei_DBfuncs.php');
 	require_once( 'chkDeceasedDate.php' );
 		
-	$_rpt = array();
+	$_rptMsg = '';
 	$_totCount = 0;
 	$_blnkCount = 0;
 	define ( 'BLANKDATA', "BLANK"); // filler for allowed blank field
@@ -76,8 +76,8 @@
 		return true;
 	} // parseLineCSV_XLS()
 
-  $_pgTime = time(); // NOW!
-  $_pgDate = Date( DateFormatArchive );
+	$_pgTime = time(); // NOW!
+	$_pgDate = Date( DateFormatArchive );
 	$_myDir = dirname ( __FILE__ );
 	session_start();
 	
@@ -87,7 +87,7 @@
 	}
 
 	$_sessType = $_SESSION[ 'sessType' ];
-	$_sessLang = $_SESSION[ 'sessLang' ];
+	$useChn = ( $_SESSION[ 'sessLang' ] == SESS_LANG_CHN );
 	$_sessUsr = $_SESSION[ 'usrName' ];
 
 	$_tblName = $_POST[ 'dbTblName' ];
@@ -103,13 +103,14 @@
 	if ( ( $_fileExt !== 'csv' && $_fileExt !== 'CSV' ) || 
 			 ( mb_check_encoding (file_get_contents( $_tmpDataFile ), 'UTF-8') == false ) ) {
 		$_errCount++;
-		$_errRec[] = "Only CSV (Comma Separately Values) File encoded in UTF-8 is supported!";
-		exit();
+		$_errRec[] = ( $useChn) ? "本網站上載只支持用 UTF-8 編碼的檔案！"
+								: "Only CSV (Comma Separately Values) File encoded in UTF-8 is supported!";
+		goto EndRpt;
 	}
 
 	ini_set("auto_detect_line_endings", true); // CRLF (Windows), CR (Mac), or LF (Linux)
 	$_fh = fopen ( $_tmpDataFile, "r");
-	
+
 	fgets( $_fh ); // skip the first line in file, which is the column titles in Chinese
 	unset( $_tupFldNs ); $_tupFldNs = array();
 	$line = fgets( $_fh );	// tuple attribute names
@@ -128,8 +129,8 @@
 		unset( $_tupAttrNVs ); $_tupAttrNVs = array(); // ( Name, Value) pairs in an associative array format
 		if ( !parseCSV_XLS( $line, $_tupFldVs ) ) {
 			$_errCount++;
-			$_errRec[] = basename(__FILE__) . "() Line " . __LINE__
-								. ":\tCSV Format Error on Record {$_totCount}; content:\t\"{$line}\"\n";
+			$_errRec[] = ( $useChn ) ? "第 {$_totCount} 行：『逗號分隔值』/ (CSV) 資料格式有錯誤；\"{$line}\""
+								: ":\tCSV Format Error on Record {$_totCount}; content:\t\"{$line}\"";
 			continue; // skip the line
 		}
 		for ( $i = 0; $i < sizeof( $_tupFldVs ); $i++ ) {
@@ -137,17 +138,17 @@
 			$_attrV = trim($_tupFldVs[$i]);
 			if ( $_attrN == 'deceasedDate' && !chkDate( $_attrV ) ) {
 				$_errCount++;
-				$_errRec[] = basename(__FILE__) . "() Line " . __LINE__
-								 . ":\tError on Record {$_totCount}; Deceased Date must be a valid date between
-								 . \"{$_SESSION[ 'pwPlqDate' ]}\" and \"{$_SESSION[ 'rtrtDate' ]}\"!";
+				$_errRec[] = ( $useChn ) ? "第 {$_totCount} 行：往生日必須介於&nbsp;\"{$_SESSION[ 'pwPlqDate' ]}\"&nbsp;與&nbsp;\"{$_SESSION[ 'rtrtDate' ]}\"&nbsp;之間！"
+							: ":\tError on Record {$_totCount}; Deceased Date must be a valid date between "
+							. "\"{$_SESSION[ 'pwPlqDate' ]}\" and \"{$_SESSION[ 'rtrtDate' ]}\"!";
 				$_attrErr = true;
 				break;				
 			} // attribute is deceasedDate
 			if ( preg_match( "%^\s*$%", $_attrV ) == 1 ) { // Field value is empty
 				if ( $_attrN != 'W_Title' && $_attrN != 'R_Title' ) {
 					$_errCount++;
-					$_errRec[] = basename(__FILE__) . "() Line " . __LINE__
-										. ":\tError on Record {$_totCount}; incomplete data!";
+					$_errRec[] = ( $useChn ) ? "第 {$_totCount} 行：資料不完整！"
+											 : "Error on Record {$_totCount}; incomplete data!";
 					$_attrErr = true; // no field can be empty except these two
 					break;
 				} 
@@ -172,31 +173,49 @@
 		$_db->autocommit(true);
 	} // each input data line / tuple
 
-EndRpt:	
-	$_rpt [ 'upldStat' ] = "\tTotal Upload Request: {$_totCount} entries;\tTotal Inserted: {$_insCount}\n";
-	if ( $_blnkCount ) {
-		$_rpt [ 'blnkCount' ] = "\t{$_blnkCount} Records are blank and NOT inserted\n";
+EndRpt:
+	$_rptMsg = ( $useChn ) 	? "上載 {$_fileBase}.{$_fileExt} 檔案資料匯總報告\n\n"
+							: "Status of Uploading {$_fileBase}.{$_fileExt}\n\n";
+	$_rptMsg .= ( $useChn ) ? "總共資料行數：{$_totCount}；確實上載資料行數：{$_insCount}"
+						  : "Total Upload Request: {$_totCount} entries;\tTotal Inserted: {$_insCount}";
+	if ( $_blnkCount > 0 ) {
+		$_rptMsg .= "\n\n";
+		$_rptMsg .= ( $useChn ) ? "有 {$_blnkCount} 行資料是空白；沒有上載！"
+						   : "{$_blnkCount} Records are blank and NOT inserted!";
+	} // $_blnkCount > 0
+	if ( $_dupCount > 0 ) {
+		$_rptMsg .= "\n\n";
+		$_rptMsg .= ( $useChn ) ? "下列 {$_dupCount} 行資料為重復；沒有上載！"
+							   : "{$_dupCount} Records are duplicates and NOT inserted!";
+		$lineNbrg = ($_dupCount > 1);
+		for ( $i = 0; $i < $_dupCount; $i++ ) {
+			$lineBreak = ( strlen( $_rptMsg ) > 0 ) ? "\n" : '';
+			$lineNbr = "[ " . ($i + 1) . " ] ";
+			$_rptMsg .= $lineBreak . ( $lineNbrg ? $lineNbr : '' ) . $_dupRec[ $i ];
+		}
+	} // $_dupCount > 0
+	if ( $_errCount > 0 ) {
+		$_rptMsg .= "\n\n";
+		$_rptMsg .= ( $useChn ) ? "有 {$_errCount} 行資料有錯誤；沒有上載！"
+							   : "{$_errCount} Records encountered errors and were skipped!";
+		$lineNbrg = ($_errCount > 1);
+		for ( $i = 0; $i < $_errCount; $i++ ) {
+			$lineBreak = ( strlen( $_rptMsg ) > 0 ) ? "\n" : '';
+			$lineNbr = "[ " . ($i + 1) . " ] ";
+			$_rptMsg .= $lineBreak . ( $lineNbrg ? $lineNbr : '' ) . $_errRec[ $i ];
+		}		
+	} // $_errCount > 0
+	echo $_rptMsg;
+/*
+ * Archiving the uploaded data file
+	if ( ( ! file_exists ( $_archiveDir ) ) &&  ( ! mkdir ( $_archiveDir ) ) ) {
+			die ( "Error archiving uploaded file - CANNOT create archive folder: $_archiveDir <br/>" );
 	}
-	if ( $_dupCount ) {
-		$_rpt [ 'dupStat' ] = "\t{$_dupCount} Records are duplicates and NOT inserted\n";
-		$_rpt [ 'dupRec' ] = $_dupRec;		
-	}
-	if ( $_errCount ) {
-		$_rpt [ 'errStat' ] = "\t{$_errCount} Records encountered errors and were skipped\n";
-		$_rpt [ 'errRec' ] = $_errRec;		
-	}
-	print_r ( $_rpt );
 
-	/*
-	 * Archiving the uploaded data file
-  if ( ( ! file_exists ( $_archiveDir ) ) &&  ( ! mkdir ( $_archiveDir ) ) ) {
-  			die ( "Error archiving uploaded file - CANNOT create archive folder: $_archiveDir <br/>" );
-  }
-  
-  if ( ! move_uploaded_file( $_tmpDataFile, $_archiveName ) ) {
-  			die ( "Error archiving uploaded file - CANNOT create archive folder: $_archiveDir <br/>" );
-  }
-  
-  echo "The file " . basename( $_FILES[0]["upldFile"]["name"]). " has been archived.<br/>";
-	 */
+	if ( ! move_uploaded_file( $_tmpDataFile, $_archiveName ) ) {
+			die ( "Error archiving uploaded file - CANNOT create archive folder: $_archiveDir <br/>" );
+	}
+
+	echo "The file " . basename( $_FILES[0]["upldFile"]["name"]). " has been archived.<br/>";
+ */
 ?>
