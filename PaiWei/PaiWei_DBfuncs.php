@@ -142,7 +142,7 @@ function deletePaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 
 function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 	global $_db, $_insCount, $_dupCount, $_errCount;
-	global $_errRec, $_dupRec;
+	global $_errRec, $_dupRec, $useChn;
 
 	$tupAttrX = array();
 	$tupValX = array ();
@@ -166,9 +166,13 @@ function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 	$sql = "SELECT `ID` FROM $pwTable WHERE {$qryCond};";
 	$rslt = $_db->query( $sql );
 	if ( $_db->errno ) {
+		if ( DEBUG ) {
 			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} on Rec. No. '{$recNo}' while executing: {$sql}\n";
-			$_errCount++;
-			return false;
+		} else {
+			$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+		}
+		$_errCount++;
+		return false;
 	} // error condition
 
 	switch ( $rslt->num_rows ) { // should be 0 or 1
@@ -178,7 +182,11 @@ function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 			$tupID = $rslt->fetch_all(MYSQLI_ASSOC)[0][ 'ID' ];
 			break;
 		default:
-			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\tERROR: {$rslt->num_rows} found in Table `{$pwTable}`\n";
+			if ( DEBUG ) {
+				$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\tERROR: {$rslt->num_rows} found in Table `{$pwTable}`\n";	
+			} else {
+				$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+			}
 			$_errCount++;
 			return false;
 	} // switch()
@@ -187,7 +195,11 @@ function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 		$sql = "INSERT INTO {$pwTable} {$tupAttrs} VALUE {$tupVal};";
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
-			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} Rec. No. '{$recNo}' while executing: {$sql}\n";
+			if ( DEBUG ) {
+				$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} Rec. No. '{$recNo}' while executing: {$sql}\n";				
+			} else {
+				$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+			}
 			$_errCount++;
 			return false;
 		}
@@ -201,7 +213,11 @@ function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 	$sql = "SELECT * FROM pw2Usr WHERE {$sqlCond};";
 	$rslt = $_db->query( $sql );
 	if ( $_db->errno ) {
-		$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} Rec. No. '{$recNo}' while executing: {$sql}\n";
+		if ( DEBUG ) {
+			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} Rec. No. '{$recNo}' while executing: {$sql}\n";
+		} else {
+			$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+		}
 		$_errCount++;
 		return false;
 	}
@@ -211,19 +227,29 @@ function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 					.	"VALUE ( \"{$pwTable}\", \"{$tupID}\", \"{$usr}\" );";
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
-			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} Rec. No. '{$recNo}' while executing: {$sql}\n";
+			if ( DEBUG ) {
+				$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} Rec. No. '{$recNo}' while executing: {$sql}\n";
+			} else {
+				$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+			}
 			$_errCount++;
 			return false;
 		}
 		$_insCount++;
 		return $tupID;
 	case 1:
-		$_dupRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\tDUPLICATE: {$tupVal} for User {$usr} already in the database;\n";
+		$_debugMsg = ( DEBUG ) ? __FUNCTION__ . "()\t" . __LINE__ . ": " : '';
+		$_dupMsg = ( $useChn )  ? "{$usr} 的牌位資料 {$tupVal} 已經在資料庫中。" 
+								: "{$tupVal} for User {$usr} already in the database!";
+		$_dupRec[] = $_debugMsg . $_dupMsg;
 		$_dupCount++;
 		return false;
 		break;
 	default: // error condition: tuple indexed ==> should only be 0 or 1
-		$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\tERROR: {$rslt->num_rows} records found in the pw2Usr Table\n";
+		$_debugMsg = ( DEBUG ) ? __FUNCTION__ . "()\t" . __LINE__ . ": " : '';
+		$_errMsg = ( $useChn )  ? "資料庫有錯誤！已有 {$rslt->num_rows} 份同樣的牌位資料！"
+								: "ERROR! {$rslt->num_rows} records found in the database.";
+		$_errRec[] = $_debugMsg . $_errMsg;
 		$_errCount++;
 		return false;		
 	} // switch on num_rows				
