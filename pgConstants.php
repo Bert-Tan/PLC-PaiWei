@@ -29,7 +29,7 @@
 				DEFINE ( 'PDF_INCL', '/home/amitabha/tcpdf' );
 				DEFINE ( 'ARCHIVEDIR', '/home/amitabha/Archive' );
 				DEFINE ( 'IDLE_THRESHOLD', 1800 );
-				DEFINE ( 'DEBUG', "false" );
+				DEFINE ( 'DEBUG', false );
 				break;
 	}
 

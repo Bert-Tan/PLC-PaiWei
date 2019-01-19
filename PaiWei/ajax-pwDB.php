@@ -7,6 +7,7 @@
 	$_sessType = $_SESSION[ 'sessType' ];
 	$_sessLang = $_SESSION[ 'sessLang' ];
 	$_sessUsr = $_SESSION[ 'usrName' ];
+	$useChn = ( $_SESSION[ 'sessLang' ] == SESS_LANG_CHN );
 
 function _dbName_2_htmlName ( $_dbName ) {
 	global $_sessLang;
@@ -336,6 +337,7 @@ function delTblData( $dbInfo ) {
 	 * The receiving AJAX switch on 'URL', 'delSUCCESS', 'errCount'
 	 */
 	global $_db, $_errRec, $_errCount, $_delCount;
+	global $useChn;
 	$rpt = array();
 
 	$tblName = $dbInfo['tblName'];
@@ -355,7 +357,7 @@ function delTblData( $dbInfo ) {
 	$sql = "UNLOCK TABLES;";
 	$_db->query( $sql );
 	$_db->autocommit(true);
-	$rpt [ 'delSUCCESS' ] = "{$_delCount} records deleted";	
+	$rpt [ 'delSUCCESS' ] = ( $useChn ) ? "牌位資料刪除完畢！" : "{$_delCount} records deleted";	
 	return $rpt;
 } // delTblData()
 

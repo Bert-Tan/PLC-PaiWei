@@ -14,12 +14,16 @@ $_srchCount = 0; $_srchRec = array();
 
 function userSelectionList() {
 	global $_db, $_errCount, $_errRec;
-	
+	global $useChn;
 	$sql = "SELECT ID, usrName FROM Usr ORDER BY ID;";
 	$rslt = $_db->query( $sql );
 	if ( $_db->errno ) {
+		if ( DEBUG ) {
+			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		} else {
+			$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+		}
 		$_errCount++;
-		$_errRec[] = __FUNCTION__ . '() Line ' . __LINE__ . ":\tDB Error:\t$_db->error";
 		return false;
 	}
 	$num_Usrs = $rslt->num_rows;
@@ -52,7 +56,7 @@ function getPaiWeiTblFlds( $pwTable ) {
 function searchPaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 	global $_db, $_errRec, $_errCount;
 	global $_srchCount, $_srchRec;
-
+	global $useChn;
 	$srchCond = ""; $i = 0;
 	foreach ( $pwTupNVs as $attrN => $attrV ) {
 		if ( $i > 0 ) { $srchConds .= " AND "; }
@@ -67,7 +71,11 @@ function searchPaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 
 	$rslt = $_db->query( $sql );
 	if ( $_db->errno ) {
-		$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		if ( DEBUG ) {
+			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		} else {
+			$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+		}
 		$_errCount++;
 		return false;
 	} // error condition
@@ -80,11 +88,15 @@ function searchPaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 
 function updatePaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 	global $_db, $_errRec, $_updCount, $_errCount;
-
+	global $useChn;
 	$tupID = array_key_exists( 'ID' , $pwTupNVs ) ? $tupID = $pwTupNVs[ 'ID' ] : null;	
 	
 	if ( $tupID == null ) {
-		$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\tERROR: Must provide the key for Update\n";
+		if ( DEBUG ) {
+			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\tERROR: Must provide the key for Update\n";
+		} else {
+			$_errRec[] = ( $useChn ) ? "軟體內部發生錯誤！" : "Software Internal Error!";
+		}
 		$_errCount++;
 		return false;
 	} // error condition
@@ -100,7 +112,11 @@ function updatePaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 	$sql = "UPDATE {$pwTable} SET {$updParams} WHERE ID = \"{$tupID}\";";
 	$_db->query( $sql );
 	if ( $_db->errno ) {
-		$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		if ( DEBUG ) {
+			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		} else {
+			$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+		}
 		$_errCount++;
 		return false;
 	} // error condition
@@ -111,28 +127,40 @@ function updatePaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 
 function deletePaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 	global $_db, $_errCount, $_errRec, $_delCount;
-	
+	global $useChn;
 	$tupID = null;	
 	if ( array_key_exists( 'ID' , $pwTupNVs ) ) {
 		$tupID = $pwTupNVs[ 'ID' ];
 	}
 	if ( !$tupID ) {
+		if ( DEBUG ) {
 			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\tERROR: Must provide the key for deletion\n";
-			$_errCount++;
-			return false;
+		} else {
+			$_errRec[] = ( $useChn ) ? "軟體內部發生錯誤！" : "Software Internal Error!";
+		}
+		$_errCount++;
+		return false;
 	} // error condition
 
 	$sql = "DELETE FROM pw2Usr WHERE TblName = \"{$pwTable}\" AND pwID = \"{$tupID}\" AND pwUsrName = \"{$usr}\";";
 	$rslt = $_db->query( $sql );
 	if ( $_db->errno ) {
-		$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		if ( DEBUG ) {
+			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		} else {
+			$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+		}
 		$_errCount++;
 		return false;
 	} // error condition
 	$sql = "DELETE FROM {$pwTable} WHERE `ID` = \"{$tupID}\";";
 	$rslt = $_db->query( $sql );
 	if ( $_db->errno ) {
-		$_errRec[] = __FUNCTION. "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		if ( DEBUG ) {
+			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		} else {
+			$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+		}
 		$_errCount++;
 		return false;
 	} // error condition
