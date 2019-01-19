@@ -76,7 +76,7 @@ function readSessParam() {
 			} // for loop
 		}, // Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 77\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "readSessParam()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
 	}); // AJAX call
 } // readSessParam()
@@ -188,7 +188,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 		url: "./ajax-pwDB.php",
 		method: 'POST',
 		data:	_ajaxData,
-		success: function ( rsp ) { // SUCCESS handler
+		success: function ( rsp ) { alert ( rsp ); // SUCCESS handler
 			var rspV = JSON.parse( rsp );
 			$(".dataArea").css("overflow-y", "initial");
 			for ( var X in rspV ) {
@@ -225,7 +225,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 		}, // End of SUCCESS Handler
 		
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 225\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "Line 228\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler
 	}); // ajax call	
 } // loadTblData()
@@ -259,18 +259,18 @@ function myPaiWeiUpLoad ( e ) {
 	var myFormData = new FormData ( this ); // myFormData.append( 'pwUsr', _sessionUsr );
 	var myHdlr = $(this).attr("action");
 	$.ajax({
-    method: "POST",
-    url: myHdlr,
-    data: myFormData,
-    processData: false,
-    contentType: false,
-    cache: false,
-    success: function ( rsp ) {
+		method: "POST",
+		url: myHdlr,
+		data: myFormData,
+		processData: false,
+		contentType: false,
+		cache: false,
+		success: function ( rsp ) {
 			alert( rsp );
 			return;
-    }, // End of Success Handler 
+    	}, // End of Success Handler 
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 268\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "myPaiWeiUpload()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler		
 	}); // AJAX Call
 } // myPaiWeiUpLoad()
@@ -437,7 +437,7 @@ function lookupBtnHdlr() {
 			} // for loop
 		}, // success handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 414\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "looupBtnHdlr()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
 	}); // AJAX CALL
 } // lookupBtnHdlr() 
@@ -539,6 +539,7 @@ function insBtnHdlr() {
 						location.replace( rspV[ X ] );
 						return;
 					case 'insSUCCESS': // rspV[X] holds the tupID 
+						var alertMsg = ( _sessLang == SESS_LANG_CHN ) ? "牌位資料加入完畢！" : "Record Inserted!";
 						thisRow.attr("data-keyn", 'ID' ); thisRow.attr( 'id', rspV[ X ] );
 						cellsChanged.each(function(i) {
 							$(this).attr( "data-oldv", $(this).val() ); // remember the current value
@@ -559,7 +560,7 @@ function insBtnHdlr() {
 						lastTd.html( myEditBtns ); // change to edit & delete buttons
 						lastTd.find(".editBtn").on( 'click', editBtnHdlr ); // bind to the edit click handler
 						lastTd.find(".delBtn").on( 'click', delBtnHdlr ); // bind to the edit click handler
-						alert( "Record Inserted!" );
+						alert( alertMsg );
 						return;							
 					case 'errCount':
 						alert ( rspV [ 'errRec' ] );
@@ -575,7 +576,7 @@ function insBtnHdlr() {
 			} // for loop
 		}, // End of Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 552\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "insBtnHdlr()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
 	}); // AJAX CALL
 } // insBtnHdlr()
@@ -625,7 +626,7 @@ function delBtnHdlr() {
 			} // for loop
 		}, // End of Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
-			alert( "Line 602\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "delBtnHdlr()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler	
 	});	// AJAX Call
 } // delBtnHdlr()
@@ -693,16 +694,18 @@ function updBtnHdlr() {
 						location.replace( rspV[ X ] );
 						return;
 					case 'updSUCCESS':
+						var alertMsg = ( _sessLang == SESS_LANG_CHN ) ? "牌位資料更新完畢！" : "Record Updated!";
 						cellsChanged.each(function(i) {
 							$(this).attr( "data-oldv", $(this).val() ); // remember the current value
 						}); // cellsChanged
-						alert( 'Record Updated!' );
+						alert( alertMsg );
 						break;
 					case 'errCount':
+						var alertMsg = ( _sessLang == SESS_LANG_CHN ) ? "牌位資料更新失敗！" : "Update Failed!";
 						cellsChanged.each(function(i) {
 							$(this).val( $(this).attr( "data-oldv" ) ); // restore its old value
 						}); // cellsChanged
-						alert( "Update Failed:\n" + rspV[ 'errRec' ] );
+						alert( alertMsg + rspV[ 'errRec' ] );
 						break;
 				} // switch
 			} // for loop
@@ -720,7 +723,7 @@ function updBtnHdlr() {
 			thisRow.find("input[type=text]").prop( "disabled", true );
 			thisRow.find("input[type=text]").unbind();
 			chgUpd2Edit( updBtn );
-			alert( "Line 697\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			alert( "updBtnHdlr()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler					
 	}); // AJAX Call
 } // updBtnHdlr()
