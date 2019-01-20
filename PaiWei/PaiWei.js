@@ -188,7 +188,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 		url: "./ajax-pwDB.php",
 		method: 'POST',
 		data:	_ajaxData,
-		success: function ( rsp ) { alert ( rsp ); // SUCCESS handler
+		success: function ( rsp ) { // SUCCESS handler
 			var rspV = JSON.parse( rsp );
 			$(".dataArea").css("overflow-y", "initial");
 			for ( var X in rspV ) {
