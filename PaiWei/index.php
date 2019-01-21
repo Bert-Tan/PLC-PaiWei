@@ -46,27 +46,18 @@
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
-		
-//	session_start(); // create or retrieve
-	if ( !isset( $sessLang ) ) $sessLang = SESS_LANG_CHN; // default
-	if ( isset ( $_GET[ 'l' ] ) ) {
-		$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN;
-	} else if ( isset( $_SESSION[ 'sessLang' ] ) ) {
-		$sessLang = $_SESSION[ 'sessLang' ];
-	}	
-	$_SESSION[ 'sessLang' ] = $sessLang;
-
-	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
-	$upldUrl = URL_ROOT . "/admin/PaiWei/upldPaiWeiForm.php";
-	$ugUrl = URL_ROOT . "/admin/PaiWei/UG.php";
-	$useChn = ( $sessLang == SESS_LANG_CHN );
-	$upldUrl .= ( $useChn ) ? "?l=c" : "?l=e";
-	$ugUrl .= ( $useChn ) ? "?l=c" : "?l=e";
 	
+	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
+//	session_start(); // create or retrieve
 	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
 		header( $hdrLoc );
 	}
-
+	$sessLang = $_SESSION[ 'sessLang' ];
+	$useChn = ( $sessLang == SESS_LANG_CHN );
+	$upldUrl = URL_ROOT . "/admin/PaiWei/upldPaiWeiForm.php";
+	$ugUrl = URL_ROOT . "/admin/PaiWei/UG.php";
+	$upldUrl .= ( $useChn ) ? "?l=c" : "?l=e";
+	$ugUrl .= ( $useChn ) ? "?l=c" : "?l=e";
 ?>
 
 <!DOCTYPE html>

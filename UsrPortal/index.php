@@ -29,24 +29,14 @@
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
 
-//	session_start(); // create or retrieve
-	if ( !isset( $sessLang ) ) $sessLang = SESS_LANG_CHN; // default
-	if ( isset ( $_GET[ 'l' ] ) ) {
-		$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN;
-	} else if ( isset( $_SESSION[ 'sessLang' ] ) ) {
-		$sessLang = $_SESSION[ 'sessLang' ];
-	}	
-	$_SESSION[ 'sessLang' ] = $sessLang;
-
 	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
-	$featPWurl = "../PaiWei/index.php";	// relative;
-	$useChn = ( $sessLang == SESS_LANG_CHN );
-	$featPWurl .= ( $useChn ) ? "?l=c" : "?l=e";
-
- 	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
+//	session_start(); // create or retrieve
+	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
 		header( $hdrLoc );
 	}
-
+	$sessLang = $_SESSION[ 'sessLang' ];
+	$useChn = ( $sessLang == SESS_LANG_CHN );
+	$featPWurl = "../PaiWei/index.php";	// relative path;
 ?>
 
 <!DOCTYPE html>
@@ -63,7 +53,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$(".future").on( 'click', futureAlert );
-		$(".soon").on( 'click', soonAlert );
+	/*	$(".soon").on( 'click', soonAlert ); */
 	})
 </script>
 

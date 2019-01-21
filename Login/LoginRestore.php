@@ -50,14 +50,23 @@
 		header( $hdrLoc ); // the redirected PHP file will figure out the language
 	}
 
+<<<<<<< HEAD
+	$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN;
+=======
 	$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN; // set Lang from the CGI parameter
+>>>>>>> UI
 	if ( !isset($_SESSION[ 'sessLang' ]) ) {
 		$_SESSION[ 'sessLang' ] = $sessLang;
 	} else {
 		$sessLang = $_SESSION[ 'sessLang' ];
+<<<<<<< HEAD
+	}
+	$useChn = ( $sessLang == SESS_LANG_CHN );	
+=======
 	}	
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$hLtrS = ( $useChn ) ? "12px;" : "normal;"; // letter spacing for <h*> elements
+>>>>>>> UI
 
 	unset($usrReq);
 	$myDir = basename( dirname( __FILE__ ) );

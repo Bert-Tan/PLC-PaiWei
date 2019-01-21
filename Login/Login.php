@@ -87,15 +87,14 @@
 			$_SESSION[ 'usrEmail' ] = ($myEmail != null) ? $myEmail : $rtnV[ 'usrEmail' ] ;
 			$_SESSION[ 'sessType' ] = $sessType;
 			$_SESSION[ 'LAST_ACTIVITY' ] = $_SERVER[ 'REQUEST_TIME' ];
-			$hTop = "10vh";
 			header( $hdrLoc );
 		} else { // formulate message and style
-			$hTop = "5vh";
 			$msgTxt = ( $useChn ) ?
 				"登錄遭遇下列錯誤；請重新登錄或 <a href=\"mailto:library@amitabhalibrary.org\">通知本網站管理員</a> 。謝謝！" :
 				"Error occurred! Please retry or <a href=\"mailto:library@amitabhalibrary.org\">Report.</a> Thank you!";
 		}
 	} // user request
+	$hTop = ( strlen( $msgTxt ) ) ? "5vh" : "10vh";
 	unset($_POST);
 ?>
 
