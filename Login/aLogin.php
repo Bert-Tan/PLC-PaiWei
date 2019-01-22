@@ -52,30 +52,27 @@
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate()
 	
-	$hdrLoc = "location: " . URL_ROOT . "/admin/admPortal/index.php";
-	$rstLink = "./LoginRestore.php?my_Req=fgt_Pass&usr_Req=fgt_Pass";
+	$hdrLoc = "location: " . URL_ROOT . "/admin/AdmPortal/index.php";
 	session_start(); // create or retrieve
 	if ( isset( $_SESSION[ 'usrName' ] ) ) { // already logged in
 		header( $hdrLoc ); // the redirected PHP file will figure out the language
 	}
 
-	$sessLang = SESS_LANG_ENG; // set Lang to English
+	$sessLang = SESS_LANG_CHN; // set Lang to English
 	if ( !isset($_SESSION[ 'sessLang' ]) ) {
 		$_SESSION[ 'sessLang' ] = $sessLang;
-	} else {
-		$sessLang = $_SESSION[ 'sessLang' ];
 	}
+	$sessLang = $_SESSION[ 'sessLang' ];
 	
 	$useChn = ( $sessLang == SESS_LANG_CHN );
-	$rstLink .= ( $useChn ) ? "&l=c" : "&l=e";
 	$hLtrS = ( $useChn ) ? "12px" : "normal"; // letter spacing for <h*> element
 	$hTop = "15vh";
-	$sessType = SESS_TYP_MGR;
 	$msgTxt = '';
 	if (isset($_POST[ 'usr_Req' ])) {
 		$myUsrName = $_POST[ 'usr_Name' ];
 		$myPass = $_POST[ 'usr_Pass' ];
 		$myEmail = ( isset( $_POST[ 'usr_Email' ] ) ) ? $_POST[ 'usr_Email' ] : null ;
+		$sessType = ( $_POST[ 'sess_Typ' ] == "SESS_TYP_MGR" ) ? SESS_TYP_MGR : SESS_TYP_WEBMASTER;
 		validateUser( $myUsrName, $myPass, $sessType, $rtnV, $useChn );
 		if ( $_errCount == 0 ) { // login successful
 			$_SESSION[ 'usrName' ] = $myUsrName;
@@ -147,9 +144,15 @@
 				    	</td>
 					</tr>				
 			  		<tr>
- 						<td colspan="2" style="text-align: center; vertical-align: middle;">
+						<td style="text-align: left; vertical-align:middle;">管理層次:<br/>
+							<select name="sess_Typ" style="width: 90%; font-size: 1.0em;">
+								<option value="SESS_TYP_MGR">一般管理員</option>
+								<option value="SESS_TYP_WEBMASTER">網站管理員</option>
+							</select>
+						</td>
+ 						<td style="text-align: center; vertical-align: middle;">
 							<input type="submit" id="uSubLogin" name="usr_Req" class="pushButton" value="<?php echo xLate( 'uSub' ); ?>">							
-				    </td>
+				    	</td>
 			  		</tr>
 				</tbody>
 			</table>

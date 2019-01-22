@@ -242,16 +242,17 @@
 		return true;
 	} // validateEmail()
 
-	function validateUser( $usrName, $usrPass, $admFlag, &$rtnV, $rspChn ) {
+	function validateUser( $usrName, $usrPass, $sessType, &$rtnV, $rspChn ) {
 		global $_db, $_errCount, $_errRec;
 
 		$escName = $_db->real_escape_string( $usrName );
 		$escPass = $_db->real_escape_string( $usrPass );		
 	
-		if ( !(boolean)$admFlag ) {
+		if ( $sessType == SESS_TYP_USR ) {
 			$sql = "SELECT * FROM Usr WHERE `UsrName` = \"{$escName}\";";
 		} else {
-			$sql = "SELECT * FROM Usr WHERE UsrName = \"{$escName}\" AND ID IN ( SELECT ID FROM admUsr );";
+			$sql = "SELECT * FROM Usr WHERE UsrName = \"{$escName}\" AND ID IN "
+				 . "( SELECT ID FROM admUsr WHERE `SessTyp` = \"{$sessType}\" );";
 		}
 
 		$rslt = $_db->query( $sql );
@@ -266,7 +267,18 @@
 			return false;
 		}
 		if ( $rslt->num_rows == 0 ) {
-			$errMsg = ( $rspChn ) ? "沒有 '{$escName}' 的登錄資料！" : "No Record Found for '{$escName}'!";
+			switch ( $sessType ) {
+			case SESS_TYP_MGR:
+				$xtra = ( $rspChn ) ? "管理員" : " as an administrator";
+				break;
+			case SESS_TYP_WEBMASTER:
+				$xtra = ( $rspChn ) ? "網站管理員" : " as a webmaster";
+				break;
+			default:
+				$xtra = '';
+			}
+			$errMsg = ( $rspChn ) ? "沒有" . $xtra . " '{$escName}' 的登錄資料！"
+								  : "No Record Found for '{$escName}'" . $xtra . "!";
 			$_errCount++;
 			$_errRec[] = $errMsg;
 			return false;

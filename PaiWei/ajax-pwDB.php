@@ -127,7 +127,8 @@ function readPwParam( $_dbInfo ) {
 		return $rpt;
 	}
 	$tblName = $_dbInfo[ 'tblName' ];
-	$sql = "SELECT * FROM $tblName WHERE `isActive`;";
+	$today = Date("Y-m-d");
+	$sql = "SELECT * FROM $tblName WHERE $today <= `pwExpires`;";
 	$rslt = $_db->query( $sql );
 	if ( $_db->errno ) {
 		$_errCount++;

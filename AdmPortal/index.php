@@ -1,6 +1,6 @@
 <?php
 /**********************************************************
- *                  User Portal Main Page                 *
+ *                 Admin Portal Main Page                 *
  **********************************************************/
  
 	require_once( '../pgConstants.php' );
@@ -11,32 +11,41 @@
 		global $sessLang;
 		$htmlNames = array (
 			'htmlTitle' => array (
-				SESS_LANG_CHN => "淨土念佛堂用戶主頁",
-				SESS_LANG_ENG => "Pure Land Center User Main Page" ),
-			'featPW' => array (
-				SESS_LANG_CHN => "法會牌位申請",
-				SESS_LANG_ENG => "Name Plaque Application for<br/>Merit Dedication in Retreats" ),
-			'featFuture' => array (
-				SESS_LANG_CHN => "其他未來會提供的功能<br/>( 週日早課祈福及迴向申請，結緣法寶申請，等等。)",
-				SESS_LANG_ENG => "Future Capabilities<br/>(e.g., Req. for Dharma Items; etc.)" ),
+				SESS_LANG_CHN => "淨土念佛堂管理用戶主頁",
+				SESS_LANG_ENG => "Pure Land Center Admin User Main Page" ),
+			'pwMgr' => array (
+				SESS_LANG_CHN => "處理法會牌位",
+				SESS_LANG_ENG => "Manage Name Plaques" ),
+			'rtrtMgr' => array (
+				SESS_LANG_CHN => "更新法會資料",
+				SESS_LANG_ENG => "Manage Retreats" ),
 			'logOut' => array (
 				SESS_LANG_CHN => "用戶<br/>撤出",
 				SESS_LANG_ENG => "User<br/>Logout" ),
 			'h1Title' => array (
-				SESS_LANG_CHN => "請點選功能",
-				SESS_LANG_ENG => "Please Select a Function" )
+				SESS_LANG_CHN => "請點選管理功能",
+				SESS_LANG_ENG => "Please Select an Administrative Function" )
 			);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
 
-	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
 //	session_start(); // create or retrieve
-	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
+	$sessLang = SESS_LANG_CHN;
+	if ( isset( $_SESSION[ 'sessLang' ] ) ) {
+		$sessLang = $_SESSION[ 'sessLang' ];
+	} else {
+		$_SESSION[ 'sessLang' ] = $sessLang;
+	}
+
+	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
+	$rtrtMgrUrl = "../PaiWei/rtMgr.php";	// relative;
+	$pwMgrUrl = "../PaiWei/pwMgr.php";	// relative;
+	$useChn = ( $sessLang == SESS_LANG_CHN );
+
+ 	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
 		header( $hdrLoc );
 	}
-	$sessLang = $_SESSION[ 'sessLang' ];
-	$useChn = ( $sessLang == SESS_LANG_CHN );
-	$featPWurl = "../PaiWei/index.php";	// relative path;
+
 ?>
 
 <!DOCTYPE html>
@@ -53,10 +62,15 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$(".future").on( 'click', futureAlert );
-	/*	$(".soon").on( 'click', soonAlert ); */
+		$(".soon").on( 'click', soonAlert );
 	})
 </script>
-
+<style>
+#myMenuTbl {
+	table-layout: fixed;
+	height: 3.1em;
+}
+</style>
 </head>
 <body>
 	<div class="hdrRibbon">
@@ -68,8 +82,9 @@
 		<table id="myMenuTbl" class="centerMeV">	
 			<thead>
 				<tr>
-					<th><a href="<?php echo $featPWurl; ?>" class="myLinkButton"><?php echo xLate( 'featPW' ); ?></a></th>
-					<th class="future"><?php echo xLate( 'featFuture' ); ?></th>
+					<th><a href="<?php echo $rtrtMgrUrl; ?>" class="myLinkButton"><?php echo xLate( 'rtrtMgr' ); ?></a></th>
+					<th><a href="<?php echo $pwMgrUrl; ?>" class="myLinkButton soon"><?php echo xLate( 'pwMgr' ); ?></th>
+					<th class="future">處理週日迴向申請</th>
 				</tr>
 			</thead>
 		</table>

@@ -15,14 +15,6 @@
 <link rel="stylesheet" href="../css/admin.css">
 <link rel="stylesheet" href="../css/menu.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="../futureAlert.js"></script>
-<script>
-	$(document).ready(function() {
-		$(".future").on( 'click', futureAlert );
-		$(".soon").on( 'click', soonAlert );
-	});
-</script>
-
 </head>
 <body>
 	<div class="hdrRibbon">
@@ -38,7 +30,7 @@
 					<th><a href="./UG.php" class="myLinkButton" style="line-height: 1.3em;">用戶指南<br/>(中文)</a></th>
 					<th><a href="../Login/Login.php?l=e" class="myLinkButton" style="line-height: 1.3em;">User Login<br/>(English)</a></th>
 					<th><a href="./eUG.php" class="myLinkButton" style="line-height: 1.3em;">User Guide<br/>(English)</a></th>
-					<th><a href="../Login/aLogin.php" class="myLinkButton future" style="line-height: 2.6em;">管理員登錄</a></th>
+					<th><a href="../Login/aLogin.php" class="myLinkButton" style="line-height: 1.3em;">管理員登錄</a></th>
 				</tr>
 			</thead>
 		</table>
