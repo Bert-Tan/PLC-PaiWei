@@ -53,9 +53,8 @@
         if ( $_db->affected_rows != 1 ) {
             $_errRec[] = "資料庫發生錯誤；無法更新！";
             $_errCount++;
-            return $_errRec;
         }
-        return ( $_POST );
+        return;
     } // function updRetreatData()
 
 	function putMsg( $bxW, $txtLS, $txtA, $fontW, $xtra ) {
@@ -97,13 +96,9 @@
 	}
 
     if ( isset( $_POST[ 'rtUpdData' ] ) ) {
-        $retreatData = updRetreatData();
-    } else {
-        $retreatData = readRetreatData();
-    }
-    if ( $_errCount > 0 ) {
-
-    }
+        updRetreatData();
+    }   
+	$retreatData = readRetreatData();
 ?>
 
 <!DOCTYPE html>
@@ -187,7 +182,7 @@ input[type=submit] {
         </h1>
 <?php
     if ( isset( $_POST[ 'rtUpdData' ] ) ) {
-        $xtra = ( !$_errCount ) ? "法會資料更新完畢！" : '';
+        $xtra = ( $_errCount == 0 ) ? "法會資料更新完畢！" : '';
         echo putMsg( "40%", "normal", "center", "normal", $xtra );
     }
  ?>
