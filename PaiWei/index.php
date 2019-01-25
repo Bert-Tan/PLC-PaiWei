@@ -129,7 +129,17 @@ input[type=submit] {
 					<th class="pwTbl" data-tbl="W001A_4"><?php echo xLate( 'pwW' ); ?></th>
 					<th class="pwTbl" data-tbl="L001A"><?php echo xLate( 'pwL' ); ?></th>
 					<th class="pwTbl" data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th>
+<?php
+	if ( $sessType == SESS_TYP_USR ) {
+?>
 					<th class="ugld"><?php echo xLate( 'pwUG' ); ?></th>
+<?php
+	} else {
+?>
+					<th id="dnld"><a href="<?php echo $dnldUrl; ?>" class="myLinkButton">下載牌位檔案</a></th>
+<?php
+	}
+?>
 				</tr>
 				<tr>
 					<th class="pwTbl" data-tbl="DaPaiWei"><?php echo xLate( 'pwBIG' ); ?></th>
@@ -142,7 +152,26 @@ input[type=submit] {
 		<div id="pgLogOut" class="centerMeV"><a href="../Login/Logout.php" class="myLinkButton"><?php echo xLate('logOut');?></a></div>
 	</div>
 	<div class="dataArea">
+<?php
+	if ( $sessType == SESS_TYP_USR ) { 
+?>
 		<h1 class="centerMe" id="myDataTitle" style="<?php if ( !$useChn ) echo "letter-spacing: normal;"; ?>"><?php echo xLate( 'h1Title' ); ?></h1>
+<?php
+	} else {
+		if ( isset( $_SESSION[ 'icoName' ] ) ) {
+?>
+		<h1 class="q_centerMe" id="myDataTitle"><?php echo xLate( 'h1Title' ); ?></h1>
+		<h1 class="centerMe" style="color: blue;">幫助蓮友 <?php echo $_SESSION[ 'icoName' ]; ?> 處理法會牌位</h1>	
+<?php
+		} else { // icoSkipped; only downloading is available
+?>
+		<h1 class="centerMe" id="myDataTitle" style="margin-top: 0px; letter-spacing: normal;">
+			沒有點選蓮友為之處理牌位，<br/>牌位管理功能僅限於下載牌位列印！
+		</h1>
+<?php
+		}
+	}
+?>
 	</div>
 </body>
 </html>

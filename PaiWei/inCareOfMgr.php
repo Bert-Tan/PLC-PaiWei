@@ -271,7 +271,7 @@ input[type=submit], input[type=button] {
                 <tbody>
                     <tr>
 						<td>
-							<input	type="text" name="icoText" id="icoInput"
+							<input	type="text" name="icoText" id="icoInput" style="width: 80%;"
 									data-pmptV = "" value="請輸入蓮友識別名">
 						</td>
                         <td id="icoList">
