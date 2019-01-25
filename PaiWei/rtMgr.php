@@ -17,8 +17,8 @@
 				SESS_LANG_CHN => "淨土念佛堂管理用戶主頁",
 				SESS_LANG_ENG => "Pure Land Center Admin User Main Page" ),
 			'pwMgr' => array (
-				SESS_LANG_CHN => "處理法會牌位",
-				SESS_LANG_ENG => "Manage Name Plaques" ),
+				SESS_LANG_CHN => "為蓮友處理法會牌位",
+				SESS_LANG_ENG => "Manage Name Plaques for others" ),
 			'rtrtMgr' => array (
 				SESS_LANG_CHN => "更新法會資料",
 				SESS_LANG_ENG => "Manage Retreats" ),
@@ -88,7 +88,7 @@
 
 	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
 	$rtrtMgrUrl = "../PaiWei/rtMgr.php";	// relative;
-	$pwMgrUrl = "../PaiWei/pwMgr.php";	// relative;
+	$pwMgrUrl = "../PaiWei/inCareOfMgr.php";	// relative;
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 
  	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
@@ -168,7 +168,7 @@ input[type=submit] {
 			<thead>
 				<tr>
 					<th><a href="<?php echo $rtrtMgrUrl; ?>" class="myLinkButton"><?php echo xLate( 'rtrtMgr' ); ?></a></th>
-					<th><a href="<?php echo $pwMgrUrl; ?>" class="myLinkButton soon"><?php echo xLate( 'pwMgr' ); ?></th>
+					<th><a href="<?php echo $pwMgrUrl; ?>" class="myLinkButton"><?php echo xLate( 'pwMgr' ); ?></th>
 					<th class="future">處理週日迴向申請</th>
 				</tr>
 			</thead>
