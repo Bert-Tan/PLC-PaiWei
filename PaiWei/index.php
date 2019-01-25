@@ -53,11 +53,9 @@
 		header( $hdrLoc );
 	}
 	$sessLang = $_SESSION[ 'sessLang' ];
+	$sessType = $_SESSION[ 'sessType' ];
 	$useChn = ( $sessLang == SESS_LANG_CHN );
-	$upldUrl = URL_ROOT . "/admin/PaiWei/upldPaiWeiForm.php";
-	$ugUrl = URL_ROOT . "/admin/PaiWei/UG.php";
-	$upldUrl .= ( $useChn ) ? "?l=c" : "?l=e";
-	$ugUrl .= ( $useChn ) ? "?l=c" : "?l=e";
+	$dnldUrl = URL_ROOT . "/admin/PaiWei/dnldPaiWeiForm.php";
 ?>
 
 <!DOCTYPE html>
@@ -131,13 +129,13 @@ input[type=submit] {
 					<th class="pwTbl" data-tbl="W001A_4"><?php echo xLate( 'pwW' ); ?></th>
 					<th class="pwTbl" data-tbl="L001A"><?php echo xLate( 'pwL' ); ?></th>
 					<th class="pwTbl" data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th>
-					<th><a href="<?php echo $ugUrl; ?>" class="myLinkButton ugld"><?php echo xLate( 'pwUG' ); ?></th>
+					<th class="ugld"><?php echo xLate( 'pwUG' ); ?></th>
 				</tr>
 				<tr>
 					<th class="pwTbl" data-tbl="DaPaiWei"><?php echo xLate( 'pwBIG' ); ?></th>
 					<th class="pwTbl" data-tbl="C001A"><?php echo xLate( 'pwC' ); ?></th>
 					<th class="pwTbl" data-tbl="D001A"><?php echo xLate( 'pwD' ); ?></th>
-					<th><a href="<?php echo $upldUrl; ?>" class="myLinkButton" id="upld"><?php echo xLate( 'pwUpld' ); ?></a></th>
+					<th id="upld"><?php echo xLate( 'pwUpld' ); ?></th>
 				</tr>
 			</thead>
 		</table>

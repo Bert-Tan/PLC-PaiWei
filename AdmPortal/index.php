@@ -68,7 +68,9 @@
 <style>
 #myMenuTbl {
 	table-layout: fixed;
-	height: 3.1em;
+}
+#myMenuTbl th {
+	line-height: 2.9em;
 }
 </style>
 </head>

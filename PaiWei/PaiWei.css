@@ -6,7 +6,7 @@
 	table-layout: fixed;
 }
 
-.pwTbl:hover {
+.pwTbl:hover, .ugld:hover, #upld:hover, #dnld:hover {
 	background-color: #009900;
 	color: yellow;
 	font-weight: bold;

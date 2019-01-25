@@ -20,9 +20,7 @@
 	} // xLate()
 
 	$sessLang = SESS_LANG_CHN; // default
-	if ( isset ( $_GET[ 'l' ] ) ) {
-		$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN;
-	} else if ( isset( $_SESSION[ 'sessLang' ] ) ) {
+	if ( isset( $_SESSION[ 'sessLang' ] ) ) {
 		$sessLang = $_SESSION[ 'sessLang' ];
 	}	
 	$_SESSION[ 'sessLang' ] = $sessLang;
