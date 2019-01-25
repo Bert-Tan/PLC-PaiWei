@@ -105,8 +105,16 @@
 		header( $hdrLoc );
 	}
 
+	if ( isset( $_POST[ 'icoSkip' ] ) ) {
+		$_SESSION[ 'icoSkip' ] = true;
+		$rpt[ 'icoSkip' ] = true;
+		$rpt[ 'url' ] = URL_ROOT . '/admin/PaiWei/index.php';
+		echo json_encode( $rpt, JSON_UNESCAPED_UNICODE );
+		exit;
+	}
 	if ( isset( $_POST[ 'icoText' ] ) || isset( $_POST[ 'icoSel' ] ) ) {
-		echo json_encode ( setInCareOf (  ), JSON_UNESCAPED_UNICODE ); exit;
+		echo json_encode ( setInCareOf (  ), JSON_UNESCAPED_UNICODE );
+		exit;
 	}
 ?>
 
@@ -139,6 +147,25 @@
 		}
 		return false;
 	} // icoBlur()
+	function icoSkip() {
+		var myFormData = new FormData(); myFormData.append( 'icoSkip', true );
+		var myHdlr = $("form").attr("action");
+		$.ajax({
+			method: "POST",	url: myHdlr, data: myFormData,
+			processData: false, contentType: false, cache: false,
+			success: function ( rsp ) {
+				rspV = JSON.parse ( rsp );
+				_icoSkip = rspV[ 'icoSkip' ];
+				alert("略過處理蓮友牌位後，牌位管理功能僅限於下載牌位列印！");
+				location.replace( rspV[ 'url' ] );
+				return;
+			}, // End of Success Handler
+			error: function (jqXHR, textStatus, errorThrown) {
+				alert( "icoSkip()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+			} // End of ERROR Handler
+		});
+		return false;
+	} // icoSkip()
 	function icoSubmit() {
 		var myFormData = new FormData( this );
 		var myHdlr = $(this).attr("action");
@@ -149,12 +176,8 @@
 		if ( icoText == "請輸入蓮友識別名" ) myFormData.delete('icoText');
 		if ( icoSel.length == 0 ) myFormData.delete('icoSel');
 		$.ajax({
-			method: "POST",
-			url: myHdlr,
-			data: myFormData,
-			processData: false,
-			contentType: false,
-			cache: false,
+			method: "POST",	url: myHdlr, data: myFormData,
+			processData: false, contentType: false, cache: false,
 			success: function ( rsp ) {
 				rspV = JSON.parse ( rsp );
 				_icoName = rspV[ 'icoName' ];
@@ -162,7 +185,7 @@
 				return;
 			}, // End of Success Handler 
 			error: function (jqXHR, textStatus, errorThrown) {
-				alert( "myPaiWeiUpload()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+				alert( "icoSubmit()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 			} // End of ERROR Handler		
 		}); // AJAX Call		
 		return false;
@@ -173,6 +196,7 @@
 		$("#icoForm").on( 'submit', icoSubmit );
 		$("#icoInput").on( 'focus', icoFocus );
 		$("#icoInput").on( 'blur', icoBlur );
+		$("#icoSkip").on( 'click', icoSkip );
 	})
 </script>
 <style>
@@ -205,7 +229,7 @@
 input {
     font-size: 1.0em;
 }
-input[type=submit] {
+input[type=submit], input[type=button] {
     background-color: aqua;
     text-align: center;
     display: inline-block;
@@ -251,7 +275,14 @@ input[type=submit] {
 							<?php echo readInCareOf(); ?>
 						</td>
                     </tr>
-                    <tr><td colspan="2"><input type="submit" name="icoSub" value="處理蓮友牌位"></td></tr>
+                    <tr>
+						<td>
+							<input type="submit" name="icoSub" value="處理蓮友牌位">
+						</td>
+						<td>
+							<input type="button" name=icoSkip" id="icoSkip" value="略過處理蓮友牌位">
+						</td>
+					</tr>
                 </tbody>
             </table>
         </form>
