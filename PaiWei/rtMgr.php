@@ -121,9 +121,11 @@
 <style>
 #myMenuTbl {
 	table-layout: fixed;
-	height: 3.1em;
 }
 
+#myMenuTbl th {
+	line-height: 2.9em;
+}
 #myRetreatTbl {
     position: absolute;
     top: 30vh;
@@ -161,8 +163,8 @@ input[type=submit] {
 	<div class="hdrRibbon">
 		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" alt="">
 		<div id="pgTitle" class="centerMeV">
-			<span style="letter-spacing: 1px;">淨土念佛堂一般用戶主頁</span><br/>
-			<span class="engClass">Pure Land Center User Portal</span>
+			<span style="letter-spacing: 1px;">淨土念佛堂管理用戶主頁</span><br/>
+			<span class="engClass">Pure Land Center Admin Portal</span>
 		</div>
 		<table id="myMenuTbl" class="centerMeV">	
 			<thead>
