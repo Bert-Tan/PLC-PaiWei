@@ -1,7 +1,7 @@
 <!-- BEGIN hdr_tbl -->
 <table id="myDataHdr">
   <thead>
-    <tr><th colspan={numCols}>{htmlTblName}<br/>[&nbsp;User:&nbsp;&nbsp;{Who}&nbsp;]</th></tr>
+    <tr><th colspan={numCols}>{htmlTblName}<br/>[&nbsp;&nbsp;User:&nbsp;&nbsp;{Who}{ico}&nbsp;&nbsp;]</th></tr>
     <tr>
 			<!-- BEGIN hdr_cell -->
 			<th style="width: {cellWidth}">{htmlFldName}</th>

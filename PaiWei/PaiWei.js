@@ -65,9 +65,6 @@ function readSessParam() {
 						_alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！'
 																	   : 'Unsaved Data will be LOST!';
 						_blankData = ( _sessLang == SESS_LANG_CHN ) ? "空白" : "BLANK";
-//						$("th.pwTbl").on( 'click', pwTblHdlr ); // bind Pai Wei menu items to the click handler
-//						$("#upld").on( 'click', upldHdlr ); // bind upload anchor to its handler
-//						$(".ugld").on( 'click', ugLoader ); // bind User Guide to its handler
 						break;
 					case 'icoSkip':
 						_icoSkip = rspV[X];
@@ -192,7 +189,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 	_dbInfo[ 'tblName' ] = tblName;
 	_dbInfo[ 'pgNbr' ] = pgNbr;
 /*	_dbInfo[ 'numRec' ] = numRec; */
-	_dbInfo[ 'pwRqstr' ] = sessUsr;
+	_dbInfo[ 'pwRqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
 /*	_dbInfo[ 'inclHdr' ] = !dataOnly; */
 	_ajaxData[ 'dbReq' ] = 'dbREAD';
 	_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
@@ -258,8 +255,7 @@ function pwTblHdlr() {
 	$(".ugld").removeClass("active");
 	$(this).addClass("active");
 
-	loadTblData( _tblName, 1, 30, _sessUsr, false );
-	
+	loadTblData( _tblName, 1, 30, _sessUsr );
 	return;	
 } // function pwTblHdlr()
 
@@ -403,7 +399,7 @@ function lookupBtnHdlr() {
 	});
 	_dbInfo[ 'tblName' ] = _tblName;
 	_dbInfo[ 'tblFlds' ] = tblFlds;
-	_dbInfo[ 'pwRqstr' ] = _sessUsr;
+	_dbInfo[ 'pwRqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
 	_ajaxData[ 'dbReq' ] = 'dbSEARCH';
 	_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
 	_sessMode = SESS_MODE_EDIT; // Search Mode is over; regardless of the search result
@@ -536,7 +532,7 @@ function insBtnHdlr() {
 	});
 	_dbInfo[ 'tblName' ] = _tblName;
 	_dbInfo[ 'tblFlds' ] = tblFlds;
-	_dbInfo[ 'pwRqstr' ] = _sessUsr;
+	_dbInfo[ 'pwRqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
 	_ajaxData[ 'dbReq' ] = 'dbINS';
 	_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
 	$.ajax({
@@ -608,7 +604,7 @@ function delBtnHdlr() {
 	tblFlds [ thisRow.attr("data-keyn") ] = thisRow.attr("id");
 	_dbInfo[ 'tblName' ] = _tblName;
 	_dbInfo[ 'tblFlds' ] = tblFlds;
-	_dbInfo[ 'pwRqstr' ] = _sessUsr;
+	_dbInfo[ 'pwRqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
 	_ajaxData [ 'dbReq' ] = 'dbDEL';
 	_ajaxData [ 'dbInfo' ] = JSON.stringify ( _dbInfo );
 	$.ajax({
@@ -691,7 +687,7 @@ function updBtnHdlr() {
 	}); // each
 	_dbInfo[ 'tblName' ] = _tblName;
 	_dbInfo[ 'tblFlds' ] = tblFlds;
-	_dbInfo[ 'pwRqstr' ] = _sessUsr;
+	_dbInfo[ 'pwRqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;  // actually not used by the DB function)
 	_ajaxData[ 'dbReq' ] = 'dbUPD';
 	_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
 	$.ajax({

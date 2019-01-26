@@ -228,7 +228,7 @@ function constructTblData ( $rows, $dbTblName ) { // $rows =  $mysqlresult->fetc
 } // constructTblData()
 
 function constructTblHeader( $dbTblName ) {
-	global $_sessUsr, $_sessLang;
+	global $_sessUsr, $_sessLang, $_icoName;
 	$fldN = getPaiWeiTblFlds( $dbTblName );
   $tpl = new HTML_Template_IT("./Templates");
   $tpl->loadTemplatefile("pwTblHeader.tpl", true, true);
@@ -236,6 +236,9 @@ function constructTblHeader( $dbTblName ) {
 	$tpl->setVariable("numCols", sizeof($fldN) ) ;
   $tpl->setVariable("htmlTblName", _dbName_2_htmlName( $dbTblName ) ) ;
   $tpl->setVariable("Who", $_sessUsr ) ;
+  if ( $_icoName != null ) {
+	$tpl->setVariable("ico", ";&nbsp;&nbsp;In Care Of:&nbsp;&nbsp;{$_icoName}" ) ;
+  }
 
 	$cellWidth = (int)( 72 / ( sizeof($fldN) - 1) );
 	$i = 0;
