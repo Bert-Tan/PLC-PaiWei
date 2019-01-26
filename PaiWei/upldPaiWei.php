@@ -82,14 +82,14 @@
 	session_start();
 	
 	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
-		header( "location: " . '../Login/Login.php' );
+		header( "location: " . '../index.php' );
 		exit;
 	}
 
 	$_sessType = $_SESSION[ 'sessType' ];
 	$useChn = ( $_SESSION[ 'sessLang' ] == SESS_LANG_CHN );
 	$_sessUsr = $_SESSION[ 'usrName' ];
-
+	$_pwOwner = ( isset( $_SESSION[ 'icoName' ] ) ) ? $_SESSION[ 'icoName' ] : $_sessUsr;
 	$_tblName = $_POST[ 'dbTblName' ];
 	$_ajaxRpt = isset($_POST[ 'ajaxRpt' ] ) ? true : false;
 	$_tmpDataFile = $_FILES["upldedFiles"]["tmp_name"];
@@ -163,7 +163,7 @@
 		$_db->autocommit(false);
 		$_db->query("LOCK TABLES $_tblName WRITE;");
 		$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
-		if ( ! insertPaiWeiTuple( $_tblName, $_tupAttrNVs, $_sessUsr, $_totCount ) ) {
+		if ( ! insertPaiWeiTuple( $_tblName, $_tupAttrNVs, $_pwOwner, $_totCount ) ) {
 			$_db->rollback();
 			$_db->query("UNLOCK TABLES;");			
 			continue; // error or dup conditions, skip to the next tuple
