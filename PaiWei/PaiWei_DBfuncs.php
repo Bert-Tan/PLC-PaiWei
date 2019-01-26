@@ -16,7 +16,9 @@ function userSelectionList() {
 	global $_db, $_errCount, $_errRec;
 	global $useChn;
 	$sql = "SELECT ID, usrName FROM Usr ORDER BY ID;";
+	$sql1 = "SELECT ID, usrName FROM inCareOf ORDER BY ID;";
 	$rslt = $_db->query( $sql );
+	$rslt1 = $_db->query( $sql1 );
 	if ( $_db->errno ) {
 		if ( DEBUG ) {
 			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
@@ -26,16 +28,22 @@ function userSelectionList() {
 		$_errCount++;
 		return false;
 	}
-	$num_Usrs = $rslt->num_rows;
+	$rows1 = $rslt1->fetch_all( MYSQLI_ASSOC );
 	$rows = $rslt->fetch_all( MYSQLI_ASSOC );
-	$rslt->free();
+	$rslt->free(); $rslt1->free();
 	$tpl = new HTML_Template_IT("./Templates");
 	$tpl->loadTemplatefile("userSelectionList.tpl", true, true);
 	foreach( $rows as $row ) {
-	  $tpl->setCurrentBlock("selOption");  
-  	$tpl->setVariable( "usrName" , $row[ 'usrName' ] );
-  	$tpl->setVariable( "ID" , $row[ 'ID' ] );
-  	$tpl->parse("selOption");
+		$tpl->setCurrentBlock("selOption");  
+		$tpl->setVariable( "usrName" , $row[ 'usrName' ] );
+		$tpl->setVariable( "ID" , $row[ 'ID' ] );
+		$tpl->parse("selOption");
+	} // foreach loop
+	foreach( $rows1 as $row ) {
+		$tpl->setCurrentBlock("selOption");  
+		$tpl->setVariable( "usrName" , $row[ 'usrName' ] );
+		$tpl->setVariable( "ID" , $row[ 'ID' ] );
+		$tpl->parse("selOption");
 	} // foreach loop
 	return $tpl->get();
 } // userSelectionList()

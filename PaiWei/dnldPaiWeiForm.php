@@ -54,11 +54,11 @@ input[type=submit] {
 </HEAD>
 <BODY>
 	<div class="dataArea"><!-- style="width: 60%; margin: auto; border: 2px solid #00b300;" -->
-		<div id="forUpld"><!-- for upload into the main PaiWei Admin Page -->
+		<div id="forDnld"><!-- for download into the main PaiWei Admin Page -->
 		<h2 style="margin-top: 4vh; text-align: center; letter-spacing: 20px;">
 			下載牌位資料檔案
 		</h2>
-		<form action="dnldPaiWei.php" method="post" enctype="multipart/form-data" id="upldForm"
+		<form action="dnldPaiWei.php" method="post" enctype="multipart/form-data" id="dnldForm"
 			style="font-weight:bold; padding: 10px;">
 			<table id="myUpldTbl">
 				<tr><!-- Selection Row -->
