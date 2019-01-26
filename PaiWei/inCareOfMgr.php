@@ -126,7 +126,7 @@
 <link rel="stylesheet" type="text/css" href="https://www.amitabhalibrary.org/css/base.css">
 <link rel="stylesheet" type="text/css" href="../css/admin.css">
 <link rel="stylesheet" type="text/css" href="../css/menu.css">
-<link rel="stylesheet" type="text/css" href="./UsrPortal.css">
+<link rel="stylesheet" type="text/css" href="../UsrPortal/UsrPortal.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="../futureAlert.js"></script>
 <script type="text/javascript">

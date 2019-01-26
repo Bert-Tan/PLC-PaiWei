@@ -4,6 +4,9 @@
 var SESS_LANG_CHN = 1;	// These variables are used as CONSTANTS
 var SESS_MODE_EDIT = 0;
 var SESS_MODE_SRCH = 1;
+var SESS_TYP_USR = 0;
+var SESS_TYP_MGR = 1;
+var SESS_TYP_WEBMASTER = 2;
 
 var _sessUsr = null, _sessPass = null, _sessType = null, _sessLang = null;
 var _sessMode = SESS_MODE_EDIT; // default
@@ -23,6 +26,8 @@ var _alertUnsaved = null;
 var _blankData = null; // blank data filler for W_Title & R_Title fields; they can be blank
 var _wtList = null;	// W_Title & R_Title selection list
 var _rtList = null;
+var _icoSkip = null;
+var _icoName = null;
 
 /**********************************************************
  *                    Support functions                   *
@@ -36,7 +41,7 @@ function readSessParam() {
 		url: "./ajax-pwDB.php",
 		method: 'POST',
 		data: _ajaxData,
-		success: function( rsp ) { // Success Handler
+		success: function( rsp ) { // alert( "from Server: " + rsp ); return; // Success Handler
 			var rspV = JSON.parse ( rsp );
 			for ( var X in rspV ) {
 				switch ( X ) {
@@ -60,10 +65,16 @@ function readSessParam() {
 						_alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！'
 																	   : 'Unsaved Data will be LOST!';
 						_blankData = ( _sessLang == SESS_LANG_CHN ) ? "空白" : "BLANK";
-						$("th.pwTbl").on( 'click', pwTblHdlr ); // bind Pai Wei menu items to the click handler
-						$("#upld").on( 'click', upldHdlr ); // bind upload anchor to its handler
-						$(".ugld").on( 'click', ugLoader ); // bind User Guide to its handler
-					   return true;					
+//						$("th.pwTbl").on( 'click', pwTblHdlr ); // bind Pai Wei menu items to the click handler
+//						$("#upld").on( 'click', upldHdlr ); // bind upload anchor to its handler
+//						$(".ugld").on( 'click', ugLoader ); // bind User Guide to its handler
+						break;
+					case 'icoSkip':
+						_icoSkip = rspV[X];
+						break;
+					case 'icoName':
+						_icoName = rspV[X];
+						break;			
 					case 'errCount':
 						x = rspV [ X ];
 						eMSG = '';
@@ -74,6 +85,7 @@ function readSessParam() {
 						return false;						
 				} // switch()
 			} // for loop
+			ready_init();
 		}, // Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
 			alert( "readSessParam()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
@@ -805,6 +817,23 @@ function ready_edit() {
 	_addRowBtn.on( 'click', addRowBtnHdlr );
 	_srchBtn.on( 'click', srchBtnHdlr );
 } // ready_edit()
+
+function ready_init() {
+	if ( _sessType == SESS_TYP_USR ) {
+		$(".pwTbl").on('click', pwTblHdlr );
+		$(".ugld").on( 'click', ugLoader );
+		$("#upld").on( 'click', upldHdlr );
+		return;
+	}
+	if ( _icoName ) {
+		$(".pwTbl").on('click', pwTblHdlr );
+		$("#upld").on( 'click', upldHdlr );
+		// download will be a direct href
+		return;
+	}
+	alert( "由於沒有點選蓮友為之處理牌位，\n牌位管理功能僅限於下載牌位列印！" );
+}
+	
 
 /**********************************************************
  * Document Ready                                         *

@@ -7,6 +7,8 @@
 	$_sessType = $_SESSION[ 'sessType' ];
 	$_sessLang = $_SESSION[ 'sessLang' ];
 	$_sessUsr = $_SESSION[ 'usrName' ];
+	$_icoSkip = isset($_SESSION[ 'icoSkip' ]) ? $_SESSION[ 'icoSkip' ] : null;
+	$_icoName = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
 	$useChn = ( $_SESSION[ 'sessLang' ] == SESS_LANG_CHN );
 
 function _dbName_2_htmlName ( $_dbName ) {
@@ -122,6 +124,8 @@ function readPwParam( $_dbInfo ) {
 		$rpt[ 'usrPass' ] = $_SESSION[ 'usrPass' ];
 		$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
 		$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
+		$rpt[ 'icoSkip'] = isset($_SESSION[ 'icoSkip' ]) ? $_SESSION[ 'icoSkip' ] : null;
+		$rpt[ 'icoName'] = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
 		$rpt[ 'wtList' ] = $_SESSION[ 'wtList' ];
 		$rpt[ 'rtList' ] = $_SESSION[ 'rtList' ];
 		return $rpt;
@@ -152,6 +156,8 @@ function readPwParam( $_dbInfo ) {
 			$rpt[ 'usrPass' ] = $_SESSION[ 'usrPass' ];
 			$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
 			$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
+			$rpt[ 'icoSkip'] = isset($_SESSION[ 'icoSkip' ]) ? $_SESSION[ 'icoSkip' ] : null;
+			$rpt[ 'icoName'] = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
 			$_SESSION[ 'wtList' ] = readPWTitleList( 'pwParam_wtList' );
 			$_SESSION[ 'rtList' ] = readPWTitleList( 'pwParam_rtList' );
 			$rpt[ 'wtList' ] = $_SESSION[ 'wtList' ];
