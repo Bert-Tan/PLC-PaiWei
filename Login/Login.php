@@ -141,19 +141,19 @@
 			    	<td><?php echo xLate( 'uName' ); ?><br/>
 							<input type="text" name="usr_Name" id="uName" data-pmptV=""
 										 data-oldV="<?php echo xLate( 'uNameVal' ); ?>"
-										 value="<?php echo xLate( 'uNameVal' ); ?>" size=38 required>
+										 value="<?php echo xLate( 'uNameVal' ); ?>" required>
 						</td>
 						<td><?php echo xLate( 'uPass' ); ?><br/>
 							<input type="password" name="usr_Pass" id="uPass" data-pmptV=""
 										 data-oldV="<?php echo xLate( 'uPassVal' ); ?>"
-										 value="<?php echo xLate( 'uPassVal' ); ?>" size=38 required>
+										 value="<?php echo xLate( 'uPassVal' ); ?>" required>
 				    </td>
 					</tr>				
 					<tr>
 			  		<td><?php echo xLate( 'uEmail' ); ?><br/>
 			  			<input type="text" name="usr_Email" id="uEmail" data-pmptV=""
 			  						 data-oldV="<?php echo xLate( 'uEmailVal' ); ?>"
-			  						 value="<?php echo xLate( 'uEmailVal' ); ?>" size=38 disabled>
+			  						 value="<?php echo xLate( 'uEmailVal' ); ?>" disabled>
 			  		</td>
 			  		<td style="text-align: center;">			  			
 							<input type="checkbox" name="usr_New" id="uNew" onClick="enableEmailEntry();"><?php echo xLate( 'uNew' ); ?>

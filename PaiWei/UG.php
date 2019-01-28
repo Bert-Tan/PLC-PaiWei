@@ -100,8 +100,8 @@ input[type=submit] {
 		</h2>
         <span style="display: block; width: 95%; margin: auto; padding-top: 2vh; font-size: 1.3em;
 			font-weight: bold; line-height: 1.4em;"><!-- Intro phrase -->
-            用戶將可經由此法會牌位申請主頁選擇所要申請設立的牌位：祈福消災、往生蓮位、歷代祖先、地基主蓮位、
-            累劫冤親債主連位、牌位上載 等。
+            用戶將可經由此法會牌位申請主頁選擇所要申請設立的牌位：往生者蓮位、(一年內)往生者蓮位、歷代祖先蓮位、祈福消災牌位、
+			累劫冤親債主蓮位、地基主蓮位 等；您亦可選擇用戶指南或上載牌位檔案。
         </span>
         <div style="width: 95%; margin:auto; font-size: 1.3em;"><!-- Step-by-step Guide -->
             <ol>
@@ -109,15 +109,19 @@ input[type=submit] {
 					當您在用戶功能選項的主頁點擊『法會牌位申請』之後，您即可看到法會牌位申請的主頁如下：<br/><br/>
 					<img src="./img/pwMain.png" alt=""><br/><br/>
 					<table>
-						<tr><th>往生者蓮位</th>
+						<tr><th style="width:18%;">往生者蓮位</th>
 							<td>
-								爲啟情人的往生的父母、親友、師長、朋友，以至子女、晚輩、甚至寵物等申請設立牌位迴向祈福；
+								爲啟請人的往生的父母、親友、師長、朋友，以至子女、晚輩、甚至寵物等申請設立牌位迴向祈福；
 						    	若往生者於一年內往生，請選擇『一年內往生者蓮位』。
+							</td>
+						<tr><th style="padding-bottom: 2px;">(一年內)往生者蓮位</th>
+							<td>
+								與上同；但（1）請勿爲寵物啟請此類牌位；（2）往生者往生於一年之內。
 							</td>
 						</tr>
 						<tr><th>歷代祖先蓮位</th>
 							<td>
-								為爲啟情人的歷代祖先申請設立牌位迴向祈福；請註明祖先姓氏，如 『譚』氏，及啟請者的全名。
+								為爲啟請人的歷代祖先申請設立牌位迴向祈福；請註明祖先姓氏（ 如『譚』氏 ）及啟請者的全名。
 							</td>
 						</tr>
 						<tr><th>祈福消災牌位</th>
@@ -126,7 +130,7 @@ input[type=submit] {
 								請註明受益者的全名。
 							</td>
 						</tr>
-						<tr><th>累劫冤親債主</th>
+						<tr><th>累劫冤親債主蓮位</th>
 							<td>
 								爲啟請人本人的累劫冤親債主設立牌位迴向祈福;
 								請註明陽上啟請人的全名。
@@ -136,6 +140,11 @@ input[type=submit] {
 							<td>
 								爲啟請人所在地 (家居，別宿，工作地等) 的守護神設立牌位迴向祈福;<br/>
 								請註明啟請人所在地的地址。
+							</td>
+						</tr>
+						<tr><th>用戶指南</th>
+							<td>
+								讓您閱讀此用戶指南。
 							</td>
 						</tr>
 						<tr><th>上載牌位檔案</th>
@@ -149,7 +158,7 @@ input[type=submit] {
 					下面僅以『一年內往生者蓮位』為例說明。<br/><br/>
 					<img src="./img/editDaPaiWei.png" alt=""><br/><br/>
 					<table>
-						<tr><th>刪除</th>
+						<tr><th style="18%;">刪除</th>
 							<td>點擊『刪除』，本行牌位資料即會從資料庫中刪除。</td>
 						</tr>
 						<tr><th>更改</th>
@@ -161,7 +170,7 @@ input[type=submit] {
 					</table><br/>
 					<img src="./img/saveChgDaPaiWei.png" alt=""><br/><br/>
 					<table>
-						<tr><th>搜尋</th>
+						<tr><th style="18%;">搜尋</th>
 							<td>點擊『搜尋』，讓您可以找到您所要更改或刪除的牌位。</td>
 						</tr>
 						<tr><th>加行輸入</th>
@@ -266,6 +275,11 @@ input[type=submit] {
 								retreat date, please use "Recently Deceased."
 							</td>
 						</tr>
+						<tr><th>Recently Deceased</th>
+							<td>The same as the above except (1) the deceased passed away within a year;
+								(2) this is not for pets.
+							</td>
+						</tr>
 						<tr><th>Ancestors</th>
 							<td>For dedicating merits to the requestor's ancentors; you will just need to
 								input your ancestor's surname, for example, "Johnson," and your full name.
@@ -286,6 +300,10 @@ input[type=submit] {
 							<td>For dedicating merits to the site guardians (protecting beings) of the sites
 								of your concern, e.g., residence, vacation home, work place.<br/>
 								Plesae input the address of the sites of your concern.
+							</td>
+						</tr>
+						<tr><th>User Guide</th>
+							<td>Allows you to read this user guide.
 							</td>
 						</tr>
 						<tr><th>Upload CSV Files</th>
@@ -327,7 +345,7 @@ input[type=submit] {
 								relationship between the deceased and the requestor. They are dropdown
 								selection lists and have enumerated as exhaustively as possible the possible
 								values. If yours is not found, please select BLANK or any value, then,
-								use the "Edit" to change to what fits your situation. In case this happens,
+								use the "Edit" function to change to what fits your situation. In case this happens,
 								please also kindly let us know so we can augment the lists.
 							</td>
 						</tr>
