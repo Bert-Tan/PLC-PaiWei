@@ -26,7 +26,9 @@ VALUES
 ( "主人", "Chn" ),
 ( "老師", "Chn" ),
 ( "孝孫", "Chn" ),
+( "孝外孫", "Chn" ),
 ( "孝孫女", "Chn" ),
+( "孝外孫女", "Chn" ),
 ( "孝孫媳", "Chn" ),
 ( "孝孫婿", "Chn" ),
 ( "堂兄", "Chn" ),
@@ -145,6 +147,11 @@ VALUES
 ( "Mother-in-Law", "Eng" ),
 ( "Son", "Eng" ),
 ( "Daughter", "Eng" ),
+( "Grandson", "Eng" ),
+( "Granddaughter", "Eng" ),
+( "Grandnephew", "Eng" ),
+( "Grandniece", "Eng" ),
 ( "Son-in-Law", "Eng" ),
 ( "Daughter-in-Law", "Eng" ),
-( "More items to add", "Eng" );
+( "Grandson-in-Law", "Eng" ),
+( "Granddaughter-in-Law", "Eng" );

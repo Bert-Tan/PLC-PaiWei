@@ -10,7 +10,7 @@
 		$_errCount++;
 		$_errRec[] = "登&nbsp;錄&nbsp;時&nbsp;段&nbsp;已&nbsp;過&nbsp;期！<br/>Session has expired!";
 	} else {
-		$msgTxt = "歡迎您到淨土念佛堂牌用戶主頁！<br/>Welcome to the Pure Land Center User Portal!";
+		$msgTxt = "歡迎您到淨土念佛堂用戶主頁！<br/>Welcome to the Pure Land Center User Portal!";
 	}
 ?>
 
