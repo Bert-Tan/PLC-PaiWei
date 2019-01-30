@@ -256,6 +256,10 @@ function pwTblHdlr() {
 	$(this).addClass("active");
 
 	loadTblData( _tblName, 1, 30, _sessUsr );
+	
+	//new page: show hover message
+	enableTooltip();
+	
 	return;	
 } // function pwTblHdlr()
 
@@ -365,6 +369,11 @@ function addRowBtnHdlr() {
 	newRowDataCells.on( 'focus', onFocusHdlr ); // bind to the on 'focus' handler
 	lastTd.html( insBtn ); // place the 'Insert' button
 	lastTd.find("input[type=button]").on( 'click', insBtnHdlr ); // bind to Insert Button click handler
+	
+	var wTitleSelect = newRow.find("select[data-fldn=W_Title]");// find wTitle 'select' element
+	var rTitleSelect = newRow.find("select[data-fldn=R_Title]");// find rTitle 'select' element
+	wTitleSelect.on( 'mouseover', onMouseoverHdlr ); // bind to the on 'mouseover' handler
+	rTitleSelect.on( 'mouseover', onMouseoverHdlr ); // bind to the on 'mouseover' handler
 	
 	if ( _sessMode == SESS_MODE_SRCH ) {
 		$("#myDataWrapper").find("*").unbind()
@@ -795,6 +804,14 @@ function onFocusHdlr() {	// on 'focus' handler
 } // function onFocusHdlr()
 
 /**********************************************************
+ * Event Handler - When mouse hover a TITLE dropdown      *
+                     selection list                       *
+ **********************************************************/
+function onMouseoverHdlr() {	// on 'mouseover' handler
+	setTimeout(function(){ $(document).tooltip('disable');}, 10000);
+} // function onMouseoverHdlr()
+
+/**********************************************************
  * Binders                                                *
  **********************************************************/
 function ready_edit() {
@@ -829,6 +846,15 @@ function ready_init() {
 	}
 	alert( "由於沒有點選蓮友為之處理牌位，\n牌位管理功能僅限於下載牌位列印！" );
 }
+
+/**********************************************************
+ * Enable Tooltip to Show Hover Message                   *
+ **********************************************************/
+function enableTooltip() {
+	var hoverMsg = ( _sessLang == SESS_LANG_CHN ) ? "如果選擇列表中沒有，選擇任何稱謂然後用“更改”的方式去更正！" : "If not found in the dropdown selection list, select any and then use Edit to correct it!";
+	$(document).tooltip({content: hoverMsg});
+	$(document).tooltip("enable");
+} // enableTooltip()
 	
 
 /**********************************************************
