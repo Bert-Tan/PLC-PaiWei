@@ -1,0 +1,10 @@
+/* Tooltip container */
+.ui-tooltip {
+	border-width: 1.5px !important;
+	border-color: black !important;	
+}
+
+/* Tooltip text */
+.ui-tooltip-content {
+	font-weight: bold !important;	
+}

@@ -1,44 +1,121 @@
 <?php
- /**********************************************************
-  *                     Admin Main Page                    *
-  **********************************************************/
+/**********************************************************
+ *           User Pai Wei Application Main Page           *
+ **********************************************************/
+ 
+	require_once( '../pgConstants.php' );
+	require_once( 'dbSetup.php' );
+	require_once( 'ChkTimeOut.php' );
 
-	require_once("./pgConstants.php");
-	require_once("Login/Login_Funcs.php");
-	$msgTxt = '';
-	if ( isset($_GET[ 'r' ]) ) {
-		$_errCount++;
-		$_errRec[] = "登&nbsp;錄&nbsp;時&nbsp;段&nbsp;已&nbsp;過&nbsp;期！<br/>Session has expired!";
-	} else {
-		$msgTxt = "歡迎您到淨土念佛堂用戶主頁！<br/>Welcome to the Pure Land Center User Portal!";
+	function xLate( $what ) {
+		global $sessLang;
+		$htmlNames = array (
+			'htmlTitle' => array (
+				SESS_LANG_CHN => "淨土念佛堂法會牌位申請主頁",
+				SESS_LANG_ENG => "Retreat Merit Dedication Application Page" ),
+			'logOut' => array (
+				SESS_LANG_CHN => "用戶<br/>撤出",
+				SESS_LANG_ENG => "User<br/>Logout" ),
+			'h1Title' => array (
+				SESS_LANG_CHN => "請由上列點擊所要<br/>申請的牌位或功能",
+				SESS_LANG_ENG => "Please Select Name Plaque Type<br/>You Want to Apply for" ),
+			'pwC' => array (
+				SESS_LANG_CHN => "祈福消災牌位",
+				SESS_LANG_ENG => "Well Blessing" ),
+			'pwD' => array (
+				SESS_LANG_CHN => "地基主蓮位",
+				SESS_LANG_ENG => "Site Guardians" ),
+			'pwL' => array (
+				SESS_LANG_CHN => "歷代祖先蓮位",
+				SESS_LANG_ENG => "Ancestors" ),
+			'pwW' => array (
+				SESS_LANG_CHN => "往生者蓮位",
+				SESS_LANG_ENG => "Deceased" ),
+			'pwY' => array (
+				SESS_LANG_CHN => "累劫冤親債主蓮位",
+				SESS_LANG_ENG => "Karmic Creditors" ),
+			'pwBIG' => array (
+				SESS_LANG_CHN => "(一年內)往生者蓮位",
+				SESS_LANG_ENG => "Recently Deceased" ),
+			'pwUpld' => array (
+				SESS_LANG_CHN => "上載牌位檔案",
+				SESS_LANG_ENG => "Upload CSV Files" ),
+			'pwUG' => array (
+				SESS_LANG_CHN => "用戶指南",
+				SESS_LANG_ENG => "User Guide" )
+		);
+		return $htmlNames[ $what ][ $sessLang ];
+	} // function xLate();
+	
+	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
+//	session_start(); // create or retrieve
+	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
+		header( $hdrLoc );
 	}
+	$sessLang = $_SESSION[ 'sessLang' ];
+	$sessType = $_SESSION[ 'sessType' ];
+	$useChn = ( $sessLang == SESS_LANG_CHN );
+	$dnldUrl = URL_ROOT . "/admin/PaiWei/dnldPaiWeiForm.php";
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>淨土念佛堂牌用戶主頁</title>
+<title><?php echo xLate( 'htmlTitle' ); ?></title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="https://www.amitabhalibrary.org/css/base.css">
-<link rel="stylesheet" href="./css/admin.css">
-<link rel="stylesheet" href="./css/menu.css">
+<link rel="stylesheet" type="text/css" href="https://www.amitabhalibrary.org/css/base.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="../css/admin.css">
+<link rel="stylesheet" type="text/css" href="../css/menu.css">
+<link rel="stylesheet" type="text/css" href="./PaiWei.css">
+<link rel="stylesheet" type="text/css" href="./toolTip.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<style>
-.engClass {
-	font-size: 0.85em;
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="../futureAlert.js"></script>
+<script src="./PaiWei.js"></script>
+
+<!-- The following CSS is for the upload Form which will be loaded from the other HTML/PHP file. -->
+<style type="text/css">
+
+#myUpldTbl {
+	table-layout: fixed;
+	width: 60%;
+	margin:auto;
+	border: 4px ridge #00b300;
 }
 
-.dataArea table {
-	border-collapse: separate;
-	border-spacing: 10px 10px;
-}
-
-.dataArea th {
-	height: 8vh;
-	padding: 0px 5px;
+#myUpldTbl td {
+	padding-left: 2vw;
 	font-size: 1.2em;
+	height: 8vh;
+	border: 1px solid #00b300;
 }
 
+input[type=submit] {
+	margin: auto;
+	line-height: 40px;
+	text-align:center;
+	vertical-align: middle;
+	font-size: 1.2em;	
+}
+
+.UGsteps {
+	font-size: 0.9em;
+}
+
+.UGsteps th, td {
+	vertical-align: top;
+}
+
+.UGsteps th {
+	width: 15%;
+}
+
+.UGstepImg {
+	width: 90%;
+	height: auto;
+	border: 1px solid black;
+}
 </style>
 
 </head>
@@ -46,29 +123,58 @@
 	<div class="hdrRibbon">
 		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" alt="">
 		<div id="pgTitle" class="centerMeV">
-			<span style="letter-spacing: 10px;">淨土念佛堂用戶主頁</span><br/>
-			<span class="engClass">Pure Land Center User Portal</span>
+			<span style="letter-spacing: 1px;">淨土念佛堂牌法會牌位申請主頁</span><br/>
+			<span class="engClass">Retreat Merit Dedication Application Page</span>
 		</div>
-		<table id="myMenuTbl" class="centerMeV" style="table-layout: fixed;">
+		<table id="myMenuTbl" class="centerMeV">	
 			<thead>
 				<tr>
-					<th><a href="./Login/Login.php?l=c" class="myLinkButton" style="line-height: 1.3em;">一般用戶登錄<br/>(中文)</a></th>
-					<th><a href="./UsrPortal/UG.php" class="myLinkButton" style="line-height: 1.3em;">用戶指南<br/>(中文)</a></th>
-					<th><a href="./Login/Login.php?l=e" class="myLinkButton" style="line-height: 1.3em;">User Login<br/>(English)</a></th>
-					<th><a href="./UsrPortal/eUG.php" class="myLinkButton" style="line-height: 1.3em;">User Guide<br/>(English)</a></th>
-					<th><a href="./Login/aLogin.php" class="myLinkButton" style="line-height: 1.3em;">管理員登錄</a></th>
+					<th class="pwTbl" data-tbl="W001A_4"><?php echo xLate( 'pwW' ); ?></th>
+					<th class="pwTbl" data-tbl="L001A"><?php echo xLate( 'pwL' ); ?></th>
+					<th class="pwTbl" data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th>
+<?php
+	if ( $sessType == SESS_TYP_USR ) {
+?>
+					<th class="ugld"><?php echo xLate( 'pwUG' ); ?></th>
+<?php
+	} else {
+?>
+					<th id="dnld"><a href="<?php echo $dnldUrl; ?>" class="myLinkButton">下載牌位檔案</a></th>
+<?php
+	}
+?>
+				</tr>
+				<tr>
+					<th class="pwTbl" data-tbl="DaPaiWei"><?php echo xLate( 'pwBIG' ); ?></th>
+					<th class="pwTbl" data-tbl="C001A"><?php echo xLate( 'pwC' ); ?></th>
+					<th class="pwTbl" data-tbl="D001A"><?php echo xLate( 'pwD' ); ?></th>
+					<th id="upld"><?php echo xLate( 'pwUpld' ); ?></th>
 				</tr>
 			</thead>
 		</table>
-		<div id="pgLogOut" class="centerMeV"><a href="./Login/Logout.php" class="myLinkButton">用戶<br/>撤出</a></div>	
+		<div id="pgLogOut" class="centerMeV"><a href="../Login/Logout.php" class="myLinkButton"><?php echo xLate('logOut');?></a></div>
 	</div>
 	<div class="dataArea">
-		<?php echo putMsg( "40%", "normal", "center", "bold", $msgTxt ); ?>
-		<div class="centerMe"
-			style="font-size: 2em; font-weight: bold; text-align: center;">
-			請&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;錄
-			<br/>Please Login In
-		</div>
+<?php
+	if ( $sessType == SESS_TYP_USR ) { 
+?>
+		<h1 class="centerMe" id="myDataTitle" style="<?php if ( !$useChn ) echo "letter-spacing: normal;"; ?>"><?php echo xLate( 'h1Title' ); ?></h1>
+<?php
+	} else {
+		if ( isset( $_SESSION[ 'icoName' ] ) ) {
+?>
+		<h1 class="q_centerMe" id="myDataTitle"><?php echo xLate( 'h1Title' ); ?></h1>
+		<h1 class="centerMe" style="color: blue;">幫助蓮友 <?php echo $_SESSION[ 'icoName' ]; ?> 處理法會牌位</h1>	
+<?php
+		} else { // icoSkipped; only downloading is available
+?>
+		<h1 class="centerMe" id="myDataTitle" style="margin-top: 0px; letter-spacing: normal;">
+			沒有點選蓮友為之處理牌位，<br/>牌位管理功能僅限於下載牌位列印！
+		</h1>
+<?php
+		}
+	}
+?>
 	</div>
 </body>
 </html>
