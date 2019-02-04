@@ -40,7 +40,7 @@
 		$tpl = new HTML_Template_IT("./Templates");
 		$tpl->loadTemplatefile("inCareOfChoice.tpl", true, true);
 		$tpl->setCurrentBlock("InCareOf");
-		foreach ( $inCareOfNames as $inCareOfName ) { // print_r( $inCareOfName );
+		foreach ( $inCareOfNames as $inCareOfName ) {
 			$tpl->setCurrentBlock("Option");
 			foreach ($inCareOfName as $key => $val ) {
 				$tpl->setVariable("fldV", $val );	
@@ -113,6 +113,9 @@
 		exit;
 	}
 	if ( isset( $_POST[ 'icoText' ] ) || isset( $_POST[ 'icoSel' ] ) ) {
+		if ( $_POST[ 'icoText' ] == "請輸入蓮友識別名" ) {
+			unset( $_POST[ 'icoText' ] );
+		}
 		echo json_encode ( setInCareOf (  ), JSON_UNESCAPED_UNICODE );
 		exit;
 	}
@@ -173,8 +176,6 @@
 		if ( icoText == "請輸入蓮友識別名" && icoSel.length == 0 ) {
 			alert("請輸入或點選蓮友識別名！"); return false;
 		}
-		if ( icoText == "請輸入蓮友識別名" ) myFormData.delete('icoText');
-		if ( icoSel.length == 0 ) myFormData.delete('icoSel');
 		$.ajax({
 			method: "POST",	url: myHdlr, data: myFormData,
 			processData: false, contentType: false, cache: false,
