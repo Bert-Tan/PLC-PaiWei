@@ -28,6 +28,7 @@ var _wtList = null;	// W_Title & R_Title selection list
 var _rtList = null;
 var _icoSkip = null;
 var _icoName = null;
+var _rqTbls = [ 'D001A', 'L001A', 'Y001A', 'W001A_4', 'DaPaiWei' ];
 
 /**********************************************************
  *                    Support functions                   *
@@ -522,18 +523,38 @@ function insBtnHdlr() {
 		return;
 	}
 	
-	if ( _tblName == 'W001A_4' || _tblName == 'DaPaiWei') {
-		// taking care of 叩薦 or 敬薦; combine it with the Requestor's Name
+	switch ( _tblName ) { // taking care of 叩薦 or 敬薦; combine it with the Requestor's Name
+	case 'W001A_4':
+	case 'DaPaiWei':
 		recV = thisRow.find("select.rec option:selected").val();
 		rName = thisRow.find("input[data-fldn=W_Requestor]").val();
-		thisRow.find("input[data-fldn=W_Requestor]").val( rName + ' ' + recV );
-		recV = new RegExp(" " + recV + "$/g" ); // used to revert when unsuccessful
+		thisRow.find("input[data-fldn=W_Requestor]").val( rName + ' ' + recV ); // combine 
 		// now taking care of the 稱謂 fields; they were input as selections
-		wtV = thisRow.find("select.wTitle option:selected").val();
+		wtV = thisRow.find("select.wTitle option:selected").val(); // Title value selected from dropdown
 		rtV = thisRow.find("select.rTitle option:selected").val();
 		tblFlds[ thisRow.find("select.wTitle").attr('data-fldn') ] = wtV;
 		tblFlds[ thisRow.find("select.rTitle").attr('data-fldn') ] = rtV;
-	} // appending 叩薦 or 敬薦; taking care of 稱謂 fields
+		break;
+	case 'D001A':
+		recV = "敬薦";
+		rName = thisRow.find("input[data-fldn=D_Requestor]").val();
+		thisRow.find("input[data-fldn=D_Requestor]").val( rName + ' ' + recV );
+		break;
+	case 'Y001A':
+		recV = "敬薦";
+		rName = thisRow.find("input[data-fldn=Y_Requestor]").val();
+		thisRow.find("input[data-fldn=Y_Requestor]").val( rName + ' ' + recV );
+		break;
+	case 'L001A':
+		recV = "叩薦";
+		rName = thisRow.find("input[data-fldn=L_Requestor]").val();
+		thisRow.find("input[data-fldn=L_Requestor]").val( rName + ' ' + recV );	
+		break;
+	} // switch()
+
+	if ( recV != null ) {
+		recV = new RegExp(" " + recV + "$/g" ); // used to revert in case of error
+	}
 
 	_ajaxData = {}; _dbInfo = {};	
 	cellsChanged.each(function(i) { // (name, value) pair
@@ -564,7 +585,7 @@ function insBtnHdlr() {
 						}); // each
 						// now the 稱謂 fields
 						if ( _tblName == 'W001A_4' || _tblName == 'DaPaiWei') {
-							thisRow.find("select.rec").remove(); // 叩薦，敬薦 selection; remove it
+							thisRow.find("select.rec").remove(); // 叩薦，敬薦 dropdown; remove it
 							_wTitleInput.attr( "data-oldv", wtV ); _wTitleInput.val( wtV );
 							_rTitleInput.attr( "data-oldv", rtV ); _rTitleInput.val( rtV );
 							thisRow.find("select.wTitle").replaceWith( _wTitleInput );
@@ -580,14 +601,18 @@ function insBtnHdlr() {
 						alert( alertMsg );
 						return;							
 					case 'errCount':
-						alert ( rspV [ 'errRec' ] );
-						rName = thisRow.find("input[data-fldn=W_Requestor]").val().replace( recV, '');
-						thisRow.find("input[data-fldn=W_Requestor]").val( rName );
-						break;
 					case 'dupCount':
-						alert ( rspV [ 'dupRec' ] );
+						errX = ( X == 'errCount' ) ? 'errRec' : 'dupRec';
+						alert ( rspV[ errX ] );
+						// Only one of the following will be executed because _tblName is determined
 						rName = thisRow.find("input[data-fldn=W_Requestor]").val().replace( recV, '');
 						thisRow.find("input[data-fldn=W_Requestor]").val( rName );
+						rName = thisRow.find("input[data-fldn=Y_Requestor]").val().replace( recV, '');
+						thisRow.find("input[data-fldn=Y_Requestor]").val( rName );
+						rName = thisRow.find("input[data-fldn=L_Requestor]").val().replace( recV, '');
+						thisRow.find("input[data-fldn=L_Requestor]").val( rName );
+						rName = thisRow.find("input[data-fldn=D_Requestor]").val().replace( recV, '');
+						thisRow.find("input[data-fldn=D_Requestor]").val( rName );
 						break;
 				} // switch
 			} // for loop
