@@ -123,7 +123,7 @@ input[type=submit] {
 	<div class="hdrRibbon">
 		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" alt="">
 		<div id="pgTitle" class="centerMeV">
-			<span style="letter-spacing: 1px;">淨土念佛堂牌法會牌位申請主頁</span><br/>
+			<span style="letter-spacing: 1px;">淨土念佛堂法會牌位申請主頁</span><br/>
 			<span class="engClass">Retreat Merit Dedication Application Page</span>
 		</div>
 		<table id="myMenuTbl" class="centerMeV">	

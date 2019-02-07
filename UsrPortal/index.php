@@ -11,8 +11,8 @@
 		global $sessLang;
 		$htmlNames = array (
 			'htmlTitle' => array (
-				SESS_LANG_CHN => "淨土念佛堂用戶主頁",
-				SESS_LANG_ENG => "Pure Land Center User Main Page" ),
+				SESS_LANG_CHN => "淨土念佛堂一般用戶主頁",
+				SESS_LANG_ENG => "Pure Land Center User Portal" ),
 			'featPW' => array (
 				SESS_LANG_CHN => "法會牌位申請",
 				SESS_LANG_ENG => "Name Plaque Application for<br/>Merit Dedication in Retreats" ),

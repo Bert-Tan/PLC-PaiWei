@@ -12,7 +12,7 @@
 		$htmlNames = array (
 			'htmlTitle' => array (
 				SESS_LANG_CHN => "淨土念佛堂管理用戶主頁",
-				SESS_LANG_ENG => "Pure Land Center Admin User Main Page" ),
+				SESS_LANG_ENG => "Pure Land Center Admin Portal" ),
 			'pwMgr' => array (
 				SESS_LANG_CHN => "為蓮友處理法會牌位",
 				SESS_LANG_ENG => "Manage Name Plaques for others" ),
