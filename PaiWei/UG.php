@@ -216,7 +216,7 @@ input[type=submit] {
 						</li>
 						<li>完成輸入牌位資料後請於左上角『檔案』的下拉選項中選擇『保存為』(Save As) 如下：<br/>
 							<span style="color: blue; font-weight: bold;">
-								(若您的微軟 EXCEL 為早於 2013 年的版本，請繼續依循 <a href="#OLD">(j) 以下的存檔步骤。</a>)
+								(若您的微軟 EXCEL 為 2013 年或更早的版本，請繼續依循 <a href="#OLD">(j) 以下的存檔步骤。</a>)
 							</span><br/><br/>
 							<img src="./img/saveAsSel.png" alt="" style="width: 500px; height: auto;">
 						</li><br/>
@@ -232,17 +232,21 @@ input[type=submit] {
 						</li>
 						<li>對其他的輸入表，重復以上的步驟，將每一個輸入表存為『逗號分隔值』資料格式的檔案。
 						</li><br/>
-						<li id="OLD"><span style="color:blue; font-weight: bold;">以下存檔步驟適用於 2013 年以前的微軟 EXCEL 版本。</span>
+						<li id="OLD">
+							<span style="color:blue; font-weight: bold;">
+								以下存檔步驟適用於 2013 年及更早的微軟 EXCEL 版本。
+							</span>
 						</li><br/>
 						<li>點擊『保存為』(Save As) 後，您會看到緊接的右邊有一個下拉選項，請點選『其他樣式』(Other Formats)，
 							然後您會看到如下的『對話框』(Dialog Box)；請於『檔案名』(File Name) 資料格中輸入您要的檔案名, 
-							並於『保存格式』(Save As Type) 資料格的下拉選項中選擇『CSV (MS DOS) (*.csv)』為保存檔案的資料格式;
+							並於『保存格式』(Save As Type) 資料格的下拉選項中選擇『CSV (MS-DOS) (*.csv)』為保存檔案的資料格式;
 							然後點擊右下角的『保存』(Save)。<br/><br/>
 							<img src="./img/o_saveAsCSV.png" alt="" style="width: 700px; height: auto;">
 						</li><br/>
 						<li>請用微軟的 Notepad 開啟您剛才所存的牌位檔案，並於左上角『檔案』的下拉選項中選擇『保存為』(Save As) 後，
 							您會看到如下的『對話框』; 請於『檔案名』(File Name) 資料格中確認您要的檔案名, 於『保存格式』(Save As Type)
-							資料格中確認格式為『Text Documents (*.txt)』，並於『編碼』(Encoding) 資料格的下列選項中點選『UTF-8』.<br/><br/>
+							資料格中確認格式為『Text Documents (*.txt)』，並於『編碼』(Encoding) 資料格的下列選項中點選『UTF-8』.
+							然後點選在右下角的『保存』(Save)。<br/><br/>
 							<img src="./img/o_saveAsUTF8.png" alt="" style="width: 700px; height: auto;">
 						</li><br/>
 						<li>對其他的輸入表，請重復以上對您適用的步驟，將每一個輸入表存為『逗號分隔值』資料格式的檔案。
@@ -394,7 +398,11 @@ input[type=submit] {
 							for entering the Name Plaque data as desired.
 						</li>
 						<li>When complete, click the "File" on the upper-left and hove over "Save As..." in
-							the dropdown items, as below:<br/><br/>
+							the dropdown items, as below:<br/>
+							<span style="color: blue; font-weight: bold;">
+								If you have an MS EXCEL 2013 or older version, 
+								<a href="#OLD_E">please continue with Step (j).</a>
+							</span><br/><br/>
 							<img src="./img/saveAsSel.png" alt="" style="width: 500px; height: auto;">
 						</li><br/>
 						<li>Click "Save As..." and you will see the dialog box as below;
@@ -407,7 +415,27 @@ input[type=submit] {
 						</li><br/>
 						<li>Click "OK" and your input sheet is save in the CSV format and in the given filename and folder.
 						</li>
-						<li>Repeat the above steps across every tab if you have more than one input sheets.</li>
+						<li>Repeat the above steps across every tab if you have more than one input sheets.</li><br/>
+						<li id="OLD_E">
+							<span style="color:blue; font-weight:bold;">
+								The following steps are applicable to MS EXCEL 2013 and older versions.
+							</span>
+						</li><br/>
+						<li>After clicking "Save As", you will see a dropdown list immediately next to the right,
+							click on "Other Formats" and a dialog box will be shown as below. In this dialog box,
+							enter your file name in the "File Name" field, select "CSV (MS-DOS) (*.csv)" in the
+							"Save As Type" field, and click "Save" button on the lower right bottom of the box.<br/><br/>
+							<img src="./img/o_saveAsCSV.png" alt="" style="width: 700px; height: auto;">
+						</li><br/>
+						<li>Use MS Notepad and open the file you just saved. Click "File" on the upper left corner
+							and select "Save As" in the dropdown list, and a dialog box will be shown as below.
+							Please confirm the file name in the "File Name" field, select "Text Documents (*.txt)"
+							in the "Save As Type" field, and select "UTF-8" in the "Encoding" field. Finally,
+							click "Save" on the lower right bottom of the box.<br/><br/>
+							<img src="./img/o_saveAsUTF8.png" alt="" style="width: 700px; height: auto;">
+						</li><br/>
+						<li>Repeat applicable steps above across every tab if you have more than one input sheets.
+						</li>
 					</ol>
 				</li><br/>
 				<li>To upload pre-edited Name Plaque data files, please follow the steps below:
