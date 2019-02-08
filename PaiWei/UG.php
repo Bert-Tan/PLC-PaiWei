@@ -247,7 +247,7 @@ input[type=submit] {
 							您會看到如下的『對話框』; 請於『檔案名』(File Name) 資料格中確認您要的檔案名, 於『保存格式』(Save As Type)
 							資料格中確認格式為『Text Documents (*.txt)』，並於『編碼』(Encoding) 資料格的下列選項中點選『UTF-8』.
 							然後點選在右下角的『保存』(Save)。<br/><br/>
-							<img src="./img/o_saveAsUTF8.png" alt="" style="width: 700px; height: auto;">
+							<img src="./img/o_SaveAsUTF8.png" alt="" style="width: 700px; height: auto;">
 						</li><br/>
 						<li>對其他的輸入表，請重復以上對您適用的步驟，將每一個輸入表存為『逗號分隔值』資料格式的檔案。
 						</li>
@@ -432,7 +432,7 @@ input[type=submit] {
 							Please confirm the file name in the "File Name" field, select "Text Documents (*.txt)"
 							in the "Save As Type" field, and select "UTF-8" in the "Encoding" field. Finally,
 							click "Save" on the lower right bottom of the box.<br/><br/>
-							<img src="./img/o_saveAsUTF8.png" alt="" style="width: 700px; height: auto;">
+							<img src="./img/o_SaveAsUTF8.png" alt="" style="width: 700px; height: auto;">
 						</li><br/>
 						<li>Repeat applicable steps above across every tab if you have more than one input sheets.
 						</li>
