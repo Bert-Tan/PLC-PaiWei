@@ -214,11 +214,14 @@ input[type=submit] {
 						<li>按下『刪除鍵』/[Del]，將所有的有色圖案刪除，您就有一個乾淨的輸入表；在此輸入表內完成您所
 							要輸入的資料。
 						</li>
-						<li>完成輸入後請於左上角『檔案』的下拉選項中選擇『保存為』如下：<br/><br/>
+						<li>完成輸入牌位資料後請於左上角『檔案』的下拉選項中選擇『保存為』(Save As) 如下：<br/>
+							<span style="color: blue; font-weight: bold;">
+								(若您的微軟 EXCEL 為早於 2013 年的版本，請繼續依循 <a href="#OLD">(j) 以下的存檔步骤。</a>)
+							</span><br/><br/>
 							<img src="./img/saveAsSel.png" alt="" style="width: 500px; height: auto;">
 						</li><br/>
-						<li>點擊『保存為』後，您會看到如下的『對話框』；請於『保存為』資料格中輸入您要的檔案名，
-							並於『檔案格式』資料格中選擇 『CSV UTF-8』 為保存檔案的資料格式; 然後點擊右下角的『保存』。<br/><br/>
+						<li>點擊『保存為』後，您會看到如下的『對話框』；請於『保存為』(Save As) 資料格中輸入您要的檔案名，
+							並於『檔案格式』(File Format) 資料格中選擇 『CSV UTF-8』 為保存檔案的資料格式; 然後點擊右下角的『保存』(Save)。<br/><br/>
 							<img src="./img/saveAsCSV.png" alt="" style="width: 700px; height: auto;">
 						</li><br/>
 						<li>微軟 EXCEL 會提醒您您只能保存當下所選標籤的輸入表為所要的格式，如下：<br/><br/>
@@ -228,6 +231,21 @@ input[type=submit] {
 							保存在您以所選擇的目錄中。
 						</li>
 						<li>對其他的輸入表，重復以上的步驟，將每一個輸入表存為『逗號分隔值』資料格式的檔案。
+						</li><br/>
+						<li id="OLD"><span style="color:blue; font-weight: bold;">以下存檔步驟適用於 2013 年以前的微軟 EXCEL 版本。</span>
+						</li><br/>
+						<li>點擊『保存為』(Save As) 後，您會看到緊接的右邊有一個下拉選項，請點選『其他樣式』(Other Formats)，
+							然後您會看到如下的『對話框』(Dialog Box)；請於『檔案名』(File Name) 資料格中輸入您要的檔案名, 
+							並於『保存格式』(Save As Type) 資料格的下拉選項中選擇『CSV (MS DOS) (*.csv)』為保存檔案的資料格式;
+							然後點擊右下角的『保存』(Save)。<br/><br/>
+							<img src="./img/o_saveAsCSV.png" alt="" style="width: 700px; height: auto;">
+						</li><br/>
+						<li>請用微軟的 Notepad 開啟您剛才所存的牌位檔案，並於左上角『檔案』的下拉選項中選擇『保存為』(Save As) 後，
+							您會看到如下的『對話框』; 請於『檔案名』(File Name) 資料格中確認您要的檔案名, 於『保存格式』(Save As Type)
+							資料格中確認格式為『Text Documents (*.txt)』，並於『編碼』(Encoding) 資料格的下列選項中點選『UTF-8』.<br/><br/>
+							<img src="./img/o_saveAsUTF8.png" alt="" style="width: 700px; height: auto;">
+						</li><br/>
+						<li>對其他的輸入表，請重復以上對您適用的步驟，將每一個輸入表存為『逗號分隔值』資料格式的檔案。
 						</li>
 					</ol>
 				</li><br/>
