@@ -245,7 +245,7 @@ input[type=submit] {
 						</li><br/>
 						<li>請用微軟的 Notepad 開啟您剛才所存的牌位檔案，並於左上角『檔案』的下拉選項中選擇『保存為』(Save As) 後，
 							您會看到如下的『對話框』; 請於『檔案名』(File Name) 資料格中確認您要的檔案名, 於『保存格式』(Save As Type)
-							資料格中確認格式為『Text Documents (*.txt)』，並於『編碼』(Encoding) 資料格的下列選項中點選『UTF-8』.
+							資料格中確認格式為『All Files (*.*)』，並於『編碼』(Encoding) 資料格的下列選項中點選『UTF-8』.
 							然後點選在右下角的『保存』(Save)。<br/><br/>
 							<img src="./img/o_SaveAsUTF8.png" alt="" style="width: 700px; height: auto;">
 						</li><br/>
@@ -429,7 +429,7 @@ input[type=submit] {
 						</li><br/>
 						<li>Use MS Notepad and open the file you just saved. Click "File" on the upper left corner
 							and select "Save As" in the dropdown list, and a dialog box will be shown as below.
-							Please confirm the file name in the "File Name" field, select "Text Documents (*.txt)"
+							Please confirm the file name in the "File Name" field, select "All Files (*.*)"
 							in the "Save As Type" field, and select "UTF-8" in the "Encoding" field. Finally,
 							click "Save" on the lower right bottom of the box.<br/><br/>
 							<img src="./img/o_SaveAsUTF8.png" alt="" style="width: 700px; height: auto;">
