@@ -191,6 +191,7 @@ input[type=submit] {
 				</li><br/>
 				<li>如果您要上載牌位資料，上載的牌位資料檔案必須符合下列要求:<br/>
 					<ol type="a">
+						<li>檔案名的延伸部份必須為 ".csv"。</li>
 						<li>檔案是用 UTF-8 編碼 (UTF-8 encoded);</li>
 						<li>檔案中每一行僅含一個牌位的資料；</li>
 						<li>每一行的資料字段間，必須以一個逗號分開 &mdash;『逗號分隔值』/ (CSV) 的資料格式；</li>
@@ -245,8 +246,12 @@ input[type=submit] {
 						</li><br/>
 						<li>請用微軟的 Notepad 開啟您剛才所存的牌位檔案，並於左上角『檔案』的下拉選項中選擇『保存為』(Save As) 後，
 							您會看到如下的『對話框』; 請於『檔案名』(File Name) 資料格中確認您要的檔案名, 於『保存格式』(Save As Type)
-							資料格中確認格式為『All Files (*.*)』，並於『編碼』(Encoding) 資料格的下列選項中點選『UTF-8』.
-							然後點選在右下角的『保存』(Save)。<br/><br/>
+							資料格中確認格式為『All Files (*.*)』，並於『編碼』(Encoding) 資料格的下拉選項中點選『UTF-8』.
+							然後點選在右下角的『保存』(Save)。<br/>
+							<span style="color: blue; font-weight: bold;">
+								請注意：『保存格式』必須為『All Files (*.*)』，這樣您的檔案名的延伸部份 『 .csv 』 才不會被更動；
+								上載才會成功。
+							</span><br/><br/>
 							<img src="./img/o_SaveAsUTF8.png" alt="" style="width: 700px; height: auto;">
 						</li><br/>
 						<li>對其他的輸入表，請重復以上對您適用的步驟，將每一個輸入表存為『逗號分隔值』資料格式的檔案。
@@ -375,6 +380,7 @@ input[type=submit] {
 				</li><br/>
 				<li>If you would like to upload a pre-edited data file, it must comply with the following:<br/>
 					<ol type="a">
+						<li>The file name extention must be ".csv".</li>
 						<li>The file is UTF-8 encoded;</li>
 						<li>Every line contains one and only one Name Plaque data entry;</li>
 						<li>Data fields in a line must be comma separated, i.e., CSV format;</li>
@@ -431,7 +437,11 @@ input[type=submit] {
 							and select "Save As" in the dropdown list, and a dialog box will be shown as below.
 							Please confirm the file name in the "File Name" field, select "All Files (*.*)"
 							in the "Save As Type" field, and select "UTF-8" in the "Encoding" field. Finally,
-							click "Save" on the lower right bottom of the box.<br/><br/>
+							click "Save" on the lower right bottom of the box.<br/>
+							<span style="color: blue; font-weight: bold;">
+								Note: You must select "All Files (*.*)" in the "Save As Type" field such that
+								your filename extension, ".csv", will be kept, which is required by upload.
+							</span><br/><br/>
 							<img src="./img/o_SaveAsUTF8.png" alt="" style="width: 700px; height: auto;">
 						</li><br/>
 						<li>Repeat applicable steps above across every tab if you have more than one input sheets.
