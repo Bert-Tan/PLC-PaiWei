@@ -101,12 +101,14 @@ input[type=submit] {
         <span style="display: block; width: 95%; margin: auto; padding-top: 2vh; font-size: 1.3em;
 			font-weight: bold; line-height: 1.4em;"><!-- Intro phrase -->
             用戶將可經由此法會牌位申請主頁選擇所要申請設立的牌位：往生者蓮位、(一年內)往生者蓮位、歷代祖先蓮位、祈福消災牌位、
-			累劫冤親債主蓮位、地基主蓮位 等；您亦可選擇用戶指南或上載牌位檔案。
+			累劫冤親債主蓮位、地基主蓮位 等；您亦可選擇用戶指南或上載牌位檔案。<br/>
+			您可由本網站的用戶界面<a href="#viaInput">直接輸入</a>上列各類牌位申請，
+			也可以由<a href="#viaUpld">上載的方式輸入</a>，再由本網站的用戶界面確認上載的資料是正確的。
         </span>
         <div style="width: 95%; margin:auto; font-size: 1.3em;"><!-- Step-by-step Guide -->
-            <ol>
+            <ol id="viaInput">
                 <li>
-					當您在用戶功能選項的主頁點擊『法會牌位申請』之後，您即可看到法會牌位申請的主頁如下：<br/><br/>
+					當您在用戶功能選項的主頁點擊『法會牌位申請』之後，您即可看到法會牌位申請的用戶界面如下：<br/><br/>
 					<img src="./img/pwMain.png" alt=""><br/><br/>
 					<table>
 						<tr><th style="width:18%;">往生者蓮位</th>
@@ -127,13 +129,15 @@ input[type=submit] {
 						<tr><th>祈福消災牌位</th>
 							<td>
 								爲啟請人的父母、親友、師長、朋友，子女、晚輩、甚至本人等申請設立牌位祈福；<br/>
-								請註明受益者的全名。
+								請註明受益者<span style="color:blue; font-weight: bold;"> (註：應仍健在。) </span>
+								的全名。
 							</td>
 						</tr>
 						<tr><th>累劫冤親債主蓮位</th>
 							<td>
-								爲啟請人本人的累劫冤親債主設立牌位迴向祈福;
-								請註明陽上啟請人的全名。
+								爲啟請人本人的累劫冤親債主
+								<span style="color:blue; font-weight: bold;"> (註：一般而言，應已不健在。) </span>
+								設立牌位迴向祈福; 請註明陽上啟請人的全名。	
 							</td>
 						</tr>
 						<tr><th>地基主蓮位</th>
@@ -189,7 +193,7 @@ input[type=submit] {
 						</tr>
 					</table>
 				</li><br/>
-				<li>如果您要上載牌位資料，上載的牌位資料檔案必須符合下列要求:<br/>
+				<li id="viaUpld">如果您要上載牌位資料，上載的牌位資料檔案必須符合下列要求:<br/>
 					<ol type="a">
 						<li>檔案名的延伸部份必須為 ".csv"。</li>
 						<li>檔案是用 UTF-8 編碼 (UTF-8 encoded);</li>
@@ -287,10 +291,13 @@ input[type=submit] {
 			font-weight: bold; line-height: 1.1em;"><!-- Intro phrase -->
             Users can apply for specific Merit Dedication Name Plaques during Retreats from this page:
 			well-blessing, deceased and recently deceased beloved ones, ancestors, site guardians,
-			karmic creditors, etc. You can also upload name plaque data.
+			karmic creditors, etc. You can also upload pre-edited name plaque data.
+			You can apply for various Name Plaques via the <a href="#viaInput_e">direct input</a> interface
+			on this page; you can also input the data by <a href="#viaUpld_e">uploading</a>, then, verify
+			the data via the direct input interface.
         </span>
         <div style="width: 95%; margin:auto; font-size: 1.3em;"><!-- BEGIN Step-by-step Guide -->
-            <ol>
+            <ol id="viaInput_e">
                 <li>
 					When you click the "Name Plaque Application for Merit Dedication in Retreats",
 					you will see the "Retreat Merit Dedication Request Page" with selections as below：<br/><br/>
@@ -315,11 +322,17 @@ input[type=submit] {
 						<tr><th>Well Blessing</th>
 							<td>For well blessing to the requestor's parents, relatives, teachers, friends,
 								sons, daughters, younger generations, requestor-self, even pets.<br/>
-								Please input well-blessing recipient's full name.
+								Please input well-blessing recipient's 
+								<span style="color:blue; font-weight: bold;">
+								(should still be alive)
+								</span> full name.
 							</td>
 						</tr>
 						<tr><th>Karmic Creditors</th>
-							<td>For dedicating merits to the requestor's karmic creditors in all life cycles.<br/>
+							<td>For dedicating merits to the requestor's karmic creditors
+								<span style="color: blue; font-weight: bold;">
+								 (generally speaking, no longer alive)
+								</span>in all life cycles.<br/>
 								Please input the requestor's full name.
 							</td>
 						</tr>
@@ -378,7 +391,8 @@ input[type=submit] {
 						</tr>
 					</table>
 				</li><br/>
-				<li>If you would like to upload a pre-edited data file, it must comply with the following:<br/>
+				<li id="viaUpld_e">
+					If you would like to upload a pre-edited data file, it must comply withthe following:<br/>
 					<ol type="a">
 						<li>The file name extention must be ".csv".</li>
 						<li>The file is UTF-8 encoded;</li>
