@@ -135,7 +135,7 @@ input[type=submit] {
 						</tr>
 						<tr><th>累劫冤親債主蓮位</th>
 							<td>
-								爲啟請人本人的累劫冤親債主
+								爲啟請人本人<span style="color:blue; font-weight: bold;"> (註：應仍健在。) </span>的累劫冤親債主
 								<span style="color:blue; font-weight: bold;"> (註：一般而言，應已不健在。) </span>
 								設立牌位迴向祈福; 請註明陽上啟請人的全名。	
 							</td>
@@ -206,7 +206,10 @@ input[type=submit] {
 				</li><br/>
 				<li>建議您依下列步驟，建立並保存為逗號分隔值 (CSV) 的檔案。
 					<ol type="a">
-						<li><a href="./Templates/pwTemplate.xlsx"><b>下載此樣式檔案</b></a></li>
+						<li><a href="./Templates/pwTemplate.xlsx"><b>下載此樣式檔案</b></a>；
+							若您的微軟 EXCEL 不能開啟或解讀該樣式檔案，
+							<a href="./Templates/pwTemplate.xls"><b>請下載此舊樣式檔案</b></a>
+						</li>
 						<li>此樣式檔案是微軟的 EXCEL 檔，每一個標籤反應上面所述的各類牌位種類；
 							點擊您所要申請牌位的標籤，即可開始書寫牌位資料；我們仍然以『一年內往生親友蓮位』為例說明。<br/>
 							當您點擊『一年內往生親友蓮位』標籤後，您會看到如下的輸入表：<br/><br/>
@@ -329,10 +332,13 @@ input[type=submit] {
 							</td>
 						</tr>
 						<tr><th>Karmic Creditors</th>
-							<td>For dedicating merits to the requestor's karmic creditors
+							<td>For dedicating merits to the requestor's 
+								<span style="color:blue; font-weight: bold;">
+								(should still be alive)
+								</span> karmic creditors 
 								<span style="color: blue; font-weight: bold;">
-								 (generally speaking, no longer alive)
-								</span>in all life cycles.<br/>
+								(generally speaking, no longer alive)
+								</span> in all life cycles.<br/>
 								Please input the requestor's full name.
 							</td>
 						</tr>
@@ -405,7 +411,10 @@ input[type=submit] {
 				</li><br/>
 				<li>Please follow the steps below to construct a CSV file proper for upload.
 					<ol type="a">
-						<li><a href="./Templates/e_pwTemplate.xlsx"><b>Download this template</b></a></li>
+						<li><a href="./Templates/e_pwTemplate.xlsx"><b>Download this template</b></a>;
+							if your MS EXCEL cannot open the .xlsx template file, please
+							<a href="./Templates/e_pwTemplate.xls"><b>download the older version template</b></a>.
+						</li>
 						<li>This is an MS EXCEL template file; every tab supports a Name Plaque type above.
 							Select the tab for the Name Plaque type you want to input the Name Plaque data.<br/><br/>
 							<img src="./img/e_inputXLS.png" alt="">
