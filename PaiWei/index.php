@@ -18,7 +18,7 @@
 				SESS_LANG_ENG => "User<br/>Logout" ),
 			'h1Title' => array (
 				SESS_LANG_CHN => "請由上列點擊所要<br/>申請的牌位或功能",
-				SESS_LANG_ENG => "Please Select Name Plaque Type<br/>You Want to Apply for" ),
+				SESS_LANG_ENG => "Please Select Name Plaque Type From<br/>The Above You Want to Apply for" ),
 			'pwC' => array (
 				SESS_LANG_CHN => "祈福消災牌位",
 				SESS_LANG_ENG => "Well Blessing" ),
@@ -42,7 +42,10 @@
 				SESS_LANG_ENG => "Upload CSV Files" ),
 			'pwUG' => array (
 				SESS_LANG_CHN => "用戶指南",
-				SESS_LANG_ENG => "User Guide" )
+				SESS_LANG_ENG => "User Guide" ),
+			'alertMsg' => array (
+				SESS_LANG_CHN => "除有特殊困難，牌位申請者須本人親自<br/>( 或由指定代表 ) 前來參加法會。",
+				SESS_LANG_ENG => "Note: You or your designee shall be present in the retreat unless you have difficulties." )
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
@@ -158,7 +161,12 @@ input[type=submit] {
 <?php
 	if ( $sessType == SESS_TYP_USR ) { 
 ?>
-		<h1 class="centerMe" id="myDataTitle" style="<?php if ( !$useChn ) echo "letter-spacing: normal;"; ?>"><?php echo xLate( 'h1Title' ); ?></h1>
+		<h1 class="q_centerMe" id="myDataTitle"
+			style="<?php if ( !$useChn ) echo "letter-spacing: normal;"; ?>; width: 60%;"><?php echo xLate( 'h1Title' ); ?></h1>
+		<div class="msgBox centerMe"
+			style="width: 42%;font-size: 26px; font-weight: bold; border-color: #00b300;">
+			<?php echo xLate( 'alertMsg' ); ?>
+		</div>
 <?php
 	} else {
 		if ( isset( $_SESSION[ 'icoName' ] ) ) {
