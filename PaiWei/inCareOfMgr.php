@@ -33,10 +33,13 @@
         global $_db;
 
 		$_db->query( "LOCK TABLES inCareOf READ;" );
-		$sql = "SELECT UsrName FROM inCareOf WHERE true;";
-		$rslt = $_db->query( $sql );
+		$rslt = $_db->query("SELECT UsrName FROM inCareOf WHERE true;");
 		$_db->query( "UNLOCK TABLES;" );
 		$inCareOfNames = $rslt->fetch_all(MYSQLI_ASSOC);
+		$_db->query( "LOCK TABLES Usr READ;" );
+		$rslt = $_db->query("SELECT UsrName FROM Usr WHERE true;");
+		$_db->query( "UNLOCK TABLES;" );
+		$usrNames = $rslt->fetch_all(MYSQLI_ASSOC);
 		$tpl = new HTML_Template_IT("./Templates");
 		$tpl->loadTemplatefile("inCareOfChoice.tpl", true, true);
 		$tpl->setCurrentBlock("InCareOf");
@@ -46,7 +49,14 @@
 				$tpl->setVariable("fldV", $val );	
 			}
 			$tpl->parse("Option");
-		}
+		} // $inCareOfNames
+		foreach ( $usrNames as $usrName ) {
+			$tpl->setCurrentBlock("Option");
+			foreach ($usrName as $key => $val ) {
+				$tpl->setVariable("fldV", $val );	
+			}
+			$tpl->parse("Option");
+		} // $inCareOfNames
 		$tpl->parse("InCareOf");
 		$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
 		return preg_replace( "/(^\t*)/", "  ", $tmp );
@@ -56,12 +66,18 @@
 		global $_db, $_POST, $_SESSION;
 		$rpt = array( );
 		$_SESSION[ 'icoName' ] = isset($_POST[ 'icoText' ]) ? $_POST[ 'icoText' ] : $_POST[ 'icoSel' ];
-		$_db->query( "LOCK TABLES inCareOf READ, WRITE;" );
-		$rslt = $_db->query( "SELECT * FROM inCareOf WHERE `UsrName` = \"{$_SESSION[ 'icoName' ]}\";" );
-		if ( $rslt->num_rows == 0 ) {
-			$rslt = $_db->query( "INSERT INTO inCareOf ( `UsrName` ) VALUE ( \"{$_SESSION[ 'icoName' ]}\" );" );
-		}
+		/* check if exits in Usr Table */
+		$_db->query("LOCK TABLES Usr READ;");
+		$rslt = $_db->query("SELECT UsrName FROM Usr WHERE `UsrName` = \"{$_SESSION[ 'icoName' ]}\";");
 		$_db->query( "UNLOCK TABLES;" );
+		if ( $rslt->num_rows == 0 ) { // Not in Usr Table => Insert into inCareOf Table
+			$_db->query( "LOCK TABLES inCareOf WRITE;" );
+			$rslt = $_db->query( "SELECT * FROM inCareOf WHERE `UsrName` = \"{$_SESSION[ 'icoName' ]}\";" );
+			if ( $rslt->num_rows == 0 ) {
+				$rslt = $_db->query( "INSERT INTO inCareOf ( `UsrName` ) VALUE ( \"{$_SESSION[ 'icoName' ]}\" );" );
+			}
+			$_db->query( "UNLOCK TABLES;" );
+		} // End of Not in Usr Table
 		$rpt['icoName'] = $_SESSION['icoName'];
 		$rpt[ 'url' ] = URL_ROOT . '/admin/PaiWei/index.php';
 		return $rpt;
