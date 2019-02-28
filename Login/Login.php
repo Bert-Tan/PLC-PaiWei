@@ -55,17 +55,13 @@
 	$hdrLoc = "location: " . URL_ROOT . "/admin/UsrPortal/index.php";
 	$rstLink = "./LoginRestore.php?my_Req=fgt_Pass&usr_Req=fgt_Pass";
 	session_start(); // create or retrieve
-	if ( isset( $_SESSION[ 'usrName' ] ) ) { // already logged in
+	if ( isset( $_SESSION[ 'usrName' ] ) || ( !isset( $_GET[ 'l' ] ) ) ) {
+		// already logged in or Login language not specified
 		header( $hdrLoc ); // the redirected PHP file will figure out the language
 	}
 
 	$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN; // set Lang from the CGI parameter
-	if ( !isset($_SESSION[ 'sessLang' ]) ) {
-		$_SESSION[ 'sessLang' ] = $sessLang;
-	} else {
-		$sessLang = $_SESSION[ 'sessLang' ];
-	}
-	
+	$_SESSION[ 'sessLang' ] = $sessLang;
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$rstLink .= ( $useChn ) ? "&l=c" : "&l=e";
 	$hLtrS = ( $useChn ) ? "12px" : "normal"; // letter spacing for <h*> element

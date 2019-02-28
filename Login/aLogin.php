@@ -58,11 +58,8 @@
 		header( $hdrLoc ); // the redirected PHP file will figure out the language
 	}
 
-	$sessLang = SESS_LANG_CHN; // set Lang to English
-	if ( !isset($_SESSION[ 'sessLang' ]) ) {
-		$_SESSION[ 'sessLang' ] = $sessLang;
-	}
-	$sessLang = $_SESSION[ 'sessLang' ];
+	$sessLang = SESS_LANG_CHN; // set Lang to Chinese - Administrators
+	$_SESSION[ 'sessLang' ] = $sessLang;
 	
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$hLtrS = ( $useChn ) ? "12px" : "normal"; // letter spacing for <h*> element
