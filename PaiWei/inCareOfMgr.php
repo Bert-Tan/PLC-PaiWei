@@ -32,12 +32,10 @@
     function readInCareOf() { // returns a string reflecting a <select> html element
         global $_db;
 
-		$_db->query( "LOCK TABLES inCareOf READ;" );
-		$rslt = $_db->query("SELECT UsrName FROM inCareOf WHERE true;");
-		$_db->query( "UNLOCK TABLES;" );
+		$_db->query( "LOCK TABLES `inCareOf` READ, `Usr` READ;" );
+		$rslt = $_db->query("SELECT `UsrName` FROM `inCareOf`;");
 		$inCareOfNames = $rslt->fetch_all(MYSQLI_ASSOC);
-		$_db->query( "LOCK TABLES Usr READ;" );
-		$rslt = $_db->query("SELECT UsrName FROM Usr WHERE true;");
+		$rslt = $_db->query("SELECT `UsrName` FROM `Usr` WHERE `UsrName` NOT IN (SELECT UsrName FROM inCareOf);");
 		$_db->query( "UNLOCK TABLES;" );
 		$usrNames = $rslt->fetch_all(MYSQLI_ASSOC);
 		$tpl = new HTML_Template_IT("./Templates");
