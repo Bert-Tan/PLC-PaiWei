@@ -31,7 +31,7 @@
     
     function readUsrPwRows() { // returns a string reflecting a <select> html element
         global $_db;
-
+		$tblNames = array('W001A_4', 'DaPaiWei', 'L001A', 'C001A', 'Y001A', 'D001A' );
 		$_db->query( "LOCK TABLES inCareOf READ, pw2Usr READ;" );
 		$sql  =	"SELECT DISTINCT `pwUsrName` FROM `pw2Usr` WHERE `pwUsrName` IN "
 			  .	"(SELECT `UsrName` FROM `inCareOf`) ORDER BY `pwUsrName`;";
@@ -48,28 +48,23 @@
 		foreach ( $allNames as $Name ) {
 			$icoName = $Name['pwUsrName'];
 			$_db->query("LOCK TABLES `pw2Usr` READ;");
-			$sql = "SELECT `TblName` FROM `pw2Usr` WHERE `pwUsrName` = \"${icoName}\" AND `TblName` = 'W001A_4';";
-			$rslt = $_db->query( $sql ); $w_Tot = $rslt->num_rows;
-			$sql = "SELECT `TblName` FROM `pw2Usr` WHERE `pwUsrName` = \"${icoName}\" AND `TblName` = 'DaPaiWei';";
-			$rslt = $_db->query( $sql ); $W_Tot = $rslt->num_rows;
-			$sql = "SELECT `TblName` FROM `pw2Usr` WHERE `pwUsrName` = \"${icoName}\" AND `TblName` = 'L001A';";
-			$rslt = $_db->query( $sql ); $l_Tot = $rslt->num_rows;
-			$sql = "SELECT `TblName` FROM `pw2Usr` WHERE `pwUsrName` = \"${icoName}\" AND `TblName` = 'C001A';";
-			$rslt = $_db->query( $sql ); $c_Tot = $rslt->num_rows;
-			$sql = "SELECT `TblName` FROM `pw2Usr` WHERE `pwUsrName` = \"${icoName}\" AND `TblName` = 'Y001A';";
-			$rslt = $_db->query( $sql ); $y_Tot = $rslt->num_rows;
-			$sql = "SELECT `TblName` FROM `pw2Usr` WHERE `pwUsrName` = \"${icoName}\" AND `TblName` = 'D001A';";
-			$rslt = $_db->query( $sql ); $d_Tot = $rslt->num_rows;
-			$sql = "SELECT `TblName` FROM `pw2Usr` WHERE `pwUsrName` = \"${icoName}\";";
-			$rslt = $_db->query( $sql ); $g_Tot = $rslt->num_rows;
+			$rslt = $_db->query("SELECT `TblName` FROM `pw2Usr` WHERE `pwUsrName` = \"${icoName}\";");
 			$_db->query("UNLOCK TABLES;");
-			$tpl->setCurrentBlock("dashboard_row");	$tpl->setCurrentBlock("dashboard_cells");
-			$tpl->setVariable("icoName", $icoName );	$tpl->setVariable("w_Tot", $w_Tot );
-			$tpl->setVariable("W_Tot", $W_Tot );	$tpl->setVariable("l_Tot", $l_Tot );
-			$tpl->setVariable("c_Tot", $c_Tot );	$tpl->setVariable("y_Tot", $y_Tot );
-			$tpl->setVariable("d_Tot", $d_Tot );	$tpl->setVariable("g_Tot", $g_Tot );
-			$tpl->parse("dashboard_cells");	$tpl->parse("dashboard_row");
-		} // $inCareOfNames		
+			$tpl->setCurrentBlock( "dashboard_row" );
+			$tpl->setVariable( "icoName", $icoName );
+			$tpl->setVariable( "icoTotal", $rslt->num_rows );
+			foreach ( $tblNames as $tblName ) {
+				$_db->query("LOCK TABLES `pw2Usr` READ;");
+				$sql = "SELECT `TblName` FROM `pw2Usr` WHERE `pwUsrName` = \"${icoName}\" AND `TblName` = \"${tblName}\";";
+				$_db->query("UNLOCK TABLES;");
+				$rslt = $_db->query( $sql );
+				$tpl->setCurrentBlock("dashboard_cell");
+				$tpl->setVariable("tblName", $tblName );
+				$tpl->setVariable("tblTotal", $rslt->num_rows );
+				$tpl->parse("dashboard_cell");
+			} // each TblName
+			$tpl->parse("dashboard_row");
+		} // $allNames		
 		$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
 		return preg_replace( "/(^\t*)/", "  ", $tmp );
 	} // function readUsrPwRows()
@@ -140,9 +135,6 @@
 	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
 	$rtrtMgrUrl = "./rtMgr.php";	// relative;
 	$pwMgrUrl = "./Dashboard.php";
-/*
-	$pwMgrUrl = "../PaiWei/inCareOfMgr.php";	// relative;
- */
 	$sessLang = $_SESSION[ 'sessLang' ];
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 
@@ -263,7 +255,7 @@ table.pgMenu {
 	/* The following are adjustable */
 	right: 0vw;
 	table-layout: fixed;
-	width: 42vw;
+	width: 46vw;
 }
 
 table.pgMenu th {
@@ -300,6 +292,15 @@ table.pgMenu th a:hover {
 /******************************************************************************
  *             The data table in the dataArea on every Admin Page             *
  ******************************************************************************/
+div.dataArea {
+	top: 1vh;
+	width: 75%;
+	left: 50%;
+	transform:translateX(-50%);
+	height: 87vh;
+	border: 1px solid grey;
+}
+
 h1.dataTitle, h2.dataTitle, h3.dataTitle {
 	text-align: center;
 }
