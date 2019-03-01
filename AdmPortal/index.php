@@ -39,7 +39,7 @@
 
 	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
 	$rtrtMgrUrl = "../PaiWei/rtMgr.php";	// relative;
-	$pwMgrUrl = "../PaiWei/inCareOfMgr.php";	// relative;
+	$pwMgrUrl = "../PaiWei/Dashboard.php";	// relative;
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 
  	if ( !isset( $_SESSION[ 'usrName' ] ) ) {

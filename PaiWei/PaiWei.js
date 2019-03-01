@@ -42,7 +42,7 @@ function readSessParam() {
 		url: "./ajax-pwDB.php",
 		method: 'POST',
 		data: _ajaxData,
-		success: function( rsp ) { // alert( "from Server: " + rsp ); return; // Success Handler
+		success: function( rsp ) {
 			var rspV = JSON.parse ( rsp );
 			for ( var X in rspV ) {
 				switch ( X ) {
@@ -72,7 +72,10 @@ function readSessParam() {
 						break;
 					case 'icoName':
 						_icoName = rspV[X];
-						break;			
+						break;
+					case 'tblName':
+						_tblName = rspV[X];
+						break;	
 					case 'errCount':
 						x = rspV [ X ];
 						eMSG = '';
@@ -84,6 +87,10 @@ function readSessParam() {
 				} // switch()
 			} // for loop
 			ready_init();
+			if ( _tblName != null ) {
+				loadTblData( _tblName, 1, 30, _icoName );
+				enableTooltip();
+			}
 		}, // Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
 			alert( "readSessParam()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
@@ -190,7 +197,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 	_dbInfo[ 'tblName' ] = tblName;
 	_dbInfo[ 'pgNbr' ] = pgNbr;
 /*	_dbInfo[ 'numRec' ] = numRec; */
-	_dbInfo[ 'pwRqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
+	_dbInfo[ 'pwRqstr' ] = sessUsr;
 /*	_dbInfo[ 'inclHdr' ] = !dataOnly; */
 	_ajaxData[ 'dbReq' ] = 'dbREAD';
 	_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
@@ -256,7 +263,7 @@ function pwTblHdlr() {
 	$(".ugld").removeClass("active");
 	$(this).addClass("active");
 
-	loadTblData( _tblName, 1, 30, _sessUsr );
+	loadTblData( _tblName, 1, 30, ( ( _icoName != null ) ? _icoName : _sessUsr ) );
 	
 	//new page: show hover message
 	enableTooltip();

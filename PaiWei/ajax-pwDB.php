@@ -126,6 +126,7 @@ function readPwParam( $_dbInfo ) {
 		$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
 		$rpt[ 'icoSkip'] = isset($_SESSION[ 'icoSkip' ]) ? $_SESSION[ 'icoSkip' ] : null;
 		$rpt[ 'icoName'] = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
+		$rpt[ 'tblName'] = isset($_SESSION[ 'tblName' ]) ? $_SESSION[ 'tblName' ] : null;
 		$rpt[ 'wtList' ] = $_SESSION[ 'wtList' ];
 		$rpt[ 'rtList' ] = $_SESSION[ 'rtList' ];
 		return $rpt;
@@ -158,6 +159,7 @@ function readPwParam( $_dbInfo ) {
 			$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
 			$rpt[ 'icoSkip'] = isset($_SESSION[ 'icoSkip' ]) ? $_SESSION[ 'icoSkip' ] : null;
 			$rpt[ 'icoName'] = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
+			$rpt[ 'tblName'] = isset($_SESSION[ 'tblName' ]) ? $_SESSION[ 'tblName' ] : null;
 			$_SESSION[ 'wtList' ] = readPWTitleList( 'pwParam_wtList' );
 			$_SESSION[ 'rtList' ] = readPWTitleList( 'pwParam_rtList' );
 			$rpt[ 'wtList' ] = $_SESSION[ 'wtList' ];
@@ -442,6 +444,16 @@ function updTblData( $dbInfo ) {
 } // updTblData()
 
 /**********************************************************
+ *                      For Dashboard                     *
+ **********************************************************/
+function dashBoardSetting( $dbInfo ) {
+	global $_SESSION;
+	$_SESSION['icoName'] = $dbInfo['icoName'];
+	$_SESSION['tblName'] = $dbInfo['tblName'];
+	$rpt[ 'url' ] = URL_ROOT . '/admin/PaiWei/index.php';
+	return $rpt;
+} // dashBoardSetting()
+/**********************************************************
  *								 Main Functional Code										*
  **********************************************************/
 $_dbReq = $_POST[ 'dbReq' ];
@@ -465,6 +477,9 @@ switch ( $_dbReq ) {
 		break;
 	case 'dbUPD':
 		echo json_encode ( updTblData ( $_dbInfo ), JSON_UNESCAPED_UNICODE );
+		break;
+	case 'pwDashboard':
+		echo json_encode ( dashBoardSetting( $_dbInfo ), JSON_UNESCAPED_UNICODE);
 		break;
 } // switch()
 
