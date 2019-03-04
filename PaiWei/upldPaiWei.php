@@ -168,9 +168,7 @@
 					$_toAdd = " 叩薦";	// default
 					break;
 				} // switch()
-//				if ( preg_match( $_toDel, $_attrV ) !== 1 ) { // not there; insert default
 				$_attrV = preg_replace( "%$%", $_toAdd, $_attrV );
-//				}
 			} // End of taking care of 叩薦 or 敬薦
 			$_tupAttrNVs[ $_attrN ] = $_attrV; // this particular attribute's (Name, Value)
 		} // formulate tuple attribute's (Name, Value) pairs in associative array format
