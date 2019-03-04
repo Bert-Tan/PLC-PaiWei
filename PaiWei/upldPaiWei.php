@@ -156,8 +156,8 @@
 				$_attrV = BLANKDATA; // field is either W_Title or R_Title, for which blank is allowed
 			} // Field value is empty
 			if ( in_array( $_attrN, $_rqTitles ) ) { // make 叩薦 or 敬薦 consistent
-				$_toDel = "%\s*(叩薦|敬薦)$%";
-				$_attrV = preg_replace( $_toDel, ' ${1}', $_attrV ); // if they are there, make consistent
+				$_toDel = "%\s*(叩薦|敬薦)%u";
+				$_attrV = preg_replace( $_toDel, '', $_attrV ); // if they are there, delete it
 				switch( $_attrN ) {
 				case 'D_Requestor':
 				case 'Y_Requestor':
@@ -168,9 +168,9 @@
 					$_toAdd = " 叩薦";	// default
 					break;
 				} // switch()
-				if ( preg_match( $_toDel, $_attrV ) !== 1 ) { // not there; insert default
-					$_attrV = preg_replace( "%$%", $_toAdd, $_attrV );
-				}
+//				if ( preg_match( $_toDel, $_attrV ) !== 1 ) { // not there; insert default
+				$_attrV = preg_replace( "%$%", $_toAdd, $_attrV );
+//				}
 			} // End of taking care of 叩薦 or 敬薦
 			$_tupAttrNVs[ $_attrN ] = $_attrV; // this particular attribute's (Name, Value)
 		} // formulate tuple attribute's (Name, Value) pairs in associative array format

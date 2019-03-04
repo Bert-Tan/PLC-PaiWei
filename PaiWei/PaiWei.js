@@ -543,24 +543,30 @@ function insBtnHdlr() {
 		tblFlds[ thisRow.find("select.rTitle").attr('data-fldn') ] = rtV;
 		break;
 	case 'D001A':
-		recV = "敬薦";
-		rName = thisRow.find("input[data-fldn=D_Requestor]").val();
-		thisRow.find("input[data-fldn=D_Requestor]").val( rName + ' ' + recV );
+		recV = " 敬薦"; targetV = new RegExp( "\s*敬薦", "gu" );
+		rNameO = thisRow.find("input[data-fldn=D_Requestor]");
+		rName = rNameO.val().trim();
+		rName = rName.replace( targetV, '' ); /* delete */
+		rNameO.val( rName + recV );
 		break;
 	case 'Y001A':
-		recV = "敬薦";
-		rName = thisRow.find("input[data-fldn=Y_Requestor]").val();
-		thisRow.find("input[data-fldn=Y_Requestor]").val( rName + ' ' + recV );
+		recV = " 敬薦"; targetV = new RegExp( "\s*敬薦", "gu" );
+		rNameO = thisRow.find("input[data-fldn=Y_Requestor]");
+		rName = rNameO.val().trim();
+		rName = rName.replace( targetV, '' ); /* delete */
+		rNameO.val( rName + recV );
 		break;
 	case 'L001A':
-		recV = "叩薦";
-		rName = thisRow.find("input[data-fldn=L_Requestor]").val();
-		thisRow.find("input[data-fldn=L_Requestor]").val( rName + ' ' + recV );	
+		recV = " 叩薦"; targetV = new RegExp( "\s*叩薦", "gu");
+		rNameO = thisRow.find("input[data-fldn=L_Requestor]");
+		rName = rNameO.val().trim();
+		rName = rName.replace( targetV, '' ).trim(); /* delete it */
+		rNameO.val( rName + recV );
 		break;
 	} // switch()
 
 	if ( recV != null ) {
-		recV = new RegExp(" " + recV + "$/g" ); // used to revert in case of error
+		recV = new RegExp( recV, "gu" ); // used to revert in case of error
 	}
 
 	_ajaxData = {}; _dbInfo = {};	
