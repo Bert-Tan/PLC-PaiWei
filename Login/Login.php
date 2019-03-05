@@ -147,9 +147,9 @@
 					</tr>				
 					<tr>
 			  		<td><?php echo xLate( 'uEmail' ); ?><br/>
-			  			<input type="text" name="usr_Email" id="uEmail" data-pmptV=""
+			  			<input type="email" name="usr_Email" id="uEmail" data-pmptV=""
 			  						 data-oldV="<?php echo xLate( 'uEmailVal' ); ?>"
-			  						 value="<?php echo xLate( 'uEmailVal' ); ?>" disabled>
+			  						 value="<?php echo xLate( 'uEmailVal' ); ?>" required disabled>
 			  		</td>
 			  		<td style="text-align: center;">			  			
 							<input type="checkbox" name="usr_New" id="uNew" onClick="enableEmailEntry();"><?php echo xLate( 'uNew' ); ?>

@@ -190,7 +190,7 @@
 ?>
 					<tr>
 			  		<td><?php echo xLate( 'uregEmail' ); ?><br/>
-			  			<input type="text" name="usr_Email" id="uEmail" data-pmptV=""
+			  			<input type="email" name="usr_Email" id="uEmail" data-pmptV=""
 			  						 data-oldV="<?php echo $emailPrompt; ?>"
 			  						 value="<?php echo $emailPrompt; ?>" size=35 required>
 			  		</td>
