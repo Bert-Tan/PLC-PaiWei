@@ -148,7 +148,7 @@
 							</select>
 						</td>
  						<td style="text-align: center; vertical-align: middle;">
-							<input type="submit" id="uSubLogin" name="usr_Req" class="pushButton" value="<?php echo xLate( 'uSub' ); ?>">							
+							<input type="submit" id="uLogin" name="usr_Req" class="pushButton" value="<?php echo xLate( 'uSub' ); ?>">							
 				    	</td>
 			  		</tr>
 				</tbody>

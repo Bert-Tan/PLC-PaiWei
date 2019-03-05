@@ -189,17 +189,17 @@
 	if ( !$paintReset ) { 
 ?>
 					<tr>
-			  		<td><?php echo xLate( 'uregEmail' ); ?><br/>
-			  			<input type="email" name="usr_Email" id="uEmail" data-pmptV=""
-			  						 data-oldV="<?php echo $emailPrompt; ?>"
-			  						 value="<?php echo $emailPrompt; ?>" size=35 required>
-			  		</td>
-			  		<td style="text-align: center; width: 50%;">
+			  			<td><?php echo xLate( 'uregEmail' ); ?><br/>
+			  				<input type="email" name="usr_Email" id="uEmail" data-pmptV=""
+			  						data-oldV="<?php echo $emailPrompt; ?>"
+			  						value="<?php echo $emailPrompt; ?>" size=35 required>
+			  			</td>
+			  			<td style="text-align: center; width: 50%;">
 							<input type="hidden" name="usr_Req" value="chk_Email">
 							<input type="submit" id="uSubEmail" class="pushButton"
-										 name="my_Req" value="<?php echo xLate( 'uRecover' ); ?>" >
-				    </td>
-			  	</tr>
+									name="my_Req" value="<?php echo xLate( 'uRecover' ); ?>" >
+				    	</td>
+			  		</tr>
 <?php
 	} else {
 ?>
@@ -209,20 +209,20 @@
 						</td>
 						<td><?php echo xLate( 'uPass' ); ?><br/>
 							<input type="password" name="usr_Pass" id="uPass" data-pmptV=""
-										 data-oldV="<?php echo $passPrompt; ?>"
-										 value="<?php echo $passPrompt; ?>" size=35 required>
-				    </td>
-				  </tr>
-				  <tr>
-				  	<td><?php echo xLate( 'uEmail' ); ?><br/>
-							<input type="text" name="usr_Email" id="uEmail" value="<?php echo $myEmail; ?>" readonly>
-				  	</td>
-				  	<td style="text-align: center; width: 50%;">
-				  		<input type="hidden" name="usr_ID" value="<?php echo $myID; ?>">
-				  		<input type="hidden" name="usr_Req" value="upd_Pass">
-				  		<input type="submit" id="uSubUpd" class="pushButton"
-				  					 name="my_Req" value="<?php echo xLate( 'uUpd' ); ?>">
-				  	</td>
+									data-oldV="<?php echo $passPrompt; ?>"
+									value="<?php echo $passPrompt; ?>" size=35 required>
+				    	</td>
+				  	</tr>
+				  	<tr>
+				  		<td><?php echo xLate( 'uEmail' ); ?><br/>
+							<input type="email" name="usr_Email" id="uEmail" value="<?php echo $myEmail; ?>" readonly>
+				  		</td>
+				  		<td style="text-align: center; width: 50%;">
+				  			<input type="hidden" name="usr_ID" value="<?php echo $myID; ?>">
+				  			<input type="hidden" name="usr_Req" value="upd_Pass">
+				  			<input type="submit" id="uUpd" class="pushButton"
+				  				name="my_Req" value="<?php echo xLate( 'uUpd' ); ?>">
+				  		</td>
 				  </tr>
 <?php
 	}

@@ -130,42 +130,42 @@
 		echo putMsg( "60%", "normal", "left", "normal", $msgTxt );
 	}
 ?>
-		<form action="" method="post">
-			<table class="dataTbl centerMe" id="myLoginTbl">
+		<form action="" method="post"><!-- Login Form -->
+			<table class="dataTbl centerMe" id="myLoginTbl"><!-- Login Form Table -->
 				<tbody>
 					<tr>
-			    	<td><?php echo xLate( 'uName' ); ?><br/>
+			    		<td><?php echo xLate( 'uName' ); ?><br/>
 							<input type="text" name="usr_Name" id="uName" data-pmptV=""
-										 data-oldV="<?php echo xLate( 'uNameVal' ); ?>"
-										 value="<?php echo xLate( 'uNameVal' ); ?>" required>
+								data-oldV="<?php echo xLate( 'uNameVal' ); ?>"
+								value="<?php echo xLate( 'uNameVal' ); ?>" required>
 						</td>
 						<td><?php echo xLate( 'uPass' ); ?><br/>
 							<input type="password" name="usr_Pass" id="uPass" data-pmptV=""
-										 data-oldV="<?php echo xLate( 'uPassVal' ); ?>"
-										 value="<?php echo xLate( 'uPassVal' ); ?>" required>
-				    </td>
+								data-oldV="<?php echo xLate( 'uPassVal' ); ?>"
+								value="<?php echo xLate( 'uPassVal' ); ?>" required>
+				    	</td>
 					</tr>				
 					<tr>
-			  		<td><?php echo xLate( 'uEmail' ); ?><br/>
-			  			<input type="email" name="usr_Email" id="uEmail" data-pmptV=""
-			  						 data-oldV="<?php echo xLate( 'uEmailVal' ); ?>"
-			  						 value="<?php echo xLate( 'uEmailVal' ); ?>" required disabled>
-			  		</td>
-			  		<td style="text-align: center;">			  			
+			  			<td><?php echo xLate( 'uEmail' ); ?><br/>
+			  				<input type="email" name="usr_Email" id="uEmail" data-pmptV=""
+			  					data-oldV="<?php echo xLate( 'uEmailVal' ); ?>"
+			  					value="<?php echo xLate( 'uEmailVal' ); ?>" required disabled>
+			  			</td>
+			  			<td style="text-align: center;">			  			
 							<input type="checkbox" name="usr_New" id="uNew" onClick="enableEmailEntry();"><?php echo xLate( 'uNew' ); ?>
-				    </td>
+				    	</td>
 					</tr>
-			  	<tr>
+			  		<tr>
  						<td style="text-align: center; vertical-align: middle;">
-							<input type="submit" id="uSubLogin" name="usr_Req" class="pushButton" value="<?php echo xLate( 'uSub' ); ?>">							
-				    </td>
+							<input type="submit" id="uLogin" name="usr_Req" class="pushButton" value="<?php echo xLate( 'uSub' ); ?>">							
+				    	</td>
  						<td style="text-align: center; vertical-align: middle;">
 							<a href="<?php echo $rstLink; ?>" class="pushButton"><?php echo xLate( 'uFgt' ); ?></a>
-				    </td>
-			  	</tr>
+				    	</td>
+			  		</tr>
 				</tbody>
-			</table>
-		</form>
+			</table><!-- Login Form Table -->
+		</form><!-- Login Form -->
 	</div>
 </body>
 </html>
