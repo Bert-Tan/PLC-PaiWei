@@ -32,6 +32,8 @@
     function readUsrPwRows() { // returns a string reflecting a <select> html element
         global $_db;
 		$tblNames = array('W001A_4', 'DaPaiWei', 'L001A', 'C001A', 'Y001A', 'D001A' );
+		$pwTotal = array(	'W001A_4' => 0, 'DaPaiWei' => 0, 'L001A' => 0,
+							'C001A' => 0, 'Y001A' => 0, 'D001A' => 0 , 'grandTotal' => 0 );
 		$_db->query( "LOCK TABLES inCareOf READ, pw2Usr READ;" );
 		$sql  =	"SELECT DISTINCT `pwUsrName` FROM `pw2Usr` WHERE `pwUsrName` IN "
 			  .	"(SELECT `UsrName` FROM `inCareOf`) ORDER BY `pwUsrName`;";
@@ -53,18 +55,29 @@
 			$tpl->setCurrentBlock( "dashboard_row" );
 			$tpl->setVariable( "icoName", $icoName );
 			$tpl->setVariable( "icoTotal", $rslt->num_rows );
+			$pwTotal[ 'grandTotal' ] += $rslt->num_rows;
 			foreach ( $tblNames as $tblName ) {
 				$_db->query("LOCK TABLES `pw2Usr` READ;");
 				$sql = "SELECT `TblName` FROM `pw2Usr` WHERE `pwUsrName` = \"${icoName}\" AND `TblName` = \"${tblName}\";";
 				$_db->query("UNLOCK TABLES;");
 				$rslt = $_db->query( $sql );
+				$pwTotal[ "${tblName}" ] += $rslt->num_rows;
 				$tpl->setCurrentBlock("dashboard_cell");
 				$tpl->setVariable("tblName", $tblName );
 				$tpl->setVariable("tblTotal", $rslt->num_rows );
 				$tpl->parse("dashboard_cell");
 			} // each TblName
 			$tpl->parse("dashboard_row");
-		} // $allNames		
+		} // $allNames
+		/* now the Summary Row */
+		$tpl->setCurrentBlock( "sumRow" );
+		$tpl->setVariable("grandTotal", $pwTotal[ 'grandTotal' ]);
+		foreach( $tblNames as $tblName ) {
+			$tpl->setCurrentBlock("sumCell");
+			$tpl->setVariable("pwSum", $pwTotal[ "${tblName}" ]);
+			$tpl->parse("sumCell");
+		} // each tblName
+		$tpl->parse("dashboard_row");
 		$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
 		return preg_replace( "/(^\t*)/", "  ", $tmp );
 	} // function readUsrPwRows()
@@ -351,6 +364,11 @@ table.dataRows tr:nth-child(even) {
 table.dataRows tr:nth-child(odd) {
 	color: black;
 	background-color: #ffffe6;
+}
+
+table.dataRows tr:last-child td {
+	color: yellow;
+	background-color: #00b300;
 }
 
 table.dataRows td {
