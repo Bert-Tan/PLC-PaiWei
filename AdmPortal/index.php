@@ -13,6 +13,9 @@
 			'htmlTitle' => array (
 				SESS_LANG_CHN => "淨土念佛堂管理用戶主頁",
 				SESS_LANG_ENG => "Pure Land Center Admin Portal" ),
+			'admUMgr' => array (
+				SESS_LANG_CHN => "用戶管理",
+				SESS_LANG_ENG => "User Mgmt" ),
 			'pwMgr' => array (
 				SESS_LANG_CHN => "為蓮友處理法會牌位",
 				SESS_LANG_ENG => "Manage Name Plaques for others" ),
@@ -38,6 +41,7 @@
 	}
 
 	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
+	$admUMgrUrl = "./AdmUMgr.php";
 	$rtrtMgrUrl = "../PaiWei/rtMgr.php";	// relative;
 	$pwMgrUrl = "../PaiWei/Dashboard.php";	// relative;
 	$useChn = ( $sessLang == SESS_LANG_CHN );
@@ -84,6 +88,13 @@
 		<table id="myMenuTbl" class="centerMeV">	
 			<thead>
 				<tr>
+				<?php
+	if ( $_SESSION[ 'sessType' ] == SESS_TYP_WEBMASTER ) {
+?>
+					<th><a href="<?php echo $admUMgrUrl; ?>" class="myLinkButton"><?php echo xLate( 'admUMgr' ); ?></a></th>
+<?php
+	}
+?>   
 					<th><a href="<?php echo $rtrtMgrUrl; ?>" class="myLinkButton"><?php echo xLate( 'rtrtMgr' ); ?></a></th>
 					<th><a href="<?php echo $pwMgrUrl; ?>" class="myLinkButton"><?php echo xLate( 'pwMgr' ); ?></th>
 					<th class="future">處理週日迴向申請</th>

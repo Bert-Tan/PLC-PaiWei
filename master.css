@@ -1,0 +1,226 @@
+/******************************************************************************
+ *                     CSS File Location: admin/master.css                    *
+ ******************************************************************************/
+body {
+	background-image:	url("../pic/bk_gray.gif");
+	background-attachment:	fixed;
+	font-family:	arial, sans-serif;
+	font-size:	100%;
+}
+
+.engClass {
+	font-size: 80%;
+}
+
+.centerMe { /* generic; to center a block element in its containing block element */
+	position: absolute; top: 50%; left: 50%; transform:translate(-50%, -50%);
+}
+
+.centerMeV { /* generic; to vertically center a block element in its containing block element */
+	position: absolute; top: 50%; transform:translateY(-50%);
+}
+
+.centerMeH { /* generic; to horizontally center a block element in its containing block element */
+	position: absolute; left: 50%; transform:translateX(-50%);
+}
+
+.q_centerMe {
+	position: absolute; top: 25%; left: 50%; transform:translate(-50%, -50%);
+}
+
+/******************************************************************************
+ *                     The top ribbon on every Admin Page                     *
+ ******************************************************************************/
+div.hdrRibbon {
+	position: relative;
+    top: 0px;
+	width: 80vw;
+    height: 10vh; /* Adjustable by local CSS */
+    margin: auto;
+	margin-top: 0px;
+	white-space: nowrap;
+}
+
+div.hdrRibbon img { /* for the logo */
+	float: left;
+	display: block; 
+	height: 9vh; /* adjustable by local CSS */
+	width: auto; /* so will be in-scale */
+}
+
+div.hdrRibbon #pgTitle { /* for the page Title */
+	left: 10vh;	/* adjustable locally according to the logo size above */
+	display: inline-block;
+    font-size: 23px;
+	font-weight: bold;
+}
+
+/******************************************************************************
+ *            The menu table in the top ribbon on every Admin Page            *
+ ******************************************************************************/
+table.pgMenu {
+    border-collapse: collapse;
+    table-layout: fixed;
+	/* The following are adjustable */
+	right: 0px;
+	width: 46vw;
+}
+
+table.pgMenu th {
+	border: 1px solid white;
+	background-color:	#00b300;
+	color: white;
+	padding: 2px 5px;
+	text-align: center;
+	vertical-align: middle;
+	/* The following are adjustable */
+	line-height: 1.4em;
+	height: 100%;
+}
+
+table.pgMenu th a {
+	/*
+	 * for anchors in the page menu table; make them occupy the entire th cell
+	 */
+	text-decoration: none;
+	background-color:#00b300;
+	color: white;
+	text-align: center;
+	font-weight: bold;
+	display: block;
+	width: 100%;
+	height: 100%;
+	line-height: 1.4em;
+}
+
+table.pgMenu th a:hover {
+	color: yellow;
+	background-color: #009900;
+	cursor: pointer;
+}
+
+table.pgMenu th:last-child { /* for logout box */
+	width: 3.5vw;
+	border-left: 3px solid white;
+}
+
+/******************************************************************************
+ *             The data table in the dataArea on every Admin Page             *
+ ******************************************************************************/
+div.dataArea {
+	width: 75%;
+	margin: auto;
+	margin-top: 3px;
+	height: 87vh;
+	border: 1px solid grey;
+}
+
+h1.dataTitle, h2.dataTitle, h3.dataTitle {
+	text-align: center;
+}
+
+div.dataHdrWrapper, div.dataBodyWrapper {
+	/**************************************************************************
+	 * HTML TBODY is not scrollable, define Table Header and Data as Tables   *
+	 * themselves, use wrappers around them, and make Data Wrapper scrollable *
+	 **************************************************************************/
+	width: 100%; /* adjustable */
+}
+
+div.dataBodyWrapper {
+	overflow-y: auto;
+	height: 71vh; /* adjustable */
+}
+
+table.dataHdr, table.dataRows {
+	/*
+	 * Data Header & Data Rows are tables by themselves; see the note above
+	 */
+	border-collapse: collapse;
+	width: 100%;
+	table-layout: fixed;
+}
+
+table.dataHdr th, table.dataRows td {
+	border: 1px solid silver;
+	margin: 0px;
+	padding: 2px 5px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+table.dataHdr th {
+	color: white;
+	background-color: #00b300;
+	/* The following are adjustable */
+	height: 2.2em;
+	line-height: 1.3em;
+}
+
+table.dataRows tr:nth-child(even) {
+	color: black;
+	background-color: #ffffb3;
+}
+
+table.dataRows tr:nth-child(odd) {
+	color: black;
+	background-color: #ffffe6;
+}
+
+table.dataRows td {
+	color: black;
+	/* The following are adjustable */
+	height: 1.4em;
+	line-height: 1.3em;
+}
+
+/******************************************************************************
+ * The dialog box in the dataArea on Admin Pages to collect data; e.g., login *
+ ******************************************************************************/
+table.dialog {
+    border: 4px ridge #00b300;
+    table-layout: fixed;
+    width: 60%;
+    margin: auto;
+    margin-top: 0px;
+    padding: 0px;
+}
+
+table.dialog th, table.dialog td {
+	border: 1px solid;
+	margin: 0px;
+	padding: 2px 5px;
+	vertical-align: middle;
+    text-align: center;
+}
+
+table.dialog th {
+    border-color: silver;
+    color: white;
+    background-color: #00b300;
+    height: 2.5em; /* adjustable */
+    line-height: 1.3em;
+}
+
+table.dialog tr:nth-child(even) {
+	color: black;
+	background-color: #ffffb3;
+}
+
+table.dialog tr:nth-child(odd) {
+	color: black;
+	background-color: #ffffe6;
+}
+
+table.dialog td {
+    border-color: #00b300;
+    height: 2.5em; /* adjustable */
+    line-height: 1.3em;
+}
+
+/******************************************************************************
+ *                 For future features / capabilities - dimmed                *
+ ******************************************************************************/
+.future {
+    opacity: 0.7;
+}

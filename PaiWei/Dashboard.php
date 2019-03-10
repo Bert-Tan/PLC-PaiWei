@@ -13,6 +13,9 @@
 			'htmlTitle' => array (
 				SESS_LANG_CHN => "淨土念佛堂管理用戶主頁",
 				SESS_LANG_ENG => "Pure Land Center Admin User Main Page" ),
+			'admUMgr' => array (
+				SESS_LANG_CHN => "用戶管理",
+				SESS_LANG_ENG => "User Mgmt" ),
 			'pwMgr' => array (
 				SESS_LANG_CHN => "為蓮友處理法會牌位",
 				SESS_LANG_ENG => "Manage Name Plaques for others" ),
@@ -146,6 +149,7 @@
 		header( $hdrLoc );
 	}
 	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
+	$admUMgrUrl = "../AdmPortal/AdmUMgr.php";
 	$rtrtMgrUrl = "./rtMgr.php";	// relative;
 	$pwMgrUrl = "./Dashboard.php";
 	$sessLang = $_SESSION[ 'sessLang' ];
@@ -417,6 +421,13 @@ table.dataHdr th select {
 		<table class="pgMenu centerMeV">	
 			<thead>
 				<tr>
+<?php
+	if ( $_SESSION[ 'sessType' ] == SESS_TYP_WEBMASTER ) {
+?>
+					<th><a href="<?php echo $admUMgrUrl; ?>"><?php echo xLate( 'admUMgr' ); ?></a></th>
+<?php
+	}
+?>
 					<th><a href="<?php echo $rtrtMgrUrl; ?>"><?php echo xLate( 'rtrtMgr' ); ?></a></th>
 					<th><a href="<?php echo $pwMgrUrl; ?>"><?php echo xLate( 'pwMgr' ); ?></th>
 					<th class="future">處理週日迴向申請</th>
