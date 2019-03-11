@@ -215,7 +215,7 @@ input[type=button] {
 	<div class="dataArea">
 		<h1 class="dataTitle">淨土念佛堂用戶管理</h1>
 		<table class="dataHdr">
-			<thead><tr><th>蓮友登錄識別名</th><th>用戶分類</th><th>管理指令</th></tr></thead>
+			<thead><tr><th>蓮友登錄識別名<br>(用戶表)&nbsp;識別名</th><th>用戶分類</th><th>管理指令</th></tr></thead>
 		</table>
 		<div class="dataBodyWrapper">
 		<table class="dataRows">
