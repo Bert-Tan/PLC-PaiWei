@@ -72,8 +72,8 @@ function delUsrData() {
 	}); // AJAX Call		
 	return false;
 } // delUsrData()
-$(document).ready(function() {
-	$(".future").on( 'click', futureAlert );
+
+function AdmUMgr_rdy() {
 	$("input[name=setUsrClass]").on( 'click', setUsrClass );
 	$("input[name=delUsr]").on( 'click', delUsrData );
-});
+} // AdmUMgr_rdy()

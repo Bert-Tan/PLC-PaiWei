@@ -7,31 +7,6 @@
 	require_once( 'dbSetup.php' );
 	require_once( 'ChkTimeOut.php' );
 
-	function xLate( $what ) {
-		global $sessLang;
-		$htmlNames = array (
-			'htmlTitle' => array (
-				SESS_LANG_CHN => "淨土念佛堂管理用戶主頁",
-                SESS_LANG_ENG => "Pure Land Center Admin Portal" ),
-            'admUMgr' => array (
-                SESS_LANG_CHN => "用戶管理",
-                SESS_LANG_ENG => "User Mgmt" ),
-			'pwMgr' => array (
-				SESS_LANG_CHN => "為蓮友處理法會牌位",
-				SESS_LANG_ENG => "Manage Name Plaques for others" ),
-			'rtrtMgr' => array (
-				SESS_LANG_CHN => "更新法會資料",
-				SESS_LANG_ENG => "Manage Retreats" ),
-			'logOut' => array (
-				SESS_LANG_CHN => "用戶<br/>撤出",
-				SESS_LANG_ENG => "User<br/>Logout" ),
-			'h1Title' => array (
-				SESS_LANG_CHN => "請選擇蓮友為他處理法會牌位",
-				SESS_LANG_ENG => "Manage Name Plaques for Others" )
-			);
-		return $htmlNames[ $what ][ $sessLang ];
-    } // function xLate();
-
 	function readUsers2Manage() {
 		global $_db;
 		$sql = "SELECT `ID`, `UsrName` FROM `Usr` ORDER BY `ID`;";
@@ -125,18 +100,11 @@
 	} // function delUsrData()
 
 //	session_start(); // create or retrieve (already called in ChkTimeOut.php )
-	$sessLang = SESS_LANG_CHN; // default
-	$_SESSION[ 'sessLang' ] = $sessLang;
-
-	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
-	$admUMgrUrl = "./AdmUMgr.php";
-	$rtrtMgrUrl = "../PaiWei/rtMgr.php";	// relative;
-	$pwMgrUrl = "../PaiWei/Dashboard.php";	// relative;
-	$useChn = ( $sessLang == SESS_LANG_CHN );
-
+	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";	
  	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
 		header( $hdrLoc );
 	}
+
 	if (sizeof($_POST) > 0 ) {
 		$dbInfo = json_decode( $_POST [ 'dbInfo' ], true );
 		switch ( $_POST[ 'dbReq' ] ) {
@@ -153,12 +121,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title><?php echo xLate( 'htmlTitle' ); ?></title>
+<title>淨土念佛堂管理用戶主頁</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="../master.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="../futureAlert.js"></script>
-<script src="./AdmPortal.js"></script>
+<script type="text/javascript" src="../futureAlert.js"></script>
+<script type="text/javascript" src="./AdmCommon.js"></script>
+<script type="text/javascript" src="./AdmUMgr.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	pgMenu_rdy();
+	AdmUMgr_rdy();
+})
+</script>
 <style>
 /* local overrides */
 div.dataBodyWrapper {
@@ -174,7 +149,7 @@ table.dataHdr {
 
 /* local specific */
 input, select {
-	font-size: 1.0em;
+	font-size: 1.1em;
 	background-color: aqua;
 	border: 1px solid blue;
 	height: 1.5em;
@@ -200,14 +175,14 @@ input[type=button] {
 <?php
 	if ( $_SESSION[ 'sessType' ] == SESS_TYP_WEBMASTER ) {
 ?>
-					<th><a href="<?php echo $admUMgrUrl; ?>"><?php echo xLate( 'admUMgr' ); ?></a></th>
+					<th>用戶管理</th>
 <?php
 	}
 ?>                
-					<th><a href="<?php echo $rtrtMgrUrl; ?>"><?php echo xLate( 'rtrtMgr' ); ?></a></th>
-					<th><a href="<?php echo $pwMgrUrl; ?>"><?php echo xLate( 'pwMgr' ); ?></th>
+					<th>更新法會資料</th>
+					<th>為蓮友處理法會牌位</th>
 					<th class="future">處理週日迴向申請</th>
-					<th><a href="../Login/Logout.php">用戶<br/>撤出</a></th>
+					<th>用戶<br/>撤出</th>
 				</tr>
 			</thead>
 		</table><!-- Page Menu -->

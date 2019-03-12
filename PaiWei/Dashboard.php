@@ -7,34 +7,9 @@
 	require_once( 'dbSetup.php' );
 	require_once( 'ChkTimeOut.php' );
 
-	function xLate( $what ) {
-		global $sessLang;
-		$htmlNames = array (
-			'htmlTitle' => array (
-				SESS_LANG_CHN => "淨土念佛堂管理用戶主頁",
-				SESS_LANG_ENG => "Pure Land Center Admin User Main Page" ),
-			'admUMgr' => array (
-				SESS_LANG_CHN => "用戶管理",
-				SESS_LANG_ENG => "User Mgmt" ),
-			'pwMgr' => array (
-				SESS_LANG_CHN => "為蓮友處理法會牌位",
-				SESS_LANG_ENG => "Manage Name Plaques for others" ),
-			'rtrtMgr' => array (
-				SESS_LANG_CHN => "更新法會資料",
-				SESS_LANG_ENG => "Manage Retreats" ),
-			'logOut' => array (
-				SESS_LANG_CHN => "用戶<br/>撤出",
-				SESS_LANG_ENG => "User<br/>Logout" ),
-			'h1Title' => array (
-				SESS_LANG_CHN => "請選擇蓮友為他處理法會牌位",
-				SESS_LANG_ENG => "Manage Name Plaques for Others" )
-			);
-		return $htmlNames[ $what ][ $sessLang ];
-    } // function xLate();
-    
     function readUsrPwRows() { // returns a string reflecting a <select> html element
         global $_db;
-		$tblNames = array('W001A_4', 'DaPaiWei', 'L001A', 'C001A', 'Y001A', 'D001A' );
+		$tblNames = array(	'W001A_4', 'DaPaiWei', 'L001A', 'C001A', 'Y001A', 'D001A' );
 		$pwTotal = array(	'W001A_4' => 0, 'DaPaiWei' => 0, 'L001A' => 0,
 							'C001A' => 0, 'Y001A' => 0, 'D001A' => 0 , 'grandTotal' => 0 );
 		$_db->query( "LOCK TABLES inCareOf READ, pw2Usr READ;" );
@@ -44,7 +19,7 @@
 		$inCareOfNames = $rslt->fetch_all(MYSQLI_ASSOC);
 		$sql  =	"SELECT DISTINCT `pwUsrName` FROM `pw2Usr` WHERE `pwUsrName` NOT IN "
 			  .	"(SELECT `UsrName` FROM `inCareOf`) ORDER BY `pwUsrName`;";
-		$rslt = $_db->query( $sql ); // $w_Tot = $rslt->num_rows; echo "Line 22: $w_Tot\n\n"; exit;
+		$rslt = $_db->query( $sql );
 		$otherNames = $rslt->fetch_all(MYSQLI_ASSOC);
 		$_db->query( "UNLOCK TABLES;" );
 		$allNames = array_merge( $inCareOfNames, $otherNames );
@@ -145,15 +120,10 @@
 	} // function setInCareOf()
 
 //	session_start(); // create or retrieve (already called in ChkTimeOut.php )
+	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
 	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
 		header( $hdrLoc );
 	}
-	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
-	$admUMgrUrl = "../AdmPortal/AdmUMgr.php";
-	$rtrtMgrUrl = "./rtMgr.php";	// relative;
-	$pwMgrUrl = "./Dashboard.php";
-	$sessLang = $_SESSION[ 'sessLang' ];
-	$useChn = ( $sessLang == SESS_LANG_CHN );
 
 	if ( sizeof( $_POST ) > 0 ) {
 		if ( $_POST[ 'meansEntered' ] == 'byInput' ) {
@@ -170,13 +140,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title><?php echo xLate( 'htmlTitle' ); ?></title>
+<title>淨土念佛堂管理用戶主頁</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="https://www.amitabhalibrary.org/css/base.css">
-<link rel="stylesheet" type="text/css" href="../css/admin.css">
-<link rel="stylesheet" type="text/css" href="../css/menu.css">
+<link rel="stylesheet" type="text/css" href="../master.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="../futureAlert.js"></script>
+<script type="text/javascript" src="../futureAlert.js"></script>
+<script type="text/javascript" src="../AdmPortal/AdmCommon.js"></script>
 <script type="text/javascript">
 	function icoInputFocus() {
 		var newV = $(this).val().trim().replace( /<br>$/gm, '');
@@ -255,7 +224,7 @@
 		}); // ajax Call
 	} // dataCellClick()
 	$(document).ready(function() {
-		$(".future").on( 'click', futureAlert );
+		pgMenu_rdy();
 		$("input#icoInput").on( 'focus', icoInputFocus );
 		$("input#icoInput").on( 'blur', icoInputBlur );
 		$("input#icoInputBtn").on( 'click', icoInputSubmit );
@@ -264,122 +233,11 @@
 	})
 </script>
 <style>
-/******************************************************************************
- *            The menu table in the top ribbon on every Admin Page            *
- ******************************************************************************/
-table.pgMenu {
-	border-collapse: collapse;
-	/* The following are adjustable */
-	right: 0vw;
-	table-layout: fixed;
-	width: 46vw;
-}
-
-table.pgMenu th {
-	border: 1px solid white;
-	background-color:	#00b300;
-	color: white;
-	padding: 2px 5px;
-	text-align: center;
-	vertical-align: middle;
-	/* The following are adjustable */
-	line-height: 1.2em;
-}
-
-table.pgMenu th a {
-	/*
-	 * for anchors in the page menu table; make them occupy the entire th cell
-	 */
-	display: inline-block;
-	width: 100%;
-	height: 100%;
-	text-decoration: none;
-	color: white;
-	background-color: #00b300;
-	text-align: center;
-	vertical-align: middle;
-}
-
-table.pgMenu th a:hover {
-	color: yellow;
-	background-color: ##009900;
-	cursor: pointer;
-}
-
-/******************************************************************************
- *             The data table in the dataArea on every Admin Page             *
- ******************************************************************************/
-div.dataArea {
-	top: 1vh;
-	width: 75%;
-	left: 50%;
-	transform:translateX(-50%);
-	height: 87vh;
-	border: 1px solid grey;
-}
-
-h1.dataTitle, h2.dataTitle, h3.dataTitle {
-	text-align: center;
-}
-
-div.dataHdrWrapper, div.dataBodyWrapper {
-	/**************************************************************************
-	 * HTML TBODY is not scrollable, define Table Header and Data as Tables   *
-	 * themselves, use wrappers around them, and make Data Wrapper scrollable *
-	 **************************************************************************/
-	width: 100%; /* adjustable */
-}
-
-div.dataBodyWrapper {
-	overflow-y: auto;
-	height: 71vh; /* adjustable */
-}
-
-table.dataHdr, table.dataRows {
-	/*
-	 * Data Header & Data Rows are tables by themselves; see the note above
-	 */
-	border-collapse: collapse;
-	width: 100%;
-	table-layout: fixed;
-}
-
-table.dataHdr th, table.dataRows td {
-	border: 1px solid silver;
-	margin: 0px;
-	padding: 2px 5px;
-	vertical-align: middle;
-	text-align: center;
-}
-
-table.dataHdr th {
-	color: white;
-	background-color: #00b300;
-	/* The following are adjustable */
-	height: 2.2em;
-	line-height: 1.3em;
-}
-
-table.dataRows tr:nth-child(even) {
-	color: black;
-	background-color: #ffffb3;
-}
-
-table.dataRows tr:nth-child(odd) {
-	color: black;
-	background-color: #ffffe6;
-}
-
-table.dataRows tr:last-child td {
+/* Below are completely local */
+table.dataRows tr:last-child td { /* the Summary Row */
 	color: yellow;
 	background-color: #00b300;
-}
-
-table.dataRows td {
-	color: black;
-	/* The following are adjustable */
-	height: 1.4em;
-	line-height: 1.3em;
+	font-weight: bold;
 }
 
 table.dataRows td[data-tblN]:hover {
@@ -388,7 +246,6 @@ table.dataRows td[data-tblN]:hover {
 	cursor: pointer;
 }
 
-/* Below are completely local */
 table.dataHdr th input {
 	font-size: 1.0em;
 	background-color: aqua;
@@ -413,7 +270,7 @@ table.dataHdr th select {
 </head>
 <body>
 	<div class="hdrRibbon">
-		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" alt="">
+		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" class="centerMeV" alt="">
 		<div id="pgTitle" class="centerMeV">
 			<span style="letter-spacing: 1px;">淨土念佛堂管理用戶主頁</span><br/>
 			<span class="engClass">Pure Land Center Admin Portal</span>
@@ -424,14 +281,14 @@ table.dataHdr th select {
 <?php
 	if ( $_SESSION[ 'sessType' ] == SESS_TYP_WEBMASTER ) {
 ?>
-					<th><a href="<?php echo $admUMgrUrl; ?>"><?php echo xLate( 'admUMgr' ); ?></a></th>
+					<th>用戶管理</th>
 <?php
 	}
 ?>
-					<th><a href="<?php echo $rtrtMgrUrl; ?>"><?php echo xLate( 'rtrtMgr' ); ?></a></th>
-					<th><a href="<?php echo $pwMgrUrl; ?>"><?php echo xLate( 'pwMgr' ); ?></th>
+					<th>更新法會資料</th>
+					<th>為蓮友處理法會牌位</th>
 					<th class="future">處理週日迴向申請</th>
-					<th style="width: 3.5vw;"><a href="../Login/Logout.php">用戶<br/>撤出</a></th>
+					<th>用戶<br/>撤出</th>
 				</tr>
 			</thead>
 		</table>
