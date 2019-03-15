@@ -36,7 +36,6 @@
 	}
 	$sessLang = $_SESSION[ 'sessLang' ];
 	$useChn = ( $sessLang == SESS_LANG_CHN );
-	$featPWurl = "../PaiWei/index.php";	// relative path;
 ?>
 
 <!DOCTYPE html>
@@ -44,39 +43,48 @@
 <head>
 <title><?php echo xLate( 'htmlTitle' ); ?></title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="https://www.amitabhalibrary.org/css/base.css">
-<link rel="stylesheet" type="text/css" href="../css/admin.css">
-<link rel="stylesheet" type="text/css" href="../css/menu.css">
-<link rel="stylesheet" type="text/css" href="./UsrPortal.css">
+<link rel="stylesheet" type="text/css" href="../master.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="../futureAlert.js"></script>
 <script type="text/javascript">
+	var _appPlaces = {
+		"usrApp" : "../PaiWei/index.php",
+		"usrLogout" : "../Login/Logout.php"
+	};
 	$(document).ready(function() {
 		$(".future").on( 'click', futureAlert );
-	/*	$(".soon").on( 'click', soonAlert ); */
+		$("th[data-urlIdx]").on( 'click', function() {
+			location.replace( _appPlaces[ $(this).attr( "data-urlIdx" ) ]);
+		});
 	})
 </script>
+<style type="text/css">
+/* local customization */
+	table.pgMenu {
+		table-layout: auto;
+	}
+</style>
 
 </head>
 <body>
 	<div class="hdrRibbon">
-		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" alt="">
+		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" class="centerMeV" alt="">
 		<div id="pgTitle" class="centerMeV">
-			<span style="letter-spacing: 1px;">淨土念佛堂一般用戶主頁</span><br/>
+			<span>淨土念佛堂一般用戶主頁</span><br/>
 			<span class="engClass">Pure Land Center User Portal</span>
 		</div>
-		<table id="myMenuTbl" class="centerMeV">	
+		<table class="pgMenu centerMeV">	
 			<thead>
 				<tr>
-					<th><a href="<?php echo $featPWurl; ?>" class="myLinkButton"><?php echo xLate( 'featPW' ); ?></a></th>
+					<th data-urlIdx="usrApp"><?php echo xLate( 'featPW' ); ?></th>
 					<th class="future"><?php echo xLate( 'featFuture' ); ?></th>
+					<th data-urlIdx="usrLogout"><?php echo xLate( 'logOut' ); ?></div>
 				</tr>
 			</thead>
-		</table>
-		<div id="pgLogOut" class="centerMeV"><a href="../Login/Logout.php"><?php echo xLate( 'logOut' ); ?></a></div>
+		</table>		
 	</div>
 	<div class="dataArea">
-		<h1 class="centerMe" id="myDataTitle" style="<?php if ( !$useChn ) echo "letter-spacing: normal;"; ?>"><?php echo xLate( 'h1Title' ); ?></h1>
+		<h1 class="dataTitle centerMe" style="<?php if ( !$useChn ) echo "letter-spacing: normal;"; ?>"><?php echo xLate( 'h1Title' ); ?></h1>
 	</div>
 </body>
 </html>

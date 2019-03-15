@@ -11,8 +11,8 @@
 				SESS_LANG_CHN => "淨土念佛堂用戶重新設立密碼主頁",
 				SESS_LANG_ENG => "Pure Land Center User Password Reset" ),
 			'featPW' => array (
-				SESS_LANG_CHN => "法會牌位申請",
-				SESS_LANG_ENG => "Name Plaque Application for<br/>Merit Dedication in Retreats" ),
+				SESS_LANG_CHN => "淨土念佛堂用戶主頁",
+				SESS_LANG_ENG => "Pure Land Center User Portal" ),
 			'featFuture' => array (
 				SESS_LANG_CHN => "其他未來會提供的功能<br/>( 週日早課祈福及迴向申請，結緣法寶申請，等等。)",
 				SESS_LANG_ENG => "Future Capabilities<br/>(e.g., Req. for Dharma Items; etc.)" ),
@@ -62,6 +62,8 @@
 	$resetURLroot = ( $_os == 'DAR' ) ? "http://www.localplc.org/admin" : "https://www.amitabhalibrary.org/admin";
 	$href_url = $resetURLroot . "/$myDir" . "/$myBasename";
 	$msgTxt = '';
+	$mbxDisplay = "none";
+	$mbxBC = "#00b300";
 	if (isset($_GET[ 'my_Req' ])) { // $_GET[ 'my_Req' ] may have Chinese characters; use 'usr_Req'!
 		unset( $myID ); unset( $myUsrName ); unset( $myPass ); unset( $myEmail );
 		unset( $myToken ); $rtnV = array(); $usrReq = $_GET[ 'usr_Req' ];
@@ -129,8 +131,15 @@
 		} // switch on usr_Req
 		if ( $_errCount > 0 ) {
 			$msgTxt = ( $useChn ) ?
-				"恢復登錄密碼遭遇下列錯誤；請重復或<a href=\"mailto:library@amitabhalibrary.org\">通知本網站管理員</a> 。謝謝！" :
+				"恢復登錄密碼遭遇下列錯誤；請重復或 <a href=\"mailto:library@amitabhalibrary.org\">通知本網站管理員</a> 。謝謝！" :
 				"Error occurred! Please retry or <a href=\"mailto:library@amitabhalibrary.org\">Report.</a> Thank you!";
+			$lineNbrg = ( $_errCount > 1 );
+			for ( $i = 0; $i < $_errCount; $i++ ) {
+				$lineBreak = ( strlen( $msgTxt ) > 0 ) ? "<br/>" : '';
+				$lineNbr = "[ " . ($i + 1) . " ] ";
+				$msgTxt .= $lineBreak . ( $lineNbrg ? $lineNbr : '' ) . $_errRec[ $i ];
+			}
+			$mbxBC = "red"; // border color
 		}
 		$hTop = ( strlen( $msgTxt ) > 0 ) ? "5vh" : "10vh";
 	} // End of handling Login Recovery
@@ -141,50 +150,81 @@
 <HEAD>
 <TITLE><?php echo xLate( 'htmlTitle' ); ?></TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="https://www.amitabhalibrary.org/css/base.css">
-<link rel="stylesheet" type="text/css" href="../css/admin.css">
-<link rel="stylesheet" type="text/css" href="../css/menu.css">
-<link rel="stylesheet" type="text/css" href="./Login.css">
+<link rel="stylesheet" type="text/css" href="../master.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="../futureAlert.js"></script>
 <script src="./Login.js"></script>
+<style>
+	table.pgMenu {
+		table-layout: auto;
+	}
+	table.dialog td {
+		text-align: left;
+		font-size: 1.1em;
+	}
+	input {
+		position: relative;
+		left: 10%;
+		width: 80%;
+		font-size: 1.1em;
+	}
+	input[type=submit] {
+		left: 15%;
+		color: white;
+		background-color: #00b300;
+		width: 70%;
+		line-height: 2.0em;
+		border-radius: 8px;
+	}
+</style>
 </HEAD>
-<BODY>
+<body>
 	<div class="hdrRibbon">
-		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" alt="">
+		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" class="centerMeV" alt="">
 		<div id="pgTitle" class="centerMeV">
 			<span style="letter-spacing: 2px;">淨土念佛堂用戶重新設立密碼主頁</span><br/>
 			<span class="engClass">Pure Land Center User Password Reset</span></div>		
-		<table id="myMenuTbl" class="centerMeV">
+		<table class="pgMenu centerMeV">
 			<thead>
 				<tr>
-					<th><?php echo xLate( 'featPW' ); ?></th>
+					<th data-urlIdx="usrHome"><?php echo xLate( 'featPW' ); ?></th>
 					<th class="future"><?php echo xLate( 'featFuture' ); ?></th>
+					<th data-urlIdx="usrLogout"><?php echo xLate( 'logOut' ); ?></th>
 				</tr>
 			</thead>
 		</table>
-		<div id="pgLogOut" class="centerMeV"><a href="./Logout.php"><?php echo xLate( 'logOut' ); ?></a></div>
 	</div>
 <!-- ***** BEGIN dataArea -->
 	<div class="dataArea">
-		<h2 id="myDataTitle"
-			style="margin-top: <?php echo $hTop; ?>; letter-spacing: <?php echo $hLtrS; ?>;">
+		<h1 class="dataTitle" style="margin-top: <?php echo $hTop; ?>>;letter-spacing: <?php echo $hLtrS; ?>;">
 			<?php echo xLate( 'h2Title' ); ?>
-		</h2>
+		</h1>
 <!-- ***** BEGIN Acknowledgement Area ***** -->
 <?php
 	if ( strlen( $msgTxt ) > 0 ) {
-		echo putMsg( "60%", "normal", "left", "normal", $msgTxt );
+		$mbxLtrSP = ( $useChn ) ? "20px" : "normal"; // letter-spacing
+		$mbxTxtA = "left"; // text-align
+		$mbxFontW = "normal"; // font-weight
+		$mbxDisplay = "block";
 	}
 ?>
+		<div style="width: 55%; margin: auto; border: 7px solid; border-radius: 8px; padding: 2px 3px;
+				font-size: 1.2em;
+				text-align: <?php echo $mbxTxtA;?>;
+				letter-spacing: normal;
+				display: <?php echo $mbxDisplay;?>;
+				border-color: <?php echo $mbxBC;?>;">
+			<?php echo $msgTxt; ?>
+		</div>
 <!-- ***** END Acknowledgement Area ***** -->
 <!-- ***** BEGIN Input Area ***** -->
 		<form action="" method="get">
 			<input type="hidden" name="l" value="<?php if ( $useChn ) { echo 'c'; } else { echo 'e'; }?>">
-			<table class="dataTbl centerMe" id="myLoginTbl">
+			<table class="dialog centerMe">
 				<tbody>
 <?php
 //	$emailTxt = ( !isset( $myEmail ) ) ? ( ( $useChn) ? '郵箱地址 (英文)' : 'Email Address' ) : "{$myEmail}";
-	$emailPrompt = ( $useChn ) ? '請輸入郵箱地址 (英文)' : 'Please Enter Email Address' ;
+	$emailPrompt = ( $useChn ) ? '請輸入郵箱地址 (英文)' : 'Enter Email Address' ;
 	$passPrompt = ( !isset( $myPass ) ) ? 'Please Enter New Password' : "{$myPass}";
 	if ( !$paintReset ) { 
 ?>
@@ -192,9 +232,9 @@
 			  			<td><?php echo xLate( 'uregEmail' ); ?><br/>
 			  				<input type="email" name="usr_Email" id="uEmail" data-pmptV=""
 			  						data-oldV="<?php echo $emailPrompt; ?>"
-			  						value="<?php echo $emailPrompt; ?>" size=35 required>
+			  						value="<?php echo $emailPrompt; ?>" required>
 			  			</td>
-			  			<td style="text-align: center; width: 50%;">
+			  			<td>
 							<input type="hidden" name="usr_Req" value="chk_Email">
 							<input type="submit" id="uSubEmail" class="pushButton"
 									name="my_Req" value="<?php echo xLate( 'uRecover' ); ?>" >
@@ -210,14 +250,14 @@
 						<td><?php echo xLate( 'uPass' ); ?><br/>
 							<input type="password" name="usr_Pass" id="uPass" data-pmptV=""
 									data-oldV="<?php echo $passPrompt; ?>"
-									value="<?php echo $passPrompt; ?>" size=35 required>
+									value="<?php echo $passPrompt; ?>" required>
 				    	</td>
 				  	</tr>
 				  	<tr>
 				  		<td><?php echo xLate( 'uEmail' ); ?><br/>
 							<input type="email" name="usr_Email" id="uEmail" value="<?php echo $myEmail; ?>" readonly>
 				  		</td>
-				  		<td style="text-align: center; width: 50%;">
+				  		<td>
 				  			<input type="hidden" name="usr_ID" value="<?php echo $myID; ?>">
 				  			<input type="hidden" name="usr_Req" value="upd_Pass">
 				  			<input type="submit" id="uUpd" class="pushButton"

@@ -23,28 +23,6 @@
 		$MM_in_Chn = $MM2Chn[ $_scratch[ 'MM' ][0] ];
 		return "{$_scratch[ 'YYYY' ][0]} 年 " . "{$MM_in_Chn} 月 " . "{$_scratch[ 'dd' ][0]} 日";
 	} // MMddyyyy2Chn()
-		
-	function putMsg( $bxW, $txtLS, $txtA, $fontW, $xtra ) {
-		// style: Width, Letter-spacing, text-alignment, font-weight
-		global $_errCount,  $_errRec;
-
-		$msg = ( strlen( $xtra ) <= 0 ) ? '' : $xtra;
-		$mbxBC = ( $_errCount > 0 ) ? "red" : "#00b300";
-		$lineNbrg = ( $_errCount > 1 );
-		for ( $i = 0; $i < $_errCount; $i++ ) {
-			$lineBreak = ( strlen( $msg ) > 0 ) ? "<br/>" : '';
-			$lineNbr = "[ " . ($i + 1) . " ] ";
-			$msg .= $lineBreak . ( $lineNbrg ? $lineNbr : '' ) . $_errRec[ $i ];
-		}
-		$msgBox =
-			"<div class=\"msgBox q_centerMe\" id=\"ackMsg\"
-				style=\"display: block; border-color: {$mbxBC}; width: {$bxW};
-				text-align: {$txtA}; letter-spacing: {$txtLS}; font-weight: {$fontW};\">
-				{$msg}
-			 </div>	
-			";
-		return $msgBox;
-	} // putMsg()
 
 	function usersDropdown( $admFlag, $rspChn ) {
 		//

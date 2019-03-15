@@ -3,38 +3,56 @@
  *           Admin Main Page User Guide - English         *
  **********************************************************
 -->
-<?php
-?>
 
 <!DOCTYPE html>
 <html>
 <head>
 <title>Pure Land Center User Portal Guide</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="https://www.amitabhalibrary.org/css/base.css">
-<link rel="stylesheet" href="../css/admin.css">
-<link rel="stylesheet" href="../css/menu.css">
+<link rel="stylesheet" href="../master.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+	var _appPlaces = {
+		"uLogin" : "../Login/Login.php?l=c",
+		"UG" : "./UG.php",
+		"eLogin" : "../Login/Login.php?l=e",
+		"eUG" : "./eUG.php",
+		"aLogin" : "../Login/aLogin.php",
+		"usrLogout" : "../Login/Logout.php"
+	};
+	$(document).ready(function () {
+		$("th[data-urlIdx]").on( 'click', function() {
+			location.replace( _appPlaces[ $(this).attr( "data-urlIdx" ) ]);
+		});
+	});
+</script>
+<style>
+/* local override */
+table.pgMenu th:last-child {
+	width: 5vw;
+	border-left: 1px;
+}
+</style>
 </head>
 <body>
 	<div class="hdrRibbon">
-		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" alt="">
+		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" class="centerMeV" alt="">
 		<div id="pgTitle" class="centerMeV">
-			<span style="letter-spacing: 10px;">淨土念佛堂一般用戶指南</span><br/>
-			<span class="engClass" style="font-size:0.9em;">Pure Land Center User Portal Guide</span>
+			<span style="letter-spacing: 6px;">淨土念佛堂一般用戶指南</span><br/>
+			<span class="engClass">Pure Land Center User Portal Guide</span>
 		</div>
-		<table id="myMenuTbl" class="centerMeV">
+		<table class="pgMenu centerMeV">
 			<thead>
 				<tr>
-					<th><a href="../Login/Login.php?l=c" class="myLinkButton" style="line-height: 1.3em;">一般用戶登錄<br/>(中文)</a></th>
-					<th><a href="./UG.php" class="myLinkButton" style="line-height: 1.3em;">用戶指南<br/>(中文)</a></th>
-					<th><a href="../Login/Login.php?l=e" class="myLinkButton" style="line-height: 1.3em;">User Login<br/>(English)</a></th>
-					<th><a href="./eUG.php" class="myLinkButton" style="line-height: 1.3em;">User Guide<br/>(English)</a></th>
-					<th><a href="../Login/aLogin.php" class="myLinkButton" style="line-height: 1.3em;">管理員登錄</a></th>
+					<th data-urlIdx="uLogin">一般用戶登錄<br/>(中文)</th>
+					<th data-urlIdx="UG">用戶指南<br/>(中文)</th>
+					<th data-urlIdx="eLogin">User Login<br/>(English)</a></th>
+					<th data-urlIdx="eUG">User Guide<br/>(English)</th>
+					<th data-urlIdx="aLogin">管理員登錄</th>
+					<th data-urlIdx="usrLogout">用戶撤出<br/>Logout</th>
 				</tr>
 			</thead>
 		</table>
-		<div id="pgLogOut" class="centerMeV"><a href="../Login/Logout.php" class="myLinkButton">用戶<br/>撤出</a></div>	
 	</div>
 	<div class="dataArea" style="overflow-y: auto;">
 		<span style="display: block; width: 95%; margin: auto; padding-top: 2vh; font-size: 1.3em; font-weight: bold;

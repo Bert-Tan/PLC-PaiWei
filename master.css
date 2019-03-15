@@ -89,7 +89,7 @@ table.pgMenu th:last-child { /* for logout box */
 	border-left: 3px solid white;
 }
 
-table.pgMenu th:hover {
+table.pgMenu th:not(.future, .soon):hover {
 	color: yellow;
 	background-color: #009900;
 	cursor: pointer;
@@ -216,7 +216,7 @@ table.dialog td {
 	margin: auto;
 	border: 7px solid red; /* border-color changeable */
 	border-radius: 7px;
-	padding: 1vh 2vw;
+	padding: 2px 2px;
 	font-size: 1.2em;
 	text-align: left;		/* changeable */
 	letter-spacing: normal;	/* changeable */

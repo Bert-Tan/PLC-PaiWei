@@ -28,34 +28,12 @@
         $sql = "UPDATE pwParam SET `pwExpires` = \"{$_POST[ 'pwExpires' ]}\", `rtrtDate` = \"{$_POST[ 'rtrtDate' ]}\" "
              . "WHERE `ID` = \"{$_POST[ 'ID' ]}\";";
         $rslt = $_db->query( $sql );
-        if ( $_db->affected_rows != 1 ) {
+        if ( $_db->affected_rows > 1 ) {
             $_errRec[] = "資料庫發生錯誤；無法更新！";
             $_errCount++;
         }
         return;
 	} // function updRetreatData()
-	
-	function putMsg( $bxW, $txtLS, $txtA, $fontW, $xtra ) {
-		// style: Width, Letter-spacing, text-alignment, font-weight
-		global $_errCount,  $_errRec;
-
-		$msg = ( strlen( $xtra ) <= 0 ) ? '' : $xtra;
-		$mbxBC = ( $_errCount > 0 ) ? "red" : "#00b300";
-		$lineNbrg = ( $_errCount > 1 );
-		for ( $i = 0; $i < $_errCount; $i++ ) {
-			$lineBreak = ( strlen( $msg ) > 0 ) ? "<br/>" : '';
-			$lineNbr = "[ " . ($i + 1) . " ] ";
-			$msg .= $lineBreak . ( $lineNbrg ? $lineNbr : '' ) . $_errRec[ $i ];
-		}
-		$msgBox =
-			"<div class=\"msgBox centerMeQ\" id=\"ackMsg\"
-				style=\"display: block; border-color: {$mbxBC}; width: {$bxW}; top: 37%;
-				text-align: {$txtA}; letter-spacing: {$txtLS}; font-weight: {$fontW};\">
-				{$msg}
-			 </div>	
-			";
-		return $msgBox;
-	} // putMsg()
 
 //  session_start(); // create or retrieve (already called in ChkTimeOut.php )
 	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
@@ -130,11 +108,36 @@ input[type=submit] {
 	<div class="dataArea">
 		<div class="centerMeQ dataTitle" style="font-size: 2.0em;">請更新法會資料</div>
 <?php
+	$mbxDisplay = "none";
     if ( isset( $_POST[ 'rtUpdData' ] ) ) {
-        $xtra = ( $_errCount == 0 ) ? "法會資料更新完畢！" : '';
-        echo putMsg( "35%", "normal", "center", "bold", $xtra );
-    }
- ?>
+		$mbxDisplay = "block";
+        if ( $_errCount == 0 ) {
+			$msgTxt = "法會資料更新完畢！";
+			$mbxBC = "#00b300";
+			$mbxTxtA = "center";
+		} else { // formulate msg
+			$msgTxt = "更新法會資料發生錯誤！";
+			$mbxBc = "red";
+			$mbxTxtA = "left";
+			$lineNbrg = ( $_errCount > 1 );
+			for ( $i = 0; $i < $_errCount; $i++ ) {
+				$lineBreak = ( strlen( $msgTxt ) > 0 ) ? "<br/>" : '';
+				$lineNbr = "[ " . ($i + 1) . " ] ";
+				$msgTxt .= $lineBreak . ( $lineNbrg ? $lineNbr : '' ) . $_errRec[ $i ];
+			}
+		}
+    } // End of Update Ack
+?>
+		<div style="width: 50%; margin: auto; border: 7px solid; border-radius: 8px; padding: 2px 3px;
+				margin-top: 12%;
+				font-size: 1.2em;
+				text-align: <?php echo $mbxTxtA; ?>;
+				letter-spacing: normal;
+				display: <?php echo $mbxDisplay; ?>;
+				border-color: <?php echo $mbxBC;?>;">
+			<?php echo $msgTxt; ?>
+		</div>
+
         <form action="" method="post" id="retreatUpd">
             <input type="hidden" name="ID" value="<?php echo $retreatData[ 'ID' ]; ?>">
             <table class="dialog" style="position: absolute; top: 45%; left: 30%;">

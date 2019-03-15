@@ -1,3 +1,8 @@
+var _usrPlace = {
+    'usrHome' : "../index.php",
+    'usrLogout' : "../Login/Logout.php"
+} // anchors where each pgMenu TH points to
+
 function enableEmailEntry() { // new_User checkbox is clicked; this is a toggle function
 	if ( ! $("#uEmail").prop( "disabled" ) ) { // was enabled; now to disable
 		var pmptV = $("#uEmail").attr("data-oldV");
@@ -36,6 +41,25 @@ function onBlurHdlr() {
 	return false;
 } // function onBlurHdlr()
 
+function getRstLink() {
+	$.ajax({
+		method: "post",
+		url: "",
+		data: { 'dbReq' : "uResetLink" },
+		success: function ( rsp ) {
+			rspV = JSON.parse( rsp );
+			_usrPlace [ 'uResetLink' ] = rspV[ 'uResetLink' ];
+			$("table.dialog td[data-urlIdx=uResetLink]").on( 'click', function() {
+				location.replace(  _usrPlace [ $(this).attr("data-urlIdx") ] );
+			});
+			return false;
+		}, // success scenario
+		error: function (jqXHR, textStatus, errorThrown) {
+			alert( "getRstLink()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+		} // End of ERROR Handler
+	})
+} // function getRstLink()
+
 $(document).ready(function() {
 	/*
 	 * Normal Login Scenario
@@ -67,4 +91,12 @@ $(document).ready(function() {
 	
 	$("input[type=text], input[type=password], input[type=email]").on( 'focus', onFocusHdlr );
 	$("input[type=text], input[type=password], input[type=email]").on( 'blur', onBlurHdlr );
+	$(".future").on( 'click', futureAlert );
+	$("table.pgMenu th:not(.future)").on('click', function() {
+        location.replace(  _usrPlace [ $(this).attr("data-urlIdx") ] );
+	});
+	var _resetPresent = $("table.dialog td[data-urlIdx=uResetLink]");
+	if ( _resetPresent.length > 0 ) {
+		getRstLink();
+	}
 });
