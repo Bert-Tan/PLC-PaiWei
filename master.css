@@ -211,16 +211,6 @@ table.dialog td {
     line-height: 1.3em;
 }
 
-.msgBox {
-	width: 40%;				/* changeable */
-	margin: auto;
-	border: 7px solid red; /* border-color changeable */
-	border-radius: 7px;
-	padding: 2px 2px;
-	font-size: 1.2em;
-	text-align: left;		/* changeable */
-	letter-spacing: normal;	/* changeable */
-}
 /******************************************************************************
  *                 For future features / capabilities - dimmed                *
  ******************************************************************************/
