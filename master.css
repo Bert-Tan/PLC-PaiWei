@@ -89,7 +89,7 @@ table.pgMenu th:last-child { /* for logout box */
 	border-left: 3px solid white;
 }
 
-table.pgMenu th:not(.future):hover, th:not(.soon):hover {
+table.pgMenu th:not(.future):hover, table.pgMenu th:not(.soon):hover {
 	color: yellow;
 	background-color: #009900;
 	cursor: pointer;
