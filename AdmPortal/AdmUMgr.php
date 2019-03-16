@@ -93,7 +93,7 @@
 			$rpt[ "$tblName" ] = "刪除用戶 '${uName}' 在 '${tblName}' 表中的牌位資料。。。";
 		} // loop through all tables this user has data
 		$_db->query("LOCK TABLES `${uTblName}` WRITE;"); /* either Usr or inCareOf table */
-		$rslt = $_db->query("DELETE FROM `${uTblName}` WHERE `UsrName` = \"${uName}\";");
+		$rslt = $_db->query( "DELETE FROM `${uTblName}` WHERE `ID` = \"${uID}\";" );
 		$_db->query("UNLOCK TABLES;");
 		$rpt[ "${uTblName}" ] = "用戶: '${uName}' 已被刪除!\n";
 		return $rpt;
