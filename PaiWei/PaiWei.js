@@ -50,8 +50,8 @@ function readSessParam() {
 						location.replace( rspV[ X ] );
 						return false;
 					case 'notActive':	// No retreat active; put out msg
-						alertMsg = ( _sessLang == SESS_LANG_CHN ) ? '本念佛堂近期內沒有法會！'
-																  : 'Currently, there is NO Planned Retreat!';
+						alertMsg = ( _sessLang == SESS_LANG_CHN ) ? '牌位申請已過期，或本念佛堂近期內沒有法會！'
+								 : "Name Plaque Application deadline passed; or,\nthere is NO Planned Retreat!";
 						alert ( alertMsg );
 						return false;
 					case 'pwPlqDate':
