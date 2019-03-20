@@ -278,10 +278,12 @@
 		$escPass = $_db->real_escape_string( $usrPass );
 		$escEmail = $_db->real_escape_string( $usrEmail );
 		$hashed_pswd = password_hash( $escPass , PASSWORD_BCRYPT, [ 'cost' => HASH_COST ] );
+		$_db->query("LOCK TABLES `Usr` WRITE, `inCareOf` WRITE;");
 		$sql = "INSERT INTO Usr ( `UsrName`, `UsrPass`, `UsrEmail` ) " .
 				"VALUES ( \"{$escName}\", \"{$hashed_pswd}\", \"{$escEmail}\" );";
 		$_db->query( $sql );
 		if ( $_db->errno ) {
+			$_db->query("UNLOCK TABLES;");
 			$errMsg = ( $rspChn ) ? "資料庫內部錯誤，<a href=\"mailto:library@amitabhalibrary.org\">請告知本館</a>"
 								  : "DB Internal Error; <a href=\"mailto:library@amitabhalibrary.org\">Please Report</a>";
 			$_errCount++;
@@ -292,6 +294,8 @@
 			}	
 			return false;
 		}
+		$_db->query("DELETE FROM `inCareOf` WHERE `UsrName` = \"${escName}\";");
+		$_db->query("UNLOCK TABLES;");
 		return true;
 	} // registerUser()
 /*
