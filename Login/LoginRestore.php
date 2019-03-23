@@ -43,9 +43,9 @@
 			'rUG' => array (
 				SESS_LANG_CHN => "回到<br/>用戶指南",
 				SESS_LANG_ENG => "Return to<br/>User Guide" ),
-			'ugL' => array (
-				SESS_LANG_CHN => "c",
-				SESS_LANG_ENG => "e" )			
+			'ugLidx' => array ( /* urlIdx value which points to UG URL for Chinese and English respectively */
+				SESS_LANG_CHN => "cUG",
+				SESS_LANG_ENG => "eUG" )	
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate()
@@ -194,7 +194,7 @@
 			<thead>
 				<tr>
 					<th data-urlIdx="usrHome"><?php echo xLate( 'featPW' ); ?></th>
-					<th data-urlIdx="rUG" data-ugL="<?php echo xLate( 'ugL' );?>"><?php echo xLate( 'rUG' ); ?></th>
+					<th data-urlIdx="<?php echo xLate('ugLidx');?>"><?php echo xLate( 'rUG' ); ?></th>
 					<th class="future"><?php echo xLate( 'featFuture' ); ?></th>
 					<th data-urlIdx="usrLogout"><?php echo xLate( 'logOut' ); ?></th>
 				</tr>
