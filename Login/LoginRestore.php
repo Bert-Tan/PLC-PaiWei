@@ -11,8 +11,8 @@
 				SESS_LANG_CHN => "淨土念佛堂用戶重新設立密碼主頁",
 				SESS_LANG_ENG => "Pure Land Center User Password Reset" ),
 			'featPW' => array (
-				SESS_LANG_CHN => "淨土念佛堂用戶主頁",
-				SESS_LANG_ENG => "Pure Land Center User Portal" ),
+				SESS_LANG_CHN => "淨土念佛堂<br/>用戶主頁",
+				SESS_LANG_ENG => "Pure Land Center<br/>User Portal" ),
 			'featFuture' => array (
 				SESS_LANG_CHN => "其他未來會提供的功能<br/>( 週日早課祈福及迴向申請，結緣法寶申請，等等。)",
 				SESS_LANG_ENG => "Future Capabilities<br/>(e.g., Req. for Dharma Items; etc.)" ),
@@ -39,7 +39,13 @@
 				SESS_LANG_ENG => "Reset Password"	),
 			'uUpd' => array (
 				SESS_LANG_CHN => "更新密碼",
-				SESS_LANG_ENG => "Update Password"	)				
+				SESS_LANG_ENG => "Update Password"	),
+			'rUG' => array (
+				SESS_LANG_CHN => "回到<br/>用戶指南",
+				SESS_LANG_ENG => "Return to<br/>User Guide" ),
+			'ugL' => array (
+				SESS_LANG_CHN => "c",
+				SESS_LANG_ENG => "e" )			
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate()
@@ -188,6 +194,7 @@
 			<thead>
 				<tr>
 					<th data-urlIdx="usrHome"><?php echo xLate( 'featPW' ); ?></th>
+					<th data-urlIdx="rUG" data-ugL="<?php echo xLate( 'ugL' );?>"><?php echo xLate( 'rUG' ); ?></th>
 					<th class="future"><?php echo xLate( 'featFuture' ); ?></th>
 					<th data-urlIdx="usrLogout"><?php echo xLate( 'logOut' ); ?></th>
 				</tr>

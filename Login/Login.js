@@ -93,7 +93,14 @@ $(document).ready(function() {
 	$("input[type=text], input[type=password], input[type=email]").on( 'blur', onBlurHdlr );
 	$(".future").on( 'click', futureAlert );
 	$("table.pgMenu th:not(.future)").on('click', function() {
-        location.replace(  _usrPlace [ $(this).attr("data-urlIdx") ] );
+		urlIdx = $(this).attr("data-urlIdx"); ugL = $(this).attr("data-ugL");
+		if ( urlIdx == 'rUG' ) {
+			url = ( ugL == "c" ) ? "../UsrPortal/UG.php" : "../UsrPortal/eUG.php";
+		} else {
+			url = _usrPlace[ urlIdx ];
+		}
+//		alert ( "Line 102: " + urlIdx + "; Lang= " + ugL + ";\nurl= " + url ); return;
+        location.replace(  url );
 	});
 	var _resetPresent = $("table.dialog td[data-urlIdx=uResetLink]");
 	if ( _resetPresent.length > 0 ) {
