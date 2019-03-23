@@ -14,8 +14,14 @@
         global $_db, $_errCount, $_errRec;
 
         $sql = "SELECT * FROM pwParam WHERE true;";
-        $rslt = $_db->query( $sql );
-        if ( $rslt->num_rows != 1 ) { // should be only one tuple
+		$rslt = $_db->query( $sql );
+		if ( $rslt->num_rows == 0 ) {
+			$_errRec[ 'rtrtDate' ] = "請輸入法會開始日期";
+			$_errRec[ 'pwExpires' ] = "請輸入牌位申請截止日期";
+			$_errCount = 2;
+			return $_errRec;
+		}
+        if ( $rslt->num_rows > 1 ) { // should be only one tuple
             $_errRec[] = "資料庫發生錯誤；無法讀取法會資料！";
             $_errCount++;
             return $_errRec;
@@ -24,9 +30,13 @@
     } // function getRetreatData()
 
     function updRetreatData() {
-        global $_db, $_POST, $_errCount, $_errRec;
-        $sql = "UPDATE pwParam SET `pwExpires` = \"{$_POST[ 'pwExpires' ]}\", `rtrtDate` = \"{$_POST[ 'rtrtDate' ]}\" "
-             . "WHERE `ID` = \"{$_POST[ 'ID' ]}\";";
+		global $_db, $_POST, $_errCount, $_errRec;
+		if ( isset( $_POST[ 'rtNew' ] ) ) {
+			$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`) VALUE ( \"{$_POST['rtrtDate']}\", \"{$_POST['pwExpires']}\" );";
+		} else {
+    		$sql = "UPDATE pwParam SET `pwExpires` = \"{$_POST[ 'pwExpires' ]}\", `rtrtDate` = \"{$_POST[ 'rtrtDate' ]}\" "
+				 . "WHERE `ID` = \"{$_POST[ 'ID' ]}\";";
+		}
         $rslt = $_db->query( $sql );
         if ( $_db->affected_rows > 1 ) {
             $_errRec[] = "資料庫發生錯誤；無法更新！";
@@ -129,7 +139,7 @@ input[type=submit] {
     } // End of Update Ack
 ?>
 		<div style="width: 50%; margin: auto; border: 7px solid; border-radius: 8px; padding: 2px 3px;
-				margin-top: 12%;
+				margin-top: 14%;
 				font-size: 1.2em;
 				text-align: <?php echo $mbxTxtA; ?>;
 				letter-spacing: normal;
@@ -144,7 +154,16 @@ input[type=submit] {
                 <thead><tr><th>法會開始日期</th><th>牌位申請截止日期</th></tr></thead>
                 <tbody>
                     <tr>
-                        <td><input type="text" name="rtrtDate" value="<?php echo $retreatData[ 'rtrtDate' ];?>"></td>
+                        <td>
+<?php
+	if ( !isset( $_POST[ 'rtUpdData' ] ) && ( $_errCount > 0 ) ) { /* reading Retreat Data non-existent */
+?>
+							<input type="hidden" name="rtNew" value="true">
+<?php
+	}
+?>
+							<input type="text" name="rtrtDate" value="<?php echo $retreatData[ 'rtrtDate' ];?>">
+						</td>
                         <td><input type="text" name="pwExpires" value="<?php echo $retreatData[ 'pwExpires' ];?>"></td>
                     </tr>
                     <tr><td colspan="2"><input type="submit" name="rtUpdData" value="更新法會資料"></td></tr>
