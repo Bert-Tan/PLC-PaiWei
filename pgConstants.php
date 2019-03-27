@@ -55,6 +55,7 @@
 									);
 									
 	require_once ( 'HTML/Template/IT.php' );
+	require_once(PDF_INCL.'/tcpdf.php');
 
 /*
  * Set Timezone & Date format: <Month> <Day>, <Year> for writing a letter; YYYY-MM-DD for MySQL
