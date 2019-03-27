@@ -57,8 +57,9 @@ input[type=submit] {
 		<div id="forDnld"><!-- for download into the main PaiWei Admin Page -->
 		<h2 style="margin-top: 4vh; text-align: center; letter-spacing: 20px;">
 			下載牌位資料檔案
-		</h2>
-		<form action="dnldPaiWei.php" method="post" enctype="multipart/form-data" id="dnldForm"
+		</h2>		
+		<!-- <form action="dnldPaiWei.php" method="post" enctype="multipart/form-data" id="dnldForm" -->
+		<form action="dnldPaiWeiPDF.php" method="post" enctype="multipart/form-data" id="dnldForm"
 			style="font-weight:bold; padding: 10px;">
 			<table id="myUpldTbl">
 				<tr><!-- Selection Row -->
