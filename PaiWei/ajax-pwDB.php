@@ -7,7 +7,6 @@
 	$_sessType = $_SESSION[ 'sessType' ];
 	$_sessLang = $_SESSION[ 'sessLang' ];
 	$_sessUsr = $_SESSION[ 'usrName' ];
-	$_icoSkip = isset($_SESSION[ 'icoSkip' ]) ? $_SESSION[ 'icoSkip' ] : null;
 	$_icoName = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
 	$useChn = ( $_SESSION[ 'sessLang' ] == SESS_LANG_CHN );
 
@@ -113,27 +112,29 @@ function readPwParam( $_dbInfo ) {
 	 */
 	global $_db, $_SESSION, $_errCount, $_errRec;
 	$rpt = array();
-	
+
+	$rpt[ 'usrName'] = $_SESSION[ 'usrName' ];
+	$rpt[ 'usrPass' ] = $_SESSION[ 'usrPass' ];
+	$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
+	$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
+	$rpt[ 'icoName'] = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
+	$rpt[ 'tblName'] = isset($_SESSION[ 'tblName' ]) ? $_SESSION[ 'tblName' ] : null;
 	if ( isset($_SESSION[ 'pwPlqDate' ]) ) {
 		/*
-		 * The session is active and the parameters had been read before
+		 * The session is active and the parameters had been read before; no need to access DB
 		 */
 		$rpt[ 'pwPlqDate' ] = $_SESSION[ 'pwPlqDate' ];
 		$rpt[ 'rtrtDate' ] = $_SESSION[ 'rtrtDate' ];
-		$rpt[ 'usrName'] = $_SESSION[ 'usrName' ];
-		$rpt[ 'usrPass' ] = $_SESSION[ 'usrPass' ];
-		$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
-		$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
-		$rpt[ 'icoSkip'] = isset($_SESSION[ 'icoSkip' ]) ? $_SESSION[ 'icoSkip' ] : null;
-		$rpt[ 'icoName'] = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
-		$rpt[ 'tblName'] = isset($_SESSION[ 'tblName' ]) ? $_SESSION[ 'tblName' ] : null;
 		$rpt[ 'wtList' ] = $_SESSION[ 'wtList' ];
 		$rpt[ 'rtList' ] = $_SESSION[ 'rtList' ];
 		return $rpt;
 	}
-	$tblName = $_dbInfo[ 'tblName' ];
-	$today = Date("Y-m-d");
-	$sql = "SELECT * FROM $tblName WHERE DATE($today) <= `pwExpires`;";
+	$tblName = $_dbInfo[ 'tblName' ]; /* pwParam */
+	if ( $_SESSION[ 'sessType' ] == SESS_TYP_USR ) {
+		$sql = "SELECT * FROM $tblName WHERE CURRENT_DATE <= `pwExpires`;";
+	} else {
+		$sql = "SELECT * FROM $tblName;";
+	}
 	$rslt = $_db->query( $sql );
 	if ( $_db->errno ) {
 		$_errCount++;
@@ -143,36 +144,21 @@ function readPwParam( $_dbInfo ) {
 		$rpt[ 'errRec' ] = $_errRec;
 		return $rpt;
 	}
-	switch ( $rslt->num_rows ) {
-		case 0:
-			$rpt[ 'notActive' ] = true;
-			return $rpt;
-		case 1:
-			$rtrtDate = $rslt->fetch_all(MYSQLI_ASSOC)[0][ 'rtrtDate' ];
-			$rpt[ 'rtrtDate' ] = date( "Y-m-d", strtotime( $rtrtDate ) );
-			$rpt[ 'pwPlqDate' ] = date( "Y-m-d", strtotime( $rtrtDate . " -1 year" ) );
-			$_SESSION[ 'pwPlqDate' ] = $rpt[ 'pwPlqDate' ];
-			$_SESSION[ 'rtrtDate' ] = $rtrtDate;
-			$rpt[ 'usrName'] = $_SESSION[ 'usrName' ];
-			$rpt[ 'usrPass' ] = $_SESSION[ 'usrPass' ];
-			$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
-			$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
-			$rpt[ 'icoSkip'] = isset($_SESSION[ 'icoSkip' ]) ? $_SESSION[ 'icoSkip' ] : null;
-			$rpt[ 'icoName'] = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
-			$rpt[ 'tblName'] = isset($_SESSION[ 'tblName' ]) ? $_SESSION[ 'tblName' ] : null;
-			$_SESSION[ 'wtList' ] = readPWTitleList( 'pwParam_wtList' );
-			$_SESSION[ 'rtList' ] = readPWTitleList( 'pwParam_rtList' );
-			$rpt[ 'wtList' ] = $_SESSION[ 'wtList' ];
-			$rpt[ 'rtList' ] = $_SESSION[ 'rtList' ];
-			return $rpt;
-		default:
-			$_errCount++;
-			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__
-								 . "{$rslt->num_rows} found in Table '{$tblName}'\n";
-			$rpt[ 'errCount' ] = $_errCount;
-			$rpt[ 'errRec' ] = $_errRec;
-			return $rpt;
-	} // switch()		
+	if ( $rslt->num_rows == 0 && $_SESSION[ 'sessType' ] == SESS_TYP_USR ) {
+		$rpt[ 'notActive' ] = true; /* disable PaiWei Function for general users */
+		return $rpt;
+	}
+	
+	$rtrtDate = $rslt->fetch_all(MYSQLI_ASSOC)[0][ 'rtrtDate' ]; 
+	$rpt[ 'rtrtDate' ] = $rtrtDate;
+	$rpt[ 'pwPlqDate' ] = date( "Y-m-d", strtotime( $rtrtDate . " -1 year" ) );
+	$_SESSION[ 'pwPlqDate' ] = $rpt[ 'pwPlqDate' ];
+	$_SESSION[ 'rtrtDate' ] = $rtrtDate;
+	$_SESSION[ 'wtList' ] = readPWTitleList( 'pwParam_wtList' );
+	$_SESSION[ 'rtList' ] = readPWTitleList( 'pwParam_rtList' );
+	$rpt[ 'wtList' ] = $_SESSION[ 'wtList' ];
+	$rpt[ 'rtList' ] = $_SESSION[ 'rtList' ];
+	return $rpt;	
 } // function readPwParam()
 
 function constructTblData ( $rows, $dbTblName ) { // $rows =  $mysqlresult->fetch_all( MYSQLI_ASSOC )

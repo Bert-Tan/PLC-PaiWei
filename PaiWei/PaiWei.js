@@ -26,7 +26,6 @@ var _alertUnsaved = null;
 var _blankData = null; // blank data filler for W_Title & R_Title fields; they can be blank
 var _wtList = null;	// W_Title & R_Title selection list
 var _rtList = null;
-var _icoSkip = null;
 var _icoName = null;
 var _rqTbls = [ 'D001A', 'L001A', 'Y001A', 'W001A_4', 'DaPaiWei' ];
 
@@ -56,19 +55,27 @@ function readSessParam() {
 						return false;
 					case 'pwPlqDate':
 						_pwPlqDate = rspV[ X ];
-						_rtrtDate = rspV[ 'rtrtDate' ];
-						_sessUsr = rspV[ 'usrName'  ];
-						_sessPass = rspV[ 'usrPass' ];
-						_sessType = rspV[ 'sessType' ];
-						_sessLang = rspV[ 'sessLang' ];
-						_wtList = rspV[ 'wtList' ];
-						_rtList = rspV[ 'rtList' ];
-						_alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！'
-																	   : 'Unsaved Data will be LOST!';
-						_blankData = ( _sessLang == SESS_LANG_CHN ) ? "空白" : "BLANK";
 						break;
-					case 'icoSkip':
-						_icoSkip = rspV[X];
+					case 'rtrtDate':
+						_rtrtDate = rspV[ X ];
+						break;
+					case 'wtList':
+						_wtList = rspV[ X ];
+						break;
+					case 'rtList':
+						_rtList = rspV[ X ];
+						break;
+					case 'usrName':
+						_sessUsr = rspV[X];
+						break;
+					case 'usrPass':
+						_sessPass = rspV[X];
+						break;
+					case 'sessType':
+						_sessType = rspV[X];
+						break;
+					case 'sessLang':
+						_sessLang = rspV[ 'sessLang' ];
 						break;
 					case 'icoName':
 						_icoName = rspV[X];
@@ -86,6 +93,8 @@ function readSessParam() {
 						return false;						
 				} // switch()
 			} // for loop
+			_alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！' : 'Unsaved Data will be LOST!';
+			_blankData = ( _sessLang == SESS_LANG_CHN ) ? "空白" : "BLANK";
 			ready_init();
 			if ( _tblName != null ) {
 				loadTblData( _tblName, 1, 30, _icoName );
