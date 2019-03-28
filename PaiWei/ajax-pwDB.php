@@ -133,7 +133,7 @@ function readPwParam( $_dbInfo ) {
 	}
 	$tblName = $_dbInfo[ 'tblName' ];
 	$today = Date("Y-m-d");
-	$sql = "SELECT * FROM $tblName WHERE $today <= `pwExpires`;";
+	$sql = "SELECT * FROM $tblName WHERE DATE($today) <= `pwExpires`;";
 	$rslt = $_db->query( $sql );
 	if ( $_db->errno ) {
 		$_errCount++;
