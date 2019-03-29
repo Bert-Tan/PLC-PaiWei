@@ -104,7 +104,7 @@
 	function setInCareOf( $name ) {
 		global $_db, $_SESSION;
 		$rpt = array();
-		$_SESSION[ 'icoName' ] = $name;
+		$_SESSION[ 'icoName' ] = $name; unset( $_SESSION[ 'tblName' ] );
 		$_db->query("LOCK TABLES Usr READ;");
 		$rslt = $_db->query("SELECT `UsrName` FROM `Usr` WHERE `UsrName` = \"{$name}\";");
 		$_db->query( "UNLOCK TABLES;" );
@@ -131,6 +131,7 @@
 			exit;
 		}
 		$_SESSION[ 'icoName' ] = $_POST[ 'icoName' ];
+		unset( $_SESSION[ 'tblName' ] );
 		$rpt[ 'url' ] = URL_ROOT . '/admin/PaiWei/index.php';
 		echo json_encode ( $rpt, JSON_UNESCAPED_UNICODE );
 		exit;
