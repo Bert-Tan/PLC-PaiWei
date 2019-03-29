@@ -110,6 +110,7 @@ input[type=submit] {
 	border-radius: 10px;
 }
 
+/* for loaded User Guide */
 .UGsteps {
 	font-size: 0.9em;
 }
@@ -126,6 +127,53 @@ input[type=submit] {
 	width: 90%;
 	height: auto;
 	border: 1px solid black;
+}
+
+/* localization for loaded data tables */
+
+table.dataHdr, table.dataRows {
+	table-layout: auto;
+}
+
+table.dataHdr tr th:last-child, table.dataRows tr td:last-child {
+	width: 28%;
+}
+
+table.dataHdr th, table.dataRows td {
+	height: 22px;
+	line-height: 1.2em;
+}
+
+table.dataRows tr td:not(:last) {
+	text-align: left;
+}
+
+/* local specific for Data Input fields */
+input {
+	font-size: 1.0em;
+}
+
+input[type=button] {
+  background-color: aqua;
+  text-align: center;
+  display: inline-block;
+  border: 1px solid blue;
+  border-radius: 4px;
+}
+
+input[type=text] {
+	width: 100%;
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+table.dataRows tr:nth-child(odd) input[type=text] {
+	background-color: #ffffe6;
+}
+
+table.dataRows tr:nth-child(even) input[type=text] {
+	background-color: #ffffcc;
 }
 </style>
 

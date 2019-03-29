@@ -29,7 +29,7 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_CHN =>	"佛&nbsp;力&nbsp;超&nbsp;薦&nbsp;累&nbsp;劫&nbsp;冤&nbsp;親&nbsp;債&nbsp;主",
 			SESS_LANG_ENG =>	"Dedicate Merit to Karmic Creditors" ),
 		'D001A' =>	array (
-			SESS_LANG_CHN =>	"佛&nbsp;力&nbsp;超&nbsp;薦&nbsp;地&nbsp;基&nbsp;主",
+			SESS_LANG_CHN =>	"佛&nbsp;力&nbsp;超&nbsp;薦&nbsp;地&nbsp;基&nbsp;主",
 			SESS_LANG_ENG =>	"Dedicate Merit to Site Guardians" ),
 		'DaPaiWei' => array (
 			SESS_LANG_CHN =>	"佛&nbsp;力&nbsp;超&nbsp;薦&nbsp;近&nbsp;期&nbsp;"

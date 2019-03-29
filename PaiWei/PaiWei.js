@@ -197,21 +197,19 @@ function isJSON( str ) {
 function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter is eliminated */
 	// before introducing page-by-page surfing, the dataonly parameter isn't really needed
 	var dataArea = $(".dataArea");
-	var tblHdrWrapper =	'<div id="myHdrWrapper"></div>';
-	var tblDataWrapper = '<div id="myDataWrapper"></div>';
-	var errText = ( _sessLang == SESS_LANG_CHN ) ? '沒有找到所選擇的法會的牌位，請輸入或上載牌位資料。'
-																							 : 'No record found! Please input or upload Data';
-	var errMsg =	'<H1 class="centerMe errMsg">' + errText + '</h1>';
+	var tblHdrWrapper =	'<div class="dataHdrWrapper"></div>';
+	var tblDataWrapper = '<div class="dataBodyWrapper"></div>';
+	var errText = ( _sessLang == SESS_LANG_CHN ) ? '沒有找到所選擇的法會的牌位，<br/>請輸入或上載牌位資料。'
+												 : 'No record found!<br/>Please input or upload Data';
+	var errMsg =	'<h1 class="centerMe errMsg">' + errText + '</h1>';
 	_ajaxData = {}; _dbInfo = {};
 
-  dataArea.empty();
-  dataArea.append( tblHdrWrapper , tblDataWrapper );
+	dataArea.empty();
+	dataArea.append( tblHdrWrapper , tblDataWrapper );
   	
 	_dbInfo[ 'tblName' ] = tblName;
 	_dbInfo[ 'pgNbr' ] = pgNbr;
-/*	_dbInfo[ 'numRec' ] = numRec; */
 	_dbInfo[ 'pwRqstr' ] = sessUsr;
-/*	_dbInfo[ 'inclHdr' ] = !dataOnly; */
 	_ajaxData[ 'dbReq' ] = 'dbREAD';
 	_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
 	$.ajax({
@@ -227,27 +225,27 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 						location.replace( rspV [ X ] );
 						return;
 					case 'myDataHdr':
-						$("#myHdrWrapper").find("*").unbind();
-						$("#myHdraWrapper").empty();
-						$("#myHdrWrapper").html( rspV[ X ] );
+						$(".dataHdrWrapper").find("*").unbind();
+						$(".dataHdrWrapper").empty();
+						$(".dataHdrWrapper").html( rspV[ X ]);
 						break;
 					case 'myData':
-						$("#myDataWrapper").find("*").unbind();
-						$("#myDataWrapper").empty();
-						$("#myDataWrapper").html( rspV[ X ] );
+						$(".dataBodyWrapper").find("*").unbind();
+						$(".dataBodyWrapper").empty();
+						$(".dataBodyWrapper").html( rspV[ X ] );
 						break;
 					case 'myDataSize':
 						_tblSize = rspV[ X ];
 						break;
 				} // switch()
 			} // for loop
-			_pilotDataRow = $("#myData tbody > tr:first").clone();
+			_pilotDataRow = $("table.dataRows tbody > tr:first").clone();
 			if ( _tblSize == 0 ) {
-				$("#myDataWrapper").find("*").unbind();
-				$("#myDataWrapper").find("tr").remove();
-				$("#myDataWrapper").append( errMsg );
+				$(".dataBodyWrapper").find("*").unbind();
+				$(".dataBodyWrapper").find("tr").remove();
+				$(".dataBodyWrapper").append( errMsg );
 				if ( _sessLang != SESS_LANG_CHN ) {
-					$("#myDataWrapper").find("H1").css( "letter-spacing", "normal");
+					$(".dataBodyWrapper").find("h1").css( "letter-spacing", "normal");
 				}
 			}
 			_sessMode = SESS_MODE_EDIT;
@@ -357,16 +355,16 @@ function addRowBtnHdlr() {
 	var insBtn = '<input class="insBtn" type="button" value="' + insBtnText + '">';
 	var recTxt1 = ( _sessLang == SESS_LANG_CHN ) ? "叩薦" : "Sincerely Recommend";
 	var recTxt2 = ( _sessLang == SESS_LANG_CHN ) ? "敬薦" : "Recommend";
-	var selEle = "<select class=\"rec\" style=\"float:right; font-size:1.1em;\">" + 
+	var selEle = "<select class=\"rec\" style=\"float:right; font-size:0.9em;\">" + 
 					"<option>" + recTxt1 + "<\/option>" + 
 					"<option>" + recTxt2 + "<\/option>" +
 				 "<\/select>";
-	var tbody = $("#myData tbody");
+	var tbody = $(".dataRows tbody");
 	var newRow = _pilotDataRow.clone();
 	var newRowDataCells = newRow.find("input[type=text]");
 	var lastTd = newRow.find("td:last");
-	var cellText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入牌位資料" : "Please Enter Name Plaque Text";
-	var	dateText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "Please Enter YYYY-MM-DD";
+	var cellText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入牌位資料" : "Name Plaque Text";
+	var	dateText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "YYYY-MM-DD";
 	
 	$(".errMsg").remove();
 	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
@@ -376,9 +374,7 @@ function addRowBtnHdlr() {
 	newRowDataCells.val( cellText );
 	newRowDataCells.attr( { 'data-oldv' : '', 'data-pmptv' : '' } );
 	newRowDataCells.prop( 'disabled', false );
-	// if ( _tblName == 'DaPaiWei' ) {
-		newRow.find("input[data-fldn=deceasedDate]").val( dateText );
-	// }
+	newRow.find("input[data-fldn=deceasedDate]").val( dateText );
 	newRow.find("input[data-fldn=W_Requestor]").after( selEle );
 	/*
 	 * Replace W_Title and R_Title input fields with dropdown items selection;
@@ -397,12 +393,10 @@ function addRowBtnHdlr() {
 	rTitleSelect.on( 'mouseover', onMouseoverHdlr ); // bind to the on 'mouseover' handler
 	
 	if ( _sessMode == SESS_MODE_SRCH ) {
-		$("#myDataWrapper").find("*").unbind()
+		$(".dataBodyWrapper").find("*").unbind()
 		tbody.find("tr").remove(); // remove all data rows
-		$("#myDataFooter").remove(); // remove the footer
 		_sessMode = SESS_MODE_EDIT;
 	}
-
 	tbody.append( newRow );
 } // addRowBtnHdlr()
 
@@ -433,8 +427,8 @@ function lookupBtnHdlr() {
 	_ajaxData[ 'dbReq' ] = 'dbSEARCH';
 	_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
 	_sessMode = SESS_MODE_EDIT; // Search Mode is over; regardless of the search result
-	$("#myDataWrapper").find("*").unbind(); // done with the current data
-	$("#myDataWrapper").empty();
+	$(".dataBodyWrapper").find("*").unbind(); // done with the current data
+	$(".dataBodyWrapper").empty();
 	$.ajax({
 		url: "./ajax-pwDB.php",
 		method: 'POST',
@@ -447,17 +441,17 @@ function lookupBtnHdlr() {
 						location.replace( rspV[ X ] );
 						return;
 					case 'myData': // The Server returns a data table
-						$("#myDataWrapper").find("*").unbind();
-						$("#myDataWrapper").html( rspV[ X ] );
-						_pilotDataRow = $("#myData tbody > tr:first").clone();
+						$(".dataBodyWrapper").find("*").unbind();
+						$(".dataBodyWrapper").html( rspV[ X ] );
+						_pilotDataRow = $(".dataRows tbody > tr:first").clone();
 						break;
 					case 'myDataSize':
 						_tblSize = rspV [ X ];
 						if ( _tblSize == 0 ) { // an empty row was received for the _pilotDataRow; now remove it
-							$("#myDataWrapper").find("tr").remove();
-							$("#myDataWrapper").append( notFoundMSG );
+							$(".dataBodyWrapper").find("tr").remove();
+							$(".dataBodyWrapper").append( notFoundMSG );
 							if ( _sessLang != SESS_LANG_CHN ) {
-								$("#myDataWrapper").find("H1").css( "letter-spacing", "normal");
+								$(".dataBodyWrapper").find("h1").css( "letter-spacing", "normal");
 							}
 							return;
 						}
@@ -469,7 +463,7 @@ function lookupBtnHdlr() {
 							msgText += element;
 						});
 						var errMSG = '<h1 class="centerMe errMsg">' + msgText + '</h1>';
-						$("#myDataWrapper").append( errMSG ); // reset to default					
+						$(".dataBodyWrapper").append( errMSG ); // reset to default					
 						break;
 				} // switch()
 			} // for loop
@@ -487,7 +481,7 @@ function srchBtnHdlr() {
 	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
 	var lookupBtnText = ( _sessLang == SESS_LANG_CHN ) ? "查詢" : "Look Up";
 	var lookupBtn = '<input class="lookupBtn" type="button" value="' + lookupBtnText + '">';
-	var tbody = $("#myData tbody"); 
+	var tbody = $(".dataRows tbody"); 
 	var newRow = _pilotDataRow.clone();
 	var newRowDataCells = newRow.find("input[type=text]");
 	var lastTd = newRow.find("td:last");
@@ -516,7 +510,6 @@ function srchBtnHdlr() {
 	lastTd.find("input[type=button]").on( 'click', lookupBtnHdlr ); // bind to Lookup Button click handler
 	tbody.find("*").unbind();	
 	tbody.find("tr").remove(); // remove all data rows
-	$("#myDataFooter").remove(); // remove the footer
 	tbody.append( newRow );
 	_sessMode = SESS_MODE_SRCH;
 } // srchBtnHdlr()

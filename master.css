@@ -128,7 +128,7 @@ div.dataHdrWrapper, div.dataBodyWrapper {
 
 div.dataBodyWrapper {
 	overflow-y: auto;
-	height: 71vh; /* adjustable */
+	height: 76vh; /* adjustable */
 }
 
 table.dataHdr, table.dataRows {
