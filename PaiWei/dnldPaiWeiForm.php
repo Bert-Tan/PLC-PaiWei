@@ -21,13 +21,32 @@
 <HEAD>
 <TITLE>淨土念佛堂法會牌位下載主頁</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="https://www.amitabhalibrary.org/css/base.css">
-<link rel="stylesheet" type="text/css" href="../css/admin.css">
-<link rel="stylesheet" type="text/css" href="../css/menu.css">
-<link rel="stylesheet" type="text/css" href="./PaiWei.css">
+<link rel="stylesheet" type="text/css" href="../master.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style type="text/css">
-	
+table.dialog {
+	width: 60%;
+}
+
+table.dialog td {
+	padding-top: 2px;
+	padding-left: 2vw;
+	height: 6vh;
+	font-size: 1.1em;
+	text-align: left;
+	vertical-align: top;
+}
+
+input[type=submit] {
+	margin: auto;
+	line-height: 40px;
+	text-align:center;
+	vertical-align: middle;
+	font-size: 1.1em;
+	background-color: aqua;
+	border: 1px solid blue;
+	border-radius: 10px;
+}	
 #myUpldTbl {
 	table-layout: fixed;
 	width: 60%;
@@ -61,9 +80,9 @@ input[type=submit] {
 		<!-- <form action="dnldPaiWei.php" method="post" enctype="multipart/form-data" id="dnldForm" -->
 		<form action="dnldPaiWeiPDF.php" method="post" enctype="multipart/form-data" id="dnldForm"
 			style="font-weight:bold; padding: 10px;">
-			<table id="myUpldTbl">
+			<table class="dialog">
 				<tr><!-- Selection Row -->
-			    <td style="width: 50%;">申請人:<br/>
+			    <td>申請人:<br/>
 						<?php echo userSelectionList(); ?>
 			    </td>
 		    	<td style="">請選擇下載牌位資料檔案:<br/>
@@ -79,7 +98,7 @@ input[type=submit] {
 			    </td>
 			  </tr>
 			  <tr><!-- Submit Row -->
-			    <td colspan="2" style="text-align: center;">
+			    <td colspan="2" style="text-align: center; vertical-align: middle; padding: 1vh 0px;">
 			    	<input type="submit" value="下  載" name="submit">
 			    </td>
 		  	</tr>

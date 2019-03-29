@@ -7,14 +7,7 @@
 	require_once( 'dbSetup.php' );
 	require_once( 'ChkTimeOut.php' );
 
-	$sessLang = SESS_LANG_CHN; // default
-	if ( isset ( $_GET[ 'l' ] ) ) {
-		$sessLang = ( $_GET[ 'l' ] == 'e' ) ? SESS_LANG_ENG : SESS_LANG_CHN;
-	} else if ( isset( $_SESSION[ 'sessLang' ] ) ) {
-		$sessLang = $_SESSION[ 'sessLang' ];
-	}	
-	$_SESSION[ 'sessLang' ] = $sessLang;
-
+	$sessLang = $_SESSION[ 'sessLang' ];
 	$hdrURL = URL_ROOT . "/admin/index.php";
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
@@ -28,27 +21,14 @@
 <HEAD>
 <TITLE>淨土念佛堂法會牌位上載主頁</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="https://www.amitabhalibrary.org/css/base.css">
-<link rel="stylesheet" type="text/css" href="../css/admin.css">
-<link rel="stylesheet" type="text/css" href="../css/menu.css">
-<link rel="stylesheet" type="text/css" href="./PaiWei.css">
+<link rel="stylesheet" type="text/css" href="../master.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="../futureAlert.js"></script>
 <script src="./PaiWei.js"></script>
 <style type="text/css">
-	
-#myUpldTbl {
-	table-layout: fixed;
+/* localization */
+table.dialog {
 	width: 60%;
-	margin:auto;
-	border: 4px ridge #00b300;
-}
-
-#myUpldTbl td {
-	padding-left: 2vw;
-	font-size: 1.2em;
-	height: 8vh;
-	border: 1px solid #00b300;
 }
 
 input[type=submit] {
@@ -56,7 +36,7 @@ input[type=submit] {
 	line-height: 40px;
 	text-align:center;
 	vertical-align: middle;
-	font-size: 1.2em;	
+	font-size: 1.1em;	
 }
 
 </style>
@@ -85,31 +65,28 @@ input[type=submit] {
 			再上載資料檔案即可。謝謝！
 		</div><br/>
 		<form action="upldPaiWei.php" method="post" enctype="multipart/form-data" id="upldForm"
-			style="font-weight:bold; padding: 10px;">
-			<table id="myUpldTbl">
+			style="font-weight:bold; padding: 5px;">
+			<table class="dialog">
 				<tr>
-		    	<td style="">請選擇上載牌位資料檔案:<br/>
-		    		<!-- div style="width: 90%; margin: auto;text-align: left;"><br/-->
-							<input type="file" name="upldedFiles" id="fileToUpload" style="font-size: 1.0em;">
-						<!--/div-->
+		    		<td style="">請選擇上載牌位資料檔案:<br/>
+						<input type="file" name="upldedFiles" id="fileToUpload" style="font-size: 1.0em;">
 					</td>
 					<td style="">牌位是為了:<br/>
-						<select name="dbTblName" style="width: 250px; font-size: 1.2em;" required>
+						<select name="dbTblName" style="width: 250px; font-size: 1.1em;" required>
 						<option value="">--請選擇牌位用途--</option>
-				  	<option value="C001A">祈福消災</option>
-					  <option value="W001A_4">超薦往生超過一年的親友</option>
-					  <!-- option value="W001A_4">超薦往生超過一年的親友(高雄元亨寺)</option -->
-				    <option value="DaPaiWei">超薦一年(12個月)之內往生的親友</option>
-				    <option value="L001A">超薦歷代祖先</option>
-				    <option value="Y001A">超薦累劫冤親債主</option>
-				    <option value="D001A">超薦地基主</option>
-			    </td>
-			  </tr>
-			  <tr>
-			    <td colspan=2 style="text-align: center;">
-			    	<input type="submit" value="上  載" name="submit">
-			    </td>
-		  	</tr>
+				  		<option value="C001A">祈福消災</option>
+						<option value="W001A_4">超薦往生超過一年的親友</option>
+						<option value="DaPaiWei">超薦一年(12個月)之內往生的親友</option>
+						<option value="L001A">超薦歷代祖先</option>
+						<option value="Y001A">超薦累劫冤親債主</option>
+						<option value="D001A">超薦地基主</option>
+			    	</td>
+				</tr>
+				<tr>
+			    	<td colspan=2 style="text-align: center; vertical-align: middle; padding: 1vh 0px;">
+			    		<input type="submit" value="上  載" name="submit">
+			    	</td>
+				</tr>
 		  </table>
 		</form>
 <?php
@@ -135,8 +112,8 @@ input[type=submit] {
 			the CSV files，and then upload them. Thank you.
 		</div><br/>
 		<form action="upldPaiWei.php" method="post" enctype="multipart/form-data" id="upldForm"
-			style="font-weight:bold; padding: 10px;">
-			<table id="myUpldTbl">
+			style="font-weight:bold; padding: 5px;">
+			<table class="dialog">
 				<tr>
 		    	<td style="">Please Select a File to Upload:<br/>
 		    		<!-- div style="width: 90%; margin: auto;text-align: left;"><br/-->
@@ -144,7 +121,7 @@ input[type=submit] {
 						<!--/div-->
 					</td>
 					<td style="">The File is for:<br/>
-						<select name="dbTblName" style="width: 250px; font-size: 1.2em;" required>
+						<select name="dbTblName" style="width: 250px; font-size: 1.1em;" required>
 						<option value="">--Please Select a Type--</option>
 				  	<option value="C001A">Well Blessing</option>
 					  <option value="W001A_4">Deceased</option>
@@ -155,7 +132,7 @@ input[type=submit] {
 			    </td>
 			  </tr>
 			  <tr>
-			    <td colspan=2 style="text-align: center;">
+			    <td colspan=2 style="text-align: center; vertical-align: middle; padding: 1vh 0px;">
 			    	<input type="submit" value="Upload" name="submit">
 			    </td>
 		  	</tr>

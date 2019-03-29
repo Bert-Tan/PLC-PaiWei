@@ -95,6 +95,12 @@ table.pgMenu th:not(.future):hover, table.pgMenu th:not(.soon):hover {
 	cursor: pointer;
 }
 
+table.pgMenu th.active {
+	background-color: green;
+	color: yellow;
+	font-weight: bold;
+}
+
 /******************************************************************************
  *             The data table in the dataArea on every Admin Page             *
  ******************************************************************************/

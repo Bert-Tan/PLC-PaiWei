@@ -37,37 +37,8 @@
 <head>
 <title><?php echo xLate( 'htmlTitle' ); ?></title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="https://www.amitabhalibrary.org/css/base.css">
-<link rel="stylesheet" type="text/css" href="../css/admin.css">
-<link rel="stylesheet" type="text/css" href="../css/menu.css">
-<link rel="stylesheet" type="text/css" href="./PaiWei.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="../futureAlert.js"></script>
-<script src="./PaiWei.js"></script>
-
+<link rel="stylesheet" type="text/css" href="../master.css">
 <style type="text/css">
-
-#myUpldTbl {
-	table-layout: fixed;
-	width: 60%;
-	margin:auto;
-	border: 4px ridge #00b300;
-}
-
-#myUpldTbl td {
-	padding-left: 2vw;
-	font-size: 1.2em;
-	height: 8vh;
-	border: 1px solid #00b300;
-}
-
-input[type=submit] {
-	margin: auto;
-	line-height: 40px;
-	text-align:center;
-	vertical-align: middle;
-	font-size: 1.2em;	
-}
 
 .UGsteps {
 	font-size: 0.9em;
@@ -95,7 +66,7 @@ input[type=submit] {
 <?php
 	if ( $useChn ) { // Chinese version
  ?>
-		<h2 style="margin-top: 4vh; text-align: center; letter-spacing: 1px;">
+		<h2 style="margin-top: 6vh; text-align: center; letter-spacing: 1px;">
 			法會牌位申請用戶指南
 		</h2>
         <span style="display: block; width: 95%; margin: auto; padding-top: 2vh; font-size: 1.3em;
@@ -288,7 +259,7 @@ input[type=submit] {
 <?php
 	} else { // English version
 ?>
-		<h2 style="margin-top: 4vh; text-align: center; letter-spacing: normal;">
+		<h2 style="margin-top: 6vh; text-align: center; letter-spacing: normal;">
 			User Guide to Request for Merit Dedication Name Plaques during Retreats</h2>
         <span style="display: block; width: 95%; margin: auto; padding-top: 2vh; font-size: 1.3em;
 			font-weight: bold; line-height: 1.1em;"><!-- Intro phrase -->

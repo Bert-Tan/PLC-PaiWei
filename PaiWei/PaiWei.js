@@ -28,7 +28,10 @@ var _wtList = null;	// W_Title & R_Title selection list
 var _rtList = null;
 var _icoName = null;
 var _rqTbls = [ 'D001A', 'L001A', 'Y001A', 'W001A_4', 'DaPaiWei' ];
-
+var _url2Go = {
+	"urlDnld" : "./dnldPaiWeiForm.php",
+	"usrLogout" : "../Login/Logout.php"
+};
 /**********************************************************
  *                    Support functions                   *
  **********************************************************/
@@ -49,8 +52,9 @@ function readSessParam() {
 						location.replace( rspV[ X ] );
 						return false;
 					case 'notActive':	// No retreat active; put out msg
-						alertMsg = ( _sessLang == SESS_LANG_CHN ) ? '牌位申請已過期，或本念佛堂近期內沒有法會！'
-								 : "Name Plaque Application deadline passed; or,\nthere is NO Planned Retreat!";
+						alertMsg = ( _sessLang == SESS_LANG_CHN ) ?
+							"牌位申請已過期，\n或本念佛堂近期內沒有法會；\n牌位申請功能暫停！"
+						  : "Name Plaque Application deadline passed; or,\nthere is NO Planned Retreat!\nFunction deactivated";
 						alert ( alertMsg );
 						return false;
 					case 'pwPlqDate':
@@ -888,7 +892,10 @@ function ready_init() {
 	if ( _icoName ) {
 		$(".pwTbl").on('click', pwTblHdlr );
 		$("#upld").on( 'click', upldHdlr );
-		// download will be a direct href
+		// download will be a re-direct href
+		$(".pgMenu th[data-urlIdx=urlDnld").on('click', function() {
+			location.replace( _url2Go[$(this).attr("data-urlIdx")] );
+		});
 		return;
 	}
 	alert( "由於沒有點選蓮友為之處理牌位，\n牌位管理功能僅限於下載牌位列印！" );
@@ -915,4 +922,7 @@ $(document).ready(function() {
 	 */
 	$(".future").on( 'click', futureAlert );
 	$(".soon").on( 'click', soonAlert );
+	$(".pgMenu th[data-urlIdx=usrLogout]").on('click', function() {
+		location.replace( _url2Go[$(this).attr("data-urlIdx")] );
+	});
 }) // document ready

@@ -58,7 +58,7 @@
 	$sessLang = $_SESSION[ 'sessLang' ];
 	$sessType = $_SESSION[ 'sessType' ];
 	$useChn = ( $sessLang == SESS_LANG_CHN );
-	$dnldUrl = URL_ROOT . "/admin/PaiWei/dnldPaiWeiForm.php";
+//	$dnldUrl = URL_ROOT . "/admin/PaiWei/dnldPaiWeiForm.php";
 ?>
 
 <!DOCTYPE html>
@@ -66,11 +66,8 @@
 <head>
 <title><?php echo xLate( 'htmlTitle' ); ?></title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="https://www.amitabhalibrary.org/css/base.css">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="../css/admin.css">
-<link rel="stylesheet" type="text/css" href="../css/menu.css">
-<link rel="stylesheet" type="text/css" href="./PaiWei.css">
+<link rel="stylesheet" type="text/css" href="../master.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="./toolTip.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -79,19 +76,27 @@
 
 <!-- The following CSS is for the upload Form which will be loaded from the other HTML/PHP file. -->
 <style type="text/css">
-
-#myUpldTbl {
-	table-layout: fixed;
-	width: 60%;
-	margin:auto;
-	border: 4px ridge #00b300;
+/* localization */
+.engClass {
+	font-size: 0.7em;
 }
 
-#myUpldTbl td {
+table.pgMenu tr th:last-child {
+	border-left: 1px solid white;
+}
+
+/* for loaded PaiWei Upload Form */
+table.dialog {
+	width: 60%;
+}
+
+table.dialog td {
+	padding-top: 2px;
 	padding-left: 2vw;
-	font-size: 1.2em;
-	height: 8vh;
-	border: 1px solid #00b300;
+	height: 6vh;
+	font-size: 1.1em;
+	text-align: left;
+	vertical-align: top;
 }
 
 input[type=submit] {
@@ -99,7 +104,10 @@ input[type=submit] {
 	line-height: 40px;
 	text-align:center;
 	vertical-align: middle;
-	font-size: 1.2em;	
+	font-size: 1.1em;
+	background-color: aqua;
+	border: 1px solid blue;
+	border-radius: 10px;
 }
 
 .UGsteps {
@@ -124,12 +132,12 @@ input[type=submit] {
 </head>
 <body>
 	<div class="hdrRibbon">
-		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" alt="">
+		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" class="centerMeV" alt="">
 		<div id="pgTitle" class="centerMeV">
 			<span style="letter-spacing: 1px;">淨土念佛堂法會牌位申請主頁</span><br/>
 			<span class="engClass">Retreat Merit Dedication Application Page</span>
 		</div>
-		<table id="myMenuTbl" class="centerMeV">	
+		<table class="pgMenu centerMeV">	
 			<thead>
 				<tr>
 					<th class="pwTbl" data-tbl="W001A_4"><?php echo xLate( 'pwW' ); ?></th>
@@ -142,10 +150,11 @@ input[type=submit] {
 <?php
 	} else {
 ?>
-					<th id="dnld"><a href="<?php echo $dnldUrl; ?>" class="myLinkButton">下載牌位檔案</a></th>
+					<th id="dnld" data-urlIdx="urlDnld">下載牌位檔案</th>
 <?php
 	}
 ?>
+					<th rowSpan="2" data-urlIdx="usrLogout"><?php echo xLate('logOut');?></th>
 				</tr>
 				<tr>
 					<th class="pwTbl" data-tbl="DaPaiWei"><?php echo xLate( 'pwBIG' ); ?></th>
@@ -155,34 +164,27 @@ input[type=submit] {
 				</tr>
 			</thead>
 		</table>
-		<div id="pgLogOut" class="centerMeV"><a href="../Login/Logout.php" class="myLinkButton"><?php echo xLate('logOut');?></a></div>
 	</div>
 	<div class="dataArea">
-<?php
-	if ( $sessType == SESS_TYP_USR ) { 
-?>
-		<h1 class="q_centerMe" id="myDataTitle"
-			style="<?php if ( !$useChn ) echo "letter-spacing: normal;"; ?>; width: 60%;"><?php echo xLate( 'h1Title' ); ?></h1>
-		<div class="msgBox centerMe"
-			style="width: 42%;font-size: 26px; font-weight: bold; border-color: #00b300;">
-			<?php echo xLate( 'alertMsg' ); ?>
+		<div style="width: 60%; margin: auto; margin-top: 20vh; text-align: center; font-size: 2.0em; font-weight: bold;
+			letter-spacing: <?php if ( $useChn ) { echo "20px";} else {echo "normal";};?>;">
+			<?php echo xLate( 'h1Title' ); ?>
 		</div>
 <?php
+	$txt = '';
+	if ( $sessType == SESS_TYP_USR ) { 
+		$txt = xLate( 'alertMsg');
 	} else {
 		if ( isset( $_SESSION[ 'icoName' ] ) ) {
-?>
-		<h1 class="q_centerMe" id="myDataTitle"><?php echo xLate( 'h1Title' ); ?></h1>
-		<h1 class="centerMe" style="color: blue;">幫助蓮友 <?php echo $_SESSION[ 'icoName' ]; ?> 處理法會牌位</h1>	
-<?php
-		} else { // icoSkipped; only downloading is available
-?>
-		<h1 class="centerMe" id="myDataTitle" style="margin-top: 0px; letter-spacing: normal;">
-			沒有點選蓮友為之處理牌位，<br/>牌位管理功能僅限於下載牌位列印！
-		</h1>
-<?php
+			$txt = "幫助蓮友 '" . $_SESSION[ 'icoName' ] . "' 處理法會牌位"; 
 		}
 	}
 ?>
+		<div style="width: 45%; margin: auto; margin-top: 5vh; text-align: center; font-size: 1.7em; font-weight: bold;
+			color: blue; border: 8px solid #00b300; border-radius: 8px; padding: 2px 5px;
+			display:<?php if (sizeof($txt)==0) { echo "none"; } else { echo "block"; }; ?>;">
+			<?php echo $txt; ?>
+		</div>
 	</div>
 </body>
 </html>
