@@ -103,14 +103,15 @@ input[type=submit] {
 <?php
 	if ( $_SESSION[ 'sessType' ] == SESS_TYP_WEBMASTER ) {
 ?>
-					<th>用戶管理</th>
+					<th data-urlIdx="urlUmgr">用戶管理</th>
 <?php
 	}
 ?>
-					<th>更新法會資料</th>
-					<th>為蓮友處理法會牌位</th>
-					<th class="future">處理週日迴向申請</th>
-					<th>用戶<br/>撤出</th>
+					<th data-urlIdx="urlRtData">更新<br/>法會資料</th>
+					<th data-urlIdx="urlDnld">下載牌位列印</th>
+					<th data-urlIdx="url4Others">為蓮友<br/>處理法會牌位</th>
+					<th class="future">處理<br/>週日迴向申請</th>
+					<th data-urlIdx="usrLogout">用戶<br/>撤出</th>
 				</tr>
 			</thead>
 		</table>
