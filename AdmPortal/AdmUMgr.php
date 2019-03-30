@@ -139,7 +139,7 @@ $(document).ready(function() {
 div.dataBodyWrapper {
 	width: 70%;
 	margin: auto;
-	height: 69vh;
+	height: 67vh;
 }
 
 table.dataHdr {
