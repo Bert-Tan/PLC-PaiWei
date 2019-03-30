@@ -1,6 +1,6 @@
 <?php
 	require_once("../pgConstants.php");
-	require_once("../dbSetup.php");
+	require_once("dbSetup.php");
 	require_once("PaiWei_DBfuncs.php");
 	
 	$paiweiTable = $_POST [ 'dbTblName' ]; //PaiWei type
@@ -15,7 +15,7 @@
 	
 	//common PaiWei information (string)
 	$prefixPaiwei = ''; $suffixPaiwei = ''; $commonStrPaiwei = ''; //PaiWei's prefix/suffix information and common string
-	$prefixReq = '陽上'; //requester's prefix information
+	$prefixReq = '陽上'; $suffixReq = ''; //requester's prefix/suffix information
 	
 	//font settings
 	$ChineseFont = 'cid0csv'; $EnglishFont = 'times'; 	
@@ -63,7 +63,7 @@
 	$pdf = new TCPDF($pageOrientation, $unit, $pageSize, true, 'UTF-8', false);
 	
 	//set PaiWei configurations
-	setConfigure(); 
+	setConfigure();
 
 	//set PDF document information
 	$pdf->SetTitle($pdfTitle);
@@ -104,10 +104,7 @@
 			//print prefix and suffix of PaiWei
 			$pdf->SetFont($ChineseFont, $fontStylePaiwei, $fontSizePrefixPaiwei);
 			$pdf->Text($xPaiwei, $yPrefixPaiwei, $prefixPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
-			$pdf->Text($xPaiwei, $ySuffixPaiwei, $suffixPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
-			//print prefix of requester
-			$pdf->SetFont($ChineseFont, $fontStyleReq, $fontSizePrefixReq);
-			$pdf->Text($xReq, $yPrefixReq, $prefixReq, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
+			$pdf->Text($xPaiwei, $ySuffixPaiwei, $suffixPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);			
 			
 			$index = $i*$paiweiNumPerPage + $j; // data index in the array
 			$dataType = '';
@@ -117,9 +114,12 @@
 				$dataType = 'PaiWei';
 				if($index < $paiweiCount) //some PaiWei images maybe empty (no PaiWei information)
 					printStr($paiweiArray[$index], $fontStylePaiwei, $fontSizePaiwei, $xPaiwei, $yTopPaiwei, $yBottomPaiwei, $rotateXadjustPaiwei, $textXadjustPaiwei, $mulLineXadjustPaiwei, $dataType);
+				else { //empty PaiWei data, just print common PaiWei string (i.e., '氏歷代祖先')	
+					$pdf->SetFont($ChineseFont, $fontStylePaiwei, $fontSizePaiwei);
+					$pdf->Text($xPaiwei, $yPaiweiCommon, $commonStrPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);			
+				}
 			}
-			else {
-				//print common PaiWei string
+			else { //paiWei data are common (i.e., '地基主' and '累劫冤親債主')
 				$pdf->SetFont($ChineseFont, $fontStylePaiwei, $fontSizePaiwei);
 				$pdf->Text($xPaiwei, $yPaiweiCommon, $commonStrPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);			
 			}
@@ -127,19 +127,28 @@
 			//print requester data
 			if(count($reqArray) > 0) {
 				$dataType = 'Req';
-				if($index < $paiweiCount) { //some PaiWei images maybe empty (no PaiWei information)
-					printStr($reqArray[$index], $fontStyleReq, $fontSizeReq, $xReq, $yTopReq, $yBottomReq, $rotateXadjustReq, $textXadjustReq, $mulLineXadjustReq, $dataType);
-				
-					//print requester's suffix
+				if($index < $paiweiCount) { //some PaiWei images maybe empty (no requester information)
+					$lineNum = printStr($reqArray[$index], $fontStyleReq, $fontSizeReq, $xReq, $yTopReq, $yBottomReq, $rotateXadjustReq, $textXadjustReq, $mulLineXadjustReq, $dataType);
+					
+					//adjusted requester's prefix/suffix X position (center-aligned, multiple lines of requester information)
+					$xReqAdjusted = $xReq - ($lineNum-1)*$mulLineXadjustReq;
+					
+					//print requester's prefix and suffix
 					$pdf->SetFont($ChineseFont, $fontStyleReq, $fontSizePrefixReq);
-					$pdf->Text($xReq, $ySuffixReq, $reqSuffixArray[$index], false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
+					$pdf->Text($xReqAdjusted, $yPrefixReq, $prefixReq, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
+					$pdf->Text($xReqAdjusted, $ySuffixReq, $reqSuffixArray[$index], false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
 				}
-			}
+				else { //empty requester data, just print requester's prefix and suffix
+					$pdf->SetFont($ChineseFont, $fontStyleReq, $fontSizePrefixReq);
+					$pdf->Text($xReq, $yPrefixReq, $prefixReq, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
+					$pdf->Text($xReq, $ySuffixReq, $suffixReq, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
+				}
+			}			
 		
 			//print DiJiZhu address data
 			if(count($addressArray) > 0) {
 				$dataType = 'Address';
-				if($index < $paiweiCount) //some PaiWei images maybe empty (no PaiWei information)
+				if($index < $paiweiCount) //some PaiWei images maybe empty (no DiJiZhu address information)
 					printStr($addressArray[$index], $fontStyleAddress, $fontSizeAddress, $xAddress, $yTopAddress, $yBottomAddress, $rotateXadjustAddress, $textXadjustAddress, $mulLineXadjustAddress, $dataType);
 			}
 			
@@ -163,8 +172,8 @@
 		global $paiweiTable, $pdf, $ChineseFont, $EnglishFont;
 		global $topMargin, $leftMargin, $rightMargin;
 		global $pdfTitle, $imgPath, $imgWidth, $imgHeight, $imgType, $imgAlign, $paiweiNumPerPage;
-		global $prefixPaiwei, $suffixPaiwei, $commonStrPaiwei;
-		global $fontStylePaiwei, $fontStyleReq, $fontStyleAddress;
+		global $prefixPaiwei, $suffixPaiwei, $commonStrPaiwei, $suffixReq;
+		global $fontStylePaiwei, $fontStyleReq, $fontStyleAddress; 
 		global $fontSizePaiwei, $fontSizeReq, $fontSizeAddress, $fontSizePrefixPaiwei, $fontSizePrefixReq;
 		global $rotateXadjustPaiwei, $textXadjustPaiwei, $rotateXadjustReq;
 		global $textXadjustReq, $rotateXadjustAddress, $textXadjustAddress;
@@ -187,7 +196,7 @@
 			case 'D001A':
 				$topMargin=0.7; $leftMargin=0.2; $rightMargin=0.2; $pdfTitle='地基主蓮位';
 				$imgPath='img/XiaoPaiWei.png'; $imgWidth=2.42; $imgHeight=7.5; $imgType='PNG';
-				$paiweiNumPerPage=6; $prefixPaiwei='佛力超薦'; $suffixPaiwei='往生蓮位'; $commonStrPaiwei='地基主';
+				$paiweiNumPerPage=6; $prefixPaiwei='佛力超薦'; $suffixPaiwei='往生蓮位'; $commonStrPaiwei='地基主'; $suffixReq='敬薦';
 				$fontSizePaiwei=18; $fontSizePrefixPaiwei=20; $fontSizeReq=14; $fontSizePrefixReq=16; $fontSizeAddress=12;
 				$fontStylePaiwei='B'; $fontStyleReq='B'; $fontStyleAddress='';
 				$rotateXadjustPaiwei=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
@@ -204,14 +213,15 @@
 			case 'L001A':
 				$topMargin=0.7; $leftMargin=0.2; $rightMargin=0.2; $pdfTitle='歷代祖先蓮位';
 				$imgPath='img/XiaoPaiWei.png'; $imgWidth=2.42; $imgHeight=7.5; $imgType='PNG';
-				$paiweiNumPerPage=6; $prefixPaiwei='佛力超薦'; $suffixPaiwei='往生蓮位';
+				$paiweiNumPerPage=6;
+				$prefixPaiwei='佛力超薦'; $suffixPaiwei='往生蓮位'; $commonStrPaiwei='氏歷代祖先'; $suffixReq='叩薦';
 				$fontSizePaiwei=18; $fontSizePrefixPaiwei=20; $fontSizeReq=14; $fontSizePrefixReq=16;
 				$fontStylePaiwei='B'; $fontStyleReq='B';
 				$rotateXadjustPaiwei=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
 				$textXadjustPaiwei=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
 				$rotateXadjustReq=1.1*$pdf->GetStringWidth('G', $EnglishFont, $fontStyleReq, $fontSizeReq, false);
 				$textXadjustReq=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStyleReq, $fontSizeReq, false);
-				$xIniPaiwei=12.64; $xStepPaiwei=2.265; $yPrefixPaiwei=2.0; $ySuffixPaiwei=5.5; $yTopPaiwei=3.2; $yBottomPaiwei=5.45;	
+				$xIniPaiwei=12.64; $xStepPaiwei=2.265; $yPrefixPaiwei=2.0; $ySuffixPaiwei=5.5; $yTopPaiwei=3.2; $yBottomPaiwei=5.45; $yPaiweiCommon=3.85;	
 				$xIniReq=11.725; $xStepReq=2.265; $yPrefixReq=3.2; $ySuffixReq=6.0; $yTopReq=3.75; $yBottomReq=5.95;
 				$mulLineXadjustPaiwei=0.13; $mulLineXadjustReq=0.1;
 				break;
@@ -219,7 +229,7 @@
 				$topMargin=0.7; $leftMargin=0.2; $rightMargin=0.2; $pdfTitle='累劫冤親債主蓮位'; 
 				$imgPath='img/XiaoPaiWei.png'; $imgWidth=2.42; $imgHeight=7.5; $imgType='PNG';
 				$paiweiNumPerPage=6;
-				$prefixPaiwei='佛力超薦'; $suffixPaiwei='往生蓮位'; $commonStrPaiwei='累劫冤親債主';
+				$prefixPaiwei='佛力超薦'; $suffixPaiwei='往生蓮位'; $commonStrPaiwei='累劫冤親債主'; $suffixReq='敬薦';
 				$fontSizePaiwei=18; $fontSizePrefixPaiwei=20; $fontSizeReq=14; $fontSizePrefixReq=16;
 				$fontStylePaiwei='B'; $fontStyleReq='B';
 				$rotateXadjustPaiwei=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
@@ -233,7 +243,7 @@
 			case 'W001A_4':
 				$topMargin=0.7; $leftMargin=0.2; $rightMargin=0.2; $pdfTitle='往生者蓮位';
 				$imgPath='img/XiaoPaiWei.png'; $imgWidth=2.42; $imgHeight=7.5; $imgType='PNG';
-				$paiweiNumPerPage=6; $prefixPaiwei='佛力超薦'; $suffixPaiwei='往生蓮位';
+				$paiweiNumPerPage=6; $prefixPaiwei='佛力超薦'; $suffixPaiwei='往生蓮位'; $suffixReq='叩薦';
 				$fontSizePaiwei=18; $fontSizePrefixPaiwei=20; $fontSizeReq=14; $fontSizePrefixReq=16;
 				$fontStylePaiwei='B'; $fontStyleReq='B';
 				$rotateXadjustPaiwei=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
@@ -249,14 +259,14 @@
 				$imgPath='img/DaPaiWei.jpg'; $paiweiNumPerPage=1; $imgType='JPG'; $imgAlign='C';//center align
 				$imgWidth=0; $imgHeight=0; //TCPDF calculate image width and height automatically
 				$fontStylePaiwei='B'; $fontStyleReq='B';
-				$fontSizePaiwei=36; $fontSizeReq=20; $fontSizePrefixReq=24;
-				$rotateXadjustPaiwei=0.95*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
+				$fontSizePaiwei=24; $fontSizeReq=18; $fontSizePrefixReq=20;
+				$rotateXadjustPaiwei=1.0*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
 				$textXadjustPaiwei=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
-				$rotateXadjustReq=1.0*$pdf->GetStringWidth('G', $EnglishFont, $fontStyleReq, $fontSizeReq, false);
-				$textXadjustReq=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStyleReq, $fontSizeReq, false);
-				$xIniPaiwei=4.25; $xStepPaiwei=0; $yTopPaiwei=4.5; $yBottomPaiwei=9.2;				
-				$xIniReq=2.55; $xStepReq=0; $yPrefixReq=6.15; $ySuffixReq=10.25; $yTopReq=6.95; $yBottomReq=10.25;
-				$mulLineXadjustPaiwei=0.27; $mulLineXadjustReq=0.16;
+				$rotateXadjustReq=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStyleReq, $fontSizeReq, false);
+				$textXadjustReq=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStyleReq, $fontSizeReq, false);			
+				$xIniPaiwei=4.27; $xStepPaiwei=0; $yTopPaiwei=4.65; $yBottomPaiwei=9.4;							
+				$xIniReq=2.75; $xStepReq=0; $yPrefixReq=6.2; $ySuffixReq=10.4; $yTopReq=6.85; $yBottomReq=10.35;
+				$mulLineXadjustPaiwei=0.19; $mulLineXadjustReq=0.14;
 				break;	
 		}		
 	}
@@ -391,8 +401,8 @@
 			array_push($subStrsArray, $strings); //2-D array, be consist with multiple lines data structure
 		
 		//calculate initial X position (i.e., the first line)
-		//PaiWei data: lines are center-aligned
-		//requester/address data: line right-aligned
+		//PaiWei data: lines center-aligned (based on PaiWei's prefix/suffix string)
+		//requester/address data: lines right-aligned (based on pre-defined requester/address prefix/suffix string position)
 		$x = ( $dataType=='PaiWei' ) ? $x + (count($subStrsArray)-1)*$mulLineXadjust : $x;
 		
 		//print each PaiWei/requester/address line
@@ -423,7 +433,10 @@
 			
 			//calculate X position for the next line
 			$x = $x - 2*$mulLineXadjust;
-		}		
+		}	
+		
+		//return line count, to adjust requester's prefix/suffix string center-aligned
+		return count($subStrsArray);
 	}
 	
 	//split a string into substrings only containing Chinese and non-Chinese characters
