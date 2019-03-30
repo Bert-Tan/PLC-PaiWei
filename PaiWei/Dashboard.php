@@ -12,6 +12,8 @@
 		$tblNames = array(	'W001A_4', 'DaPaiWei', 'L001A', 'C001A', 'Y001A', 'D001A' );
 		$pwTotal = array(	'W001A_4' => 0, 'DaPaiWei' => 0, 'L001A' => 0,
 							'C001A' => 0, 'Y001A' => 0, 'D001A' => 0 , 'grandTotal' => 0 );
+		$pwSheets = array(	'W001A_4' => 0, 'DaPaiWei' => 0, 'L001A' => 0,
+							'C001A' => 0, 'Y001A' => 0, 'D001A' => 0 , 'grandTotal' => 0 );
 		$_db->query( "LOCK TABLES inCareOf READ, pw2Usr READ;" );
 		$sql  =	"SELECT DISTINCT `pwUsrName` FROM `pw2Usr` WHERE `pwUsrName` IN "
 			  .	"(SELECT `UsrName` FROM `inCareOf`) ORDER BY `pwUsrName`;";
@@ -47,15 +49,23 @@
 			} // each TblName
 			$tpl->parse("dashboard_row");
 		} // $allNames
+		foreach( $tblNames as $tblName ) {
+			$pwCounts = $pwTotal[ "${tblName}" ];
+			$pwSheets[ "$tblName" ] = (int)( $pwCounts / 6 ) + ( ( $pwCounts % 6 ) > 0 );
+			if ( $tblName == "DaPaiWei" ) { $pwSheets[ "$tblName" ] = $pwCounts; }
+			$pwSheets[ 'grandTotal' ] += $pwSheets[ "$tblName" ];
+		}
 		/* now the Summary Row */
 		$tpl->setCurrentBlock( "sumRow" );
 		$tpl->setVariable("grandTotal", $pwTotal[ 'grandTotal' ]);
+		$tpl->setVariable("grandSheets", $pwSheets[ 'grandTotal' ]);
 		foreach( $tblNames as $tblName ) {
 			$tpl->setCurrentBlock("sumCell");
 			$tpl->setVariable("pwSum", $pwTotal[ "${tblName}" ]);
+			$tpl->setVariable("pwSht", $pwSheets[ "${tblName}" ]);
 			$tpl->parse("sumCell");
 		} // each tblName
-		$tpl->parse("dashboard_row");
+		$tpl->parse("sumRow");
 		$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
 		return preg_replace( "/(^\t*)/", "  ", $tmp );
 	} // function readUsrPwRows()
@@ -235,6 +245,13 @@
 </script>
 <style>
 /* Below are completely local */
+div.dataArea {
+	height: 86vh;
+	margin-top: 1vh;
+}
+div.dataBodyWrapper {
+	height: 70vh;
+}
 table.dataRows tr:last-child td { /* the Summary Row */
 	color: yellow;
 	background-color: #00b300;

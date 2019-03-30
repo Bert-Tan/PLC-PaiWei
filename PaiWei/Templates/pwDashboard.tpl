@@ -9,10 +9,10 @@
 <!-- END dashboard_row -->
 <!-- BEGIN sumRow -->
 <tr>
-    <td>總&nbsp;&nbsp;&nbsp;&nbsp;計</td>
+    <td>總&nbsp;&nbsp;&nbsp;&nbsp;計【張 數】</td>
     <!-- BEGIN sumCell -->
-    <td>{pwSum}</td>
+    <td>{pwSum} 【{pwSht}】</td>
     <!-- END sumCell -->
-    <td>{grandTotal}</td>    
+    <td>{grandTotal} 【{grandSheets}】</td>    
 </tr>
 <!-- END sumRow -->
