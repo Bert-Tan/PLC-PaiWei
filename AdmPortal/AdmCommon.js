@@ -1,6 +1,7 @@
 var _url2Go = {
     'urlUmgr' : "../AdmPortal/AdmUMgr.php", /* test only; real path: "../AdmPortal/AdmUMgr.php", */
     'urlRtData' : "../PaiWei/rtMgr.php", /* test only; real path: "../PaiWei/rtMgr.php", */
+    'urlDnldJiWen' : "../PaiWei/dnldJiWenForm.php",
     'urlDnld' : "../PaiWei/dnldPaiWeiForm.php",
     'url4Others' : "../PaiWei/Dashboard.php", /* test only; real path: "../PaiWei/Dashboard.php", */
     'usrLogout' : "../Login/Logout.php"
