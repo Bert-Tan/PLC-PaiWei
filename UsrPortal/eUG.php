@@ -65,11 +65,11 @@ table.pgMenu th:last-child {
 		<div style="width: 95%; margin:auto; font-size: 1.3em;">
 			<ol>
 				<li>To obtain a login ID，please go to the <a href="../index.php">Pure Land Center User Portal</a>
-					or on this page, click "<a href="../Login/Login.php?l=e">User Login</a>" as shown below。<br/><br/>
+					or, click "<a href="../Login/Login.php?l=e">User Login</a>" on this page as shown below。<br/><br/>
 					<!-- img src="https://www.amitabhalibrary.org/admin/UsrPortal/img/Click2Login.png" alt="" -->
 					<img src="./img/Click2Login.png" width="85%;"alt="" style="border: 1px solid black;">
 				</li><br/>
-				<li>After you click the "User Login", you will see the Login Page
+				<li>After you click "User Login", you will see the Login Page
 					with a login dialog box as shown below: <br/><br/>
 					<!-- img src="https://www.amitabhalibrary.org/admin/UsrPortal/img/LoginInput.png" alt="" -->
 					<img src="./img/eLoginInput.png" width="85%" alt="" style="border: 1px solid black;">
@@ -79,17 +79,17 @@ table.pgMenu th:last-child {
 					fields, and click "Login".
 				</li><br/>
 				<li>
-					If you are a new user, please check mark the "I am a new user" checkbox,
+					If you are a new user, please check the "I am a new user" checkbox,
 					and click "Login".
 				</li><br/>
 				<li>
 					If you forgot your credentials, please click "Forgot Password", we will help
-					you recover.
+					you recover it.
 				</li><br/>
 				<li>
-					After you logged in, you will on the main page to select among the available
+					After you are logged in, you will be directed to the main page to select among the available
 					user functions.<br/>(Note that at present, the only supported user function is
-					the request for merit dedication name plaques durint retreats.
+					the request for merit dedication name plaques during retreats.
 					Other functions will be available in the future.)<br/><br/>
 					<img src="./img/euPortalMain.png" width="85%" alt="" style="border: 1px solid black;">
 				</li><br/>
