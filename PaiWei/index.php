@@ -185,9 +185,16 @@ table.dataRows tr:nth-child(even) input[type=text] {
 			<span style="letter-spacing: 1px;">淨土念佛堂法會牌位申請主頁</span><br/>
 			<span class="engClass">Retreat Merit Dedication Application Page</span>
 		</div>
-		<table class="pgMenu centerMeV">	
+		<table class="pgMenu centerMeV" style="<?php if ( $sessType != SESS_TYP_USR ) { echo 'width: 50vw;'; } ?>">
 			<thead>
 				<tr>
+<?php
+	if ( $sessType != SESS_TYP_USR ) {
+?>		
+					<th rowSpan="2" data-urlIdx="urlAdmHome" style="width: 4.2vw;">回到<br/>管理主頁</th>
+<?php
+	}
+?>
 					<th class="pwTbl" data-tbl="W001A_4"><?php echo xLate( 'pwW' ); ?></th>
 					<th class="pwTbl" data-tbl="L001A"><?php echo xLate( 'pwL' ); ?></th>
 					<th class="pwTbl" data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th>

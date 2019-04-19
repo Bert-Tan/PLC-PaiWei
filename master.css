@@ -84,7 +84,7 @@ table.pgMenu th:first-child {
 }
 
 table.pgMenu th:last-child { /* for logout box */
-	width: 3.5vw;
+	width: 4.2vw;
 	border-right: none;
 	border-left: 3px solid white;
 }

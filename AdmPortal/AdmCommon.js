@@ -1,4 +1,5 @@
 var _url2Go = {
+    'urlAdmHome' : "../AdmPortal/index.php",
     'urlUmgr' : "../AdmPortal/AdmUMgr.php", /* test only; real path: "../AdmPortal/AdmUMgr.php", */
     'urlRtData' : "../PaiWei/rtMgr.php", /* test only; real path: "../PaiWei/rtMgr.php", */
     'urlDnldJiWen' : "../PaiWei/dnldJiWenForm.php",

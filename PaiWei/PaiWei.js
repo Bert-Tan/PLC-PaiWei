@@ -29,6 +29,7 @@ var _rtList = null;
 var _icoName = null;
 var _rqTbls = [ 'D001A', 'L001A', 'Y001A', 'W001A_4', 'DaPaiWei' ];
 var _url2Go = {
+	"urlAdmHome" : "../AdmPortal/index.php",
 	"urlDnld" : "./dnldPaiWeiForm.php",
 	"usrLogout" : "../Login/Logout.php"
 };
@@ -885,10 +886,6 @@ function ready_init() {
 	if ( _icoName ) {
 		$(".pwTbl").on('click', pwTblHdlr );
 		$("#upld").on( 'click', upldHdlr );
-		// download will be a re-direct href
-		$(".pgMenu th[data-urlIdx=urlDnld").on('click', function() {
-			location.replace( _url2Go[$(this).attr("data-urlIdx")] );
-		});
 		return;
 	}
 	alert( "由於沒有點選蓮友為之處理牌位，\n牌位管理功能僅限於下載牌位列印！" );
@@ -915,7 +912,7 @@ $(document).ready(function() {
 	 */
 	$(".future").on( 'click', futureAlert );
 	$(".soon").on( 'click', soonAlert );
-	$(".pgMenu th[data-urlIdx=usrLogout]").on('click', function() {
+	$(".pgMenu th[data-urlIdx]").on('click', function() {
 		location.replace( _url2Go[$(this).attr("data-urlIdx")] );
 	});
 }) // document ready
