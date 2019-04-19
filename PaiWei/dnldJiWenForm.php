@@ -69,7 +69,7 @@ input[type=submit] {
 				<tbody>
 					<tr>
 						<td style="vertical-align: middle;">
-							<select name="rtType" style="width: 230px; font-size: 1.2em;" required>
+							<select name="rtEvent" style="width: 230px; font-size: 1.2em;" required>
 								<option value="">-- 請選擇法會祭、疏文類別 --</option>
 								<option value="Qingming">清明祭祖法會</option>
 								<option value="Zhongyuan">中元祭祖法會</option>
