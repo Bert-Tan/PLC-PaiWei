@@ -10,6 +10,30 @@
     $retreatData = array();
     $_errCount = 0; $_errRec = array();
 
+	function evtSelection( $dfltSel ) {
+		$tpl = new HTML_Template_IT("./Templates");
+		$tpl->loadTemplatefile("rtEvtOpt.tpl", true, true);
+		$tpl->setCurrentBlock("rtEvtOpt");
+		switch ( $dfltSel ) {
+		case "Qingming":
+			$tpl->setVariable("dfltQM", "selected");
+			break;
+		case "Zhongyuan":
+			$tpl->setVariable("dfltZY", "selected");
+			break;
+		case "ThriceYearning":
+			$tpl->setVariable("dfltTY", "selected");
+			break;
+		default: /* unKnown */
+			$tpl->setVariable("dflt", "none");
+			break;
+		} // switch()
+		$tpl->parse("rtEvtOpt");
+	//	echo "Line: " . __LINE__ . " " . $tpl->get();exit;
+		$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
+		return preg_replace( "/(^\t*)/", "  ", $tmp );
+	} // function evtSelection()
+
     function readRetreatData() {
         global $_db, $_errCount, $_errRec;
 
@@ -18,7 +42,9 @@
 		if ( $rslt->num_rows == 0 ) {
 			$_errRec[ 'rtrtDate' ] = "請輸入法會開始日期";
 			$_errRec[ 'pwExpires' ] = "請輸入牌位申請截止日期";
-			$_errCount = 2;
+			$_errRec[ 'rtEvent' ] = "unKnown";
+			$_errRec[ 'rtReason' ] = "請輸入法會因緣";
+			$_errCount = 4;
 			return $_errRec;
 		}
         if ( $rslt->num_rows > 1 ) { // should be only one tuple
@@ -29,12 +55,16 @@
         return ( $rslt->fetch_all(MYSQLI_ASSOC)[0] );  
     } // function getRetreatData()
 
-    function updRetreatData() {
+    function updRetreatData() { // javascript function formSanity() has passed sanity check
 		global $_db, $_POST, $_errCount, $_errRec;
+		$rtReason = ( $_POST[ 'rtEvent' ] == "ThriceYearning" ) ? $_POST[ 'rtReason' ] : "";
+
 		if ( isset( $_POST[ 'rtNew' ] ) ) {
-			$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`) VALUE ( \"{$_POST['rtrtDate']}\", \"{$_POST['pwExpires']}\" );";
+			$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`, `rtEvent`, `rtReason` ) VALUE "
+				 . "( \"{$_POST['rtrtDate']}\", \"{$_POST['pwExpires']}\", \"{$_POST['rtEvent']}\", \"{$rtReason}\");";
 		} else {
-    		$sql = "UPDATE pwParam SET `pwExpires` = \"{$_POST[ 'pwExpires' ]}\", `rtrtDate` = \"{$_POST[ 'rtrtDate' ]}\" "
+			$sql = "UPDATE pwParam SET `pwExpires` = \"{$_POST[ 'pwExpires' ]}\", `rtrtDate` = \"{$_POST[ 'rtrtDate' ]}\", "
+				 . "`rtEvent` = \"{$_POST[ 'rtEvent' ]}\", `rtReason` = \"{$rtReason}\" "
 				 . "WHERE `ID` = \"{$_POST[ 'ID' ]}\";";
 		}
         $rslt = $_db->query( $sql );
@@ -53,7 +83,7 @@
 	}
 
     if ( isset( $_POST[ 'rtUpdData' ] ) ) {
-        updRetreatData();
+		updRetreatData();
     }   
 	$retreatData = readRetreatData();
 ?>
@@ -67,18 +97,65 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="../futureAlert.js"></script>
 <script type="text/javascript" src="../AdmPortal/AdmCommon.js"></script>
+<script type="text/javascript" src="./chkRtDate.js"></script>
 <script type="text/javascript">
+	function selChange() {
+		var chgdTo = $(this).find(":selected").val();
+		if ( chgdTo != "ThriceYearning" ) {
+			$(".rtRsn").find("input").prop("disabled", true ).val("不適用");
+		} else {
+			$(".rtRsn").find("input").prop("disabled", false ).val("請輸入法會因緣");
+		}
+		return false;
+	} // function selChange()
+	function formSanity() {
+		var rtDate = $(this).find("input[name=rtrtDate]").val(); var rtD = new Date(rtDate);
+		var pwDate = $(this).find("input[name=pwExpires]").val(); var pwD = new Date(pwDate);
+		var rtEvent = $(this).find(":selected").val();
+		var rtRsn = $(this).find("input[name=rtReason]").val();
+		if ( chkDate( rtDate, false ) == false || chkDate( pwDate, true ) == false ) {
+			alert( "法會開始及牌位截止日期必須是在一年之內的有效日期！" ); return false;
+		}
+		if ( rtD <= pwD ) {
+			alert("法會牌位申請截止日期必須早於法會開始日期！"); return false;
+		}
+		if ( rtEvent == "ThriceYearning" && ( rtRsn == '不適用' || rtRsn == '請輸入法會因緣') ) {
+			alert( "請輸入三時繫念法會因緣!" ); return false;
+		}
+		return true;
+	} // function formSanity()
 	$(document).ready(function() {
 		pgMenu_rdy();
+		$("select").on( "change", selChange );
+		/* initial Selection ? */
+		var iniSel = $("select :selected");
+		if ( iniSel.length > 0 ) { // has a default rtEvent selection
+			if ( iniSel.val() != "ThriceYearning" ) {
+				$(".rtRsn").find("input").prop("disabled", true ).val("不適用");
+			} else {
+				$(".rtRsn").find("input").prop("disabled", false ); // Allow edit
+				/* do not want to set value because it could be read from the DB */
+			}
+		} // has a default rtEvent selection
+		$("form").on( 'submit', formSanity );
 	})
 </script>
 <style>
-input {
+table.dialog {
+	width: 46%;
+	left: 27%;
+}
+
+input, select {
     font-size: 1.1em;
 }
 
 input[type=text] {
-	width: 70%;
+	width: 80%;
+}
+
+select {
+	width: 90%;
 }
 input[type=submit] {
     background-color: aqua;
@@ -103,11 +180,12 @@ input[type=submit] {
 			$mbxBC = "#00b300";
 			$mbxTxtA = "center";
 		} else { // formulate msg
+			print_r ( $_errRec );
 			$msgTxt = "更新法會資料發生錯誤！";
 			$mbxBc = "red";
 			$mbxTxtA = "left";
 			$lineNbrg = ( $_errCount > 1 );
-			for ( $i = 0; $i < $_errCount; $i++ ) {
+			for ( $i = 0; $i < $_errCount; $i++ ) { echo __LINE__ . ": " . $i . "<br/><br/><br/>";
 				$lineBreak = ( strlen( $msgTxt ) > 0 ) ? "<br/>" : '';
 				$lineNbr = "[ " . ($i + 1) . " ] ";
 				$msgTxt .= $lineBreak . ( $lineNbrg ? $lineNbr : '' ) . $_errRec[ $i ];
@@ -127,8 +205,8 @@ input[type=submit] {
 
         <form action="" method="post" id="retreatUpd">
             <input type="hidden" name="ID" value="<?php echo $retreatData[ 'ID' ]; ?>">
-            <table class="dialog" style="position: absolute; top: 45%; left: 30%;">
-                <thead><tr><th>法會開始日期</th><th>牌位申請截止日期</th></tr></thead>
+            <table class="dialog" style="position: absolute; top: 45%;">
+				<thead><tr><th>法會開始日期</th><th>牌位申請截止日期</th><th>法會類別</th></tr></thead>
                 <tbody>
                     <tr>
                         <td>
@@ -141,9 +219,21 @@ input[type=submit] {
 ?>
 							<input type="text" name="rtrtDate" value="<?php echo $retreatData[ 'rtrtDate' ];?>">
 						</td>
-                        <td><input type="text" name="pwExpires" value="<?php echo $retreatData[ 'pwExpires' ];?>"></td>
+                        <td>
+							<input type="text" name="pwExpires" value="<?php echo $retreatData[ 'pwExpires' ];?>">
+						</td>
+						<td>
+							<?php echo evtSelection( $retreatData[ 'rtEvent' ] ); ?>
+						</td>
+					</tr>
+					<tr>
+						<td class="rtRsn" colspan="3" style="text-align: left; padding: 4px 10px;">
+							<span style="font-weight: bold;">三時繫念法會因緣：</span><br/>
+							<input type="text" name="rtReason" style="display: inline-block; float:right; width: 95%;"
+								value="<?php echo $retreatData[ 'rtReason' ]; ?>" disabled>
+						</td>
                     </tr>
-                    <tr><td colspan="2"><input type="submit" name="rtUpdData" value="更新法會資料"></td></tr>
+                    <tr><td colspan="3"><input type="submit" name="rtUpdData" value="更新法會資料"></td></tr>
                 </tbody>
             </table>
         </form>
