@@ -201,9 +201,11 @@ function constructTblData ( $rows, $dbTblName ) { // $rows =  $mysqlresult->fetc
 		if ( $_sessLang == SESS_LANG_CHN ) {
 			$tpl->setVariable( "editBtnTxt", "更改");
 			$tpl->setVariable( "delBtnTxt", "刪除");
+			$tpl->setVariable( "dupBtnTxt", "複製");
 		} else {
 			$tpl->setVariable("editBtnTxt", "Edit");
-			$tpl->setVariable("delBtnTxt", "Delete");
+			$tpl->setVariable("delBtnTxt", "Del");
+			$tpl->setVariable( "dupBtnTxt", "Dup");
 		}  	
 	  $tpl->parse("dataEditCol");
 	  /* User assignment selection code goes here */

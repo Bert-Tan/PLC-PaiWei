@@ -18,6 +18,7 @@ var _rTitleInput = null;
 var _pwPlqDate = null;
 var _rtrtDate = null;
 
+var _dupBtns = null;
 var _delBtns = null;
 var _editBtns = null;
 var _addRowBtn = null;
@@ -185,6 +186,7 @@ function chgUpd2Edit ( updBtn ) {
 	td.html( htmlString );
 	td.find(".editBtn").on( 'click', editBtnHdlr );
 	td.find(".delBtn").on( 'click', delBtnHdlr );
+	td.find(".dupBtn").on( 'click', dupBtnHdlr );
 } // chgUpd2Edit()
 
 function isJSON( str ) {
@@ -569,10 +571,13 @@ function delAllBtnHdlr() {
 function insBtnHdlr() {
 	var insBtn = $(this);
 	var editBtnText = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
-	var delBtnText = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Delete';
+	var delBtnText = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Del';
+	var dupBtnText = ( _sessLang == SESS_LANG_CHN ) ? '複製' : 'Dup';
 	var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入完整的牌位資料" : "Please enter complete plaque data";
-	var myEditBtns = '<input class="editBtn" type="button" value="' + editBtnText + '">&nbsp;&nbsp;' +
-									'<input class="delBtn" type="button" value="' + delBtnText + '">';
+	var myEditBtns = '<input class="editBtn" type="button" value="' + editBtnText + '">&nbsp;&nbsp;&nbsp;' +
+					 '<input class="delBtn" type="button" value="' + delBtnText + '">&nbsp;&nbsp;&nbsp;' +
+					 '<input class="dupBtn" type="button" value="' + dupBtnText + '">'
+					;
 	var thisRow = $(this).closest("tr");
 	var cellsChanged = thisRow.find("input[data-changed=true]");
 	var recV = null;
@@ -598,24 +603,24 @@ function insBtnHdlr() {
 		tblFlds[ thisRow.find("select.rTitle").attr('data-fldn') ] = rtV;
 		break;
 	case 'D001A':
-		recV = " 敬薦"; targetV = new RegExp( "\s*敬薦", "gu" );
+		recV = " 敬薦";
 		rNameO = thisRow.find("input[data-fldn=D_Requestor]");
 		rName = rNameO.val().trim();
-		rName = rName.replace( targetV, '' ); /* delete */
+		rName = rName.replace( /\s*敬薦/gu, '' ); /* delete */
 		rNameO.val( rName + recV );
 		break;
 	case 'Y001A':
-		recV = " 敬薦"; targetV = new RegExp( "\s*敬薦", "gu" );
+		recV = " 敬薦";
 		rNameO = thisRow.find("input[data-fldn=Y_Requestor]");
 		rName = rNameO.val().trim();
-		rName = rName.replace( targetV, '' ); /* delete */
+		rName = rName.replace( /\s*敬薦/gu, '' ); /* delete */
 		rNameO.val( rName + recV );
 		break;
 	case 'L001A':
 		recV = " 叩薦"; targetV = new RegExp( "\s*叩薦", "gu");
 		rNameO = thisRow.find("input[data-fldn=L_Requestor]");
 		rName = rNameO.val().trim();
-		rName = rName.replace( targetV, '' ).trim(); /* delete it */
+		rName = rName.replace( /\s*叩薦/gu, '' ).trim(); /* delete it */
 		rNameO.val( rName + recV );
 		break;
 	} // switch()
@@ -664,25 +669,35 @@ function insBtnHdlr() {
 						thisRow.find("input[type=text]").removeAttr('data-pmptv');
 						lastTd = thisRow.find("td:last"); insBtn.unbind(); insBtn.remove();
 						lastTd.html( myEditBtns ); // change to edit & delete buttons
-						lastTd.find(".editBtn").on( 'click', editBtnHdlr ); // bind to the edit click handler
-						lastTd.find(".delBtn").on( 'click', delBtnHdlr ); // bind to the edit click handler
+						lastTd.find(".editBtn").on( 'click', editBtnHdlr ); // bind to the Edit click handler
+						lastTd.find(".delBtn").on( 'click', delBtnHdlr ); // bind to the Del click handler
+						lastTd.find(".dupBtn").on( 'click', dupBtnHdlr ); // bind to the Dup click handler
 						alert( alertMsg );
 						return;							
 					case 'errCount':
 					case 'dupCount':
 						errX = ( X == 'errCount' ) ? 'errRec' : 'dupRec';
 						alert ( rspV[ errX ] );
-						// Only one of the following will be executed because _tblName is determined
-						rName = thisRow.find("input[data-fldn=W_Requestor]").val().replace( recV, '');
-						thisRow.find("input[data-fldn=W_Requestor]").val( rName );
-						rName = thisRow.find("input[data-fldn=Y_Requestor]").val().replace( recV, '');
-						thisRow.find("input[data-fldn=Y_Requestor]").val( rName );
-						rName = thisRow.find("input[data-fldn=L_Requestor]").val().replace( recV, '');
-						thisRow.find("input[data-fldn=L_Requestor]").val( rName );
-						rName = thisRow.find("input[data-fldn=D_Requestor]").val().replace( recV, '');
-						thisRow.find("input[data-fldn=D_Requestor]").val( rName );
+						switch( _tblName ) {
+						case 'W001A_4':
+							rName = thisRow.find("input[data-fldn=W_Requestor]").val().replace( recV, '');
+							thisRow.find("input[data-fldn=W_Requestor]").val( rName );
+							break;
+						case 'Y001A':
+							rName = thisRow.find("input[data-fldn=Y_Requestor]").val().replace( recV, '');
+							thisRow.find("input[data-fldn=Y_Requestor]").val( rName );
+							break;
+						case 'L001A':
+							rName = thisRow.find("input[data-fldn=L_Requestor]").val().replace( recV, '');
+							thisRow.find("input[data-fldn=L_Requestor]").val( rName );
+							break;
+						case 'D001A':
+							rName = thisRow.find("input[data-fldn=D_Requestor]").val().replace( recV, '');
+							thisRow.find("input[data-fldn=D_Requestor]").val( rName );
+							break;
+						} // switch on _tblName
 						break;
-				} // switch
+				} // switch on X
 			} // for loop
 		}, // End of Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
@@ -691,6 +706,29 @@ function insBtnHdlr() {
 	}); // AJAX CALL
 } // insBtnHdlr()
  
+/**********************************************************
+ * Event Handler - When a Duplicate Button is clicked     *
+ **********************************************************/
+function dupBtnHdlr() {
+	var thisRow = $(this).closest("tr");
+	var newRow = thisRow.clone();
+	var notAllowedTxt = ( _sessLang == SESS_LANG_CHN ) ? "不能複製尚未保存更動的牌位項目！"
+													   : "Cannot duplicate an entry with unsaved changes!";
+	var insBtnText = ( _sessLang == SESS_LANG_CHN ) ? "加入" : "Insert";
+	var insBtn = '<input class="insBtn" type="button" value="' + insBtnText + '">';
+	var dirtyCells = thisRow.find("input[data-changed=true]").length;
+
+	if ( dirtyCells > 0 ) { alert( notAllowedTxt ); return; }
+
+	newRow.find("*").unbind();
+	newRow.prop( 'id', '' ); // no tuple key value
+	newRow.find("input[type=text]").prop( 'disabled', false ).on( 'blur', dataChgHdlr );
+	newRow.find("input[type=text]").attr({ 'data-oldv' : '', 'data-pmptv' : '', 'data-changed' : 'true' });
+	newRow.find("td:last").html( insBtn );
+	newRow.find("td:last .insBtn").on( 'click', insBtnHdlr );
+	thisRow.after( newRow );
+} // dupBtnHdlr()
+
 /**********************************************************
  * Event Handler - When a Delete Button is clicked        *
  **********************************************************/
@@ -910,18 +948,21 @@ function onMouseoverHdlr() {	// on 'mouseover' handler
 function ready_edit() {
 	if ( _delBtns != null ) _delBtns.unbind(); // unbind the old ones
 	if ( _editBtns != null ) _editBtns.unbind();
+	if ( _dupBtns != null ) _dupBtns.unbind();
 	if ( _addRowBtn != null ) _addRowBtn.unbind();
 	if ( _srchBtn != null ) _srchBtn.unbind();
 	if ( _delAllBtn != null ) _delAllBtn.unbind();
 
 	_delBtns = $(".delBtn");
 	_editBtns = $(".editBtn");
+	_dupBtns = $(".dupBtn");
 	_addRowBtn = $("#addRowBtn");
 	_srchBtn = $("#srchBtn");
 	_delAllBtn = $("#delAllBtn");
 
 	_delBtns.on( 'click', delBtnHdlr );
 	_editBtns.on( 'click', editBtnHdlr );
+	_dupBtns.on( 'click', dupBtnHdlr );
 	_addRowBtn.on( 'click', addRowBtnHdlr );
 	_srchBtn.on( 'click', srchBtnHdlr );
 	_delAllBtn.on( 'click', delAllBtnHdlr )
