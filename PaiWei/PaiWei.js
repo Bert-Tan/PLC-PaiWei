@@ -22,6 +22,7 @@ var _delBtns = null;
 var _editBtns = null;
 var _addRowBtn = null;
 var _srchBtn = null;
+var _delAllBtn = null;
 var _alertUnsaved = null;
 var _blankData = null; // blank data filler for W_Title & R_Title fields; they can be blank
 var _wtList = null;	// W_Title & R_Title selection list
@@ -516,6 +517,53 @@ function srchBtnHdlr() {
 } // srchBtnHdlr()
 
 /**********************************************************
+ * Event Handler - When the Del ALL Button is clicked	  *
+ **********************************************************/
+function delAllBtnHdlr() {
+	var delAllAlert = ( _sessLang == SESS_LANG_CHN ) ? '刪除的資料將無法恢復，請確認！'
+												  : 'Deleted data cannot be undone, please confirm！';
+																								
+	if ( !confirm( delAllAlert ) ) return;
+
+	_ajaxData = {}; _dbInfo = {};
+	_dbInfo[ 'tblName' ] = _tblName;
+	_dbInfo[ 'pwRqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
+	_ajaxData [ 'dbReq' ] = 'dbDELX';
+	_ajaxData [ 'dbInfo' ] = JSON.stringify ( _dbInfo );
+	$.ajax({
+		url: "./ajax-pwDB.php",
+		method: 'POST',
+		data:	_ajaxData,
+		success: function( rsp ) { // alert ( rsp ); // return; // Success Handler
+			rspV = JSON.parse ( rsp );
+			for ( var X in rspV ) {
+				switch ( X ) {
+				case 'URL':
+					location.replace( rspV[ X ] );
+					return;
+				case 'delSUCCESS':
+					alert( rspV [ X ] );
+					$("table.dataRows").find("*").unbind();
+					$("table.dataRows").find("tr").remove();
+					return;
+				case 'errCount':
+					x = rspV [ X ];
+					eMSG = '';
+					for ( i=0; i < x; i++ ) {
+						eMSG += rspV [ 'errRec' ][i] + "\n";
+					}
+					alert( eMSG );
+					return;
+				} // switch()
+			} // for loop
+		}, // End of Success Handler
+		error: function (jqXHR, textStatus, errorThrown) {
+			alert( "delAllBtnHdlr()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+		} // End of ERROR Handler
+	}); // AJAX Call
+} // delAllBtnHdlr()
+
+/**********************************************************
  * Event Handler - When an Insert Button is clicked       *
  **********************************************************/
 function insBtnHdlr() {
@@ -864,16 +912,19 @@ function ready_edit() {
 	if ( _editBtns != null ) _editBtns.unbind();
 	if ( _addRowBtn != null ) _addRowBtn.unbind();
 	if ( _srchBtn != null ) _srchBtn.unbind();
-		
+	if ( _delAllBtn != null ) _delAllBtn.unbind();
+
 	_delBtns = $(".delBtn");
 	_editBtns = $(".editBtn");
 	_addRowBtn = $("#addRowBtn");
 	_srchBtn = $("#srchBtn");
+	_delAllBtn = $("#delAllBtn");
 
 	_delBtns.on( 'click', delBtnHdlr );
 	_editBtns.on( 'click', editBtnHdlr );
 	_addRowBtn.on( 'click', addRowBtnHdlr );
 	_srchBtn.on( 'click', srchBtnHdlr );
+	_delAllBtn.on( 'click', delAllBtnHdlr )
 } // ready_edit()
 
 function ready_init() {

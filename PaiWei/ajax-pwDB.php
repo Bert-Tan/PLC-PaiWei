@@ -244,9 +244,11 @@ function constructTblHeader( $dbTblName ) {
 	if ( $_sessLang == SESS_LANG_CHN) {
 		$tpl->setVariable("addBtnTxt", '加行輸入');
 		$tpl->setVariable("srchBtnTxt", '搜尋');
+		$tpl->setVariable("delAllBtnTxt", '全部刪除');
 	} else {
 		$tpl->setVariable("addBtnTxt", 'AddInputRow');
 		$tpl->setVariable("srchBtnTxt", 'Search');
+		$tpl->setVariable("delAllBtnTxt", 'DelAll');
 	}	 	
 	$tpl->parse("dataEditCol");
   $tpl->parse("hdr_tbl");
@@ -360,6 +362,35 @@ function delTblData( $dbInfo ) {
 } // delTblData()
 
 /**********************************************************
+ *				For dbDELX																			*
+ **********************************************************/
+function delTblUsrData( $dbInfo ) {
+	/*
+	 * The receiving AJAX switch on 'URL', 'delSUCCESS', 'errCount'
+	 */
+	global $_db, $_errRec, $_errCount, $_delCount;
+	global $useChn;
+	$rpt = array();
+
+	$tblName = $dbInfo['tblName'];
+	$_db->autocommit(false);
+	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
+	$sql = "LOCK TABLES `{$tblName}` WRITE, `pw2Usr` WRITE;";
+	$_db->query( $sql );	
+	if ( ! deletePaiWeiUsrTuple( $dbInfo['tblName'], $dbInfo['pwRqstr' ] ) ) {
+		$_db->rollback();
+		$rpt [ 'errCount' ] = $_errCount;
+		$rpt [ 'errRec' ] = $_errRec;
+		return $rpt;
+	}
+	$_db->commit();
+	$_db->query( "UNLOCK TABLES;" );
+	$_db->autocommit(true);
+	$rpt [ 'delSUCCESS' ] = ( $useChn ) ? "{$_delCount} 項牌位資料刪除完畢！" : "{$_delCount} records deleted";	
+	return $rpt;
+} // delTblUsrData()
+
+/**********************************************************
  *				For dbINS																				*
  **********************************************************/
 function insTblData( $dbInfo ) {
@@ -460,6 +491,9 @@ switch ( $_dbReq ) {
 		break;
 	case 'dbDEL':
 		echo json_encode ( delTblData( $_dbInfo ), JSON_UNESCAPED_UNICODE );
+		break;
+	case 'dbDELX': /* delete table data that belongs to a specific user */
+		echo json_encode ( delTblUsrData( $_dbInfo ), JSON_UNESCAPED_UNICODE );
 		break;
 	case 'dbUPD':
 		echo json_encode ( updTblData ( $_dbInfo ), JSON_UNESCAPED_UNICODE );

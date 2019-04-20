@@ -205,7 +205,7 @@ table.dataRows tr:nth-child(even) input[type=text] {
 <?php
 	} else {
 ?>
-					<th id="dnld" data-urlIdx="urlDnld">下載牌位檔案</th>
+					<th id="dnld" data-urlIdx="urlDnld">下載牌位列印</th>
 <?php
 	}
 ?>

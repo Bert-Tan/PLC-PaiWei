@@ -176,6 +176,36 @@ function deletePaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 	return true;
 } // deletePaiWeiTuple ()
 
+function deletePaiWeiUsrTuple( $pwTable, $usr ) { // echo "Table= $pwTable; User= $usr <br/>"; exit;
+	global $_db, $_errCount, $_errRec, $_delCount;
+	global $useChn;
+	$sql = "DELETE FROM `{$pwTable}` WHERE `ID` IN "
+		 . "(SELECT `pwID` FROM `pw2Usr` WHERE `tblName` = \"{$pwTable}\" AND `pwUsrName` = \"{$usr}\"); ";
+	$_db->query( $sql );
+	if ( $_db->errno ) {
+		if ( DEBUG ) {
+			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		} else {
+			$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+		}
+		$_errCount++;
+		return false;
+	} // error condition
+	$sql = "DELETE FROM `pw2Usr` WHERE `tblName` = \"{$pwTable}\" AND `pwUsrName` = \"{$usr}\"; ";
+	$_db->query( $sql );
+	if ( $_db->errno ) {
+		if ( DEBUG ) {
+			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		} else {
+			$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+		}
+		$_errCount++;
+		return false;
+	} // error condition
+	$_delCount = $_db->affected_rows;
+	return true;
+} // deletePaiWeiUsrTuple()
+
 function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 	global $_db, $_insCount, $_dupCount, $_errCount;
 	global $_errRec, $_dupRec, $useChn;
