@@ -599,8 +599,8 @@ function insBtnHdlr() {
 			break;
 		}
 		recV = thisRow.find("select.rec option:selected").val();
-		rName = thisRow.find("input[data-fldn=W_Requestor]").val();
-		thisRow.find("input[data-fldn=W_Requestor]").val( rName + ' ' + recV ); // combine 
+		rNameO = thisRow.find("input[data-fldn=W_Requestor]").val();
+		thisRow.find("input[data-fldn=W_Requestor]").val( rNameO + ' ' + recV ); // combine 
 		// now taking care of the 稱謂 fields; they were input as selections
 		wtV = thisRow.find("select.wTitle option:selected").val(); // Title value selected from dropdown
 		rtV = thisRow.find("select.rTitle option:selected").val();
@@ -678,6 +678,9 @@ function insBtnHdlr() {
 					case 'errCount':
 					case 'dupCount':
 						errX = ( X == 'errCount' ) ? 'errRec' : 'dupRec';
+						if ( !noDropdown && (_tblName == 'W001A_4' || _tblName == 'DaPaiWei') ) {
+							thisRow.find("input[data-fldn=W_Requestor]").val( rNameO );
+						}
 						alert ( rspV[ errX ] );
 						break;
 				} // switch on X
