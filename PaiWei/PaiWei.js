@@ -580,6 +580,7 @@ function insBtnHdlr() {
 					;
 	var thisRow = $(this).closest("tr");
 	var cellsChanged = thisRow.find("input[data-changed=true]");
+	var noDropdown = ( thisRow.find("select").length == 0 );
 	var recV = null;
 	var rName = null;
 	var tblFlds = {};
@@ -593,6 +594,10 @@ function insBtnHdlr() {
 	switch ( _tblName ) { // taking care of 叩薦 or 敬薦; combine it with the Requestor's Name
 	case 'W001A_4':
 	case 'DaPaiWei':
+		/* The row was duplicated for insert; there will be no dropdown selection for rt nor wt */
+		if ( noDropdown ) {
+			break;
+		}
 		recV = thisRow.find("select.rec option:selected").val();
 		rName = thisRow.find("input[data-fldn=W_Requestor]").val();
 		thisRow.find("input[data-fldn=W_Requestor]").val( rName + ' ' + recV ); // combine 
@@ -625,10 +630,6 @@ function insBtnHdlr() {
 		break;
 	} // switch()
 
-	if ( recV != null ) {
-		recV = new RegExp( recV, "gu" ); // used to revert in case of error
-	}
-
 	_ajaxData = {}; _dbInfo = {};	
 	cellsChanged.each(function(i) { // (name, value) pair
 		tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
@@ -657,7 +658,7 @@ function insBtnHdlr() {
 							$(this).attr( "data-changed", "false" );
 						}); // each
 						// now the 稱謂 fields
-						if ( _tblName == 'W001A_4' || _tblName == 'DaPaiWei') {
+						if ( !noDropdown && (_tblName == 'W001A_4' || _tblName == 'DaPaiWei') ) {
 							thisRow.find("select.rec").remove(); // 叩薦，敬薦 dropdown; remove it
 							_wTitleInput.attr( "data-oldv", wtV ); _wTitleInput.val( wtV );
 							_rTitleInput.attr( "data-oldv", rtV ); _rTitleInput.val( rtV );
@@ -678,24 +679,6 @@ function insBtnHdlr() {
 					case 'dupCount':
 						errX = ( X == 'errCount' ) ? 'errRec' : 'dupRec';
 						alert ( rspV[ errX ] );
-						switch( _tblName ) {
-						case 'W001A_4':
-							rName = thisRow.find("input[data-fldn=W_Requestor]").val().replace( recV, '');
-							thisRow.find("input[data-fldn=W_Requestor]").val( rName );
-							break;
-						case 'Y001A':
-							rName = thisRow.find("input[data-fldn=Y_Requestor]").val().replace( recV, '');
-							thisRow.find("input[data-fldn=Y_Requestor]").val( rName );
-							break;
-						case 'L001A':
-							rName = thisRow.find("input[data-fldn=L_Requestor]").val().replace( recV, '');
-							thisRow.find("input[data-fldn=L_Requestor]").val( rName );
-							break;
-						case 'D001A':
-							rName = thisRow.find("input[data-fldn=D_Requestor]").val().replace( recV, '');
-							thisRow.find("input[data-fldn=D_Requestor]").val( rName );
-							break;
-						} // switch on _tblName
 						break;
 				} // switch on X
 			} // for loop
