@@ -312,7 +312,6 @@
 		if($paiweiFlds != '') {
 			$_selFlds = $paiweiFlds;
 			$_sql = getSQL($_selFlds);
-			//print_r($_sql);
 			$_rslt = $_db->query( $_sql );
 			$_Rows = $_rslt->fetch_all ( MYSQLI_NUM );	
 
@@ -327,7 +326,6 @@
 		if($reqFlds != '') {
 			$_selFlds = $reqFlds;
 			$_sql = getSQL($_selFlds);
-			//print_r($_sql);
 			$_rslt = $_db->query( $_sql );
 			$_Rows = $_rslt->fetch_all ( MYSQLI_NUM );
 
@@ -352,7 +350,6 @@
 		if($addressFlds != '') {
 			$_selFlds = $addressFlds;
 			$_sql = getSQL($_selFlds);
-			//print_r($_sql);
 			$_rslt = $_db->query( $_sql );
 			$_Rows = $_rslt->fetch_all ( MYSQLI_NUM );
 			
@@ -362,19 +359,15 @@
 			}
 		}
 		
-		$_db->close();
-		
-		//print_r($paiweiArray);
-		//print_r($reqArray);
-		//print_r($reqSuffixArray);
-		//print_r($addressArray);		
+		$_db->close();		
 	}
 	
 	//get query SQL statement
 	function getSQL($_selFlds) {
 		global $paiweiTable;
 		if ( $_POST[ 'dnldUsrName' ] == 'ALL' ) {
-			$_sql = "SELECT $_selFlds FROM {$paiweiTable} ORDER BY ID;";
+			//group PaiWei data by pwUsrName
+			$_sql = "SELECT $_selFlds FROM {$paiweiTable} LEFT JOIN pw2Usr ON (ID = pwID AND TblName = \"{$paiweiTable}\") ORDER BY pwUsrName, ID;";
 		} else {
 			$_dnldUsrName = $_POST[ 'dnldUsrName' ];
 			$_sql	= "SELECT {$_selFlds} FROM {$paiweiTable} WHERE ID IN "
@@ -444,7 +437,6 @@
 		//English (Latin) characters, numbers (digits), whitespaces, and English symbols ('&' and ',' and '.' and '#' and '-')
 		$regExp = '/(?<=[^\p{Latin}0-9\&\,\.\#\-\s])(?=[\p{Latin}0-9\&\,\.\#\-\s])|(?<=[\p{Latin}0-9\&\,\.\#\-\s])(?=[^\p{Latin}0-9\&\,\.\#\-\s])/u';
 		$subStrings = preg_split($regExp, $str, -1);
-		//print_r($subStrings);
 		return $subStrings;
 	}
 	
@@ -461,7 +453,6 @@
 				$width = $pdf->GetStringWidth($str, $EnglishFont, $fontStyle, $fontSize, false);
 			array_push($widths, $width);
 		}
-		//print_r($widths);
 		return $widths;
 	}
 	
@@ -475,7 +466,6 @@
 			else
 				array_push($isChinese, false);
 		}
-		//print_r($isChinese);
 		return $isChinese;
 	}
 	
@@ -483,7 +473,6 @@
 	function calYposition($widths, $yTop, $yBottom) {
 		$totalWidth = array_sum($widths);
 		$y = $yTop + ($yBottom-$yTop-$totalWidth)/2;
-		//print_r($y);
 		return $y;
 	}
 	
