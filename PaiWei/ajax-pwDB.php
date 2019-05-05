@@ -131,7 +131,8 @@ function readPwParam( $_dbInfo ) {
 	}
 	$tblName = $_dbInfo[ 'tblName' ]; /* pwParam */
 	if ( $_SESSION[ 'sessType' ] == SESS_TYP_USR ) {
-		$sql = "SELECT * FROM $tblName WHERE CURRENT_DATE <= `pwExpires`;";
+		$currDate = date("Y-m-d", time() );
+		$sql = "SELECT * FROM $tblName WHERE `$currDate` <= `pwExpires`;";
 	} else {
 		$sql = "SELECT * FROM $tblName;";
 	}
