@@ -79,13 +79,14 @@ table.pgMenu th {
 	height: 100%;
 }
 
-table.pgMenu th:first-child {
-	border-left: none;
+table.pgMenu th[data-urlIdx=urlUsrHome], table.pgMenu th[data-urlIdx=urlAdmHome] {
+	width: 4.2vw;
+	border-left: none; /* always the left-most table cell */
 }
 
-table.pgMenu th:last-child { /* for logout box */
+table.pgMenu th[data-urlIdx=usrLogout] { /* for logout box */
 	width: 4.2vw;
-	border-right: none;
+	border-right: none; /* always the right-most table dell */
 	border-left: 3px solid white;
 }
 

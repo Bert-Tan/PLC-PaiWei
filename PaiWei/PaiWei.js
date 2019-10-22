@@ -32,6 +32,7 @@ var _icoName = null;
 var _rqTbls = [ 'D001A', 'L001A', 'Y001A', 'W001A_4', 'DaPaiWei' ];
 var _url2Go = {
 	"urlAdmHome" : "../AdmPortal/index.php",
+	"urlUsrHome" : "../UsrPortal/index.php",
 	"urlDnld" : "./dnldPaiWeiForm.php",
 	"usrLogout" : "../Login/Logout.php"
 };

@@ -1,0 +1,56 @@
+/* CSS for horizontally tabbed navigation; if used, include it after the master.css */
+
+table.tabMenu {
+    border-collapse: collapse;
+    border: none;
+    width: 75%;
+    margin: auto;
+    margin-top: 0px; /* follows the previous element immediately */
+    table-layout: fixed;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+table.tabMenu th {
+    background-color:	#00b300;
+    border: 1px solid white;
+    border-top: none;
+	color: white; /* text color */
+	padding: 2px 5px;
+	text-align: center;
+	vertical-align: middle;
+    line-height: 1.2em;
+    height: 1.4em;
+}
+
+table.tabMenu th:first-child {
+    border-left: 1px solid #00b300;
+}
+
+table.tabMenu th:last-child {
+    border-right: 1px solid #00b300;
+}
+
+table.tabMenu th:hover {
+	color: yellow;
+	background-color: #009900;
+	cursor: pointer;   
+}
+
+table.tabMenu th.active {
+    background-color: green;
+    color: yellow;
+    border-bottom: 1px solid green;
+}
+
+div.tabDataArea {
+    width: 95%;
+    height: 65vh;
+    margin: auto;
+    margin-top: 0px;
+    border: 2px solid green; /* same as the active tab color */
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}

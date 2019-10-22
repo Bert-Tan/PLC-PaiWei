@@ -16,6 +16,9 @@
 			'logOut' => array (
 				SESS_LANG_CHN => "用戶<br/>撤出",
 				SESS_LANG_ENG => "User<br/>Logout" ),
+			'UsrHome' => array (
+				SESS_LANG_CHN => "回到<br/>用戶主頁",
+				SESS_LANG_ENG => "Back to<br/>UsrPortal" ),
 			'h1Title' => array (
 				SESS_LANG_CHN => "請由上列點擊所要<br/>申請的牌位或功能",
 				SESS_LANG_ENG => "Please Select Name Plaque Type From<br/>The Above You Want to Apply for" ),
@@ -58,6 +61,7 @@
 	$sessLang = $_SESSION[ 'sessLang' ];
 	$sessType = $_SESSION[ 'sessType' ];
 	$useChn = ( $sessLang == SESS_LANG_CHN );
+	$fontSize = ( $useChn ) ? "1.0em" : "0.9em";
 //	$dnldUrl = URL_ROOT . "/admin/PaiWei/dnldPaiWeiForm.php";
 ?>
 
@@ -81,10 +85,16 @@
 	font-size: 0.7em;
 }
 
-table.pgMenu tr th:last-child {
+table.pgMenu tr th:last {
 	border-left: 1px solid white;
 }
 
+table.pgMenu th[data-urlIdx=usrLogout] {
+	border-left: 1px solid white;
+}
+table.pgMenu th[data-urlIdx=urlUsrHome] {
+	font-size: <?php echo $fontSize; ?>;
+}
 /* for loaded PaiWei Upload Form */
 table.dialog {
 	width: 60%;
@@ -185,13 +195,17 @@ table.dataRows tr:nth-child(even) input[type=text] {
 			<span style="letter-spacing: 1px;">淨土念佛堂法會牌位申請主頁</span><br/>
 			<span class="engClass">Retreat Merit Dedication Application Page</span>
 		</div>
-		<table class="pgMenu centerMeV" style="<?php if ( $sessType != SESS_TYP_USR ) { echo 'width: 50vw;'; } ?>">
+		<table class="pgMenu centerMeV" style="width: 50vw;">
 			<thead>
 				<tr>
 <?php
 	if ( $sessType != SESS_TYP_USR ) {
 ?>		
-					<th rowSpan="2" data-urlIdx="urlAdmHome" style="width: 4.2vw;">回到<br/>管理主頁</th>
+					<th rowSpan="2" data-urlIdx="urlAdmHome">回到<br/>管理主頁</th>
+<?php
+	} else {
+?>
+					<th rowSpan="2" data-urlIdx="urlUsrHome"><?php echo xLate( 'UsrHome' ); ?></th>
 <?php
 	}
 ?>

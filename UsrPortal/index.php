@@ -13,12 +13,18 @@
 			'htmlTitle' => array (
 				SESS_LANG_CHN => "淨土念佛堂一般用戶主頁",
 				SESS_LANG_ENG => "Pure Land Center User Portal" ),
+			'UsrHome' => array (
+				SESS_LANG_CHN => "回到<br/>用戶主頁",
+				SESS_LANG_ENG => "Back to<br/>UsrPortal" ),
 			'featPW' => array (
-				SESS_LANG_CHN => "法會牌位申請",
-				SESS_LANG_ENG => "Name Plaque Application for<br/>Merit Dedication in Retreats" ),
+				SESS_LANG_CHN => "申請<br/>法會牌位",
+				SESS_LANG_ENG => "Name Plaque for<br/>Retreat Merit Dedication" ),
+			'featSun' => array (
+				SESS_LANG_CHN => "早課<br/>祈福迴向",
+				SESS_LANG_ENG => "Sunday Chanting<br/>Merit Dedication" ),
 			'featFuture' => array (
-				SESS_LANG_CHN => "其他未來會提供的功能<br/>( 週日早課祈福及迴向申請，結緣法寶申請，等等。)",
-				SESS_LANG_ENG => "Future Capabilities<br/>(e.g., Req. for Dharma Items; etc.)" ),
+				SESS_LANG_CHN => "其他未來會提供的功能<br/>(結緣法寶申請，等等。)",
+				SESS_LANG_ENG => "Future:<br/>(Dharma Items Request; etc.)" ),
 			'logOut' => array (
 				SESS_LANG_CHN => "用戶<br/>撤出",
 				SESS_LANG_ENG => "User<br/>Logout" ),
@@ -36,6 +42,7 @@
 	}
 	$sessLang = $_SESSION[ 'sessLang' ];
 	$useChn = ( $sessLang == SESS_LANG_CHN );
+	$fontSize = ( $useChn ) ? "1.0em;" : "0.9em;";
 ?>
 
 <!DOCTYPE html>
@@ -46,15 +53,12 @@
 <link rel="stylesheet" type="text/css" href="../master.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="../futureAlert.js"></script>
+<script src="./UsrCommon.js"></script>
 <script type="text/javascript">
-	var _appPlaces = {
-		"usrApp" : "../PaiWei/index.php",
-		"usrLogout" : "../Login/Logout.php"
-	};
 	$(document).ready(function() {
 		$(".future").on( 'click', futureAlert );
 		$("th[data-urlIdx]").on( 'click', function() {
-			location.replace( _appPlaces[ $(this).attr( "data-urlIdx" ) ]);
+			location.replace( _url2Go[ $(this).attr( "data-urlIdx" ) ]);
 		});
 	})
 </script>
@@ -67,22 +71,7 @@
 
 </head>
 <body>
-	<div class="hdrRibbon">
-		<img src="https://www.amitabhalibrary.org/pic/PLC_logo_TR.png" class="centerMeV" alt="">
-		<div id="pgTitle" class="centerMeV">
-			<span>淨土念佛堂一般用戶主頁</span><br/>
-			<span class="engClass">Pure Land Center User Portal</span>
-		</div>
-		<table class="pgMenu centerMeV">	
-			<thead>
-				<tr>
-					<th data-urlIdx="usrApp"><?php echo xLate( 'featPW' ); ?></th>
-					<th class="future"><?php echo xLate( 'featFuture' ); ?></th>
-					<th data-urlIdx="usrLogout"><?php echo xLate( 'logOut' ); ?></div>
-				</tr>
-			</thead>
-		</table>		
-	</div>
+	<?php require_once("./UsrPgHeader.htm");?>
 	<div class="dataArea">
 		<h1 class="dataTitle centerMe" style="<?php if ( !$useChn ) echo "letter-spacing: normal;"; ?>"><?php echo xLate( 'h1Title' ); ?></h1>
 	</div>
