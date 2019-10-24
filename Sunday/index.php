@@ -44,6 +44,9 @@
 			'gongDeZhuTab' => array (
 				SESS_LANG_CHN => "申請做功德主",
 				SESS_LANG_ENG => "Request to Serve as<br/>A Ceremony Sponsor" ),
+			'present' => array (
+				SESS_LANG_CHN => "**** 祈福迴向的申請人務必親自，或有指定代表出席參加 ****",
+				SESS_LANG_ENG => "**** The Requestor or a Delegate Must Be Present ****" ),
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
@@ -145,6 +148,7 @@
 	</table>
 	<div class="dataArea">
 		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>;"><?php echo xLate( 'qifuTitle' ); ?></h2>
+		<h2 style="color: darkred;"><?php echo xLate( 'present' ); ?></h2>
 		<div id="tabDataFrame">
 			<!-- Frame to load Tab Data -->
 		</div><!-- tabDataFrame -->
