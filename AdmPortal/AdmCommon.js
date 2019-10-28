@@ -4,7 +4,8 @@ var _url2Go = {
     'urlRtData' : "../PaiWei/rtMgr.php", /* test only; real path: "../PaiWei/rtMgr.php", */
     'urlDnldJiWen' : "../PaiWei/dnldJiWenForm.php",
     'urlDnld' : "../PaiWei/dnldPaiWeiForm.php",
-    'url4Others' : "../PaiWei/Dashboard.php", /* test only; real path: "../PaiWei/Dashboard.php", */
+    'url4Others' : "../PaiWei/Dashboard.php",
+    'urlSundayMgr' : "../Sunday/sundayMgr.php",
     'usrLogout' : "../Login/Logout.php"
 } // anchors where each pgMenu TH points to
 

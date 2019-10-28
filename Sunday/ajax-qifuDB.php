@@ -56,18 +56,6 @@ function _dbName_2_htmlName ( $_dbName ) {
 	return ( $_htmlNames[ $_dbName ][ $_sessLang ]  );
 } // _dbName_2_htmlName()
 
-function setSundayParam( $dbInfo ) { // used by the Sunday Admin capabilities
-	global $_db;
-	$tblName = $dbInfo[ 'tblName' ];
-	$fldNV = $dbInfo[ 'fldNV' ];
-	$expHH = $fldNV[ 'expHH' ];
-	$expMM = $fldNV[ 'expMM' ];
-	$sql = "UPDATE `{$tblName}` SET `expHH` = \"{$expHH}\", `expMM` = \"{$expMM}\" WHERE `ID` = \"1\";";
-	$_db->query("LOCK TABLES `{$tblName}`;");
-	$rslt = $_db->query( $sql );
-	$_db->query("UNLOCK TABLES;");
-} // function setSundayParam()
-
 function readSundayParam( $dbInfo ) {
 	global $_db;
 	/*
