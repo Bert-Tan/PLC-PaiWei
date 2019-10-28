@@ -51,7 +51,7 @@
                 SESS_LANG_CHN => "下載列印祈福迴向啟請資料",
                 SESS_LANG_ENG => "" ),  // management function - Chinese only
             'forOthers' => array (
-                SESS_LANG_CHN => "處理祈福迴向申請",
+                SESS_LANG_CHN => "處理蓮友祈福迴向申請",
                 SESS_LANG_ENG => "" ),  // management function - Chinese only
 		);
 		return $htmlNames[ $what ][ $sessLang ];
