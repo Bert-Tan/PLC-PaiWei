@@ -100,7 +100,126 @@
 				$rpt[ 'err' ] = "資料庫發生錯誤；無法讀取申請截止資料！最後所執行的資料庫指令為：\n {$sql}";
 				return $rpt;
 		}
-    } // function readSundayDue()
+	} // function readSundayDue()
+	
+	function loadSundayDashboard() {
+		global $_db;
+		$rpt = array();
+		$tblNames = array( 'sundayQifu', 'sundayMerit' );
+		$sqlUsrs = "SELECT DISTINCT `UsrName` FROM `sundayRq2Usr` WHERE `UsrName` NOT IN "
+				 . "(SELECT `UsrName` FROM `inCareOf`) ORDER BY `UsrName`;";
+		$sqlInCareOf = "SELECT DISTINCT `UsrName` FROM `sundayRq2Usr` WHERE `UsrName` IN "
+					 . "(SELECT `UsrName` FROM `inCareOf`) ORDER BY `UsrName`;";
+		$_db->query("LOCK TABLES `sundayRq2Usr` READ, `inCareOf` READ;");
+		$rslt = $_db->query( $sqlUsrs );
+		$usrNames = $rslt->fetch_all(MYSQLI_ASSOC);
+		$rslt = $_db->query( $sqlInCareOf );
+		$inCareOfNames = $rslt->fetch_all(MYSQLI_ASSOC);
+		$_db->query("UNLOCK TABLES;");			 
+		$allNames = array_merge( $inCareOfNames, $usrNames );
+		$tpl = new HTML_Template_IT("./Templates");
+		$tpl->loadTemplatefile("sundayDashboardRows.tpl", true, true);
+		$tpl->setCurrentBlock("dashboardBody");
+		foreach ( $allNames as $Name ) {
+			$icoName = $Name[ 'UsrName' ];
+			$_db->query("LOCK TABLES `sundayRq2Usr` READ;");
+			$rslt = $_db->query("SELECT `TblName` FROM `sundayRq2Usr` WHERE `UsrName` = \"{$icoName}\";");
+			$_db->query("UNLOCK TABLES;");
+			$tpl->setCurrentBlock("dashboardRow");			
+			$tpl->setVariable("usrName", $icoName);
+			$tpl->setVariable("rowSum", $rslt->num_rows);
+			foreach ( $tblNames as $tblName ) {
+				$tpl->setCurrentBlock("dashboardCell");
+				$_db->query("LOCK TABLES `sundayRq2Usr` READ;");
+				$rslt = $_db->query("SELECT `TblName` FROM `sundayRq2Usr` WHERE `TblName` = \"{$tblName}\" AND `UsrName` = \"{$icoName}\";");
+				$_db->query("UNLOCK TABLES;");
+				$tpl->setVariable("tblName", $tblName);
+				$tpl->setVariable("usrTblSum", $rslt->num_rows);
+				$tpl->parse("dashboardCell");
+			} // loop over tables
+			$tpl->parse("dashboardRow");
+		} // loop over all Names to construct row data
+		$tpl->parse("dashboardBody");
+		$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
+		$rpt[ 'dashboardBody' ] = preg_replace( "/(^\t*)/", "  ", $tmp );
+		$rpt[ 'inCareOfOptions' ] = readInCareOf();
+		return $rpt;
+	} // function loadSundayDashboard()
+
+	function readInCareOf() { // returns a string reflecting a <select> html element
+		global $_db;
+		$inCareOfNames = array();
+		$usrNames = array();
+
+		$sql1 = "SELECT `UsrName` FROM `inCareOf` WHERE `UsrName` NOT IN "
+			  . "(SELECT DISTINCT `UsrName` FROM `sundayRq2Usr`);";
+		$sql2 = "SELECT `UsrName` FROM `Usr` WHERE `UsrName` NOT IN "
+			  . "(SELECT DISTINCT `UsrName` FROM `sundayRq2Usr`);";
+		$_db->query( "LOCK TABLES `inCareOf` READ，`sundayRq2Usr` READ, `Usr` READ;" );
+		$rslt = $_db->query( $sql1 );
+		if ( $rslt->num_rows > 0) {
+			$inCareOfNames = $rslt->fetch_all(MYSQLI_ASSOC);
+		}
+		$rslt = $_db->query( $sql2 );
+		$_db->query( "UNLOCK TABLES;" );
+		if ( $rslt->num_rows > 0 ) {
+			$usrNames = $rslt->fetch_all(MYSQLI_ASSOC);
+		}
+		$tpl = new HTML_Template_IT("./Templates");
+		$tpl->loadTemplatefile("inCareOfOptions.tpl", true, true);
+		$tpl->setCurrentBlock("InCareOf");
+		foreach ( $inCareOfNames as $inCareOfName ) {
+			$tpl->setCurrentBlock("Option");
+			foreach ($inCareOfName as $key => $val ) {
+				$tpl->setVariable("optV", $val );	
+			}
+			$tpl->parse("Option");
+		} // $inCareOfNames
+		foreach ( $usrNames as $usrName ) {
+			$tpl->setCurrentBlock("Option");
+			foreach ($usrName as $key => $val ) {
+				$tpl->setVariable("optV", $val );	
+			}
+			$tpl->parse("Option");
+		} // $inCareOfNames
+		$tpl->parse("InCareOf");
+		$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
+		return preg_replace( "/(^\t*)/", "  ", $tmp );
+	} // function readInCareOf()
+
+	function setIcoName( $icoName ) {
+		global $_db;
+		// first check existence in the Usr table
+		$_db->query("LOCK TABLES `Usr` READ;");
+		$rslt = $_db->query("SELECT * FROM `Usr` WHERE `UsrName` = \"{$icoName}\";");
+		$_db->query("UNLOCK TABLES;");
+		if ( $rslt->num_rows > 0 ) return; // nothing to do
+		// Add it into inCareOf table, if not existent
+		$sql = "INSERT INTO `inCareOf` ( `UsrName` ) VALUE ( \"{$icoName}\" ) "
+			 . "ON DUPLICATE KEY UPDATE `UsrName` = \"{$icoName}\";";
+		$_db->query("LOCK TABLES `inCareOf` WRITE;");
+		$_db->query( $sql );
+		$_db->query("UNLOCK TABLES;");
+	} // function setIcoName()
+
+	function dashboardRedirect( $dbInfo ) {
+		global $_SESSION;
+		$_SESSION['icoName'] = $dbInfo[ 'icoName' ];
+		switch( $dbInfo[ 'icoNameType' ] ) {
+		case 'icoDerived':
+			$_SESSION[ 'tblName' ] = $dbInfo[ 'tblName' ];
+			break;
+		case 'icoSelected':
+			unset( $_SESSION[ 'tblName' ] );
+			break;
+		case 'icoInput':
+			unset( $_SESSION[ 'tblName' ] );
+			setIcoName( $dbInfo['icoName'] );
+			break;
+		} // switch()
+		$rpt[ 'redirect' ] = URL_ROOT . '/admin/Sunday/index.php';
+		return $rpt;
+	} // function dashboardRedirect()
 
 	$hdrLoc = "location: " . URL_ROOT . "/admin/index.php";
 //	session_start(); // create or retrieve
@@ -124,6 +243,12 @@
 		exit;
 	case 'dbSetSundayDue':
 		echo json_encode( setSundayDue( $_dbInfo ), JSON_UNESCAPED_UNICODE );
+		exit;
+	case 'dbLoadSundayDashboard':
+		echo json_encode( loadSundayDashboard( ), JSON_UNESCAPED_UNICODE );
+		exit;
+	case 'dashboardRedirect':
+		echo json_encode( dashboardRedirect( $_dbInfo ), JSON_UNESCAPED_UNICODE );
 		exit;
 	} // switch()
 /*
@@ -203,7 +328,7 @@
     	-moz-box-sizing: border-box;
     	-webkit-box-sizing: border-box;
 	}
-// for Admin Dialog box
+/* for Admin Dialog box */
 	table.dialog {
 		width: 46%;
 		margin: auto;
@@ -228,6 +353,33 @@
 		border: 1px solid blue;
 		border-radius: 3px;
 	}
+
+/* for dashboard */
+	table.dataRows td[data-tblN]:hover {
+	/*	color: no change; */
+		background-color: #ffff80;
+		cursor: pointer;
+	}
+
+	table.dataHdr th input {
+		font-size: 1.0em;
+		background-color: aqua;
+		border: 1px solid blue;
+	}
+
+	table.dataHdr th input[type=button] {
+		margin-top: 3px;
+		display: inline-block;
+		float: right;
+		border: 1px solid blue;
+		border-radius: 6px;
+	}
+
+	table.dataHdr th select {
+		width: 70%;
+		background-color: aqua;
+		border: 1px solid blue;
+	}
 </style>
 
 </head>
@@ -238,7 +390,7 @@
 			<tr>
 				<th data-table="sundayParam"><?php echo xLate( 'setDueTime' ); ?></th>
 				<th class="future" data-table="dnldPrint"><?php echo xLate( 'dnldPrint' ); ?></th>
-				<th class="future" data-table="sundayDash"><?php echo xLate( 'forOthers' ); ?></th>
+				<th data-table="sundayDash"><?php echo xLate( 'forOthers' ); ?></th>
 			</tr>
 		</thead>
 	</table>

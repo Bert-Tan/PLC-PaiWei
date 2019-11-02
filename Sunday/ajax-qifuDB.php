@@ -74,7 +74,7 @@ function readSundayParam( $dbInfo ) {
 	$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
 	$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
 	$rpt[ 'icoName' ] = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
-	$rpt[ 'tblName' ] = isset($_SESSION[ 'tblName' ]) ? $_SESSION[ 'tblName' ] : null;
+	$rpt[ 'tblName' ] = isset($_SESSION[ 'tblName' ]) ? $_SESSION[ 'tblName' ] : null; unset( $_SESSION[ 'tblName' ] );
 	$rpt[ 'expHH' ] = $row[ 'expHH' ]; // "08"; // hard code for now!
 	$rpt[ 'expMM' ] = $row[ 'expMM' ]; // "30";
 	return $rpt;
@@ -143,16 +143,16 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 			}
 			// all other fields are visible to user
 			$tpl->setCurrentBlock("data_cell");
-			if ( $rowCount == 1 ) { // only need to set cell width for the first data row
+//			if ( $rowCount == 1 ) { // only need to set cell width for the first data row
 				$tpl->setVariable("cellWidth", cellWidth( $key, $dbTblName  ) );
-			}
+//			}
 			$tpl->setVariable("dbFldN", $key);
 			$tpl->setVariable("dbFldV", $val);
 			$tpl->parse("data_cell");
 		} // data fields of a row from sundayQifu or sundayMerit table
 	
 		$tpl->setCurrentBlock("reqDateCol");
-		if ( $rowCount == 1 ) $tpl->setVariable("dateFldWidth", $dateFldWidth );
+/*		if ( $rowCount == 1 ) */$tpl->setVariable("dateFldWidth", $dateFldWidth );
 		if ( $dateFldV == '' ) {
 			$dateFldV = $sundayRqDates;
 		}

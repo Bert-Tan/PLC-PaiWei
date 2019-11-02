@@ -8,6 +8,101 @@ function isJSON( str ) {
     return false;
 } // isJSON()
 
+function loadSundayDashboard() {
+    $("#tabDataFrame").load("./Templates/sundayDashboard.htm", function() {
+        var ajaxData = {}, dbInfo = {};
+        dbInfo[ 'tblName' ] = 'sundayParam'; // filler; will not be used
+        ajaxData[ 'dbReq' ] = 'dbLoadSundayDashboard';
+        ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
+        $.ajax({
+            url: '', method: 'post', data: ajaxData,
+            success: function( rsp ) {
+                rspX = isJSON( rsp );
+                if ( ! rspX ) { alert( rsp ); return false; }
+                for ( X in rspX ) {
+                    switch ( X ) {
+                    case 'URL':
+                        location.replace( rspX[X] );
+                        return;
+                    case 'dashboardBody': // alert( rspX[X] );
+                        $("table.dataRows tbody").replaceWith( rspX[X] );
+                        break;
+                    case 'inCareOfOptions':
+                        $("table.dataHdr #toBeReplaced").replaceWith( rspX[X] );
+                        break;
+                    }
+                } // loop over received elements
+                // now connect handlers
+                $("table.dataRows td[data-tblN]").on( 'click', hdlr_dataCellClick );
+                $("#icoInputBtn").on( 'click', hdlr_icoInput );
+                $("#icoSelBtn").on( 'click', hdlr_icoSelect );
+            }, // SUCCESS handler
+            error: function ( jqXHR, textStatus, errorThrown ) {
+                alert( "loadSundayDueForm()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+            } // error handler
+        }); // AJAX Call
+    });
+} // function loadSundayDashboard()
+
+function dashboardRedirect( dbInfo ) {
+    var ajaxData = {};
+    ajaxData[ 'dbReq' ] = 'dashboardRedirect';
+    ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
+    $.ajax({
+        url: '', method: 'post', data: ajaxData,
+        success: function ( rsp ) {
+            var rspX = isJSON( rsp );
+            if ( ! rspX ) { alert ( rsp ); return false; }
+            for ( X in rspX ) {
+                switch (X) {
+                case 'URL': // session timed out
+                case 'redirect':
+                //    alert("page will be redirected to: " + rspX[X]);
+                    location.replace( rspX[ X ] );
+                    return;
+                } // switch();
+            }
+        }, // SUCCESS HANDLER
+        error: function ( jqXHR, textStatus, errorThrown ) {
+            alert( "hdlr_dataCellClick()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+        } // error handler
+    }); // AJAX Call
+} // function dashboardRedirect()
+
+function hdlr_dataCellClick() {
+    var thisRow = $(this).closest("tr");
+    var dbInfo = {}
+    dbInfo[ 'icoName' ] = thisRow.find("td[data-uName]").attr("data-uName");
+    dbInfo[ 'icoNameType' ] = 'icoDerived';
+    dbInfo[ 'tblName' ] = $(this).attr("data-tblN");
+    dashboardRedirect( dbInfo );
+    // dashboardRedirect() will not return here;
+} // function hdlr_dataCellClick()
+
+function hdlr_icoInput() {
+    var dbInfo = {};
+    var icoName = $(this).closest("th").find("#icoInput").val();
+    if ( icoName == '請輸入蓮友識別名' ) {
+        alert( icoName ); return false;
+    }
+    dbInfo[ 'icoName' ] = icoName;
+    dbInfo[ 'icoNameType' ] = 'icoInput';
+    dashboardRedirect( dbInfo );
+    // dashboardRedirect() will not return here;
+} // function hdlr_icoInput()
+
+function hdlr_icoSelect() {
+    var dbInfo = {};
+    var icoName = $(this).closest("th").find("SELECT OPTION:SELECTED").val();
+    if ( icoName.length == 0 ) {
+        alert( '請點選蓮友識別名' ); return false;
+    }
+    dbInfo[ 'icoName' ] = icoName;
+    dbInfo[ 'icoNameType' ] = 'icoSelected';
+    dashboardRedirect( dbInfo );
+    // dashboardRedirect() will not return here;    
+} // hdlr_icoSelect()
+
 function loadSundayDueForm() {
     $("#tabDataFrame").load("./Templates/sundayDueForm.htm", function() {
         // The template is loaded; now fill in the data if provisioned; use AJAX call
@@ -17,9 +112,7 @@ function loadSundayDueForm() {
         ajaxData[ 'dbReq' ] = 'dbReadSundayDue';
         ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
         $.ajax({
-            url:    '',
-            method: 'post',
-            data: ajaxData,
+            url: '', method: 'post', data: ajaxData,
             success: function( rsp ) {
                 rspX = isJSON( rsp );
                 if ( !rspX ) { alert( rsp ); return false; }
@@ -54,7 +147,6 @@ function loadSundayDueForm() {
                 $("form input[type=text]").on( 'focus', hdlr_onFocus );
                 $("form input[type=text]").on( 'blur', hdlr_dataChg );
                 $("form").on( 'submit', hdlr_formSubmit );
-// alert("Line 57: \n" + $("form").html() );
             }, // Success Handler
             error: function ( jqXHR, textStatus, errorThrown ) {
                 alert( "loadSundayDueForm()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
@@ -195,8 +287,7 @@ function hdlr_tabClick() {
         alert("Line 187: Download & Print clicked");
         break
     case 'sundayDash':
-    //    loadTblData( _tblName, ( ( _icoName == null ) ? _sessUsr : _icoName ), "tabDataFrame" );
-        alert("Line 32: Sunday Dashboard data will be loaded");
+        loadSundayDashboard();
         break;
     } // switch()
 } // function tabClick()

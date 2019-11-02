@@ -134,7 +134,6 @@ function readSundayParam() {
             /* done all the startup house-keeping; ready to edit */
             _alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！' : 'Unsaved Data will be LOST!';
             init_done();
-//            getSundays();
         }, // success handler
         error: function ( jqXHR, textStatus, errorThrown ) {
             alert( "readSundayParam()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
@@ -145,9 +144,15 @@ function readSundayParam() {
 function init_done() {
     var ackStart = ( _sessLang == SESS_LANG_CHN) ? "今天的祈福迴向申請已截止，祈福迴向將從下星期日開始！"
                                                  : "Today's request is overdue; submitted request will begin next Sunday";
+    var defaultTbl = "sundayRule";
+    if ( _tblName != null )  {
+        defaultTbl = _tblName;
+        _tblName = null;
+    }
+    
     $(".tabMenu th").on( 'click', hdlr_tabClick );
     $(".tabMenu th.future").unbind().on( 'click', futureAlert );
-    $("table.tabMenu th:first-child").trigger( 'click' );
+    $(".tabMenu th[data-table=" + defaultTbl + "]").trigger( 'click' );
 
     /* initialize time variables; with _xxx are globals */
     _now = new Date();   _nowV = _now.getTime();
@@ -214,10 +219,10 @@ function loadTblData( tblName, usrName, frameID ) { // alert( "loadTblData - Use
                 case 'URL':
                     location.replace( rspX [ X ] );
                     return;
-                case 'myDataHdr':
+                case 'myDataHdr': //alert("Line 222 HDR = " + rspX[X]); 
                     tblHdrWrapper.html( rspX[ X ]);
                     break;
-                case 'myData':
+                case 'myData': // alert("Line 225 DATA = " + rspX[X]);
                     tblDataWrapper.html( rspX[ X ]);
                     break;
                 case 'myDataSize':
