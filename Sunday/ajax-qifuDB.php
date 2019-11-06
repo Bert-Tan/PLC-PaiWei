@@ -36,21 +36,21 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_ENG => "Request<br/>Reason" ),
 		'Age' => array (
 			SESS_LANG_CHN => "往生者<br/>年齡",
-			SESS_LANG_ENG => "Age Deceased" ),
+			SESS_LANG_ENG => "Age Died" ),
 		'Deceased_D' =>	array (
-			SESS_LANG_CHN => "往生日期<br/>(西元)年-月-日",
+			SESS_LANG_CHN => "往生日期<br/>(西元 年-月-日)",
 			SESS_LANG_ENG => "Date Deceased<br/>YYYY-MM-DD" ),
 		'Deceased_P' =>	array (
 			SESS_LANG_CHN => "往生地點",
 			SESS_LANG_ENG => "Place Deceased" ),
 		'mDates' => array (
-			SESS_LANG_CHN => "功德迴向日期<br/>(星期日，最多七次)",
-			SESS_LANG_ENG => "Requested Sundays<br/>(within 49 days)" ),
+			SESS_LANG_CHN => "功德迴向日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多七次，以逗號分開)",
+			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 7 times; comma separated)" ),
 		'qDates' => array (
-			SESS_LANG_CHN => "祈福消災日期<br/>(星期日，最多三次)",
-			SESS_LANG_ENG => "Requested Sundays<br/>(up to 3 times)" ),
+			SESS_LANG_CHN => "祈福消災日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多三次，以逗號分開)",
+			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 3 times; comma separated)" ),
 		'dateInputV' => array (
-			SESS_LANG_CHN => "(西元)年-月-日；星期日，以逗號分開",
+			SESS_LANG_CHN => "(西元)年年年年-月月-日日；若多個星期日，請以逗號分開",
 			SESS_LANG_ENG => "YYYY-MM-DD; Sundays, comma separated" )
 	);
 	return ( $_htmlNames[ $_dbName ][ $_sessLang ]  );
@@ -66,7 +66,13 @@ function readSundayParam( $dbInfo ) {
 	$_db->query( "LOCK TABLES `{$tblName}` READ;" );
 	$sql = "SELECT `expHH`, `expMM` FROM `{$tblName}`;";
 	$rslt = $_db->query( $sql );
-	$row = $rslt->fetch_all( MYSQLI_ASSOC )[0];
+	if ( $rslt->num_rows == 0 ) { // not configured; set default
+		$sql = "INSERT INTO `$tblName` ( 'expHH', 'expMM' ) VALUES ( \"08\", \"30\" );";
+		$_db->query( $sql );
+		$row[ 'expHH' ] = "09"; $row[ 'expMM' ] = "00";
+	} else {
+		$row = $rslt->fetch_all( MYSQLI_ASSOC )[0];
+	}
 	$_db->query( "UNLOCK TABLES;" );
 	$rslt->free();
 	$rpt[ 'usrName'] = $_SESSION[ 'usrName' ];
@@ -75,30 +81,32 @@ function readSundayParam( $dbInfo ) {
 	$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
 	$rpt[ 'icoName' ] = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
 	$rpt[ 'tblName' ] = isset($_SESSION[ 'tblName' ]) ? $_SESSION[ 'tblName' ] : null; unset( $_SESSION[ 'tblName' ] );
-	$rpt[ 'expHH' ] = $row[ 'expHH' ]; // "08"; // hard code for now!
-	$rpt[ 'expMM' ] = $row[ 'expMM' ]; // "30";
+	$rpt[ 'expHH' ] = $row[ 'expHH' ]; // Hour Due
+	$rpt[ 'expMM' ] = $row[ 'expMM' ]; // Minute Due
 	return $rpt;
 } // function readSundayParam()
 
 function cellWidth( $fldN, $tblName ) { // Sunday data table field width (%) mapping
-	if ( $tblName == 'sundayQifu' ) {
-		return "width: 15.4%;"; // All fields for 祈福 table are the same width
-	}
 	$x = ''; // 迴向 table fields vary
 	switch ( $fldN ) {
 		case 'R_Name':
+		case 'qWhom':
 		case 'mWhom':
 			$x = 10; break;
 		case 'GuanXi':
 			$x = 11; break;
+		case 'Rsn':
+			$x = 18; break;
 		case 'Age':
 			$x = 6; break;
 		case 'Deceased_D':
-			$x = 11; break;
+			$x = 12; break;
 		case 'Deceased_P':
-			$x = 11; break;
+			$x = 8.5; break;
+		case 'qDates':
+			$x = 34; break;
 		case 'mDates': // for 迴向; at most 7 dates
-			$x = 24; break;
+			$x = 25.5; break;
 	} // switch() - End of determining Cell Width
 	return "width: " . $x . "%;";
 } // cellWidth()
@@ -108,19 +116,18 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 	
 	$dateFldName = ( $dbTblName == 'sundayQifu' ) ? 'qDates' : 'mDates';
 	$dateFldWidth = cellWidth( $dateFldName, $dbTblName );
-	$dateFldV = '';
 
 	if ( $rows == null ) { // construct an empty data table with an empty row
 		$fldN = getDBTblFlds( $dbTblName );
 		$i = 0;
 		foreach( $fldN as $colName ) {
 			if ( $i == 0 ) { // key field; give it an empty value
-				$row[ $colName ] = ''; continue;
+				$row[ $colName ] = ''; $i++; continue;
 			}
 			$row[ $colName ] = ( $_sessLang == SESS_LANG_CHN ) ? "請輸入資料" : "Input data";
 		}
 		$rows[0] = $row;
-		$dateFldV = _dbName_2_htmlName( 'dateInputV' ); // default
+		$sundayRqDates = _dbName_2_htmlName( 'dateInputV' ); // default
 	}
 	
 	$tpl = new HTML_Template_IT("./Templates");
@@ -131,7 +138,9 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 	$rowCount = 0;
 	foreach( $rows as $row ) {
 		$rowCount++;
-		$sundayRqDates = getSundayRqDates( $dbTblName, $row['ID'], $refDate );
+		if ( $row[ 'ID' ] != '' ) {
+			$sundayRqDates = getSundayRqDates( $dbTblName, $row['ID'], $refDate );
+		}
 		if ( strlen( $sundayRqDates ) == 0 ) continue;
 		$tpl->setCurrentBlock("data_row");
 		$i = 0;
@@ -143,20 +152,15 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 			}
 			// all other fields are visible to user
 			$tpl->setCurrentBlock("data_cell");
-//			if ( $rowCount == 1 ) { // only need to set cell width for the first data row
-				$tpl->setVariable("cellWidth", cellWidth( $key, $dbTblName  ) );
-//			}
+			$tpl->setVariable("cellWidth", cellWidth( $key, $dbTblName  ) );
 			$tpl->setVariable("dbFldN", $key);
 			$tpl->setVariable("dbFldV", $val);
 			$tpl->parse("data_cell");
 		} // data fields of a row from sundayQifu or sundayMerit table
 	
 		$tpl->setCurrentBlock("reqDateCol");
-/*		if ( $rowCount == 1 ) */$tpl->setVariable("dateFldWidth", $dateFldWidth );
-		if ( $dateFldV == '' ) {
-			$dateFldV = $sundayRqDates;
-		}
-		$tpl->setVariable("dateFldV", $dateFldV ); $dateFldV = '';
+		$tpl->setVariable("dateFldWidth", $dateFldWidth );
+		$tpl->setVariable("dateFldV", $sundayRqDates ); $sundayRqDates = '';
 		$tpl->parse("reqDateCol");
 		$tpl->setCurrentBlock("dataEditCol");
 		if ( $_sessLang == SESS_LANG_CHN ) {

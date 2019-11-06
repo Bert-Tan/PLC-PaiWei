@@ -57,6 +57,7 @@
 		header( $hdrLoc );
 	}
 	$sessLang = $_SESSION[ 'sessLang' ];
+	$sessType = $_SESSION[ 'sessType' ];
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$fontSize = ( $useChn ) ? "1.0em;" : "0.9em;";
 	$ltrSpacing = ( $useChn ) ? "20px" : "normal";
@@ -135,7 +136,7 @@
 
 </head>
 <body>
-	<?php require_once("../UsrPortal/UsrPgHeader.htm");?>
+	<?php require_once("../UsrPortal/UsrPgHeader.php");?>
 	<table class="tabMenu">
 		<thead>
 			<tr>

@@ -219,10 +219,10 @@ function loadTblData( tblName, usrName, frameID ) { // alert( "loadTblData - Use
                 case 'URL':
                     location.replace( rspX [ X ] );
                     return;
-                case 'myDataHdr': //alert("Line 222 HDR = " + rspX[X]); 
+                case 'myDataHdr':
                     tblHdrWrapper.html( rspX[ X ]);
                     break;
-                case 'myData': // alert("Line 225 DATA = " + rspX[X]);
+                case 'myData':
                     tblDataWrapper.html( rspX[ X ]);
                     break;
                 case 'myDataSize':
@@ -260,7 +260,8 @@ function hdlr_dataChg() { // on Blur
     var ackBeyond49 = ( _sessLang == SESS_LANG_CHN ) ? "已過七七之期；功德回向以本週末為限: '"
                                                      : "Deceased > 49 days ago; Merit Dedication limited to this Sunday: '";
     var ignoreBeyond49 = ( _sessLang == SESS_LANG_CHN ) ? "功德回向日期應該在七七之內！" : "Requests should be within 49 days!";
-    var errDeceased = ( _sessLang == SESS_LANG_CHN ) ? "往生日期不應在未來！" : "A future date is entered!"
+    var errDeceased = ( _sessLang == SESS_LANG_CHN ) ? "往生日期不應在未來！" : "A future date is entered!";
+    var errAge = ( _sessLang == SESS_LANG_CHN ) ? "請輸入合理的年齡數字！" : "Please enter a reasonable age!";
     var reqDeceased = ( _sessLang == SESS_LANG_CHN ) ? "請輸入往生日期！" : "Please enter Deceased Date!";
     var newV = $(this).val().trim().replace( /<br>$/gm, '');
     var newVx = '';
@@ -280,6 +281,13 @@ function hdlr_dataChg() { // on Blur
         return;
     }
 
+    if ( fldN = 'Age') {
+        if ( ! newV.match(/^\d{,3]/) ) {
+            alert( errAge );
+            $(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
+            return false;
+        }
+    }
     if ( fldN == 'Deceased_D' ) { // data change or input in 往生日期 field
         if ( ! isValidDate( newV, false, true ) ) { // an invalid date
             $(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
@@ -388,7 +396,7 @@ function hdlr_tabClick() {
     } // switch()
 } // function tabClick()
 
-function hdlr_addRow() { // alert("hdlr_addRow() clicked");
+function hdlr_addRow() {
     var dataBody = $("table.dataRows tbody");
     var newRow = _pilotRow.clone();
     var newRowDataCells = newRow.find("input[type=text]");

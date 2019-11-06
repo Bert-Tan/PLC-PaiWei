@@ -1,4 +1,5 @@
 var _url2Go = {
+    'urlAdmHome' : "../AdmPortal/index.php",
     'urlUsrHome' : "../UsrPortal/index.php",
     'urlPaiWei' : "../PaiWei/index.php",
     'urlSunday' : "../Sunday/index.php",

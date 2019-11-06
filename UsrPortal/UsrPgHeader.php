@@ -9,7 +9,17 @@
         <table class="pgMenu centerMeV">	
             <thead>
                 <tr>
+<?php
+    if ( $sessType != SESS_TYP_USR ) {
+?>		
+                    <th data-urlIdx="urlAdmHome">回到<br/>管理主頁</th>
+<?php
+    } else {
+?>
                     <th data-urlIdx="urlUsrHome"><?php echo xLate( 'UsrHome' ); ?></th>
+<?php
+    }
+?>                    
                     <th data-urlIdx="urlPaiWei"><?php echo xLate( 'featPW' ); ?></th>
                     <th data-urlIdx="urlSunday"><?php echo xLate( 'featSun' ); ?></th>
                     <th class="future"><?php echo xLate( 'featFuture' ); ?></th>
