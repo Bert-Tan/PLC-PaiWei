@@ -104,8 +104,8 @@ function updateSundayTuple( $tblName, $tupNVs, $usr, $refDate ) {
 	if ( sizeof( $reqDates ) > 0 ) { // changes to the sundayRq2Days table
 		// the easiest way: delete all entries for ($tblName, $tupID), & insert the new dates
 		$sql = "DELETE FROM `sundayRq2Days` WHERE `TblName` = \"{$tblName}\" AND `rqID` = \"{$tupID}\";";
-		if ( $refDate != null ) $sql .= " AND `rqDate` >= \"{$refDate}\"";
-		$sql .= ";";
+		//if ( $refDate != null ) $sql .= " AND `rqDate` >= \"{$refDate}\"";
+		//$sql .= ";";		
 		$rslt = $_db->query( $sql );
 		$i = 0; $reqDateValues = '';
 		foreach ( $reqDates as $reqDate ) {

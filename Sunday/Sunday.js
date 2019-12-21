@@ -281,7 +281,7 @@ function hdlr_dataChg() { // on Blur
         return;
     }
 
-    if ( fldN = 'Age') {
+    if ( fldN == 'Age') {
         if ( ! newV.match(/^\d{,3]/) ) {
             alert( errAge );
             $(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
