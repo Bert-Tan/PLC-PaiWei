@@ -389,7 +389,7 @@
 		<thead>
 			<tr>
 				<th data-table="sundayParam"><?php echo xLate( 'setDueTime' ); ?></th>
-				<th class="future" data-table="dnldPrint"><?php echo xLate( 'dnldPrint' ); ?></th>
+				<th data-table="dnldPrint"><?php echo xLate( 'dnldPrint' ); ?></th>
 				<th data-table="sundayDash"><?php echo xLate( 'forOthers' ); ?></th>
 			</tr>
 		</thead>
