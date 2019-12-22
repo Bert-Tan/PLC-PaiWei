@@ -195,11 +195,11 @@
 		$rqDate = getCurrentNextSundayDate();
 		
 		//get Sunday Qifu data
-		$sundayTable = 'sundayqifu';	
+		$sundayTable = 'sundayQifu';	
 		$qifuDataArray = queryData($sundayTable, $rqDate);
 		
 		//get Sunday Merit data
-		$sundayTable = 'sundaymerit';	
+		$sundayTable = 'sundayMerit';	
 		$meritDataArray = queryData($sundayTable, $rqDate);
 		
 		//pre-process data
@@ -386,8 +386,8 @@
 		
 		//SQL statement: group Sunday Qify/Merit data by rqID and concatenate all rqDate
 		$_sql = "SELECT {$_selFlds}, GROUP_CONCAT(rqDate ORDER BY rqDate SEPARATOR \", \") FROM {$sundayTable} "
-				.	"INNER JOIN sundayrq2days ON (ID=rqID AND TblName=\"{$sundayTable}\") "
-				.	"WHERE ID in (SELECT rqID FROM sundayrq2days "
+				.	"INNER JOIN sundayRq2Days ON (ID=rqID AND TblName=\"{$sundayTable}\") "
+				.	"WHERE ID in (SELECT rqID FROM sundayRq2Days "
 				.	"WHERE TblName=\"{$sundayTable}\" AND rqDate=\"{$rqDate}\") "
 				.	"GROUP BY ID;";	
 		
