@@ -78,7 +78,6 @@
 	
 	//Close and output PDF document
 	$pdf->Output($pdfTitle.'.pdf', 'I');
-	//$pdf->Output('C:/test.pdf', 'FI');
 	
 	
 	
