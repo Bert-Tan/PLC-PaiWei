@@ -62,6 +62,10 @@
 	$pdf->SetMargins($leftMargin, $topMargin, $rightMargin, true);
 	//set auto page breaks
 	$pdf->SetAutoPageBreak(true, $bottomMargin);	
+	//set font
+	$pdf->SetFont($ChineseFont, $fontStyle, $fontSize);
+	// set color for background
+	$pdf->SetFillColor(220, 220, 220);
 	
 	//get data
 	getData(); 
@@ -74,6 +78,7 @@
 	
 	//Close and output PDF document
 	$pdf->Output($pdfTitle.'.pdf', 'I');
+	//$pdf->Output('C:/test.pdf', 'FI');
 	
 	
 	
@@ -84,12 +89,7 @@
 		global $pdf, $title, $totalWidth;
 		global $ChineseFont, $fontStyle, $fontSize;
 		
-		$pageNum = count($dataArray); //number of PDF pages
-		
-		//set font
-		$pdf->SetFont($ChineseFont, $fontStyle, $fontSize);
-		// set color for background
-		$pdf->SetFillColor(220, 220, 220);
+		$pageNum = count($dataArray); //number of PDF pages		
 		
 		for($i = 0; $i < $pageNum; ++$i) {	
 			
@@ -169,9 +169,9 @@
 				$pdf->writeHTMLCell($cellWidthArray[$i], $cellHeight-($newY-$y), $x, $newY, $data[$i], 0, 0, false, true, 'L', true);						
 			}
 			//other data cells
-			else
+			else {
 				$pdf->MultiCell($cellWidthArray[$i], $cellHeight, $data[$i], 1, 'C', $fill, 0, '', '', true, 0, false, true, $cellHeight, 'M');
-				
+			}	
         }
 		
 		$pdf->Ln(); //new line
@@ -218,7 +218,7 @@
 		global $pdf, $extraHeight, $emptyRowNum, $totalHeight, $emptyCellHeight;
 
 		//field number of each request data record
-		$colNum = count($dataArray[0]);
+		$colNum = count($headerData);
 		
 		
 		//(1) remove Year field in request dateStr
@@ -228,7 +228,7 @@
 		$pdfPageTitleHeight = 4 * $pdf->getStringHeight($totalHeight, "  ", false, true, '', 1);
 				
 		//(3) calculate table header height
-		$headerHeight = calculateCellHeight($headerData, $cellWidthArray, false, 0, false, $colNum);
+		$headerHeight = calculateCellHeight($headerData, $cellWidthArray, false, 0, false);
 				
 		//(4) calculate table_cell_height and request_date_string_height for each data record
 		for($i = 0; $i < count($dataArray); ++$i) {
@@ -236,7 +236,7 @@
 			$data = $dataArray[$i]; //data record
 			
 			$dateStrHeight = calculateDateStrHeight($data[$colNum-1], $cellWidthArray[$colNum-1]);
-			$cellHeight = calculateCellHeight($data, $cellWidthArray, true, $dateStrHeight, true, $colNum);
+			$cellHeight = calculateCellHeight($data, $cellWidthArray, true, $dateStrHeight, true);
 			
 			array_push($dateStrHeightArray, $dateStrHeight);
 			array_push($cellHeightArray, $cellHeight);
@@ -303,10 +303,12 @@
 	//$addExtraHeight: boolean, whether add extra height for the corresponding row
 	//$dateStrHeight: the string height of the request dates
 	//$containDate: whether the input data record contain request dates
-	//$colNum: field number of data record
-	function calculateCellHeight($data, $cellWidthArray, $addExtraHeight, $dateStrHeight, $containDate, $colNum) {
+	function calculateCellHeight($data, $cellWidthArray, $addExtraHeight, $dateStrHeight, $containDate) {
 		global $pdf, $extraHeight;		
 		$cellHeights = array();
+		
+		//field number of each request data record
+		$colNum = count($data);
 							
 		for($i = 0; $i < $colNum; ++$i) {
 			//request dates: smaller font
