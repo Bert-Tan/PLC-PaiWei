@@ -14,10 +14,10 @@ function _dbName_2_htmlName ( $_dbName ) {
 	global $_sessLang;
 	$_htmlNames = array (
 		'sundayQifu' =>	array (
-			SESS_LANG_CHN => "祈&nbsp;&nbsp;福&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
+			SESS_LANG_CHN => "陽&nbsp;&nbsp;上&nbsp;&nbsp;祈&nbsp;&nbsp;福&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
 			SESS_LANG_ENG => "Well-wishing Request Form" ),
 		'sundayMerit' => array (
-			SESS_LANG_CHN => "功&nbsp;&nbsp;德&nbsp;&nbsp;迴&nbsp;&nbsp;向&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
+			SESS_LANG_CHN => "往功&nbsp;&nbsp;生&nbsp;&nbsp;迴&nbsp;&nbsp;向&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
 			SESS_LANG_ENG => "Merit Dedication Request Form" ),
 		'R_Name' =>	array (
 			SESS_LANG_CHN => "申請人姓名",
@@ -26,7 +26,7 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_CHN => "往生者全名",
 			SESS_LANG_ENG => "Recipient's<br/>Name" ),
 		'qWhom' =>	array (
-			SESS_LANG_CHN => "受益者全名",
+			SESS_LANG_CHN => "受祈福者全名",
 			SESS_LANG_ENG => "Recipient's<br/>Name" ),
 		'GuanXi' =>	array (
 			SESS_LANG_CHN => "與申請人關係",
@@ -44,10 +44,10 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_CHN => "往生地點",
 			SESS_LANG_ENG => "Place Deceased" ),
 		'mDates' => array (
-			SESS_LANG_CHN => "功德迴向日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多七次，以逗號分開)",
+			SESS_LANG_CHN => "往生迴向日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多七次，以逗號分開)",
 			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 7 times; comma separated)" ),
 		'qDates' => array (
-			SESS_LANG_CHN => "祈福消災日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多三次，以逗號分開)",
+			SESS_LANG_CHN => "陽上祈福日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多三次，以逗號分開)",
 			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 3 times; comma separated)" ),
 		'dateInputV' => array (
 			SESS_LANG_CHN => "(西元)年年年年-月月-日日；若多個星期日，請以逗號分開",
@@ -92,7 +92,7 @@ function cellWidth( $fldN, $tblName ) { // Sunday data table field width (%) map
 		case 'R_Name':
 		case 'qWhom':
 		case 'mWhom':
-			$x = 10; break;
+			$x = 10.5; break;
 		case 'GuanXi':
 			$x = 11; break;
 		case 'Rsn':
