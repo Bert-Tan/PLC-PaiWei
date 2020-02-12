@@ -17,7 +17,7 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_CHN => "陽&nbsp;&nbsp;上&nbsp;&nbsp;祈&nbsp;&nbsp;福&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
 			SESS_LANG_ENG => "Well-wishing Request Form" ),
 		'sundayMerit' => array (
-			SESS_LANG_CHN => "往功&nbsp;&nbsp;生&nbsp;&nbsp;迴&nbsp;&nbsp;向&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
+			SESS_LANG_CHN => "往&nbsp;&nbsp;生&nbsp;&nbsp;迴&nbsp;&nbsp;向&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
 			SESS_LANG_ENG => "Merit Dedication Request Form" ),
 		'R_Name' =>	array (
 			SESS_LANG_CHN => "申請人姓名",
@@ -43,6 +43,9 @@ function _dbName_2_htmlName ( $_dbName ) {
 		'Deceased_P' =>	array (
 			SESS_LANG_CHN => "往生地點",
 			SESS_LANG_ENG => "Place Deceased" ),
+		'GongDeZhu' =>	array (
+			SESS_LANG_CHN => "功德主",
+			SESS_LANG_ENG => "A Ceremony Sponsor" ),
 		'mDates' => array (
 			SESS_LANG_CHN => "往生迴向日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多七次，以逗號分開)",
 			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 7 times; comma separated)" ),
@@ -103,10 +106,12 @@ function cellWidth( $fldN, $tblName ) { // Sunday data table field width (%) map
 			$x = 12; break;
 		case 'Deceased_P':
 			$x = 8.5; break;
+		case 'GongDeZhu':
+			$x = 5.5; break;
 		case 'qDates':
 			$x = 34; break;
 		case 'mDates': // for 迴向; at most 7 dates
-			$x = 25.5; break;
+			$x = 25.5; break;		
 	} // switch() - End of determining Cell Width
 	return "width: " . $x . "%;";
 } // cellWidth()
