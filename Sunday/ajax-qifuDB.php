@@ -43,6 +43,9 @@ function _dbName_2_htmlName ( $_dbName ) {
 		'Deceased_P' =>	array (
 			SESS_LANG_CHN => "往生地點",
 			SESS_LANG_ENG => "Place Deceased" ),
+		'GongDeZhu' =>	array (
+			SESS_LANG_CHN => "功德主",
+			SESS_LANG_ENG => "A Ceremony Sponsor" ),
 		'mDates' => array (
 			SESS_LANG_CHN => "往生迴向日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多七次，以逗號分開)",
 			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 7 times; comma separated)" ),
@@ -106,10 +109,16 @@ function cellWidth( $fldN, $tblName ) { // Sunday data table field width (%) map
 		case 'qDates':
 			$x = 34; break;
 		case 'mDates': // for 迴向; at most 7 dates
-			$x = 25.5; break;		
+			$x = 25.5; break;
+		//chunhui		
+		case 'GongDeZhu':
+			$x = 5.5; break;	
+		//chunhui	
 	} // switch() - End of determining Cell Width
 	return "width: " . $x . "%;";
 } // cellWidth()
+
+
 
 function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlresult->fetch_all( MYSQLI_ASSOC )
 	global $_sessLang, $_db;
@@ -128,6 +137,8 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 		}
 		$rows[0] = $row;
 		$sundayRqDates = _dbName_2_htmlName( 'dateInputV' ); // default
+		//chunhui
+		$gongDeZhuCheckStr = "";
 	}
 	
 	$tpl = new HTML_Template_IT("./Templates");
@@ -140,6 +151,8 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 		$rowCount++;
 		if ( $row[ 'ID' ] != '' ) {
 			$sundayRqDates = getSundayRqDates( $dbTblName, $row['ID'], $refDate );
+			//chunhui
+			$gongDeZhuCheckStr = getGongDeZhu( $dbTblName, $row['ID'] );
 		}
 		if ( strlen( $sundayRqDates ) == 0 ) continue;
 		$tpl->setCurrentBlock("data_row");
@@ -157,7 +170,13 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 			$tpl->setVariable("dbFldV", $val);
 			$tpl->parse("data_cell");
 		} // data fields of a row from sundayQifu or sundayMerit table
-	
+		
+		//chunhui
+		$tpl->setCurrentBlock("GongDeZhuCol");
+		$tpl->setVariable("cellWidth", cellWidth( 'GongDeZhu', $dbTblName ) );
+		$tpl->setVariable("checkStr", $gongDeZhuCheckStr ); $gongDeZhuCheckStr = "";
+		$tpl->parse("GongDeZhuCol");
+		//chunhui
 		$tpl->setCurrentBlock("reqDateCol");
 		$tpl->setVariable("dateFldWidth", $dateFldWidth );
 		$tpl->setVariable("dateFldV", $sundayRqDates ); $sundayRqDates = '';
@@ -186,7 +205,8 @@ function constructTblHeader( $dbTblName ) {
 	$tpl->loadTemplatefile("qifuTblHeader.tpl", true, true);
 	$tpl->setCurrentBlock("hdr_tbl") ;
 	$tpl->setVariable("tblName", $dbTblName );
-	$tpl->setVariable("numCols", sizeof($fldN) + 1 ) ; // request Date column not in DB Table
+	//chunhui
+	$tpl->setVariable("numCols", sizeof($fldN) + 2 ) ; // request Date column & GongDeZhu column not in DB Table
 	$tpl->setVariable("htmlTblName", _dbName_2_htmlName( $dbTblName ) ) ;
 	$tpl->setVariable("Who", $_sessUsr ) ;
 	if ( $_icoName != null ) {
@@ -202,6 +222,12 @@ function constructTblHeader( $dbTblName ) {
 		$tpl->setVariable("htmlFldName", _dbName_2_htmlName( $key ) ) ;
     	$tpl->parse("hdr_cell");	
 	}
+	//chunhui
+	$tpl->setCurrentBlock("GongDeZhuCol");
+	$tpl->setVariable("cellWidth", cellWidth( 'GongDeZhu', $dbTblName ) );
+	$tpl->setVariable("GongDeZhuFldName", _dbName_2_htmlName( 'GongDeZhu' ) );
+	$tpl->parse("GongDeZhuCol");
+	//chunhui
 	$tpl->setCurrentBlock("reqDateCol");
 	$dateFldName = ( $dbTblName == 'sundayQifu' ) ? 'qDates' : 'mDates';
 	$tpl->setVariable("dateFldWidth", cellWidth( $dateFldName, $dbTblName ) );
@@ -300,7 +326,8 @@ function delSundayTblData( $dbInfo ) {
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
-	$sql = "LOCK TABLES {$tblName}, sundayRq2Usr, sundayRq2Days;";
+	//chunhui
+	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
 	$_db->query( $sql );	
 	if ( ! deleteSundayTuple( $dbInfo['tblName'], $dbInfo['tblFlds'], $dbInfo['rqstr']) ) {
 		$_db->rollback();
@@ -330,7 +357,8 @@ function delSundayTblUsrData( $dbInfo ) {
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
-	$sql = "LOCK TABLES `{$tblName}` WRITE, `sundayRq2Usr` WRITE, `sundayRq2Days` WRITE;";
+	//chunhui
+	$sql = "LOCK TABLES `{$tblName}` WRITE, `sundayRq2Usr` WRITE, `sundayRq2Days` WRITE, `sundayRq2GongDeZhu` WRITE;";
 	$_db->query( $sql );	
 	if ( ! deleteSundayUsrTuple( $dbInfo['tblName'], $dbInfo['rqstr'] ) ) {
 		$_db->rollback();
@@ -357,7 +385,8 @@ function insSundayTblData( $dbInfo ) {
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
-	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`;";
+	//chunhui
+	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
 	$_db->query( $sql );
 	$tupID = insertSundayTuple(	$dbInfo['tblName'], $dbInfo['tblFlds'], $dbInfo['rqstr'] );
 	if ( ! $tupID ) {
@@ -392,7 +421,8 @@ function updSundayTblData( $dbInfo ) {
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
-	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`;";
+	//chunhui
+	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
 	$_db->query( $sql );
 	if ( ! updateSundayTuple( $dbInfo['tblName'], $dbInfo['tblFlds'], $dbInfo['rqstr'], $dbInfo['refDate'] ) ) {
 		$_db->rollback();

@@ -7,22 +7,23 @@
 	$pageSize = 'LETTER'; $unit = 'in'; //inch
 	$pdfTitle = '祈福回向申請表'; $pageOrientation = 'L';
 	$topMargin = 0.5; $bottomMargin = 0.5;
-	$leftMargin = 0.5; $rightMargin = 0.5;
+	$leftMargin = 0.3; $rightMargin = 0.3;
 	
 	//font settings
-	$ChineseFont = 'edukai3'; $EnglishFont = 'times'; 	
+	$ChineseFont = 'edukai3'; $EnglishFont = 'times'; $SymbolFont = 'zapfdingbats';
 	$fontStyle = 'B'; $fontSize = 18; $fontSizeDate = 14;
-	
+	$correctMark = TCPDF_FONTS::unichr(52);
+		
 	//some common information (string)
 	$title = '淨土念佛堂、圖書館';
 	$qifuTableTitle = '祈  福  申  請  表';
 	$meritTableTitle = '迴  向  申  請  表';
-	$qifuHeaderData = array("申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期");
-	$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請迴向之日期");
+	$qifuHeaderData = array("申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期", "斋主");
+	$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請迴向之日期", "斋主");
 	
 	//table cell column width
-	$qifuCellWidthArray = array(1.1, 1.1, 1.1, 3.4, 3.3);
-	$meritCellWidthArray = array(1.1, 1.1, 1.1, 0.9, 1.3, 1.1, 3.4);
+	$qifuCellWidthArray = array(1.1, 1.1, 1.1, 3.4, 3.3, 0.4);
+	$meritCellWidthArray = array(1.1, 1.1, 1.1, 0.9, 1.3, 1.1, 3.4, 0.4);
 	$totalWidth = 11 - $leftMargin - $rightMargin; //total table width
 	$totalHeight = 8.5 - $topMargin - $bottomMargin; //total page height
 	$extraHeight = 0.2; // extra height for each table row
@@ -77,7 +78,7 @@
 	printData($meritDataArray, $meritHeaderData, $meritCellHeightArray, $meritHeaderHeight, $meritCellWidthArray, $meritDateStrHeightArray, $meritTableTitle);
 	
 	//Close and output PDF document
-	$pdf->Output($pdfTitle.'.pdf', 'I');
+	$pdf->Output('Qifu Merit Request ' . date('Y-m-d') . '.pdf', 'I');
 	
 	
 	
@@ -131,7 +132,7 @@
 	//if $isHeader=true, print header row (special format); otherwise, print request data row
 	function printRow($data, $cellHeight, $dateStrHeight, $cellWidthArray, $isHeader) {
 		global $pdf;
-		global $ChineseFont, $EnglishFont, $fontSize, $fontStyle, $fontSizeDate;
+		global $ChineseFont, $EnglishFont, $SymbolFont, $fontSize, $fontStyle, $fontSizeDate, $correctMark;
 			
 		//field number of each request data record
 		$colNum = count($data);	
@@ -146,7 +147,7 @@
 		for($i = 0; $i < $colNum; ++$i) {
 							
 			//request dates (data cell): smaller font & left alignment & highlight CURRENT Sunday date
-			if(!$isHeader && $i == $colNum-1) {
+			if(!$isHeader && $i == $colNum-2) {
 				$pdf->SetFont($ChineseFont, $fontStyle, $fontSizeDate);
 				//$rqDate: 'Y-m-d'
 				$rqDate = getCurrentNextSundayDate();
@@ -165,7 +166,24 @@
 				//print cell borders
 				$pdf->MultiCell($cellWidthArray[$i], $cellHeight, '', 1, 'C', $fill, 0, '', '', true, 0, false, true, $cellHeight, 'M');
 				//print date string, no borders	
-				$pdf->writeHTMLCell($cellWidthArray[$i], $cellHeight-($newY-$y), $x, $newY, $data[$i], 0, 0, false, true, 'L', true);						
+				$pdf->writeHTMLCell($cellWidthArray[$i], $cellHeight-($newY-$y), $x, $newY, $data[$i], 0, 0, false, true, 'L', true);
+				
+				//reset the Y position for the next cell in the same row
+				$pdf->SetY($y, false);
+				//reset font (not use fontSizeDate for other cells)
+				$pdf->SetFont($ChineseFont, $fontStyle, $fontSize);
+			}
+			//GongDeZhu cell: if true, print correct mark
+			else if(!$isHeader && $i == $colNum-1) {				
+				$gongDeZhuMark = '';
+				if($data[$i] == 1)
+					$gongDeZhuMark = $correctMark;
+				//print GongDeZhu mark
+				$pdf->SetFont($SymbolFont, $fontStyle, $fontSize);
+				$pdf->MultiCell($cellWidthArray[$i], $cellHeight, $gongDeZhuMark, 1, 'C', $fill, 0, '', '', true, 0, false, true, $cellHeight, 'M');
+
+				//reset font
+				$pdf->SetFont($ChineseFont, $fontStyle, $fontSize);
 			}
 			//other data cells
 			else {
@@ -221,26 +239,26 @@
 		
 		
 		//(1) remove Year field in request dateStr
-		$dataArray = removeSameYearField($dataArray, $colNum-1);
-		
+		$dataArray = removeSameYearField($dataArray, $colNum-2);
+						
 		//(2) calculate PDF page title height
 		$pdfPageTitleHeight = 4 * $pdf->getStringHeight($totalHeight, "  ", false, true, '', 1);
 				
 		//(3) calculate table header height
 		$headerHeight = calculateCellHeight($headerData, $cellWidthArray, false, 0, false);
-				
+						
 		//(4) calculate table_cell_height and request_date_string_height for each data record
 		for($i = 0; $i < count($dataArray); ++$i) {
 			
 			$data = $dataArray[$i]; //data record
 			
-			$dateStrHeight = calculateDateStrHeight($data[$colNum-1], $cellWidthArray[$colNum-1]);
+			$dateStrHeight = calculateDateStrHeight($data[$colNum-2], $cellWidthArray[$colNum-2]);
 			$cellHeight = calculateCellHeight($data, $cellWidthArray, true, $dateStrHeight, true);
 			
 			array_push($dateStrHeightArray, $dateStrHeight);
 			array_push($cellHeightArray, $cellHeight);
 		}
-		
+				
 		//(5) add empty data rows (reserved for handwriting request) to data_array and height_array		
 		for($i = 0; $i < $emptyRowNum; ++$i) {
 			//add data
@@ -308,10 +326,10 @@
 		
 		//field number of each request data record
 		$colNum = count($data);
-							
+								
 		for($i = 0; $i < $colNum; ++$i) {
 			//request dates: smaller font
-			if($i == $colNum-1 && $containDate) {			
+			if($i == $colNum-2 && $containDate) {			
 				array_push($cellHeights, $dateStrHeight);
 			}
 			else {
@@ -345,7 +363,7 @@
 	
 	//remove the Year in the Requested Dates, except when there are cross years
 	//$rqdataArray: Qifu/Merit request records
-	//$dateIndex: index of request dates in each Qifu/Merit record
+	//$dateIndex: index of request dates in each Qifu/Merit record array
 	function removeSameYearField($rqDataArray, $dateIndex) {	
 		for($i = 0; $i < count($rqDataArray); ++$i) {
 			$rqData = $rqDataArray[$i];
@@ -386,8 +404,9 @@
 		$_selFlds = implode(", ", $_tblFlds); //transform to string
 		
 		//SQL statement: group Sunday Qify/Merit data by rqID and concatenate all rqDate
-		$_sql = "SELECT {$_selFlds}, GROUP_CONCAT(rqDate ORDER BY rqDate SEPARATOR \", \") FROM {$sundayTable} "
-				.	"INNER JOIN sundayRq2Days ON (ID=rqID AND TblName=\"{$sundayTable}\") "
+		$_sql = "SELECT {$_selFlds}, GROUP_CONCAT(rqDate ORDER BY rqDate SEPARATOR \", \"), GongDeZhu FROM {$sundayTable} "
+				.	"INNER JOIN sundayRq2Days ON (ID=sundayRq2Days.rqID AND sundayRq2Days.TblName=\"{$sundayTable}\") "
+				.	"INNER JOIN sundayRq2GongDeZhu ON (ID=sundayRq2GongDeZhu.rqID AND sundayRq2GongDeZhu.TblName=\"{$sundayTable}\") "
 				.	"WHERE ID in (SELECT rqID FROM sundayRq2Days "
 				.	"WHERE TblName=\"{$sundayTable}\" AND rqDate=\"{$rqDate}\") "
 				.	"GROUP BY ID;";	
