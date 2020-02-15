@@ -80,7 +80,7 @@
 							<td colspan="4" style="text-align:center; font-weight:bold;">
 								<ul>
 									<li>傳真：(630) 428-9961</li>
-									<li>簡訊 1: TBA</li>
+									<li>簡訊 1: (312) 907-1652</li>
 									<li>簡訊 2: (630) 846-6844</li>
 								</ul>
 							</td>
@@ -95,7 +95,7 @@
 			</dd><br/>
 			<dt>申請做功德主</dt>
 			<dd>
-				申請做功德主，辦法與上同，但請務必儘早與法務組聯絡，提早10分鐘到佛堂練習。
+				申請做功德主，辦法與上同，請於申請表“功德主”攔打抅，務必於佛堂早課開始前10分鐘到佛堂練習。
 				未經練習者，恕不受理。
 			</dd>
 		</dl><!-- End of dl -->        
@@ -143,8 +143,8 @@
 						<tr>
 							<td colspan="4" style="text-align:center; font-weight:bold;">
 								<ul>
-									<li>Fax：(630) 428-9961;</li>
-									<li>Text Option 1: (630) 721-1130;</li>
+									<li>Fax：(630) 428-9961</li>
+									<li>Text Option 1: (312) 907-1652</li>
 									<li>Text Option 2: (630) 846-6844</li>
 								</ul>
 							</td>
@@ -160,9 +160,10 @@
 			<dt>Request to Serve as a Sponsor</dt>
 			<dd>
 				If you want to request to serve as a sponsor, the same procedures and methods apply.
-				In addition, you must contact the volunteer in-charge for Dharma Activities.
-				If you never served such a role in a retreat, you must be trained before your request can be accepted.
-				<b>(Please contact the Dharma-Activity in-charge to arrange the training.)</b>
+				Please check the "Ceremony Sponsor" checkbox in the request form.
+				You must be trained before your request can be accepted.
+				Please arrive at the Pure Land Center at least 10 minutes before the Sunday
+				activity starts for training.
 			</dd>
 		</dl><!-- End of dl -->        
 <?php

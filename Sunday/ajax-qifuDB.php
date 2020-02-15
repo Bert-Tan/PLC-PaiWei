@@ -45,7 +45,7 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_ENG => "Place Deceased" ),
 		'GongDeZhu' =>	array (
 			SESS_LANG_CHN => "功德主",
-			SESS_LANG_ENG => "A Ceremony Sponsor" ),
+			SESS_LANG_ENG => "Ceremony Sponsor" ),
 		'mDates' => array (
 			SESS_LANG_CHN => "往生迴向日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多七次，以逗號分開)",
 			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 7 times; comma separated)" ),
@@ -170,17 +170,17 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 			$tpl->setVariable("dbFldV", $val);
 			$tpl->parse("data_cell");
 		} // data fields of a row from sundayQifu or sundayMerit table
-		
+				
+		$tpl->setCurrentBlock("reqDateCol");
+		$tpl->setVariable("dateFldWidth", $dateFldWidth );
+		$tpl->setVariable("dateFldV", $sundayRqDates ); $sundayRqDates = '';
+		$tpl->parse("reqDateCol");
 		//chunhui
 		$tpl->setCurrentBlock("GongDeZhuCol");
 		$tpl->setVariable("cellWidth", cellWidth( 'GongDeZhu', $dbTblName ) );
 		$tpl->setVariable("checkStr", $gongDeZhuCheckStr ); $gongDeZhuCheckStr = "";
 		$tpl->parse("GongDeZhuCol");
 		//chunhui
-		$tpl->setCurrentBlock("reqDateCol");
-		$tpl->setVariable("dateFldWidth", $dateFldWidth );
-		$tpl->setVariable("dateFldV", $sundayRqDates ); $sundayRqDates = '';
-		$tpl->parse("reqDateCol");
 		$tpl->setCurrentBlock("dataEditCol");
 		if ( $_sessLang == SESS_LANG_CHN ) {
 			$tpl->setVariable( "editBtnTxt", "更改");
@@ -222,17 +222,18 @@ function constructTblHeader( $dbTblName ) {
 		$tpl->setVariable("htmlFldName", _dbName_2_htmlName( $key ) ) ;
     	$tpl->parse("hdr_cell");	
 	}
+	
+	$tpl->setCurrentBlock("reqDateCol");
+	$dateFldName = ( $dbTblName == 'sundayQifu' ) ? 'qDates' : 'mDates';
+	$tpl->setVariable("dateFldWidth", cellWidth( $dateFldName, $dbTblName ) );
+	$tpl->setVariable("dateFldName", _dbName_2_htmlName( $dateFldName ) );
+	$tpl->parse("reqDateCol");
 	//chunhui
 	$tpl->setCurrentBlock("GongDeZhuCol");
 	$tpl->setVariable("cellWidth", cellWidth( 'GongDeZhu', $dbTblName ) );
 	$tpl->setVariable("GongDeZhuFldName", _dbName_2_htmlName( 'GongDeZhu' ) );
 	$tpl->parse("GongDeZhuCol");
 	//chunhui
-	$tpl->setCurrentBlock("reqDateCol");
-	$dateFldName = ( $dbTblName == 'sundayQifu' ) ? 'qDates' : 'mDates';
-	$tpl->setVariable("dateFldWidth", cellWidth( $dateFldName, $dbTblName ) );
-	$tpl->setVariable("dateFldName", _dbName_2_htmlName( $dateFldName ) );
-	$tpl->parse("reqDateCol");
 	$tpl->setCurrentBlock("dataEditCol");
 	if ( $_sessLang == SESS_LANG_CHN) {
 		$tpl->setVariable("addBtnTxt", '加行輸入');
