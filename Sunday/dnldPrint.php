@@ -7,23 +7,27 @@
 	$pageSize = 'LETTER'; $unit = 'in'; //inch
 	$pdfTitle = '祈福回向申請表'; $pageOrientation = 'L';
 	$topMargin = 0.5; $bottomMargin = 0.5;
-	$leftMargin = 0.3; $rightMargin = 0.3;
+	$leftMargin = 0.5; $rightMargin = 0.5;
 	
 	//font settings
 	$ChineseFont = 'edukai3'; $EnglishFont = 'times'; $SymbolFont = 'zapfdingbats';
-	$fontStyle = 'B'; $fontSize = 18; $fontSizeDate = 14;
+	$fontStyle = 'B'; $fontSize = 18; $fontSizeDate = 18; //$fontSizeDate = 14;
 	$correctMark = TCPDF_FONTS::unichr(52);
 		
 	//some common information (string)
 	$title = '淨土念佛堂、圖書館';
 	$qifuTableTitle = '祈  福  申  請  表';
 	$meritTableTitle = '迴  向  申  請  表';
-	$qifuHeaderData = array("申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期", "斋主");
-	$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請迴向之日期", "斋主");
-	
+	//$qifuHeaderData = array("申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期", "斋主");
+	//$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請迴向之日期", "斋主");
+	$qifuHeaderData = array("申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期", "功德主");
+	$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請迴向之日期", "功德主");
+
 	//table cell column width
-	$qifuCellWidthArray = array(1.1, 1.1, 1.1, 3.4, 3.3, 0.4);
-	$meritCellWidthArray = array(1.1, 1.1, 1.1, 0.9, 1.3, 1.1, 3.4, 0.4);
+	//$qifuCellWidthArray = array(1.1, 1.1, 1.1, 3.4, 3.3, 0.4);
+	//$meritCellWidthArray = array(1.1, 1.1, 1.1, 0.9, 1.3, 1.1, 3.4, 0.4);
+	$qifuCellWidthArray = array(1.1, 1.1, 1.1, 3.8, 1.9, 1.0);
+	$meritCellWidthArray = array(1.1, 1.1, 1.1, 0.9, 1.3, 1.6, 1.9, 1.0);
 	$totalWidth = 11 - $leftMargin - $rightMargin; //total table width
 	$totalHeight = 8.5 - $topMargin - $bottomMargin; //total page height
 	$extraHeight = 0.2; // extra height for each table row
@@ -147,6 +151,7 @@
 		for($i = 0; $i < $colNum; ++$i) {
 							
 			//request dates (data cell): smaller font & left alignment & highlight CURRENT Sunday date
+			/*
 			if(!$isHeader && $i == $colNum-2) {
 				$pdf->SetFont($ChineseFont, $fontStyle, $fontSizeDate);
 				//$rqDate: 'Y-m-d'
@@ -173,8 +178,9 @@
 				//reset font (not use fontSizeDate for other cells)
 				$pdf->SetFont($ChineseFont, $fontStyle, $fontSize);
 			}
+			*/
 			//GongDeZhu cell: if true, print correct mark
-			else if(!$isHeader && $i == $colNum-1) {				
+			if(!$isHeader && $i == $colNum-1) {				
 				$gongDeZhuMark = '';
 				if($data[$i] == 1)
 					$gongDeZhuMark = $correctMark;
@@ -404,12 +410,22 @@
 		$_selFlds = implode(", ", $_tblFlds); //transform to string
 		
 		//SQL statement: group Sunday Qify/Merit data by rqID and concatenate all rqDate
+		//sql to list all request dates
+		/*
 		$_sql = "SELECT {$_selFlds}, GROUP_CONCAT(rqDate ORDER BY rqDate SEPARATOR \", \"), GongDeZhu FROM {$sundayTable} "
 				.	"INNER JOIN sundayRq2Days ON (ID=sundayRq2Days.rqID AND sundayRq2Days.TblName=\"{$sundayTable}\") "
 				.	"INNER JOIN sundayRq2GongDeZhu ON (ID=sundayRq2GongDeZhu.rqID AND sundayRq2GongDeZhu.TblName=\"{$sundayTable}\") "
 				.	"WHERE ID in (SELECT rqID FROM sundayRq2Days "
 				.	"WHERE TblName=\"{$sundayTable}\" AND rqDate=\"{$rqDate}\") "
 				.	"GROUP BY ID;";	
+		*/
+		//sql to ONLY list the current/next Sunday as request date
+		$_sql = "SELECT {$_selFlds}, \"{$rqDate}\", GongDeZhu FROM {$sundayTable} "
+				.	"INNER JOIN sundayRq2Days ON (ID=sundayRq2Days.rqID AND sundayRq2Days.TblName=\"{$sundayTable}\") "
+				.	"INNER JOIN sundayRq2GongDeZhu ON (ID=sundayRq2GongDeZhu.rqID AND sundayRq2GongDeZhu.TblName=\"{$sundayTable}\") "
+				.	"WHERE ID in (SELECT rqID FROM sundayRq2Days "
+				.	"WHERE TblName=\"{$sundayTable}\" AND rqDate=\"{$rqDate}\") "
+				.	"GROUP BY ID;";
 		
 		//query Sunday Qify/Merit data
 		$_rslt = $_db->query( $_sql );			
