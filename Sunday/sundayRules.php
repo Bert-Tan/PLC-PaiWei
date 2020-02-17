@@ -68,11 +68,11 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td style="text-align: center; font-weight:bold;">一般狀況</td><td>星期日早晨申請截止之前即已經知道親友或家人需要陽上祈福或往生迴向</td>
+							<td style="text-align: center; font-weight:bold;">一般狀況</td><td>星期日早晨申請截止之前，即已經知道有家人或親友，需要陽上祈福或往生迴向</td>
 							<td>由本網頁直接申請</td><td>平常星期日早晨 9:00；<br/>供佛日星期日早晨 8:30</td>
 						</tr>
 						<tr>
-							<td style="text-align: center; font-weight: bold;">突發狀況</td><td>星期日早晨申請截止之後才知道親友或家人需要陽上祈福或往生迴向</td>
+							<td style="text-align: center; font-weight: bold;">突發狀況</td><td>星期日早晨申請截止之後，才知道有家人或親友，需要陽上祈福或往生迴向</td>
 							<td>傳真、簡訊、或現場填寫</td><td>平常星期日早晨 9:45；<br/>供佛日星期日早晨 9:15</td>
 							<!-- <td>星期日早課開始 15 分鐘之前</td> -->
 						</tr>
@@ -132,13 +132,14 @@
 					<tbody>
 						<tr>
 							<td style="text-align: center; font-weight:bold;">Normal Scenario</td>
-							<td>Situation known before 8:00am on Sunday</td>
-							<td>Submit request via this webpage online</td><td>8:00am on Sunday</td>
+							<td>Situation known before the Application Deadline on Sundays</td>
+							<td>Submit request via this webpage online</td>
+							<td>9:00am on regular Sundays;<br/>8:30am on Sundays w/ Buddha Offering Ceremony<br/></td>
 						</tr>
 						<tr>
 							<td style="text-align: center; font-weight: bold;">Urgent Scenario</td>
-							<td>Situation learned after 8:00am on Sunday</td>
-							<td>Submit via fax, text, or on-site</td><td>15 minutes before Sunday Activity starts</td>
+							<td>Situation learned after the Application Deadline on Sundays</td>
+							<td>Submit via fax, text, or on-site</td><td>15 minutes before respective Sunday Activity starts</td>
 						</tr>
 						<tr>
 							<td colspan="4" style="text-align:center; font-weight:bold;">
@@ -155,14 +156,16 @@
 			<dt>Multi-Sunday Requests</dt>
 			<dd>
 				When submitting requests, please indicate clearly the Sunday(s) on which your requests will be applied.
-				If you will be represented by designees, then you cannot request for more than three Sundays.
+				For Well-wishing, the requests are limited to three times.
+				For Merit-dedication and you cannot be present, the requests are limited to three times;
+				for Merit-dedication and the deceased has been beyond 49 days, the request is limited to the immediate applicable Sunday only.
 			</dd><br/>
 			<dt>Request to Serve as a Sponsor</dt>
 			<dd>
-				If you want to request to serve as a sponsor, the same procedures and methods apply.
-				Please check the "Ceremony Sponsor" checkbox in the request form.
-				You must be trained before your request can be accepted.
-				Please arrive at the Pure Land Center at least 10 minutes before the Sunday
+				If you want to request to serve as a sponsor, the same requirements apply;
+				please check the "Ceremony Sponsor" checkbox in the request form.
+				<b>However,</b> you <b>must</b> be trained before your request will be accepted.
+				Please arrive at the Pure Land Center at least <b>10</b> minutes before the Sunday
 				activity starts for training.
 			</dd>
 		</dl><!-- End of dl -->        

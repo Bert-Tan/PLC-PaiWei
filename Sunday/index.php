@@ -31,10 +31,10 @@
 				SESS_LANG_ENG => "User<br/>Logout" ),
 			'qifuTitle' => array (
 				SESS_LANG_CHN => "週日早課申請<br/>陽上祈福與往生迴向",
-				SESS_LANG_ENG => "Sunday Chanting<br/>Well-wishing&nbsp;&amp;&nbsp;Merit Dedication" ),
+				SESS_LANG_ENG => "Sunday Chanting<br/>Well-wishing for Alived&nbsp;&amp;&nbsp;Merit Dedication for Deceased" ),
 			'ruleTab' => array (
 				SESS_LANG_CHN => "申請需知",
-				SESS_LANG_ENG => "Application Instruction" ),
+				SESS_LANG_ENG => "Application Requirements" ),
 			'qifuTab' => array (
 				SESS_LANG_CHN => "陽上祈福申請表",
 				SESS_LANG_ENG => "Well-wishing Request Form" ),
@@ -108,7 +108,7 @@
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
 		width: 98%;
-		height: 70vh;
+		height: 65vh;
 		margin: auto;
 		margin-top: 0px;
 		margin-bottom: 0px;
