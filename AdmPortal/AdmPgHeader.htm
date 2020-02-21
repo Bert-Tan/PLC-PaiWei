@@ -10,7 +10,7 @@
 		<table class="pgMenu centerMeV" style="width: 52vw;">	
 			<thead>
 				<tr>
-					<th data-urlIdx="urlAdmHome" style="width: 4.2vw;">回到<br/>管理主頁</th>
+					<th data-urlIdx="urlAdmHome">回到<br/>管理主頁</th>
 <?php
 	if ( $_SESSION[ 'sessType' ] == SESS_TYP_WEBMASTER ) {
 ?>
@@ -22,7 +22,8 @@
 					<th data-urlIdx="urlDnldJiWen">列印<br/>祭文與疏文</th>
 					<th data-urlIdx="urlDnld">下載<br/>牌位列印</th>
 					<th data-urlIdx="url4Others">處理<br/>法會牌位</th>
-					<th class="future">處理<br/>週日迴向申請</th>
+					<!-- th class="future">處理<br/>週日迴向申請</th -->
+					<th data-urlIdx="urlSundayMgr">處理<br/>週日迴向申請</th>
 					<th data-urlIdx="usrLogout">用戶<br/>撤出</th>
 				</tr>
 			</thead>
