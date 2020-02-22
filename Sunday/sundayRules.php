@@ -95,8 +95,7 @@
 			</dd><br/>
 			<dt>申請做功德主</dt>
 			<dd>
-				申請做功德主，辦法與上同，請於申請表“功德主”攔打抅，以申請順序<b>前三人</b>為限。
-				功德主務必於佛堂早課開始前10分鐘到佛堂練習，
+				申請做功德主，辦法與上同，請於申請表“功德主”攔打抅，務必於佛堂早課開始前10分鐘到佛堂練習。
 				未經練習者，恕不受理。
 			</dd>
 		</dl><!-- End of dl -->        
@@ -165,7 +164,6 @@
 			<dd>
 				If you want to request to serve as a sponsor, the same requirements apply;
 				please check the "Ceremony Sponsor" checkbox in the request form.
-				We only accept the <b>first three requesters</b> every Sunday.
 				<b>However,</b> you <b>must</b> be trained before your request will be accepted.
 				Please arrive at the Pure Land Center at least <b>10</b> minutes before the Sunday
 				activity starts for training.
