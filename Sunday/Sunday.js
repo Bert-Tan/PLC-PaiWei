@@ -187,9 +187,11 @@ function init_pilotRow( pRow ) {
     pRow.find("input[type=text]").attr( { "data-oldv": '', "value": pilotInputTxt, "data-pmptv": '' } );
     pRow.find("input[data-fldn=reqDates]").attr( "value", reqDateTxt );
     pRow.find("input[type=text]").prop( "disabled", false );
+    //chunhui
     pRow.find("input[type=checkbox]").attr( { "data-oldv": '', "value": '', "data-pmptv": '' } );
     pRow.find("input[type=checkbox]").prop( "disabled", false );
     pRow.find("input[type=checkbox]").prop( "checked", false );
+    //chunhui
     pRow.attr("id", '');
     lastTd.find("*").unbind().remove();
     lastTd.append( insBtn );
@@ -272,7 +274,8 @@ function hdlr_dataChg() { // on Blur
     var pmptV = ( $(this).attr("data-pmptv") !== undefined ) ? $(this).attr("data-pmptv").trim() : '';
     var x = ( oldV.length > 0 ) ? oldV : pmptV;
     var fldN = $(this).attr("data-fldn");
-
+    
+    //chunhui
     if ( fldN == 'GongDeZhu') {
         if ($(this).is(':checked'))
             newV = "checked";
@@ -284,6 +287,7 @@ function hdlr_dataChg() { // on Blur
         }    
         return;
     }
+    //chunhui
 
     if ( newV.length == 0 ) {
         if ( oldV.length > 0 ) { // existing data editing; but did not input any data
@@ -378,6 +382,8 @@ function hdlr_dataChg() { // on Blur
 
 function hdlr_tabClick() {
     var rqTblName = $(this).attr("data-table");
+    //chunhui
+    //var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
     var dirtyCells = $("tbody input[data-changed=true]").length;
     if ( rqTblName == _tblName ) return false; /* nothing to do */
     if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
@@ -405,6 +411,12 @@ function hdlr_tabClick() {
     case 'sundayMerit':
         loadTblData( _tblName, ( ( _icoName == null ) ? _sessUsr : _icoName ), "tabDataFrame" );
         break;
+    //chunhui
+    /*    
+    case 'sundayGongDeZhu':
+        alert( "Sunday Gong De Zhu data for " + _sessUsr + " will be loaded");
+        break;
+    */
     } // switch()
 } // function tabClick()
 
@@ -412,12 +424,15 @@ function hdlr_addRow() {
     var dataBody = $("table.dataRows tbody");
     var newRow = _pilotRow.clone();
     var newRowDataCells = newRow.find("input[type=text]");
+    //chunhui
     var newCheckbox = newRow.find("input[type=checkbox]");
 
     newRowDataCells.on( 'blur', hdlr_dataChg );
     newRowDataCells.on( 'focus', hdlr_onFocus );
+    //chunhui
     newCheckbox.on( 'blur', hdlr_dataChg );
     newCheckbox.on( 'focus', hdlr_onFocus );
+    //chunhui
     newRow.find("input.insBtn").on( 'click', hdlr_insBtn );
     dataBody.append( newRow );
 } // function hdlr_addRow()
@@ -472,12 +487,15 @@ function hdlr_editBtn() {
     var canBtn = $('<input class="canBtn" type="button" value="' + canBtnVal + '">');
     var delBtn = $('<input class="delBtn" type="button" value="' + delBtnVal + '">');
     var dataCells = $(this).closest("tr").find("input[type=text]");
+    //chunhui
     var checkbox = $(this).closest("tr").find("input[type=checkbox]");
     var lastTd = $(this).closest("td");
     dataCells.prop( 'disabled', false );
     dataCells.on('blur', hdlr_dataChg );
+    //chunhui
     checkbox.prop( 'disabled', false );
     checkbox.on('blur', hdlr_dataChg );
+    //chunhui
     lastTd.find("*").unbind();
     lastTd.empty();
     lastTd.append( updBtn, spacer, canBtn, spacer, delBtn );
@@ -541,6 +559,7 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
     var thisRow = $(this).closest("tr");
     var lastTd = thisRow.find("td:last");
     var cellsChanged = thisRow.find("input[type=text][data-changed=true]");
+    //chunhui
     var checkboxChanged = thisRow.find("input[type=checkbox][data-changed=true]");
 
     var ajaxData = {}, dbInfo = {}, tblFlds = {};
@@ -555,6 +574,7 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
         tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
     });
 
+    //chunhui
     if ( checkboxChanged.length == 0 )
         tblFlds [ "GongDeZhu" ] = "";
     else {
@@ -562,6 +582,7 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
             tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
         });
     }      
+    //chunhui
 
     dbInfo[ 'tblName' ] = _tblName;
     dbInfo[ 'tblFlds' ] = tblFlds;
@@ -589,12 +610,14 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
                             $(this).attr( {"oldv": $(this).val(), "value": $(this).val(), "data-changed": "false"} );
                         });
                         thisRow.find("input[type=text]").prop("disabled", true).removeAttr('data-pmptv');
+                        //chunhui
                         if ( checkboxChanged.length != 0 ) {
                             checkboxChanged.each( function() {
                                 $(this).attr( {"oldv": $(this).val(), "value": $(this).val(), "data-changed": "false"} );
                             });
                         }
                         thisRow.find("input[type=checkbox]").prop("disabled", true).removeAttr('data-pmptv');
+                        //chunhui
                         thisRow.find("*").unbind();
                         lastTd.empty().append( editBtn, spacer, delBtn );
                         lastTd.find(".editBtn").on('click', hdlr_editBtn );
@@ -625,12 +648,14 @@ function hdlr_updBtn() {
     var thisRow = $(this).closest("tr");
     var lastTd = thisRow.find("td:last");
     var cellsChanged = thisRow.find("input[data-changed=true]");
+    //chunhui
     var checkbox = thisRow.find("input[type=checkbox]");
     var tblFlds = {}, ajaxData = {}, dbInfo = {};
 
     if ( cellsChanged.length == 0 ) {
         alert( ackNC );
         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
+        //chunhui
         thisRow.find("input[type=checkbox]").prop( "disabled", true );
         thisRow.find("*").unbind();
         lastTd.empty().append( editBtn, spacer, delBtn );
@@ -670,6 +695,7 @@ function hdlr_updBtn() {
                         alert( ackMsg );
                         cellsChanged.attr("data-changed", "false");
                         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
+                        //chunhui
                         thisRow.find("input[type=checkbox]").prop( "disabled", true );
                         thisRow.find("*").unbind();
                         lastTd.empty().append( editBtn, spacer, delBtn );
@@ -681,6 +707,7 @@ function hdlr_updBtn() {
                         cellsChanged.each(function(i) {
 							$(this).val( $(this).attr( "data-oldv" ) ); // restore its old value
                         }); // cellsChanged
+                        //chunhui
                         // checkbox disply the old status (checked/unchecked)
                         checkbox.each( function () {
                             if ( $(this).val() == "" )
@@ -688,9 +715,11 @@ function hdlr_updBtn() {
                             else
                                 $(this).prop("checked", true);
                         });
+                        //chunhui
                         alert( errMsg ); 
                         cellsChanged.attr("data-changed", "false");
                         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
+                        //chunhui
                         thisRow.find("input[type=checkbox]").prop( "disabled", true );
                         thisRow.find("*").unbind();
                         lastTd.empty().append( editBtn, spacer, delBtn );
@@ -712,8 +741,10 @@ function hdlr_canBtn() {
     var editBtn = $('<input class="editBtn" type="button" value="' + editBtnVal + '">');
     var delBtn = $('<input class="delBtn" type="button" value="' + delBtnVal + '">');
     var spacer = "<span>&nbsp;&nbsp;</span>";
+    //chunhui
     var cells = $(this).closest("tr").find("input[type=text][data-changed=true]");    
     var checkbox = $(this).closest("tr").find("input[type=checkbox][data-changed=true]");
+    //chunhui
     var td = $(this).closest("td");
 	if ( cells.length > 0 ) {
 		cells.each( function () { // Restore the old value
@@ -721,6 +752,7 @@ function hdlr_canBtn() {
 			$(this).attr( "data-changed", "false" );
 		}); // forEach
     }
+    //chunhui
     if ( checkbox.length > 0 ) {
 		checkbox.each( function () { // Restore the old value
 			$(this).val( $(this).attr( "data-oldv" ) );
@@ -732,7 +764,9 @@ function hdlr_canBtn() {
                 $(this).prop("checked", true);
 		});
     }
+    //chunhui
     $(this).closest("tr").find("input[type=text]").prop( "disabled", true );
+    //chunhui
     $(this).closest("tr").find("input[type=checkbox]").prop( "disabled", true );
     td.find("*").unbind(); td.empty();
     td.append( editBtn, spacer, delBtn );

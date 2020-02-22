@@ -109,9 +109,11 @@ function cellWidth( $fldN, $tblName ) { // Sunday data table field width (%) map
 		case 'qDates':
 			$x = 34; break;
 		case 'mDates': // for 迴向; at most 7 dates
-			$x = 25.5; break;		
+			$x = 25.5; break;
+		//chunhui		
 		case 'GongDeZhu':
-			$x = 5.5; break;		
+			$x = 5.5; break;	
+		//chunhui	
 	} // switch() - End of determining Cell Width
 	return "width: " . $x . "%;";
 } // cellWidth()
@@ -135,6 +137,7 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 		}
 		$rows[0] = $row;
 		$sundayRqDates = _dbName_2_htmlName( 'dateInputV' ); // default
+		//chunhui
 		$gongDeZhuCheckStr = "";
 	}
 	
@@ -148,6 +151,7 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 		$rowCount++;
 		if ( $row[ 'ID' ] != '' ) {
 			$sundayRqDates = getSundayRqDates( $dbTblName, $row['ID'], $refDate );
+			//chunhui
 			$gongDeZhuCheckStr = getGongDeZhu( $dbTblName, $row['ID'] );
 		}
 		if ( strlen( $sundayRqDates ) == 0 ) continue;
@@ -171,10 +175,12 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 		$tpl->setVariable("dateFldWidth", $dateFldWidth );
 		$tpl->setVariable("dateFldV", $sundayRqDates ); $sundayRqDates = '';
 		$tpl->parse("reqDateCol");
+		//chunhui
 		$tpl->setCurrentBlock("GongDeZhuCol");
 		$tpl->setVariable("cellWidth", cellWidth( 'GongDeZhu', $dbTblName ) );
 		$tpl->setVariable("checkStr", $gongDeZhuCheckStr ); $gongDeZhuCheckStr = "";
 		$tpl->parse("GongDeZhuCol");
+		//chunhui
 		$tpl->setCurrentBlock("dataEditCol");
 		if ( $_sessLang == SESS_LANG_CHN ) {
 			$tpl->setVariable( "editBtnTxt", "更改");
@@ -199,6 +205,7 @@ function constructTblHeader( $dbTblName ) {
 	$tpl->loadTemplatefile("qifuTblHeader.tpl", true, true);
 	$tpl->setCurrentBlock("hdr_tbl") ;
 	$tpl->setVariable("tblName", $dbTblName );
+	//chunhui
 	$tpl->setVariable("numCols", sizeof($fldN) + 2 ) ; // request Date column & GongDeZhu column not in DB Table
 	$tpl->setVariable("htmlTblName", _dbName_2_htmlName( $dbTblName ) ) ;
 	$tpl->setVariable("Who", $_sessUsr ) ;
@@ -221,10 +228,12 @@ function constructTblHeader( $dbTblName ) {
 	$tpl->setVariable("dateFldWidth", cellWidth( $dateFldName, $dbTblName ) );
 	$tpl->setVariable("dateFldName", _dbName_2_htmlName( $dateFldName ) );
 	$tpl->parse("reqDateCol");
+	//chunhui
 	$tpl->setCurrentBlock("GongDeZhuCol");
 	$tpl->setVariable("cellWidth", cellWidth( 'GongDeZhu', $dbTblName ) );
 	$tpl->setVariable("GongDeZhuFldName", _dbName_2_htmlName( 'GongDeZhu' ) );
 	$tpl->parse("GongDeZhuCol");
+	//chunhui
 	$tpl->setCurrentBlock("dataEditCol");
 	if ( $_sessLang == SESS_LANG_CHN) {
 		$tpl->setVariable("addBtnTxt", '加行輸入');
@@ -318,6 +327,7 @@ function delSundayTblData( $dbInfo ) {
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
+	//chunhui
 	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
 	$_db->query( $sql );	
 	if ( ! deleteSundayTuple( $dbInfo['tblName'], $dbInfo['tblFlds'], $dbInfo['rqstr']) ) {
@@ -348,6 +358,7 @@ function delSundayTblUsrData( $dbInfo ) {
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
+	//chunhui
 	$sql = "LOCK TABLES `{$tblName}` WRITE, `sundayRq2Usr` WRITE, `sundayRq2Days` WRITE, `sundayRq2GongDeZhu` WRITE;";
 	$_db->query( $sql );	
 	if ( ! deleteSundayUsrTuple( $dbInfo['tblName'], $dbInfo['rqstr'] ) ) {
@@ -375,6 +386,7 @@ function insSundayTblData( $dbInfo ) {
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
+	//chunhui
 	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
 	$_db->query( $sql );
 	$tupID = insertSundayTuple(	$dbInfo['tblName'], $dbInfo['tblFlds'], $dbInfo['rqstr'] );
@@ -410,6 +422,7 @@ function updSundayTblData( $dbInfo ) {
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
+	//chunhui
 	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
 	$_db->query( $sql );
 	if ( ! updateSundayTuple( $dbInfo['tblName'], $dbInfo['tblFlds'], $dbInfo['rqstr'], $dbInfo['refDate'] ) ) {
