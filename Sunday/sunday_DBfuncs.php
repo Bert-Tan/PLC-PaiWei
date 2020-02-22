@@ -86,7 +86,8 @@ function insertSundayTuple( $tblName, $tupNVs, $usr ) {
 	$sql = "INSERT into `sundayRq2Days` (`TblName`, `rqID`, `RqDate`) VALUE {$reqDateValues};";
 	$rslt = $_db->query( $sql );
 	// taking care of sundayRq2GongDeZhu table
-	$sql = "INSERT into `sundayRq2GongDeZhu` (`TblName`, `rqID`, `GongDeZhu`) VALUE (\"{$tblName}\",  \"{$tupID}\", \"{$gongDeZhu}\");";
+	$now = date("Y-m-d H:i:s");
+	$sql = "INSERT into `sundayRq2GongDeZhu` (`TblName`, `rqID`, `GongDeZhu`, `rqTime`) VALUE (\"{$tblName}\",  \"{$tupID}\", \"{$gongDeZhu}\", \"{$now}\");";
 	$rslt = $_db->query( $sql );
 	// taking care of sundayRq2Usr table
 	$sql = "INSERT into `sundayRq2Usr` (`TblName`, `rqID`, `UsrName`) VALUE (\"{$tblName}\",  \"{$tupID}\", \"{$usr}\");";
@@ -136,7 +137,8 @@ function updateSundayTuple( $tblName, $tupNVs, $usr, $refDate ) {
 		$rslt = $_db->query( $sql );
 	}
 	if ( $updateGongDeZhu ) { // changes to the sundayRq2GongDeZhu table
-		$sql = "UPDATE `sundayRq2GongDeZhu` SET `GongDeZhu` = \"{$gongDeZhu}\" WHERE `TblName` = \"{$tblName}\" AND `rqID` = \"{$tupID}\";";
+		$now = date("Y-m-d H:i:s");
+		$sql = "UPDATE `sundayRq2GongDeZhu` SET `GongDeZhu` = \"{$gongDeZhu}\", `rqTime` = \"{$now}\" WHERE `TblName` = \"{$tblName}\" AND `rqID` = \"{$tupID}\";";
 		$rslt = $_db->query( $sql );
 	}
 	return true;
