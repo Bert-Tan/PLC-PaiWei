@@ -10,6 +10,9 @@
 	$_icoName = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
 	$useChn = ( $_SESSION[ 'sessLang' ] == SESS_LANG_CHN );
 
+	//the max GongDeZhu number of each Sunday
+	$MaxGongDeZhu = 3;
+
 function _dbName_2_htmlName ( $_dbName ) {
 	global $_sessLang;
 	$_htmlNames = array (
@@ -370,7 +373,7 @@ function insSundayTblData( $dbInfo ) {
 	/*
 	 * The receiving AJAX switches on 'URL', 'insSuccess', 'errCount', 'dupCount'
 	 */
-	global $_db, $_errRec, $_errCount, $_insCount, $_dupCount, $_dupRec;
+	global $_db, $_errRec, $_errCount, $_insCount, $_dupCount, $_dupRec, $MaxGongDeZhu;
 	$rpt = array();
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
@@ -394,6 +397,17 @@ function insSundayTblData( $dbInfo ) {
 	$sql = "UNLOCK TABLES;";
 	$_db->query( $sql ); $_db->autocommit(true);
 	$rpt [ 'insSUCCESS' ] = $tupID;
+
+	$rpt [ 'exceedGongDeZhu' ] = false;
+	//check whether GongDeZhu requests exceed the max num
+	$firstRqDate = $dbInfo['firstRqDate'];
+	//only when GongDeZhu checkbox is changed to checked
+	if($firstRqDate != "") {
+		$gongDeZhuNum = getGongDeZhuNum($firstRqDate);
+		if( $gongDeZhuNum > $MaxGongDeZhu )
+			$rpt [ 'exceedGongDeZhu' ] = true;
+	}
+
 	return $rpt;
 } // insSundayTblData()
 
@@ -404,7 +418,7 @@ function updSundayTblData( $dbInfo ) {
 	/*
 	 * The receiving AJAX switches on 'URL', 'updSUCCESS', 'errCount'
 	 */
-	global $_db, $_errCount, $_errRec, $_updCount;
+	global $_db, $_errCount, $_errRec, $_updCount, $MaxGongDeZhu;
 	$rpt = array();
 
 	$tblName = $dbInfo['tblName'];
@@ -422,8 +436,20 @@ function updSundayTblData( $dbInfo ) {
 	}
 	$_db->commit();
 	$sql = "UNLOCK TABLES;";
-	$_db->autocommit(true);
+	$_db->query( $sql ); $_db->autocommit(true);
 	$rpt [ 'updSUCCESS' ] = true;
+	
+	$rpt [ 'exceedGongDeZhu' ] = false;
+	//check whether GongDeZhu requests exceed the max num
+	$firstRqDate = $dbInfo['firstRqDate'];
+	//only when GongDeZhu checkbox is changed to checked
+	if($firstRqDate != "") {
+		$gongDeZhuNum = getGongDeZhuNum($firstRqDate);
+		if( $gongDeZhuNum > $MaxGongDeZhu ) {
+			$rpt [ 'exceedGongDeZhu' ] = true;
+		}
+	}	
+
 	return $rpt;													
 } // updSundayTblData()
 

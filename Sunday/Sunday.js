@@ -86,6 +86,15 @@ function deriveDeceased49V( dateStr, chkSanity ) { // dateStr is a valid date st
     return( new Date( deceased.setDate( deceased.getDate() + 49 ) ).getTime() );
 } // fundtion deriveDeceased49()
 
+function getFirstRqDate(rqDateStr) { //get the first date in rqDateStr
+    rqDateStr = rqDateStr.trim().replace( /<br>$/gm, '');
+
+    var dateArray = rqDateStr.split( /,\s*/ ).sort();
+    if ( dateArray[0].length == 0 ) dateArray.shift();
+
+    return dateArray[0];
+} // fundtion getFirstRqDate()
+
 function readSundayParam() {
     var ajaxData = {}, dbInfo = {}, rspX = null;
     dbInfo[ 'tblName' ] = 'sundayParam';
@@ -532,6 +541,7 @@ function hdlr_delBtn() {
 
 function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).closest("tr").html() );
     var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入完整的資料" : "Please enter complete data";
+    var exceedGongDeZhuMsg = ( _sessLang == SESS_LANG_CHN) ? "功德主已超過三人，您在等待名單中！" : "Sponsor requests exceed the max-limit, you are in the waiting list!";
     var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
     var delBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Del';
     var editBtn = $('<input class="editBtn" type="button" value="' + editBtnVal + '">');
@@ -555,17 +565,24 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
         tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
     });
 
+    //first request date to check whether GongDeZhu exceed limit
+    //only GongDeZhu checkbox is changed to checked, firstRqDate has value; other, ""
+    var firstRqDate = "";
     if ( checkboxChanged.length == 0 )
         tblFlds [ "GongDeZhu" ] = "";
     else {
         checkboxChanged.each( function() {
             tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
         });
-    }      
+        
+        var rqDateStr = thisRow.find("input[data-fldn=reqDates]").val();
+        firstRqDate = getFirstRqDate(rqDateStr);
+    }          
 
     dbInfo[ 'tblName' ] = _tblName;
     dbInfo[ 'tblFlds' ] = tblFlds;
     dbInfo[ 'rqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
+    dbInfo[ 'firstRqDate' ] = firstRqDate;
     ajaxData[ 'dbReq'] = 'dbINS';
     ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
     $.ajax({
@@ -600,7 +617,11 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
                         lastTd.find(".editBtn").on('click', hdlr_editBtn );
                         lastTd.find(".delBtn").on('click', hdlr_delBtn );
                         alert( ackMsg );
+                        if(rspX['exceedGongDeZhu'])
+                            alert (exceedGongDeZhuMsg);
                         return;
+                    case 'exceedGongDeZhu':
+                        return;   
                     default: // Error cases - details later
                         alert( 'Insert Error occurred; received: "' + rspX[X] + '"' );
                         return;
@@ -617,6 +638,7 @@ function hdlr_updBtn() {
     var ackNC = ( _sessLang == SESS_LANG_CHN ) ? "沒有任何更動！" : "Nothing Changed!";
     var ackMsg = ( _sessLang == SESS_LANG_CHN ) ? "祈福迴向資料更新完畢！" : "Update Completed!";
     var errMsg = ( _sessLang == SESS_LANG_CHN ) ? "祈福迴向資料更新發生錯誤！" : "Update Failed!";
+    var exceedGongDeZhuMsg = ( _sessLang == SESS_LANG_CHN) ? "功德主已超過三人，您在等待名單中！" : "Sponsor requests exceed the max-limit, you are in the waiting list!";
     var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
     var delBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Del';
     var editBtn = $('<input class="editBtn" type="button" value="' + editBtnVal + '">');
@@ -639,15 +661,26 @@ function hdlr_updBtn() {
         return;
     }
 
+    //first request date to check whether GongDeZhu exceed limit
+    //only GongDeZhu checkbox is changed to checked, firstRqDate has value; other, ""
+    var firstRqDate = "";
     tblFlds[ thisRow.attr( 'data-keyn' ) ] = thisRow.attr( 'id' ); // getting tuple (Key Name, Value)
     cellsChanged.each( function () {
         tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
+
+        //GongDeZhu checkbox is changed to checked
+        if($(this).attr("data-fldn")=="GongDeZhu" && $(this).val()=="checked") {
+            var rqDateStr = thisRow.find("input[data-fldn=reqDates]").val();
+            firstRqDate = getFirstRqDate(rqDateStr);
+        }
     });
+
     dbInfo[ 'tblName' ] = _tblName;
     dbInfo[ 'tblFlds' ] = tblFlds;
     dbInfo[ 'rqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
+    dbInfo[ 'firstRqDate' ] = firstRqDate;
     dbInfo[ 'refDate' ] = _startingSundayStr;
-    ajaxData[ 'dbReq'] = 'dbUPD';
+    ajaxData[ 'dbReq'] = 'dbUPD';    
     ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
     $.ajax({
         url: "./ajax-qifuDB.php",
@@ -675,7 +708,11 @@ function hdlr_updBtn() {
                         lastTd.empty().append( editBtn, spacer, delBtn );
                         lastTd.find(".editBtn").on( 'click', hdlr_editBtn );
                         lastTd.find(".delBtn").on( 'click', hdlr_delBtn );
+                        if(rspX['exceedGongDeZhu'])
+                            alert (exceedGongDeZhuMsg);
                         return;
+                    case 'exceedGongDeZhu':
+                            return;
                     default: // Error cases - details later
                         alert( 'Insert Error occurred; received: "' + rspX[X] + '"' );
                         cellsChanged.each(function(i) {

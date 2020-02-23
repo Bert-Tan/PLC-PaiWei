@@ -16,6 +16,26 @@ function getDBTblFlds( $Table ) {
 	return $fldN;
 } // getDBTblFlds()
 
+function getGongDeZhuNum( $rqDate ) {
+	global $_db;
+
+	$sql = "LOCK TABLES `sundayRq2GongDeZhu` , `sundayRq2Days`;";
+	$_db->query( $sql );
+	
+	$sql = "SELECT G.TblName, G.rqID FROM sundayRq2GongDeZhu G "
+				.	"INNER JOIN sundayRq2Days D ON (G.TblName=D.TblName AND G.rqID=D.rqID) "
+				.	"WHERE G.GongDeZhu=1 AND D.rqDate=\"{$rqDate}\" "
+				.	"ORDER BY G.rqTime;";	
+	$rslt = $_db->query( $sql );
+	$num = $rslt->num_rows;
+		
+	$sql = "UNLOCK TABLES;";
+	$_db->query( $sql );
+	$rslt->free();
+
+	return $num;
+} // function getGongDeZhuNum()
+
 function getGongDeZhu( $tblName, $rqID ) {
 	global $_db;
 	
