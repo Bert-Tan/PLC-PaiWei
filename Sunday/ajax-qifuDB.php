@@ -10,8 +10,10 @@
 	$_icoName = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
 	$useChn = ( $_SESSION[ 'sessLang' ] == SESS_LANG_CHN );
 
+	/*
 	//the max GongDeZhu number of each Sunday
 	$MaxGongDeZhu = 3;
+	*/
 
 function _dbName_2_htmlName ( $_dbName ) {
 	global $_sessLang;
@@ -46,9 +48,11 @@ function _dbName_2_htmlName ( $_dbName ) {
 		'Deceased_P' =>	array (
 			SESS_LANG_CHN => "往生地點",
 			SESS_LANG_ENG => "Place Deceased" ),
+		/*	
 		'GongDeZhu' =>	array (
 			SESS_LANG_CHN => "功德主",
 			SESS_LANG_ENG => "Ceremony Sponsor" ),
+		*/
 		'mDates' => array (
 			SESS_LANG_CHN => "回向日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多七次，以逗號分開)",
 			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 7 times; comma separated)" ),
@@ -113,8 +117,10 @@ function cellWidth( $fldN, $tblName ) { // Sunday data table field width (%) map
 			$x = 34; break;
 		case 'mDates': // for 回向; at most 7 dates
 			$x = 25.5; break;		
-		case 'GongDeZhu':
-			$x = 5.5; break;		
+		/*
+			case 'GongDeZhu':
+			$x = 5.5; break;
+		*/		
 	} // switch() - End of determining Cell Width
 	return "width: " . $x . "%;";
 } // cellWidth()
@@ -138,7 +144,7 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 		}
 		$rows[0] = $row;
 		$sundayRqDates = _dbName_2_htmlName( 'dateInputV' ); // default
-		$gongDeZhuCheckStr = "";
+		//$gongDeZhuCheckStr = "";
 	}
 	
 	$tpl = new HTML_Template_IT("./Templates");
@@ -151,7 +157,7 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 		$rowCount++;
 		if ( $row[ 'ID' ] != '' ) {
 			$sundayRqDates = getSundayRqDates( $dbTblName, $row['ID'], $refDate );
-			$gongDeZhuCheckStr = getGongDeZhu( $dbTblName, $row['ID'] );
+			//$gongDeZhuCheckStr = getGongDeZhu( $dbTblName, $row['ID'] );
 		}
 		if ( strlen( $sundayRqDates ) == 0 ) continue;
 		$tpl->setCurrentBlock("data_row");
@@ -174,10 +180,12 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 		$tpl->setVariable("dateFldWidth", $dateFldWidth );
 		$tpl->setVariable("dateFldV", $sundayRqDates ); $sundayRqDates = '';
 		$tpl->parse("reqDateCol");
+		/*
 		$tpl->setCurrentBlock("GongDeZhuCol");
 		$tpl->setVariable("cellWidth", cellWidth( 'GongDeZhu', $dbTblName ) );
 		$tpl->setVariable("checkStr", $gongDeZhuCheckStr ); $gongDeZhuCheckStr = "";
 		$tpl->parse("GongDeZhuCol");
+		*/
 		$tpl->setCurrentBlock("dataEditCol");
 		if ( $_sessLang == SESS_LANG_CHN ) {
 			$tpl->setVariable( "editBtnTxt", "更改");
@@ -202,7 +210,8 @@ function constructTblHeader( $dbTblName ) {
 	$tpl->loadTemplatefile("qifuTblHeader.tpl", true, true);
 	$tpl->setCurrentBlock("hdr_tbl") ;
 	$tpl->setVariable("tblName", $dbTblName );
-	$tpl->setVariable("numCols", sizeof($fldN) + 2 ) ; // request Date column & GongDeZhu column not in DB Table
+	$tpl->setVariable("numCols", sizeof($fldN) + 1 ) ; // request Date column not in DB Table
+	//$tpl->setVariable("numCols", sizeof($fldN) + 2 ) ; // request Date column & GongDeZhu column not in DB Table
 	$tpl->setVariable("htmlTblName", _dbName_2_htmlName( $dbTblName ) ) ;
 	$tpl->setVariable("Who", $_sessUsr ) ;
 	if ( $_icoName != null ) {
@@ -224,10 +233,12 @@ function constructTblHeader( $dbTblName ) {
 	$tpl->setVariable("dateFldWidth", cellWidth( $dateFldName, $dbTblName ) );
 	$tpl->setVariable("dateFldName", _dbName_2_htmlName( $dateFldName ) );
 	$tpl->parse("reqDateCol");
+	/*
 	$tpl->setCurrentBlock("GongDeZhuCol");
 	$tpl->setVariable("cellWidth", cellWidth( 'GongDeZhu', $dbTblName ) );
 	$tpl->setVariable("GongDeZhuFldName", _dbName_2_htmlName( 'GongDeZhu' ) );
 	$tpl->parse("GongDeZhuCol");
+	*/
 	$tpl->setCurrentBlock("dataEditCol");
 	if ( $_sessLang == SESS_LANG_CHN) {
 		$tpl->setVariable("addBtnTxt", '加行輸入');
@@ -321,7 +332,8 @@ function delSundayTblData( $dbInfo ) {
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
-	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
+	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`;";
+	//$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
 	$_db->query( $sql );	
 	if ( ! deleteSundayTuple( $dbInfo['tblName'], $dbInfo['tblFlds'], $dbInfo['rqstr']) ) {
 		$_db->rollback();
@@ -351,7 +363,8 @@ function delSundayTblUsrData( $dbInfo ) {
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
-	$sql = "LOCK TABLES `{$tblName}` WRITE, `sundayRq2Usr` WRITE, `sundayRq2Days` WRITE, `sundayRq2GongDeZhu` WRITE;";
+	$sql = "LOCK TABLES `{$tblName}` WRITE, `sundayRq2Usr` WRITE, `sundayRq2Days` WRITE;";
+	//$sql = "LOCK TABLES `{$tblName}` WRITE, `sundayRq2Usr` WRITE, `sundayRq2Days` WRITE, `sundayRq2GongDeZhu` WRITE;";
 	$_db->query( $sql );	
 	if ( ! deleteSundayUsrTuple( $dbInfo['tblName'], $dbInfo['rqstr'] ) ) {
 		$_db->rollback();
@@ -373,12 +386,13 @@ function insSundayTblData( $dbInfo ) {
 	/*
 	 * The receiving AJAX switches on 'URL', 'insSuccess', 'errCount', 'dupCount'
 	 */
-	global $_db, $_errRec, $_errCount, $_insCount, $_dupCount, $_dupRec, $MaxGongDeZhu;
+	global $_db, $_errRec, $_errCount, $_insCount, $_dupCount, $_dupRec;
 	$rpt = array();
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
-	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
+	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`;";
+	//$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
 	$_db->query( $sql );
 	$tupID = insertSundayTuple(	$dbInfo['tblName'], $dbInfo['tblFlds'], $dbInfo['rqstr'] );
 	if ( ! $tupID ) {
@@ -398,6 +412,7 @@ function insSundayTblData( $dbInfo ) {
 	$_db->query( $sql ); $_db->autocommit(true);
 	$rpt [ 'insSUCCESS' ] = $tupID;
 
+	/*
 	$rpt [ 'exceedGongDeZhu' ] = false;
 	//check whether GongDeZhu requests exceed the max num
 	$firstRqDate = $dbInfo['firstRqDate'];
@@ -407,6 +422,7 @@ function insSundayTblData( $dbInfo ) {
 		if( $gongDeZhuNum > $MaxGongDeZhu )
 			$rpt [ 'exceedGongDeZhu' ] = true;
 	}
+	*/
 
 	return $rpt;
 } // insSundayTblData()
@@ -418,13 +434,14 @@ function updSundayTblData( $dbInfo ) {
 	/*
 	 * The receiving AJAX switches on 'URL', 'updSUCCESS', 'errCount'
 	 */
-	global $_db, $_errCount, $_errRec, $_updCount, $MaxGongDeZhu;
+	global $_db, $_errCount, $_errRec, $_updCount;
 	$rpt = array();
 
 	$tblName = $dbInfo['tblName'];
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
-	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
+	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`;";
+	//$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`, `sundayRq2GongDeZhu`;";
 	$_db->query( $sql );
 	if ( ! updateSundayTuple( $dbInfo['tblName'], $dbInfo['tblFlds'], $dbInfo['rqstr'], $dbInfo['refDate'] ) ) {
 		$_db->rollback();
@@ -439,6 +456,7 @@ function updSundayTblData( $dbInfo ) {
 	$_db->query( $sql ); $_db->autocommit(true);
 	$rpt [ 'updSUCCESS' ] = true;
 	
+	/*
 	$rpt [ 'exceedGongDeZhu' ] = false;
 	//check whether GongDeZhu requests exceed the max num
 	$firstRqDate = $dbInfo['firstRqDate'];
@@ -449,6 +467,7 @@ function updSundayTblData( $dbInfo ) {
 			$rpt [ 'exceedGongDeZhu' ] = true;
 		}
 	}	
+	*/
 
 	return $rpt;													
 } // updSundayTblData()

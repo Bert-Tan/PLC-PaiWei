@@ -86,15 +86,6 @@ function deriveDeceased49V( dateStr, chkSanity ) { // dateStr is a valid date st
     return( new Date( deceased.setDate( deceased.getDate() + 49 ) ).getTime() );
 } // fundtion deriveDeceased49()
 
-function getFirstRqDate(rqDateStr) { //get the first date in rqDateStr
-    rqDateStr = rqDateStr.trim().replace( /<br>$/gm, '');
-
-    var dateArray = rqDateStr.split( /,\s*/ ).sort();
-    if ( dateArray[0].length == 0 ) dateArray.shift();
-
-    return dateArray[0];
-} // fundtion getFirstRqDate()
-
 function readSundayParam() {
     var ajaxData = {}, dbInfo = {}, rspX = null;
     dbInfo[ 'tblName' ] = 'sundayParam';
@@ -196,9 +187,11 @@ function init_pilotRow( pRow ) {
     pRow.find("input[type=text]").attr( { "data-oldv": '', "value": pilotInputTxt, "data-pmptv": '' } );
     pRow.find("input[data-fldn=reqDates]").attr( "value", reqDateTxt );
     pRow.find("input[type=text]").prop( "disabled", false );
+    /*
     pRow.find("input[type=checkbox]").attr( { "data-oldv": '', "value": '', "data-pmptv": '' } );
     pRow.find("input[type=checkbox]").prop( "disabled", false );
     pRow.find("input[type=checkbox]").prop( "checked", false );
+    */
     pRow.attr("id", '');
     lastTd.find("*").unbind().remove();
     lastTd.append( insBtn );
@@ -282,6 +275,7 @@ function hdlr_dataChg() { // on Blur
     var x = ( oldV.length > 0 ) ? oldV : pmptV;
     var fldN = $(this).attr("data-fldn");
 
+    /*
     if ( fldN == 'GongDeZhu') {
         if ($(this).is(':checked'))
             newV = "checked";
@@ -293,6 +287,7 @@ function hdlr_dataChg() { // on Blur
         }    
         return;
     }
+    */
 
     if ( newV.length == 0 ) {
         if ( oldV.length > 0 ) { // existing data editing; but did not input any data
@@ -389,7 +384,8 @@ function hdlr_dataChg() { // on Blur
 
 function hdlr_tabClick() {
     var rqTblName = $(this).attr("data-table");
-    var dirtyCells = $("tbody input[data-changed=true]").length;
+    var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
+    //var dirtyCells = $("tbody input[data-changed=true]").length;
     if ( rqTblName == _tblName ) return false; /* nothing to do */
     if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
     _tblName = rqTblName; /* Global: _tblName, _usrName, _icoName */
@@ -423,12 +419,14 @@ function hdlr_addRow() {
     var dataBody = $("table.dataRows tbody");
     var newRow = _pilotRow.clone();
     var newRowDataCells = newRow.find("input[type=text]");
-    var newCheckbox = newRow.find("input[type=checkbox]");
+    //var newCheckbox = newRow.find("input[type=checkbox]");
 
     newRowDataCells.on( 'blur', hdlr_dataChg );
     newRowDataCells.on( 'focus', hdlr_onFocus );
+    /*
     newCheckbox.on( 'blur', hdlr_dataChg );
     newCheckbox.on( 'focus', hdlr_onFocus );
+    */
     newRow.find("input.insBtn").on( 'click', hdlr_insBtn );
     dataBody.append( newRow );
 } // function hdlr_addRow()
@@ -483,12 +481,14 @@ function hdlr_editBtn() {
     var canBtn = $('<input class="canBtn" type="button" value="' + canBtnVal + '">');
     var delBtn = $('<input class="delBtn" type="button" value="' + delBtnVal + '">');
     var dataCells = $(this).closest("tr").find("input[type=text]");
-    var checkbox = $(this).closest("tr").find("input[type=checkbox]");
+    //var checkbox = $(this).closest("tr").find("input[type=checkbox]");
     var lastTd = $(this).closest("td");
     dataCells.prop( 'disabled', false );
     dataCells.on('blur', hdlr_dataChg );
+    /*
     checkbox.prop( 'disabled', false );
     checkbox.on('blur', hdlr_dataChg );
+    */
     lastTd.find("*").unbind();
     lastTd.empty();
     lastTd.append( updBtn, spacer, canBtn, spacer, delBtn );
@@ -543,7 +543,7 @@ function hdlr_delBtn() {
 
 function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).closest("tr").html() );
     var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入完整的資料" : "Please enter complete data";
-    var exceedGongDeZhuMsg = ( _sessLang == SESS_LANG_CHN) ? "功德主已超過三人，您在等待名單中！" : "Sponsor requests exceed the max-limit, you are in the waiting list!";
+    //var exceedGongDeZhuMsg = ( _sessLang == SESS_LANG_CHN) ? "功德主已超過三人，您在等待名單中！" : "Sponsor requests exceed the max-limit, you are in the waiting list!";
     var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
     var delBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Del';
     var editBtn = $('<input class="editBtn" type="button" value="' + editBtnVal + '">');
@@ -553,7 +553,7 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
     var thisRow = $(this).closest("tr");
     var lastTd = thisRow.find("td:last");
     var cellsChanged = thisRow.find("input[type=text][data-changed=true]");
-    var checkboxChanged = thisRow.find("input[type=checkbox][data-changed=true]");
+    //var checkboxChanged = thisRow.find("input[type=checkbox][data-changed=true]");
 
     var ajaxData = {}, dbInfo = {}, tblFlds = {};
 
@@ -567,6 +567,7 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
         tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
     });
 
+    /*
     //first request date to check whether GongDeZhu exceed limit
     //only GongDeZhu checkbox is changed to checked, firstRqDate has value; other, ""
     var firstRqDate = "";
@@ -579,12 +580,13 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
         
         var rqDateStr = thisRow.find("input[data-fldn=reqDates]").val();
         firstRqDate = getFirstRqDate(rqDateStr);
-    }          
+    }   
+    */       
 
     dbInfo[ 'tblName' ] = _tblName;
     dbInfo[ 'tblFlds' ] = tblFlds;
     dbInfo[ 'rqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
-    dbInfo[ 'firstRqDate' ] = firstRqDate;
+    //dbInfo[ 'firstRqDate' ] = firstRqDate;
     ajaxData[ 'dbReq'] = 'dbINS';
     ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
     $.ajax({
@@ -608,22 +610,28 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
                             $(this).attr( {"oldv": $(this).val(), "value": $(this).val(), "data-changed": "false"} );
                         });
                         thisRow.find("input[type=text]").prop("disabled", true).removeAttr('data-pmptv');
+                        /*
                         if ( checkboxChanged.length != 0 ) {
                             checkboxChanged.each( function() {
                                 $(this).attr( {"oldv": $(this).val(), "value": $(this).val(), "data-changed": "false"} );
                             });
                         }
                         thisRow.find("input[type=checkbox]").prop("disabled", true).removeAttr('data-pmptv');
+                        */
                         thisRow.find("*").unbind();
                         lastTd.empty().append( editBtn, spacer, delBtn );
                         lastTd.find(".editBtn").on('click', hdlr_editBtn );
                         lastTd.find(".delBtn").on('click', hdlr_delBtn );
                         alert( ackMsg );
+                        /*
                         if(rspX['exceedGongDeZhu'])
                             alert (exceedGongDeZhuMsg);
+                        */
                         return;
-                    case 'exceedGongDeZhu':
-                        return;   
+                    /*
+                        case 'exceedGongDeZhu':
+                        return;  
+                    */ 
                     default: // Error cases - details later
                         alert( 'Insert Error occurred; received: "' + rspX[X] + '"' );
                         return;
@@ -640,7 +648,7 @@ function hdlr_updBtn() {
     var ackNC = ( _sessLang == SESS_LANG_CHN ) ? "沒有任何更動！" : "Nothing Changed!";
     var ackMsg = ( _sessLang == SESS_LANG_CHN ) ? "祈福迴向資料更新完畢！" : "Update Completed!";
     var errMsg = ( _sessLang == SESS_LANG_CHN ) ? "祈福迴向資料更新發生錯誤！" : "Update Failed!";
-    var exceedGongDeZhuMsg = ( _sessLang == SESS_LANG_CHN) ? "功德主已超過三人，您在等待名單中！" : "Sponsor requests exceed the max-limit, you are in the waiting list!";
+    //var exceedGongDeZhuMsg = ( _sessLang == SESS_LANG_CHN) ? "功德主已超過三人，您在等待名單中！" : "Sponsor requests exceed the max-limit, you are in the waiting list!";
     var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
     var delBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Del';
     var editBtn = $('<input class="editBtn" type="button" value="' + editBtnVal + '">');
@@ -649,13 +657,13 @@ function hdlr_updBtn() {
     var thisRow = $(this).closest("tr");
     var lastTd = thisRow.find("td:last");
     var cellsChanged = thisRow.find("input[data-changed=true]");
-    var checkbox = thisRow.find("input[type=checkbox]");
+    //var checkbox = thisRow.find("input[type=checkbox]");
     var tblFlds = {}, ajaxData = {}, dbInfo = {};
 
     if ( cellsChanged.length == 0 ) {
         alert( ackNC );
         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
-        thisRow.find("input[type=checkbox]").prop( "disabled", true );
+        //thisRow.find("input[type=checkbox]").prop( "disabled", true );
         thisRow.find("*").unbind();
         lastTd.empty().append( editBtn, spacer, delBtn );
         lastTd.find(".editBtn").on( 'click', hdlr_editBtn );
@@ -663,6 +671,12 @@ function hdlr_updBtn() {
         return;
     }
 
+    tblFlds[ thisRow.attr( 'data-keyn' ) ] = thisRow.attr( 'id' ); // getting tuple (Key Name, Value)
+    cellsChanged.each( function () {
+        tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
+    });
+
+    /*
     //first request date to check whether GongDeZhu exceed limit
     //only GongDeZhu checkbox is changed to checked, firstRqDate has value; other, ""
     var firstRqDate = "";
@@ -676,11 +690,12 @@ function hdlr_updBtn() {
             firstRqDate = getFirstRqDate(rqDateStr);
         }
     });
+    */
 
     dbInfo[ 'tblName' ] = _tblName;
     dbInfo[ 'tblFlds' ] = tblFlds;
     dbInfo[ 'rqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
-    dbInfo[ 'firstRqDate' ] = firstRqDate;
+    //dbInfo[ 'firstRqDate' ] = firstRqDate;
     dbInfo[ 'refDate' ] = _startingSundayStr;
     ajaxData[ 'dbReq'] = 'dbUPD';    
     ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
@@ -705,21 +720,26 @@ function hdlr_updBtn() {
                         alert( ackMsg );
                         cellsChanged.attr("data-changed", "false");
                         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
-                        thisRow.find("input[type=checkbox]").prop( "disabled", true );
+                        //thisRow.find("input[type=checkbox]").prop( "disabled", true );
                         thisRow.find("*").unbind();
                         lastTd.empty().append( editBtn, spacer, delBtn );
                         lastTd.find(".editBtn").on( 'click', hdlr_editBtn );
                         lastTd.find(".delBtn").on( 'click', hdlr_delBtn );
+                        /*
                         if(rspX['exceedGongDeZhu'])
                             alert (exceedGongDeZhuMsg);
+                        */
                         return;
-                    case 'exceedGongDeZhu':
+                    /*
+                        case 'exceedGongDeZhu':
                             return;
+                    */
                     default: // Error cases - details later
                         alert( 'Insert Error occurred; received: "' + rspX[X] + '"' );
                         cellsChanged.each(function(i) {
 							$(this).val( $(this).attr( "data-oldv" ) ); // restore its old value
                         }); // cellsChanged
+                        /*
                         // checkbox disply the old status (checked/unchecked)
                         checkbox.each( function () {
                             if ( $(this).val() == "" )
@@ -727,10 +747,11 @@ function hdlr_updBtn() {
                             else
                                 $(this).prop("checked", true);
                         });
+                        */
                         alert( errMsg ); 
                         cellsChanged.attr("data-changed", "false");
                         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
-                        thisRow.find("input[type=checkbox]").prop( "disabled", true );
+                        //thisRow.find("input[type=checkbox]").prop( "disabled", true );
                         thisRow.find("*").unbind();
                         lastTd.empty().append( editBtn, spacer, delBtn );
                         lastTd.find(".editBtn").on( 'click', hdlr_editBtn );
@@ -752,7 +773,7 @@ function hdlr_canBtn() {
     var delBtn = $('<input class="delBtn" type="button" value="' + delBtnVal + '">');
     var spacer = "<span>&nbsp;&nbsp;</span>";
     var cells = $(this).closest("tr").find("input[type=text][data-changed=true]");    
-    var checkbox = $(this).closest("tr").find("input[type=checkbox][data-changed=true]");
+    //var checkbox = $(this).closest("tr").find("input[type=checkbox][data-changed=true]");
     var td = $(this).closest("td");
 	if ( cells.length > 0 ) {
 		cells.each( function () { // Restore the old value
@@ -760,6 +781,7 @@ function hdlr_canBtn() {
 			$(this).attr( "data-changed", "false" );
 		}); // forEach
     }
+    /*
     if ( checkbox.length > 0 ) {
 		checkbox.each( function () { // Restore the old value
 			$(this).val( $(this).attr( "data-oldv" ) );
@@ -771,8 +793,9 @@ function hdlr_canBtn() {
                 $(this).prop("checked", true);
 		});
     }
+    */
     $(this).closest("tr").find("input[type=text]").prop( "disabled", true );
-    $(this).closest("tr").find("input[type=checkbox]").prop( "disabled", true );
+    //$(this).closest("tr").find("input[type=checkbox]").prop( "disabled", true );
     td.find("*").unbind(); td.empty();
     td.append( editBtn, spacer, delBtn );
     td.find(".editBtn").on( 'click', hdlr_editBtn );
