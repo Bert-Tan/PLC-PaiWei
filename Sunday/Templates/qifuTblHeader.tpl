@@ -9,9 +9,6 @@
 		<!-- BEGIN reqDateCol -->
 		<th style="{dateFldWidth}">{dateFldName}</th>
 		<!-- END reqDateCol -->
-		<!-- BEGIN GongDeZhuCol -->
-		<th style="{cellWidth}">{GongDeZhuFldName}</th>
-		<!-- END GongDeZhuCol -->
 		<!-- BEGIN dataEditCol -->
 		<th>
 			<input type="button" id="addRowBtn" value="{addBtnTxt}">&nbsp;

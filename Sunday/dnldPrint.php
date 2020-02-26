@@ -10,6 +10,7 @@
 	$leftMargin = 0.5; $rightMargin = 0.5;
 	
 	//font settings
+<<<<<<< HEAD
 	$ChineseFont = 'edukai3'; $EnglishFont = 'courierI'; //$SymbolFont = 'zapfdingbats';
 	$fontStyle = 'B'; $fontSize = 18; $fontSizeDate = 18; //$fontSizeDate = 14;
 	//$correctMark = TCPDF_FONTS::unichr(52);
@@ -30,6 +31,21 @@
 	//field $i=0 corresponds to rqID (which is not printed)
 	$qifuCellWidthArray = array(0,1.1, 1.1, 1.1, 3.8, 1.9, 1.0);
 	$meritCellWidthArray = array(0,1.1, 1.1, 1.1, 0.9, 1.3, 1.6, 1.9, 1.0);
+=======
+	$ChineseFont = 'edukai3'; $EnglishFont = 'times'; 	
+	$fontStyle = 'B'; $fontSize = 18; $fontSizeDate = 14;
+	
+	//some common information (string)
+	$title = '淨土念佛堂、圖書館';
+	$qifuTableTitle = '祈  福  申  請  表';
+	$meritTableTitle = '迴  向  申  請  表';
+	$qifuHeaderData = array("申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期");
+	$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請迴向之日期");
+	
+	//table cell column width
+	$qifuCellWidthArray = array(1.1, 1.1, 1.1, 3.4, 3.3);
+	$meritCellWidthArray = array(1.1, 1.1, 1.1, 0.9, 1.3, 1.1, 3.4);
+>>>>>>> parent of 391dce6... GongDeZhu Checkbox
 	$totalWidth = 11 - $leftMargin - $rightMargin; //total table width
 	$totalHeight = 8.5 - $topMargin - $bottomMargin; //total page height
 	$extraHeight = 0.2; // extra height for each table row
@@ -84,7 +100,7 @@
 	printData($meritDataArray, $meritHeaderData, $meritCellHeightArray, $meritHeaderHeight, $meritCellWidthArray, $meritDateStrHeightArray, $meritTableTitle);
 	
 	//Close and output PDF document
-	$pdf->Output('Qifu Merit Request ' . date('Y-m-d') . '.pdf', 'I');
+	$pdf->Output($pdfTitle.'.pdf', 'I');
 	
 	
 	
@@ -138,7 +154,7 @@
 	//if $isHeader=true, print header row (special format); otherwise, print request data row
 	function printRow($data, $cellHeight, $dateStrHeight, $cellWidthArray, $isHeader) {
 		global $pdf;
-		global $ChineseFont, $EnglishFont, $SymbolFont, $fontSize, $fontStyle, $fontSizeDate, $correctMark;
+		global $ChineseFont, $EnglishFont, $fontSize, $fontStyle, $fontSizeDate;
 			
 		//field number of each request data record
 		$colNum = count($data);	
@@ -154,8 +170,12 @@
 		for($i = 1; $i < $colNum; ++$i) {
 							
 			//request dates (data cell): smaller font & left alignment & highlight CURRENT Sunday date
+<<<<<<< HEAD
 			/*
 			if(!$isHeader && $i == $colNum-2) {
+=======
+			if(!$isHeader && $i == $colNum-1) {
+>>>>>>> parent of 391dce6... GongDeZhu Checkbox
 				$pdf->SetFont($ChineseFont, $fontStyle, $fontSizeDate);
 				//$rqDate: 'Y-m-d'
 				$rqDate = getCurrentNextSundayDate();
@@ -174,6 +194,7 @@
 				//print cell borders
 				$pdf->MultiCell($cellWidthArray[$i], $cellHeight, '', 1, 'C', $fill, 0, '', '', true, 0, false, true, $cellHeight, 'M');
 				//print date string, no borders	
+<<<<<<< HEAD
 				$pdf->writeHTMLCell($cellWidthArray[$i], $cellHeight-($newY-$y), $x, $newY, $data[$i], 0, 0, false, true, 'L', true);
 				
 				//reset the Y position for the next cell in the same row
@@ -199,6 +220,9 @@
 				*/
 				//reset font
 				$pdf->SetFont($ChineseFont, $fontStyle, $fontSize);
+=======
+				$pdf->writeHTMLCell($cellWidthArray[$i], $cellHeight-($newY-$y), $x, $newY, $data[$i], 0, 0, false, true, 'L', true);						
+>>>>>>> parent of 391dce6... GongDeZhu Checkbox
 			}
 			//other data cells
 			else {
@@ -261,26 +285,26 @@
 		
 		
 		//(1) remove Year field in request dateStr
-		$dataArray = removeSameYearField($dataArray, $colNum-2);
-						
+		$dataArray = removeSameYearField($dataArray, $colNum-1);
+		
 		//(2) calculate PDF page title height
 		$pdfPageTitleHeight = 4 * $pdf->getStringHeight($totalHeight, "  ", false, true, '', 1);
 				
 		//(3) calculate table header height
 		$headerHeight = calculateCellHeight($headerData, $cellWidthArray, false, 0, false);
-						
+				
 		//(4) calculate table_cell_height and request_date_string_height for each data record
 		for($i = 0; $i < count($dataArray); ++$i) {
 			
 			$data = $dataArray[$i]; //data record
 			
-			$dateStrHeight = calculateDateStrHeight($data[$colNum-2], $cellWidthArray[$colNum-2]);
+			$dateStrHeight = calculateDateStrHeight($data[$colNum-1], $cellWidthArray[$colNum-1]);
 			$cellHeight = calculateCellHeight($data, $cellWidthArray, true, $dateStrHeight, true);
 			
 			array_push($dateStrHeightArray, $dateStrHeight);
 			array_push($cellHeightArray, $cellHeight);
 		}
-				
+		
 		//(5) add empty data rows (reserved for handwriting request) to data_array and height_array		
 		for($i = 0; $i < $emptyRowNum; ++$i) {
 			//add data
@@ -348,10 +372,10 @@
 		
 		//field number of each request data record
 		$colNum = count($data);
-								
+							
 		for($i = 0; $i < $colNum; ++$i) {
 			//request dates: smaller font
-			if($i == $colNum-2 && $containDate) {			
+			if($i == $colNum-1 && $containDate) {			
 				array_push($cellHeights, $dateStrHeight);
 			}
 			else {
@@ -385,7 +409,7 @@
 	
 	//remove the Year in the Requested Dates, except when there are cross years
 	//$rqdataArray: Qifu/Merit request records
-	//$dateIndex: index of request dates in each Qifu/Merit record array
+	//$dateIndex: index of request dates in each Qifu/Merit record
 	function removeSameYearField($rqDataArray, $dateIndex) {	
 		for($i = 0; $i < count($rqDataArray); ++$i) {
 			$rqData = $rqDataArray[$i];
@@ -451,11 +475,16 @@
 		$_selFlds = implode(", ", $_tblFlds); //transform to string
 		
 		//SQL statement: group Sunday Qify/Merit data by rqID and concatenate all rqDate
+<<<<<<< HEAD
 		//sql to list all request dates
 		/*
 		$_sql = "SELECT {$_selFlds}, GROUP_CONCAT(rqDate ORDER BY rqDate SEPARATOR \", \"), GongDeZhu FROM {$sundayTable} "
 				.	"INNER JOIN sundayRq2Days ON (ID=sundayRq2Days.rqID AND sundayRq2Days.TblName=\"{$sundayTable}\") "
 				.	"INNER JOIN sundayRq2GongDeZhu ON (ID=sundayRq2GongDeZhu.rqID AND sundayRq2GongDeZhu.TblName=\"{$sundayTable}\") "
+=======
+		$_sql = "SELECT {$_selFlds}, GROUP_CONCAT(rqDate ORDER BY rqDate SEPARATOR \", \") FROM {$sundayTable} "
+				.	"INNER JOIN sundayRq2Days ON (ID=rqID AND TblName=\"{$sundayTable}\") "
+>>>>>>> parent of 391dce6... GongDeZhu Checkbox
 				.	"WHERE ID in (SELECT rqID FROM sundayRq2Days "
 				.	"WHERE TblName=\"{$sundayTable}\" AND rqDate=\"{$rqDate}\") "
 				.	"GROUP BY ID;";	
