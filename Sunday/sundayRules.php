@@ -13,7 +13,7 @@
 		global $sessLang;
 		$htmlNames = array (
 			'htmlTitle' => array (
-				SESS_LANG_CHN => "淨土念佛堂週日祈福及迴向申請主頁",
+				SESS_LANG_CHN => "淨土念佛堂週日早課祈福及回向申請主頁",
 				SESS_LANG_ENG => "Sunday Well-wishing &amp; Merit Dedication Application Page" )
 		);
 		return $htmlNames[ $what ][ $sessLang ];
@@ -50,15 +50,15 @@
 		<dl>
 			<dt>親自出席</dt>
 			<dd>申請人必須親自參加早課或供佛典禮，或有指定的代表在場。
-				如有緊急狀況 <b>(僅限本館同修)</b>，可請法務組義工為代表，否則恕不受理。</dd><br/>
+				如有緊急狀況 <b>(僅限本館同修)</b>，可請法務組到場義工作為代表，否則恕不受理。</dd><br/>
 			<dt>遵守時限</dt>
-			<dd>無論是申請陽上祈福與往生迴向 (請見下列時限) 或是擔任功德主，均以不妨礙佛堂早課準時開始為原則。</dd><br/>
+			<dd>無論是申請祈福與回向 (請見下列時限) 或是擔任功德主，均以不妨礙佛堂早課準時開始為原則。</dd><br/>
 			<dt>申請時限</dt>
 			<dd>
 				<table class="sundayRule">
 					<thead>
 						<tr><th colspan="4">
-							陽&nbsp;上&nbsp;祈&nbsp;福&nbsp;或&nbsp;往&nbsp;生&nbsp;迴&nbsp;向&nbsp;申&nbsp;請&nbsp;辦&nbsp;法&nbsp;與&nbsp;時&nbsp;限
+							祈&nbsp;福&nbsp;或&nbsp;回&nbsp;向&nbsp;申&nbsp;請&nbsp;辦&nbsp;法&nbsp;與&nbsp;時&nbsp;限
 							</th>
 						</tr>
 						<tr><th style="width: 8vw;">狀&nbsp;&nbsp;&nbsp;&nbsp;況</th>
@@ -68,12 +68,12 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td style="text-align: center; font-weight:bold;">一般狀況</td><td>星期日早晨申請截止之前，即已經知道有家人或親友，需要陽上祈福或往生迴向</td>
-							<td>由本網頁直接申請</td><td>平常星期日早晨 9:00；<br/>供佛日星期日早晨 8:30</td>
+							<td style="text-align: center; font-weight:bold;">一般狀況</td><td>星期天早晨申請截止之前，即已經知道有家人或親友，需要祈福或回向</td>
+							<td>在本網頁直接填寫申請</td><td>平常星期天早晨 9:00；<br/>供佛日星期天早晨 8:30</td>
 						</tr>
 						<tr>
-							<td style="text-align: center; font-weight: bold;">突發狀況</td><td>星期日早晨申請截止之後，才知道有家人或親友，需要陽上祈福或往生迴向</td>
-							<td>傳真、簡訊、或現場填寫</td><td>平常星期日早晨 9:45；<br/>供佛日星期日早晨 9:15</td>
+							<td style="text-align: center; font-weight: bold;">突發狀況</td><td>星期天早晨申請截止之後，才知道有家人或親友，需要祈福或回向</td>
+							<td>傳真、簡訊、或現場填寫</td><td>平常星期天早晨 9:45；<br/>供佛日星期天早晨 9:15</td>
 							<!-- <td>星期日早課開始 15 分鐘之前</td> -->
 						</tr>
 						<tr>
@@ -88,15 +88,14 @@
 					</tbody>
 				</table>
 			</dd><br/>
-			<dt>陽上祈福與往生迴向的次數</dt>
+			<dt>申請祈福與回向的次數</dt>
 			<dd>
-				若希望陽上祈福或往生迴向多次者，申請時請註明明確之日期。<b>陽上祈福以三次為限</b>。往生迴向若本人無法出席而由代表出席者，<b>以三次為限</b>；<br/>
-				往生迴向往生者若已超過七七，<b>以一次為限</b>。
+				若希望祈福或回向多次者，申請時請註明每次明確之日期。<b>祈福以三次為限</b>。回向若申請者本人無法出席而由代表出席者，<b>亦以三次為限</b>；
+				申請回向如果往生者若已超過七七，<b>以一次為限</b>。
 			</dd><br/>
 			<dt>申請做功德主</dt>
 			<dd>
-				申請做功德主，辦法與上同，請於申請表“功德主”攔打抅，以申請順序<b>前三人</b>為限。
-				功德主務必於佛堂早課開始前10分鐘到佛堂練習，
+				申請做功德主，辦法與上同，請於申請表“功德主”攔打勾，務必於佛堂早課開始前10分鐘到達佛堂練習。
 				未經練習者，恕不受理。
 			</dd>
 		</dl><!-- End of dl -->        
@@ -134,7 +133,7 @@
 						<tr>
 							<td style="text-align: center; font-weight:bold;">Normal Scenario</td>
 							<td>Situation known before the Application Deadline on Sundays</td>
-							<td>Submit request via this webpage online</td>
+							<td>Submit request via this webpage</td>
 							<td>9:00am on regular Sundays;<br/>8:30am on Sundays w/ Buddha Offering Ceremony<br/></td>
 						</tr>
 						<tr>
@@ -165,10 +164,9 @@
 			<dd>
 				If you want to request to serve as a sponsor, the same requirements apply;
 				please check the "Ceremony Sponsor" checkbox in the request form.
-				We only accept the <b>first three requesters</b> every Sunday.
 				<b>However,</b> you <b>must</b> be trained before your request will be accepted.
 				Please arrive at the Pure Land Center at least <b>10</b> minutes before the Sunday
-				activity starts for training.
+				activity starts for training. Otherwise, your request will not be granted.
 			</dd>
 		</dl><!-- End of dl -->        
 <?php

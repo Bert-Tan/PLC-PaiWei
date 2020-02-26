@@ -21,7 +21,7 @@
 				SESS_LANG_CHN => "申請<br/>法會牌位",
 				SESS_LANG_ENG => "Name Plaque for<br/>Retreat Merit Dedication" ),
 			'featSun' => array (
-				SESS_LANG_CHN => "早課<br/>祈福迴向",
+				SESS_LANG_CHN => "早課<br/>祈福回向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Merit Dedication" ),
 			'featFuture' => array (
 				SESS_LANG_CHN => "其他未來會提供的功能<br/>(結緣法寶申請，等等。)",
@@ -30,22 +30,22 @@
 				SESS_LANG_CHN => "用戶<br/>撤出",
 				SESS_LANG_ENG => "User<br/>Logout" ),
 			'qifuTitle' => array (
-				SESS_LANG_CHN => "週日早課申請<br/>陽上祈福與往生迴向",
-				SESS_LANG_ENG => "Sunday Chanting<br/>Well-wishing for Alived&nbsp;&amp;&nbsp;Merit Dedication for Deceased" ),
+				SESS_LANG_CHN => "週日早課<br/>申請祈福與回向",
+				SESS_LANG_ENG => "Sunday Chanting<br/>Application for Well-wishing&nbsp;&amp;&nbsp;Merit Dedication" ),
 			'ruleTab' => array (
 				SESS_LANG_CHN => "申請需知",
 				SESS_LANG_ENG => "Application Requirements" ),
 			'qifuTab' => array (
-				SESS_LANG_CHN => "陽上祈福申請表",
+				SESS_LANG_CHN => "祈福申請表",
 				SESS_LANG_ENG => "Well-wishing Request Form" ),
 			'meritTab' => array (
-				SESS_LANG_CHN => "往生迴向申請表",
+				SESS_LANG_CHN => "回向申請表",
 				SESS_LANG_ENG => "Merit Dedication Request Form" ),
 			'gongDeZhuTab' => array (
 				SESS_LANG_CHN => "申請做功德主",
 				SESS_LANG_ENG => "Request to Serve as<br/>A Ceremony Sponsor" ),
 			'present' => array (
-				SESS_LANG_CHN => "**** 申請人務必親自，或有指定代表出席參加，否則恕不受理 ****",
+				SESS_LANG_CHN => "**** 申請人務必親自、或有指定代表出席參加，否則恕不受理 ****",
 				SESS_LANG_ENG => "**** The Requestor or a Delegate Must Be Present ****" ),
 		);
 		return $htmlNames[ $what ][ $sessLang ];

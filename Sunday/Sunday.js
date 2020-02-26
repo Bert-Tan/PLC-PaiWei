@@ -326,7 +326,9 @@ function hdlr_dataChg() { // on Blur
 
     if ( fldN == 'reqDates' ) {
         // it could be for 祈福 (max 3 times), or for 迴向 (1 or upto 7 times ); need to validate
-        var dateArray = newV.split( /,\s*/ ).sort();
+        var dateStr = newV.replace("，", ",");
+        var dateArray = dateStr.split( /,\s*/ ).sort();
+
         if ( dateArray[0].length == 0 ) dateArray.shift();
         for ( i = 0; i < dateArray.length; i++ ) {
             if ( ! isValidDate( dateArray[i], true, true ) ) {

@@ -17,10 +17,10 @@ function _dbName_2_htmlName ( $_dbName ) {
 	global $_sessLang;
 	$_htmlNames = array (
 		'sundayQifu' =>	array (
-			SESS_LANG_CHN => "陽&nbsp;&nbsp;上&nbsp;&nbsp;祈&nbsp;&nbsp;福&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
+			SESS_LANG_CHN => "祈&nbsp;&nbsp;福&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
 			SESS_LANG_ENG => "Well-wishing Request Form" ),
 		'sundayMerit' => array (
-			SESS_LANG_CHN => "往&nbsp;&nbsp;生&nbsp;&nbsp;迴&nbsp;&nbsp;向&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
+			SESS_LANG_CHN => "回&nbsp;&nbsp;向&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
 			SESS_LANG_ENG => "Merit Dedication Request Form" ),
 		'R_Name' =>	array (
 			SESS_LANG_CHN => "申請人姓名",
@@ -50,10 +50,10 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_CHN => "功德主",
 			SESS_LANG_ENG => "Ceremony Sponsor" ),
 		'mDates' => array (
-			SESS_LANG_CHN => "往生迴向日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多七次，以逗號分開)",
+			SESS_LANG_CHN => "回向日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多七次，以逗號分開)",
 			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 7 times; comma separated)" ),
 		'qDates' => array (
-			SESS_LANG_CHN => "陽上祈福日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多三次，以逗號分開)",
+			SESS_LANG_CHN => "祈福日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多三次，以逗號分開)",
 			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 3 times; comma separated)" ),
 		'dateInputV' => array (
 			SESS_LANG_CHN => "(西元)年年年年-月月-日日；若多個星期日，請以逗號分開",
@@ -93,7 +93,7 @@ function readSundayParam( $dbInfo ) {
 } // function readSundayParam()
 
 function cellWidth( $fldN, $tblName ) { // Sunday data table field width (%) mapping
-	$x = ''; // 迴向 table fields vary
+	$x = ''; // 回向 table fields vary
 	switch ( $fldN ) {
 		case 'R_Name':
 		case 'qWhom':
@@ -111,7 +111,7 @@ function cellWidth( $fldN, $tblName ) { // Sunday data table field width (%) map
 			$x = 8.5; break;
 		case 'qDates':
 			$x = 34; break;
-		case 'mDates': // for 迴向; at most 7 dates
+		case 'mDates': // for 回向; at most 7 dates
 			$x = 25.5; break;		
 		case 'GongDeZhu':
 			$x = 5.5; break;		
@@ -333,7 +333,7 @@ function delSundayTblData( $dbInfo ) {
 	$sql = "UNLOCK TABLES;";
 	$_db->query( $sql );
 	$_db->autocommit(true);
-	$rpt [ 'delSUCCESS' ] = ( $useChn ) ? "祈福迴向資料刪除完畢！" : "Record deleted";	
+	$rpt [ 'delSUCCESS' ] = ( $useChn ) ? "祈福回向資料刪除完畢！" : "Record deleted";	
 	return $rpt;
 } // delSundayTblData()
 
@@ -362,7 +362,7 @@ function delSundayTblUsrData( $dbInfo ) {
 	$_db->commit();
 	$_db->query( "UNLOCK TABLES;" );
 	$_db->autocommit(true);
-	$rpt [ 'delSUCCESS' ] = ( $useChn ) ? "{$_delCount} 項祈福迴向資料刪除完畢！" : "{$_delCount} records deleted";	
+	$rpt [ 'delSUCCESS' ] = ( $useChn ) ? "{$_delCount} 項祈福回向資料刪除完畢！" : "{$_delCount} records deleted";	
 	return $rpt;
 } // delTblUsrData()
 

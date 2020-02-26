@@ -17,12 +17,12 @@
 	//some common information (string)
 	$title = '淨土念佛堂、圖書館';
 	$qifuTableTitle = '祈  福  申  請  表';
-	$meritTableTitle = '迴  向  申  請  表';
+	$meritTableTitle = '回  向  申  請  表';
 	//$qifuHeaderData = array("申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期", "斋主");
-	//$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請迴向之日期", "斋主");
+	//$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請回向之日期", "斋主");
 	//field $i=0 corresponds to rqID (which is not printed)
 	$qifuHeaderData = array("","申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期", "功德主");
-	$meritHeaderData = array("","申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請迴向之日期", "功德主");
+	$meritHeaderData = array("","申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請回向之日期", "功德主");
 
 	//table cell column width
 	//$qifuCellWidthArray = array(1.1, 1.1, 1.1, 3.4, 3.3, 0.4);
