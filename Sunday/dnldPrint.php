@@ -472,7 +472,8 @@
 		$_sql = "SELECT {$_selFlds}, \"{$rqDate}\" FROM {$sundayTable} "
 				.	"INNER JOIN sundayRq2Days ON (ID=rqID AND TblName=\"{$sundayTable}\") "		
 				.	"WHERE ID in (SELECT rqID FROM sundayRq2Days "
-				.	"WHERE TblName=\"{$sundayTable}\" AND rqDate=\"{$rqDate}\");";
+				.	"WHERE TblName=\"{$sundayTable}\" AND rqDate=\"{$rqDate}\") "
+				.	"GROUP BY ID;";
 		
 		//query Sunday Qify/Merit data
 		$_rslt = $_db->query( $_sql );			
