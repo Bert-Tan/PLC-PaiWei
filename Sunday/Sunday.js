@@ -196,12 +196,9 @@ function init_pilotRow( pRow ) {
     pRow.find("input[type=text]").attr( { "data-oldv": '', "value": pilotInputTxt, "data-pmptv": '' } );
     pRow.find("input[data-fldn=reqDates]").attr( "value", reqDateTxt );
     pRow.find("input[type=text]").prop( "disabled", false );
-<<<<<<< HEAD
     pRow.find("input[type=checkbox]").attr( { "data-oldv": '', "value": '', "data-pmptv": '' } );
     pRow.find("input[type=checkbox]").prop( "disabled", false );
     pRow.find("input[type=checkbox]").prop( "checked", false );
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
     pRow.attr("id", '');
     lastTd.find("*").unbind().remove();
     lastTd.append( insBtn );
@@ -284,7 +281,6 @@ function hdlr_dataChg() { // on Blur
     var pmptV = ( $(this).attr("data-pmptv") !== undefined ) ? $(this).attr("data-pmptv").trim() : '';
     var x = ( oldV.length > 0 ) ? oldV : pmptV;
     var fldN = $(this).attr("data-fldn");
-<<<<<<< HEAD
 
     if ( fldN == 'GongDeZhu') {
         if ($(this).is(':checked'))
@@ -298,9 +294,6 @@ function hdlr_dataChg() { // on Blur
         return;
     }
 
-=======
-    
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
     if ( newV.length == 0 ) {
         if ( oldV.length > 0 ) { // existing data editing; but did not input any data
             alert( emptyText ); // give alert
@@ -396,11 +389,7 @@ function hdlr_dataChg() { // on Blur
 
 function hdlr_tabClick() {
     var rqTblName = $(this).attr("data-table");
-<<<<<<< HEAD
     var dirtyCells = $("tbody input[data-changed=true]").length;
-=======
-    var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
     if ( rqTblName == _tblName ) return false; /* nothing to do */
     if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
     _tblName = rqTblName; /* Global: _tblName, _usrName, _icoName */
@@ -427,12 +416,6 @@ function hdlr_tabClick() {
     case 'sundayMerit':
         loadTblData( _tblName, ( ( _icoName == null ) ? _sessUsr : _icoName ), "tabDataFrame" );
         break;
-<<<<<<< HEAD
-=======
-    case 'sundayGongDeZhu':
-        alert( "Sunday Gong De Zhu data for " + _sessUsr + " will be loaded");
-        break;
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
     } // switch()
 } // function tabClick()
 
@@ -440,18 +423,12 @@ function hdlr_addRow() {
     var dataBody = $("table.dataRows tbody");
     var newRow = _pilotRow.clone();
     var newRowDataCells = newRow.find("input[type=text]");
-<<<<<<< HEAD
     var newCheckbox = newRow.find("input[type=checkbox]");
 
     newRowDataCells.on( 'blur', hdlr_dataChg );
     newRowDataCells.on( 'focus', hdlr_onFocus );
     newCheckbox.on( 'blur', hdlr_dataChg );
     newCheckbox.on( 'focus', hdlr_onFocus );
-=======
-
-    newRowDataCells.on( 'blur', hdlr_dataChg );
-    newRowDataCells.on( 'focus', hdlr_onFocus );
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
     newRow.find("input.insBtn").on( 'click', hdlr_insBtn );
     dataBody.append( newRow );
 } // function hdlr_addRow()
@@ -506,18 +483,12 @@ function hdlr_editBtn() {
     var canBtn = $('<input class="canBtn" type="button" value="' + canBtnVal + '">');
     var delBtn = $('<input class="delBtn" type="button" value="' + delBtnVal + '">');
     var dataCells = $(this).closest("tr").find("input[type=text]");
-<<<<<<< HEAD
     var checkbox = $(this).closest("tr").find("input[type=checkbox]");
     var lastTd = $(this).closest("td");
     dataCells.prop( 'disabled', false );
     dataCells.on('blur', hdlr_dataChg );
     checkbox.prop( 'disabled', false );
     checkbox.on('blur', hdlr_dataChg );
-=======
-    var lastTd = $(this).closest("td");
-    dataCells.prop( 'disabled', false );
-    dataCells.on('blur', hdlr_dataChg );
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
     lastTd.find("*").unbind();
     lastTd.empty();
     lastTd.append( updBtn, spacer, canBtn, spacer, delBtn );
@@ -581,12 +552,8 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
     var insBtn = $(this);
     var thisRow = $(this).closest("tr");
     var lastTd = thisRow.find("td:last");
-<<<<<<< HEAD
     var cellsChanged = thisRow.find("input[type=text][data-changed=true]");
     var checkboxChanged = thisRow.find("input[type=checkbox][data-changed=true]");
-=======
-    var cellsChanged = thisRow.find("input[data-changed=true]");
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
 
     var ajaxData = {}, dbInfo = {}, tblFlds = {};
 
@@ -600,7 +567,6 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
         tblFlds [ $(this).attr("data-fldn") ] = $(this).val();
     });
 
-<<<<<<< HEAD
     //first request date to check whether GongDeZhu exceed limit
     //only GongDeZhu checkbox is changed to checked, firstRqDate has value; other, ""
     var firstRqDate = "";
@@ -615,8 +581,6 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
         firstRqDate = getFirstRqDate(rqDateStr);
     }          
 
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
     dbInfo[ 'tblName' ] = _tblName;
     dbInfo[ 'tblFlds' ] = tblFlds;
     dbInfo[ 'rqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
@@ -644,15 +608,12 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
                             $(this).attr( {"oldv": $(this).val(), "value": $(this).val(), "data-changed": "false"} );
                         });
                         thisRow.find("input[type=text]").prop("disabled", true).removeAttr('data-pmptv');
-<<<<<<< HEAD
                         if ( checkboxChanged.length != 0 ) {
                             checkboxChanged.each( function() {
                                 $(this).attr( {"oldv": $(this).val(), "value": $(this).val(), "data-changed": "false"} );
                             });
                         }
                         thisRow.find("input[type=checkbox]").prop("disabled", true).removeAttr('data-pmptv');
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
                         thisRow.find("*").unbind();
                         lastTd.empty().append( editBtn, spacer, delBtn );
                         lastTd.find(".editBtn").on('click', hdlr_editBtn );
@@ -688,19 +649,13 @@ function hdlr_updBtn() {
     var thisRow = $(this).closest("tr");
     var lastTd = thisRow.find("td:last");
     var cellsChanged = thisRow.find("input[data-changed=true]");
-<<<<<<< HEAD
     var checkbox = thisRow.find("input[type=checkbox]");
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
     var tblFlds = {}, ajaxData = {}, dbInfo = {};
 
     if ( cellsChanged.length == 0 ) {
         alert( ackNC );
         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
-<<<<<<< HEAD
         thisRow.find("input[type=checkbox]").prop( "disabled", true );
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
         thisRow.find("*").unbind();
         lastTd.empty().append( editBtn, spacer, delBtn );
         lastTd.find(".editBtn").on( 'click', hdlr_editBtn );
@@ -749,12 +704,8 @@ function hdlr_updBtn() {
                         }); // cellsChanged
                         alert( ackMsg );
                         cellsChanged.attr("data-changed", "false");
-<<<<<<< HEAD
                         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
                         thisRow.find("input[type=checkbox]").prop( "disabled", true );
-=======
-            			thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
                         thisRow.find("*").unbind();
                         lastTd.empty().append( editBtn, spacer, delBtn );
                         lastTd.find(".editBtn").on( 'click', hdlr_editBtn );
@@ -769,7 +720,6 @@ function hdlr_updBtn() {
                         cellsChanged.each(function(i) {
 							$(this).val( $(this).attr( "data-oldv" ) ); // restore its old value
                         }); // cellsChanged
-<<<<<<< HEAD
                         // checkbox disply the old status (checked/unchecked)
                         checkbox.each( function () {
                             if ( $(this).val() == "" )
@@ -781,11 +731,6 @@ function hdlr_updBtn() {
                         cellsChanged.attr("data-changed", "false");
                         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
                         thisRow.find("input[type=checkbox]").prop( "disabled", true );
-=======
-                        alert( errMsg ); 
-                        cellsChanged.attr("data-changed", "false");
-            			thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
                         thisRow.find("*").unbind();
                         lastTd.empty().append( editBtn, spacer, delBtn );
                         lastTd.find(".editBtn").on( 'click', hdlr_editBtn );
@@ -806,19 +751,14 @@ function hdlr_canBtn() {
     var editBtn = $('<input class="editBtn" type="button" value="' + editBtnVal + '">');
     var delBtn = $('<input class="delBtn" type="button" value="' + delBtnVal + '">');
     var spacer = "<span>&nbsp;&nbsp;</span>";
-<<<<<<< HEAD
     var cells = $(this).closest("tr").find("input[type=text][data-changed=true]");    
     var checkbox = $(this).closest("tr").find("input[type=checkbox][data-changed=true]");
-=======
-    var cells = $(this).closest("tr").find("input[data-changed=true]");
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
     var td = $(this).closest("td");
 	if ( cells.length > 0 ) {
 		cells.each( function () { // Restore the old value
 			$(this).val( $(this).attr( "data-oldv" ) );
 			$(this).attr( "data-changed", "false" );
 		}); // forEach
-<<<<<<< HEAD
     }
     if ( checkbox.length > 0 ) {
 		checkbox.each( function () { // Restore the old value
@@ -833,10 +773,6 @@ function hdlr_canBtn() {
     }
     $(this).closest("tr").find("input[type=text]").prop( "disabled", true );
     $(this).closest("tr").find("input[type=checkbox]").prop( "disabled", true );
-=======
-	}
-	$(this).closest("tr").find("input[type=text]").prop( "disabled", true );
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
     td.find("*").unbind(); td.empty();
     td.append( editBtn, spacer, delBtn );
     td.find(".editBtn").on( 'click', hdlr_editBtn );

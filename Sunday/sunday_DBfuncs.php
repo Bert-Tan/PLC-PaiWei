@@ -16,7 +16,6 @@ function getDBTblFlds( $Table ) {
 	return $fldN;
 } // getDBTblFlds()
 
-<<<<<<< HEAD
 function getGongDeZhuNum( $rqDate ) {
 	global $_db;
 
@@ -48,8 +47,6 @@ function getGongDeZhu( $tblName, $rqID ) {
 	return checkboxInt2Str ( $gongDeZhu );
 } // function getGongDeZhu()
 
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
 function getSundayRqDates( $tblName, $rqID, $refDate ) {
 	global $_db;
 	$rqDates = array();
@@ -73,19 +70,13 @@ function insertSundayTuple( $tblName, $tupNVs, $usr ) {
 	$tupVal = array ();
 	$tupID = null;
 	$reqDates = array();
-<<<<<<< HEAD
 	$gongDeZhu = 0;
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
 
 	$qryCond = ""; $i = 0;
 	foreach ( $tupNVs as $attrN => $attrV ) { // formulate qry conditions, attribute list, value list
 		if ( $attrV == '' ) { continue; }
 		if ( $attrN == 'reqDates') { $reqDates = preg_split( "/,\s*/", $attrV ); continue; }
-<<<<<<< HEAD
 		if ( $attrN == 'GongDeZhu') { $gongDeZhu = checkboxStr2Int( $attrV ); continue; }
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
 		if ( $i > 0 ) { $qryCond .= " AND "; }
 		$qryCond .= " `{$attrN}` = \"{$attrV}\" ";
 		$tupAttrX[] = $attrN;
@@ -114,16 +105,13 @@ function insertSundayTuple( $tblName, $tupNVs, $usr ) {
 	}
 	$sql = "INSERT into `sundayRq2Days` (`TblName`, `rqID`, `RqDate`) VALUE {$reqDateValues};";
 	$rslt = $_db->query( $sql );
-<<<<<<< HEAD
 	// taking care of sundayRq2GongDeZhu table
 	$now = date("Y-m-d H:i:s");
 	$sql = "INSERT into `sundayRq2GongDeZhu` (`TblName`, `rqID`, `GongDeZhu`, `rqTime`) VALUE (\"{$tblName}\",  \"{$tupID}\", \"{$gongDeZhu}\", \"{$now}\");";
 	$rslt = $_db->query( $sql );
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
 	// taking care of sundayRq2Usr table
 	$sql = "INSERT into `sundayRq2Usr` (`TblName`, `rqID`, `UsrName`) VALUE (\"{$tblName}\",  \"{$tupID}\", \"{$usr}\");";
-	$rslt = $_db->query( $sql );
+	$rslt = $_db->query( $sql );	
 
 	return $tupID;
 } // function insertSundayTuple()
@@ -134,19 +122,13 @@ function updateSundayTuple( $tblName, $tupNVs, $usr, $refDate ) {
 	$tupVal = array ();
 	$tupID = null;
 	$reqDates = array();
-<<<<<<< HEAD
 	$gongDeZhu = 0;
 	$updateGongDeZhu = false;
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
 
 	$updCond = ''; $i = 0;
 	foreach ( $tupNVs as $attrN => $attrV ) {
 		if ( $attrN == 'reqDates') { $reqDates = preg_split( "/,\s*/", $attrV ); continue; }
-<<<<<<< HEAD
 		if ( $attrN == 'GongDeZhu') { $gongDeZhu = checkboxStr2Int( $attrV ); $updateGongDeZhu = true; continue; }
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
 		if ( $attrN == 'ID' ) { $tupID = $attrV; continue; }
 		if ( $i > 0 ) { $updCond .= ", "; }
 		if ( $attrN != 'ID' && $attrN != 'reqDates' ) {
@@ -174,14 +156,11 @@ function updateSundayTuple( $tblName, $tupNVs, $usr, $refDate ) {
 		$sql = "INSERT into `sundayRq2Days` (`TblName`, `rqID`, `RqDate`) VALUE {$reqDateValues};";
 		$rslt = $_db->query( $sql );
 	}
-<<<<<<< HEAD
 	if ( $updateGongDeZhu ) { // changes to the sundayRq2GongDeZhu table
 		$now = date("Y-m-d H:i:s");
 		$sql = "UPDATE `sundayRq2GongDeZhu` SET `GongDeZhu` = \"{$gongDeZhu}\", `rqTime` = \"{$now}\" WHERE `TblName` = \"{$tblName}\" AND `rqID` = \"{$tupID}\";";
 		$rslt = $_db->query( $sql );
 	}
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
 	return true;
 } // function updateSundayTuple()
 
@@ -195,15 +174,12 @@ function deleteSundayTuple( $tblName, $tupNVs, $usr ) {
 	// delete sundayRq2Days entries
 	$sql = "DELETE FROM `sundayRq2Days` WHERE `TblName` = \"{$tblName}\" AND `rqID` = \"{$tupID}\";";
 	$rslt = $_db->query( $sql );
-<<<<<<< HEAD
 	// delete sundayRq2GongDeZhu entries
 	$sql = "DELETE FROM `sundayRq2GongDeZhu` WHERE `TblName` = \"{$tblName}\" AND `rqID` = \"{$tupID}\";";
 	$rslt = $_db->query( $sql );
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
 	// delete sundayRq2Usr entries
 	$sql = "DELETE FROM `sundayRq2Usr` WHERE `TblName` = \"{$tblName}\" AND `rqID` = \"{$tupID}\" AND `UsrName` = \"{$usr}\";";
-	$rslt = $_db->query( $sql );
+	$rslt = $_db->query( $sql );	
 	// finally, delete the entry in the sundayQifu or sundayMerit table
 	$sql = "DELETE FROM `{$tblName}` WHERE `ID` = \"{$tupID}\";";
 	$rslt = $_db->query( $sql );
@@ -218,14 +194,11 @@ function deleteSundayUsrTuple( $tblName, $usr ) {
 			"(SELECT `rqID` FROM `sundayRq2Usr` WHERE `TblName` = \"{$tblName}\" AND `UsrName` = \"{$usr}\")" .
 			";";
 	$rslt = $_db->query( $sql );
-<<<<<<< HEAD
 	// Delete entries in sundayRq2GongDeZhu table belonging to the $usr
 	$sql =	"DELETE FROM `sundayRq2GongDeZhu` WHERE `TblName` = \"{$tblName}\" AND `rqID` IN " .
 			"(SELECT `rqID` FROM `sundayRq2Usr` WHERE `TblName` = \"{$tblName}\" AND `UsrName` = \"{$usr}\")" .
 			";";
 	$rslt = $_db->query( $sql );
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
 	// Delete entries in sundayQifu or sundayMerit table belonging to the $usr
 	$sql =	"DELETE FROM `{$tblName}` WHERE `ID` IN " . 
 			"(SELECT `rqID` FROM `sundayRq2Usr` WHERE `TblName` = \"{$tblName}\" AND `UsrName` = \"{$usr}\")" .
@@ -238,7 +211,6 @@ function deleteSundayUsrTuple( $tblName, $usr ) {
 	$_delCount = $_db->affected_rows;
 	return true;
 } // function deleteSundayUsrTuple()
-<<<<<<< HEAD
 
 
 function checkboxInt2Str ( $intVal ) {
@@ -254,6 +226,4 @@ function checkboxStr2Int ( $checkStr ) {
 	else
 		return 0;
 } // checkboxStr2Int
-=======
->>>>>>> parent of 391dce6... GongDeZhu Checkbox
 ?>
