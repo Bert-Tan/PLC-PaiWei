@@ -201,7 +201,11 @@ function loadTblData( tblName, usrName, frameID ) { // alert( "loadTblData - Use
     /* Caller has called $( "#" . dataFrameID ).empty() */
     var dataFrame = $( "#" + frameID );
     var tblHdrWrapper =	$('<div class="dataHdrWrapper"></div>');
-    var tblDataWrapper = $('<div class="dataBodyWrapper"></div>');
+    var tblDataWrapper = $('<div class="dataBodyWrapper" style="height: 40vh"></div>');
+    //GongDeZhu request message footer
+    var gongDeZhuMsg = ( _sessLang == SESS_LANG_CHN ) ? "<p>同修若要申請做功德主，請先送 email 到佛堂(library@amitabhalibrary.org)。確認後，請務必於佛堂早課開始前<b>10分鐘</b>到達佛堂練習。未經確認或練習者，恕不受理。</p>" : "<p>If you want to request to serve as a sponsor, please send email to us (library@amitabhalibrary.org). If you reveive a confirmation email, please arrive at the Pure Land Center at least <b>10 minutes</b> before the Sunday activity starts for training. Otherwise, your request will not be granted.</p>";
+    var footerWrapper = $('<div class="footerWrapper"></div>');
+    footerWrapper.html( gongDeZhuMsg );
     var dbInfo = {}, ajaxData = {};
     var rspX = null;
 
@@ -240,13 +244,13 @@ function loadTblData( tblName, usrName, frameID ) { // alert( "loadTblData - Use
             if ( _tblSize == 0 ) {
                 tblDataWrapper.find("tr").remove();
             }
-            dataFrame.append( tblHdrWrapper, tblDataWrapper );
+            dataFrame.append( tblHdrWrapper, tblDataWrapper, footerWrapper );
             rdy_edit();
         }, // success handler
         error: function ( jqXHR, textStatus, errorThrown ) {
             alert( "loadTblData()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
         } // error handler
-    }); // ajax Call
+    }); // ajax Call    
 } // function loadTblData() of the Sunday Qifu or Merit tables
 
 function hdlr_onFocus() {

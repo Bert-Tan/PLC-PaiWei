@@ -99,8 +99,8 @@
 				未經練習者，恕不受理。
 			</dd -->
 			<dd>
-				同修若要申請做功德主，請先送 email 到佛堂，直接向副館長申請。
-				確認後，請務必於佛堂早課開始前10分鐘到達佛堂練習。未經確認或練習者，恕不受理。
+				同修若要申請做功德主，請先送 email 到佛堂(library@amitabhalibrary.org)，直接向副館長申請。
+				確認後，請務必於佛堂早課開始前<b>10分鐘</b>到達佛堂練習。未經確認或練習者，恕不受理。
 			</dd>
 		</dl><!-- End of dl -->        
 <?php
@@ -165,12 +165,10 @@
 				for Merit-dedication and the deceased has been beyond 49 days, the request is limited to the immediate applicable Sunday only.
 			</dd><br/>
 			<dt>Request to Serve as a Sponsor</dt>
-			<dd>
-				If you want to request to serve as a sponsor, the same requirements apply;
-				please check the "Ceremony Sponsor" checkbox in the request form.
-				<b>However,</b> you <b>must</b> be trained before your request will be accepted.
-				Please arrive at the Pure Land Center at least <b>10</b> minutes before the Sunday
-				activity starts for training. Otherwise, your request will not be granted.
+			<dd>				
+				If you want to request to serve as a sponsor, please send email to us (library@amitabhalibrary.org).
+				If you reveive a confirmation email, please arrive at the Pure Land Center at least <b>10 minutes</b> before the Sunday
+				activity starts for training. Otherwise, your request will not be granted.				
 			</dd>
 		</dl><!-- End of dl -->        
 <?php

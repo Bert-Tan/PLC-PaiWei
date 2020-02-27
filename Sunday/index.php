@@ -100,10 +100,10 @@
 	table.dataHdr th, table.dataRows td {
 		height: 22px;
 		line-height: 1.2em;
-	}	
+	}
 
 	table.dataRows tr td:not(:last) {
-		text-align: left;
+		text-align: left;		
 	}
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
@@ -151,8 +151,8 @@
 		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>;"><?php echo xLate( 'qifuTitle' ); ?></h2>
 		<h2 style="color: darkred;"><?php echo xLate( 'present' ); ?></h2>
 		<div id="tabDataFrame">
-			<!-- Frame to load Tab Data -->
-		</div><!-- tabDataFrame -->
+			<!-- Frame to load Tab Data -->				
+		</div><!-- tabDataFrame -->	
 	</div><!-- dataArea -->
 </body>
 </html>
