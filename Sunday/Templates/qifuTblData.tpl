@@ -14,9 +14,11 @@
 		</td>
 		<!-- END reqDateCol -->
 		<!-- BEGIN GongDeZhuCol -->
+		<!--
 		<td style="{cellWidth}">
 			<input disabled type="checkbox" data-fldn="GongDeZhu" data-oldv="{checkStr}" {checkStr}>
 		</td>
+		-->
 		<!-- END GongDeZhuCol -->
 		<!-- BEGIN dataEditCol -->
 		<td>

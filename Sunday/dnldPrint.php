@@ -10,24 +10,30 @@
 	$leftMargin = 0.5; $rightMargin = 0.5;
 	
 	//font settings
-	$ChineseFont = 'edukai3'; $EnglishFont = 'times'; $SymbolFont = 'zapfdingbats';
+	$ChineseFont = 'edukai3'; $EnglishFont = 'courierI'; //$SymbolFont = 'zapfdingbats';
 	$fontStyle = 'B'; $fontSize = 18; $fontSizeDate = 18; //$fontSizeDate = 14;
-	$correctMark = TCPDF_FONTS::unichr(52);
+	//$correctMark = TCPDF_FONTS::unichr(52);
 		
 	//some common information (string)
 	$title = '淨土念佛堂、圖書館';
 	$qifuTableTitle = '祈  福  申  請  表';
-	$meritTableTitle = '迴  向  申  請  表';
-	//$qifuHeaderData = array("申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期", "斋主");
-	//$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請迴向之日期", "斋主");
-	$qifuHeaderData = array("申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期", "功德主");
-	$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請迴向之日期", "功德主");
+	$meritTableTitle = '回  向  申  請  表';
+	$qifuHeaderData = array("申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期");
+	$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請回向之日期");
+	/*
+	//field $i=0 corresponds to rqID (which is not printed)
+	$qifuHeaderData = array("","申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）", "申請祈福之日期", "功德主");
+	$meritHeaderData = array("","申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "申請回向之日期", "功德主");
+	*/
 
 	//table cell column width
-	//$qifuCellWidthArray = array(1.1, 1.1, 1.1, 3.4, 3.3, 0.4);
-	//$meritCellWidthArray = array(1.1, 1.1, 1.1, 0.9, 1.3, 1.1, 3.4, 0.4);
-	$qifuCellWidthArray = array(1.1, 1.1, 1.1, 3.8, 1.9, 1.0);
-	$meritCellWidthArray = array(1.1, 1.1, 1.1, 0.9, 1.3, 1.6, 1.9, 1.0);
+	$qifuCellWidthArray = array(1.1, 1.1, 1.1, 4.7, 2.0);
+	$meritCellWidthArray = array(1.1, 1.1, 1.1, 0.9, 1.3, 1.1, 3.4);
+	/*
+	//field $i=0 corresponds to rqID (which is not printed)
+	$qifuCellWidthArray = array(0,1.1, 1.1, 1.1, 3.8, 1.9, 1.0);
+	$meritCellWidthArray = array(0,1.1, 1.1, 1.1, 0.9, 1.3, 1.6, 1.9, 1.0);
+	*/
 	$totalWidth = 11 - $leftMargin - $rightMargin; //total table width
 	$totalHeight = 8.5 - $topMargin - $bottomMargin; //total page height
 	$extraHeight = 0.2; // extra height for each table row
@@ -136,7 +142,7 @@
 	//if $isHeader=true, print header row (special format); otherwise, print request data row
 	function printRow($data, $cellHeight, $dateStrHeight, $cellWidthArray, $isHeader) {
 		global $pdf;
-		global $ChineseFont, $EnglishFont, $SymbolFont, $fontSize, $fontStyle, $fontSizeDate, $correctMark;
+		global $ChineseFont, $EnglishFont, $fontSize, $fontStyle, $fontSizeDate;
 			
 		//field number of each request data record
 		$colNum = count($data);	
@@ -148,11 +154,10 @@
 		}
 		
 		//print row
-		for($i = 0; $i < $colNum; ++$i) {
-							
-			//request dates (data cell): smaller font & left alignment & highlight CURRENT Sunday date
+		for($i = 0; $i < $colNum; ++$i) {			
 			/*
-			if(!$isHeader && $i == $colNum-2) {
+			//request dates (data cell): smaller font & left alignment & highlight CURRENT Sunday date
+			if(!$isHeader && $i == $colNum-1) {
 				$pdf->SetFont($ChineseFont, $fontStyle, $fontSizeDate);
 				//$rqDate: 'Y-m-d'
 				$rqDate = getCurrentNextSundayDate();
@@ -179,22 +184,30 @@
 				$pdf->SetFont($ChineseFont, $fontStyle, $fontSize);
 			}
 			*/
+			/*
 			//GongDeZhu cell: if true, print correct mark
-			if(!$isHeader && $i == $colNum-1) {				
-				$gongDeZhuMark = '';
-				if($data[$i] == 1)
-					$gongDeZhuMark = $correctMark;
+			if(!$isHeader && $i == $colNum-1) {	
+				$pdf->SetFont($EnglishFont, $fontStyle, $fontSize);
+				if($data[$i] != 0)
+					$pdf->MultiCell($cellWidthArray[$i], $cellHeight, $data[$i], 1, 'C', $fill, 0, '', '', true, 0, false, true, $cellHeight, 'M');
+				else
+					$pdf->MultiCell($cellWidthArray[$i], $cellHeight, "", 1, 'C', $fill, 0, '', '', true, 0, false, true, $cellHeight, 'M');
+					
+				//$gongDeZhuMark = '';
+				//if($data[$i] == 1)
+				//	$gongDeZhuMark = $correctMark;
 				//print GongDeZhu mark
-				$pdf->SetFont($SymbolFont, $fontStyle, $fontSize);
-				$pdf->MultiCell($cellWidthArray[$i], $cellHeight, $gongDeZhuMark, 1, 'C', $fill, 0, '', '', true, 0, false, true, $cellHeight, 'M');
+				//$pdf->SetFont($SymbolFont, $fontStyle, $fontSize);
+				//$pdf->MultiCell($cellWidthArray[$i], $cellHeight, $gongDeZhuMark, 1, 'C', $fill, 0, '', '', true, 0, false, true, $cellHeight, 'M');
 
 				//reset font
 				$pdf->SetFont($ChineseFont, $fontStyle, $fontSize);
 			}
+			*/
 			//other data cells
-			else {
+			//else {
 				$pdf->MultiCell($cellWidthArray[$i], $cellHeight, $data[$i], 1, 'C', $fill, 0, '', '', true, 0, false, true, $cellHeight, 'M');
-			}	
+			//}	
         }
 		
 		$pdf->Ln(); //new line
@@ -224,6 +237,15 @@
 		//get Sunday Merit data
 		$sundayTable = 'sundayMerit';	
 		$meritDataArray = queryData($sundayTable, $rqDate);
+
+		/*
+		//GongDeZhu array ordered by request timestamp
+		$gondDeZhuOrderArray = queryGongDeZhuOrder($rqDate);
+		
+		//assign GongDeZhu order to Qifu/Merit data array based on request timestamp (i.e. order in $gondDeZhuOrderArray)
+		assignGongDeZhuOrder($qifuDataArray, $gondDeZhuOrderArray, 'sundayQifu');
+		assignGongDeZhuOrder($meritDataArray, $gondDeZhuOrderArray, 'sundayMerit');
+		*/
 		
 		//pre-process data
 		preprocessData($qifuDataArray, $qifuHeaderData, $qifuCellHeightArray, $qifuHeaderHeight, $qifuCellWidthArray, $qifuDateStrHeightArray);
@@ -245,7 +267,7 @@
 		
 		
 		//(1) remove Year field in request dateStr
-		$dataArray = removeSameYearField($dataArray, $colNum-2);
+		$dataArray = removeSameYearField($dataArray, $colNum-1);
 						
 		//(2) calculate PDF page title height
 		$pdfPageTitleHeight = 4 * $pdf->getStringHeight($totalHeight, "  ", false, true, '', 1);
@@ -258,7 +280,7 @@
 			
 			$data = $dataArray[$i]; //data record
 			
-			$dateStrHeight = calculateDateStrHeight($data[$colNum-2], $cellWidthArray[$colNum-2]);
+			$dateStrHeight = calculateDateStrHeight($data[$colNum-1], $cellWidthArray[$colNum-1]);
 			$cellHeight = calculateCellHeight($data, $cellWidthArray, true, $dateStrHeight, true);
 			
 			array_push($dateStrHeightArray, $dateStrHeight);
@@ -335,7 +357,7 @@
 								
 		for($i = 0; $i < $colNum; ++$i) {
 			//request dates: smaller font
-			if($i == $colNum-2 && $containDate) {			
+			if($i == $colNum-1 && $containDate) {			
 				array_push($cellHeights, $dateStrHeight);
 			}
 			else {
@@ -400,6 +422,33 @@
 		
 		return $rqDataArray;
 	}
+
+	/*
+	//assign GongDeZhu order to Qifu/Merit data array based on request timestamp (i.e. order in $gondDeZhuOrderArray)
+	function assignGongDeZhuOrder(&$dataArray, $gondDeZhuOrderArray, $sundayTable) {
+		if(count($dataArray) == 0)
+			return;
+		else
+			$colNum = count($dataArray[0]);			
+
+		foreach($dataArray as &$data) {
+			$rqID = $data[0];
+
+			//request to be GongDeZhu
+			if($data[$colNum-1] == 1) {
+				for($i = 0; $i < count($gondDeZhuOrderArray); ++$i) {
+					$gongDeZhu = $gondDeZhuOrderArray[$i];
+	
+					//assign GongDeZhu order
+					if($sundayTable==$gongDeZhu[0] && $rqID==$gongDeZhu[1]) {
+						$data[$colNum-1] = $i + 1;
+						break;
+					}
+				}				
+			}			
+		}
+	}
+	*/
 	
 	//query database to get Sunday Qifu/Merit data
 	function queryData($sundayTable, $rqDate) {
@@ -420,9 +469,8 @@
 				.	"GROUP BY ID;";	
 		*/
 		//sql to ONLY list the current/next Sunday as request date
-		$_sql = "SELECT {$_selFlds}, \"{$rqDate}\", GongDeZhu FROM {$sundayTable} "
-				.	"INNER JOIN sundayRq2Days ON (ID=sundayRq2Days.rqID AND sundayRq2Days.TblName=\"{$sundayTable}\") "
-				.	"INNER JOIN sundayRq2GongDeZhu ON (ID=sundayRq2GongDeZhu.rqID AND sundayRq2GongDeZhu.TblName=\"{$sundayTable}\") "
+		$_sql = "SELECT {$_selFlds}, \"{$rqDate}\" FROM {$sundayTable} "
+				.	"INNER JOIN sundayRq2Days ON (ID=rqID AND TblName=\"{$sundayTable}\") "		
 				.	"WHERE ID in (SELECT rqID FROM sundayRq2Days "
 				.	"WHERE TblName=\"{$sundayTable}\" AND rqDate=\"{$rqDate}\") "
 				.	"GROUP BY ID;";
@@ -433,6 +481,24 @@
 		
 		return $_Rows;
 	}
+
+	/*
+	//query database to get GongDeZhu order
+	function queryGongDeZhuOrder($rqDate) {
+		global $_db;
+		
+		$_sql = "SELECT G.TblName, G.rqID FROM sundayRq2GongDeZhu G "
+				.	"INNER JOIN sundayRq2Days D ON (G.TblName=D.TblName AND G.rqID=D.rqID) "
+				.	"WHERE G.GongDeZhu=1 AND D.rqDate=\"{$rqDate}\" "
+				.	"ORDER BY G.rqTime;";
+		
+		//query Sunday Qify/Merit data
+		$_rslt = $_db->query( $_sql );			
+		$_Rows = $_rslt->fetch_all ( MYSQLI_NUM );	
+		
+		return $_Rows;
+	}
+	*/
 	
 	//get the date of current (if NOW is Sunday) or next (if NOW is not Sunday) Sunday
 	function getCurrentNextSundayDate() {
