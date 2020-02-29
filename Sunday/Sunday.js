@@ -201,7 +201,7 @@ function loadTblData( tblName, usrName, frameID ) { // alert( "loadTblData - Use
     /* Caller has called $( "#" . dataFrameID ).empty() */
     var dataFrame = $( "#" + frameID );
     var tblHdrWrapper =	$('<div class="dataHdrWrapper"></div>');
-    var tblDataWrapper = $('<div class="dataBodyWrapper" style="height: 40vh"></div>');
+    var tblDataWrapper = $('<div class="dataBodyWrapper" style="height: 38vh"></div>');
     //GongDeZhu request message footer
     var gongDeZhuMsg = ( _sessLang == SESS_LANG_CHN ) ? "<p>同修若要申請做功德主，請先送 email 到佛堂(library@amitabhalibrary.org)。確認後，請務必於佛堂早課開始前<b>10分鐘</b>到達佛堂練習。未經確認或練習者，恕不受理。</p>" : "<p>If you want to request to serve as a sponsor, please send email to us (library@amitabhalibrary.org). If you reveive a confirmation email, please arrive at the Pure Land Center at least <b>10 minutes</b> before the Sunday activity starts for training. Otherwise, your request will not be granted.</p>";
     var footerWrapper = $('<div class="footerWrapper"></div>');
@@ -326,9 +326,20 @@ function hdlr_dataChg() { // on Blur
     if ( fldN == 'reqDates' ) {
         // it could be for 祈福 (max 3 times), or for 迴向 (1 or upto 7 times ); need to validate
         var dateStr = newV.replace("，", ",");
-        var dateArray = dateStr.split( /,\s*/ ).sort();
-
+        var dateArray = dateStr.split( /,\s*/ );
         if ( dateArray[0].length == 0 ) dateArray.shift();
+
+        // convert MM/DD/YYYY to YYYY-MM-DD
+        for ( i = 0; i < dateArray.length; i++ ) {
+            var dateString = dateArray[i];
+            // match MM/DD/YYYY
+            if( dateString.match( /^(0?[1-9]|1[012])[\/\/](0?[1-9]|[12][0-9]|3[01])[\/\/]\d{4}$/) ) {
+                var d = dateString.split( /[\/\/]/ ); // d[0]: MM; d[1]: DD; d[2]: YYYY
+                dateArray[i] = d[2].concat("-", d[0], "-", d[1]); // YYYY-MM-DD
+            }
+        }         
+        dateArray = dateArray.sort();        
+
         for ( i = 0; i < dateArray.length; i++ ) {
             if ( ! isValidDate( dateArray[i], true, true ) ) {
                 $(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');

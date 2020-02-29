@@ -54,11 +54,11 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_ENG => "Ceremony Sponsor" ),
 		*/
 		'mDates' => array (
-			SESS_LANG_CHN => "回向日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多七次，以逗號分開)",
-			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 7 times; comma separated)" ),
+			SESS_LANG_CHN => "回向日期，必須為星期日<br/>(西元 年年年年-月月-日日<br/>或 月月/日日/年年年年)<br/>(最多七次，以逗號分開)",
+			SESS_LANG_ENG => "Requested Sundays<br/>(YYYY-MM-DD or MM/DD/YYYY)<br/>(Max 7 times; comma separated)" ),
 		'qDates' => array (
-			SESS_LANG_CHN => "祈福日期，必須為星期日<br/>(西元 年年年年-月月-日日)<br/>(最多三次，以逗號分開)",
-			SESS_LANG_ENG => "Requested Sundays (YYYY-MM-DD)<br/>(Max 3 times; comma separated)" ),
+			SESS_LANG_CHN => "祈福日期，必須為星期日<br/>(西元 年年年年-月月-日日<br/>或 月月/日日/年年年年)<br/>(最多三次，以逗號分開)",
+			SESS_LANG_ENG => "Requested Sundays<br/>(YYYY-MM-DD or MM/DD/YYYY)<br/>(Max 3 times; comma separated)" ),
 		'dateInputV' => array (
 			SESS_LANG_CHN => "(西元)年年年年-月月-日日；若多個星期日，請以逗號分開",
 			SESS_LANG_ENG => "YYYY-MM-DD; Sundays, comma separated" )
