@@ -30,7 +30,7 @@
 				SESS_LANG_CHN => "用戶<br/>撤出",
 				SESS_LANG_ENG => "User<br/>Logout" ),
 			'qifuTitle' => array (
-				SESS_LANG_CHN => "週日早課<br/>申請祈福與回向",
+				SESS_LANG_CHN => "週日早課<br/>申請祈福與回向辦法",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Application for Well-wishing&nbsp;&amp;&nbsp;Merit Dedication" ),
 			'ruleTab' => array (
 				SESS_LANG_CHN => "申請需知",

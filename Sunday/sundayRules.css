@@ -51,7 +51,5 @@ table.sundayRule ul {
 }
 
 li {
-    display: inline-block;
     flex: 0 1 auto;
-    list-style-type: none;
 }
