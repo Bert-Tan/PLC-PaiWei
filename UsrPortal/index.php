@@ -71,7 +71,7 @@
 
 </head>
 <body>
-	<?php require_once("./UsrPgHeader.htm");?>
+	<?php require_once("./UsrPgHeader.php");?>
 	<div class="dataArea">
 		<h1 class="dataTitle centerMe" style="<?php if ( !$useChn ) echo "letter-spacing: normal;"; ?>"><?php echo xLate( 'h1Title' ); ?></h1>
 	</div>

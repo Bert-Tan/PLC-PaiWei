@@ -13,6 +13,13 @@
 			<input disabled type="text" data-fldn="reqDates" data-oldv="{dateFldV}" value="{dateFldV}">
 		</td>
 		<!-- END reqDateCol -->
+		<!-- BEGIN GongDeZhuCol -->
+		<!--
+		<td style="{cellWidth}">
+			<input disabled type="checkbox" data-fldn="GongDeZhu" data-oldv="{checkStr}" {checkStr}>
+		</td>
+		-->
+		<!-- END GongDeZhuCol -->
 		<!-- BEGIN dataEditCol -->
 		<td>
 			<input class="editBtn" type="button" value="{editBtnTxt}">&nbsp;&nbsp;

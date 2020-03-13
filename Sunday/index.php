@@ -21,7 +21,7 @@
 				SESS_LANG_CHN => "申請<br/>法會牌位",
 				SESS_LANG_ENG => "Name Plaque for<br/>Retreat Merit Dedication" ),
 			'featSun' => array (
-				SESS_LANG_CHN => "早課<br/>祈福迴向",
+				SESS_LANG_CHN => "早課<br/>祈福回向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Merit Dedication" ),
 			'featFuture' => array (
 				SESS_LANG_CHN => "其他未來會提供的功能<br/>(結緣法寶申請，等等。)",
@@ -30,22 +30,22 @@
 				SESS_LANG_CHN => "用戶<br/>撤出",
 				SESS_LANG_ENG => "User<br/>Logout" ),
 			'qifuTitle' => array (
-				SESS_LANG_CHN => "週日早課申請<br/>祈福與功德迴向",
-				SESS_LANG_ENG => "Sunday Chanting<br/>Well-wishing&nbsp;&amp;&nbsp;Merit Dedication" ),
+				SESS_LANG_CHN => "週日早課<br/>申請祈福與回向",
+				SESS_LANG_ENG => "Sunday Chanting<br/>Application for Well-wishing&nbsp;&amp;&nbsp;Merit Dedication" ),
 			'ruleTab' => array (
-				SESS_LANG_CHN => "申請要求與辦法",
-				SESS_LANG_ENG => "Application Requirements &amp; Procedure" ),
+				SESS_LANG_CHN => "申請需知",
+				SESS_LANG_ENG => "Application Requirements" ),
 			'qifuTab' => array (
 				SESS_LANG_CHN => "祈福申請表",
 				SESS_LANG_ENG => "Well-wishing Request Form" ),
 			'meritTab' => array (
-				SESS_LANG_CHN => "功德迴向申請表",
+				SESS_LANG_CHN => "回向申請表",
 				SESS_LANG_ENG => "Merit Dedication Request Form" ),
 			'gongDeZhuTab' => array (
 				SESS_LANG_CHN => "申請做功德主",
 				SESS_LANG_ENG => "Request to Serve as<br/>A Ceremony Sponsor" ),
 			'present' => array (
-				SESS_LANG_CHN => "**** 祈福迴向的申請人務必親自，或有指定代表出席參加 ****",
+				SESS_LANG_CHN => "**** 申請人務必親自、或有指定代表出席參加，否則恕不受理 ****",
 				SESS_LANG_ENG => "**** The Requestor or a Delegate Must Be Present ****" ),
 		);
 		return $htmlNames[ $what ][ $sessLang ];
@@ -57,6 +57,7 @@
 		header( $hdrLoc );
 	}
 	$sessLang = $_SESSION[ 'sessLang' ];
+	$sessType = $_SESSION[ 'sessType' ];
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$fontSize = ( $useChn ) ? "1.0em;" : "0.9em;";
 	$ltrSpacing = ( $useChn ) ? "20px" : "normal";
@@ -99,15 +100,15 @@
 	table.dataHdr th, table.dataRows td {
 		height: 22px;
 		line-height: 1.2em;
-	}	
+	}
 
 	table.dataRows tr td:not(:last) {
-		text-align: left;
+		text-align: left;		
 	}
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
 		width: 98%;
-		height: 70vh;
+		height: 65vh;
 		margin: auto;
 		margin-top: 0px;
 		margin-bottom: 0px;
@@ -135,14 +136,14 @@
 
 </head>
 <body>
-	<?php require_once("../UsrPortal/UsrPgHeader.htm");?>
+	<?php require_once("../UsrPortal/UsrPgHeader.php");?>
 	<table class="tabMenu">
 		<thead>
 			<tr>
 				<th data-table="sundayRule"><?php echo xLate( 'ruleTab' ); ?></th>
 				<th data-table="sundayQifu"><?php echo xLate( 'qifuTab' ); ?></th>
 				<th data-table="sundayMerit"><?php echo xLate( 'meritTab' ); ?></th>
-				<th class="future" data-table="sundayGongDeZhu"><?php echo xLate( 'gongDeZhuTab' ); ?></th>
+				<!-- <th class="future" data-table="sundayGongDeZhu"><?php echo xLate( 'gongDeZhuTab' ); ?></th> -->
 			</tr>
 		</thead>
 	</table>
@@ -150,8 +151,8 @@
 		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>;"><?php echo xLate( 'qifuTitle' ); ?></h2>
 		<h2 style="color: darkred;"><?php echo xLate( 'present' ); ?></h2>
 		<div id="tabDataFrame">
-			<!-- Frame to load Tab Data -->
-		</div><!-- tabDataFrame -->
+			<!-- Frame to load Tab Data -->				
+		</div><!-- tabDataFrame -->	
 	</div><!-- dataArea -->
 </body>
 </html>

@@ -13,7 +13,7 @@
 		global $sessLang;
 		$htmlNames = array (
 			'htmlTitle' => array (
-				SESS_LANG_CHN => "淨土念佛堂週日祈福及迴向申請主頁",
+				SESS_LANG_CHN => "淨土念佛堂週日早課祈福及回向申請主頁",
 				SESS_LANG_ENG => "Sunday Well-wishing &amp; Merit Dedication Application Page" )
 		);
 		return $htmlNames[ $what ][ $sessLang ];
@@ -46,19 +46,19 @@
 <?php
 	if ( $useChn ) { // Chinese version
  ?>
-		<h2>申請要求與辦法</h2>
+		<!-- <h2>申請要求與辦法</h2> -->
 		<dl>
 			<dt>親自出席</dt>
-			<dd>祈福的申請人於每次迴向時，必須本人親自參加早課或供佛典禮，或有指定的 代表在場。
-				如有緊急狀況 <b>(僅限本館同修)</b>，可委託法務組義工代為請託代表，否則恕無法受理。</dd><br/>
+			<dd>申請人必須親自參加早課或供佛典禮，或有指定的代表在場。
+				如有緊急狀況 <b>(僅限本館同修)</b>，可請法務組到場義工作為代表，否則恕不受理。</dd><br/>
 			<dt>遵守時限</dt>
-			<dd>無論是申請祈福迴向 (請見下列時限) 或是擔任功德主，均以不妨礙佛堂早課準時開始為原則。</dd><br/>
+			<dd>無論是申請祈福與回向 (請見下列時限) 或是擔任功德主，均以不妨礙佛堂早課準時開始為原則。</dd><br/>
 			<dt>申請時限</dt>
 			<dd>
 				<table class="sundayRule">
 					<thead>
 						<tr><th colspan="4">
-							祈&nbsp;福&nbsp;或&nbsp;迴&nbsp;向&nbsp;申&nbsp;請&nbsp;辦&nbsp;法&nbsp;與&nbsp;時&nbsp;限
+							祈&nbsp;福&nbsp;或&nbsp;回&nbsp;向&nbsp;申&nbsp;請&nbsp;辦&nbsp;法&nbsp;與&nbsp;時&nbsp;限
 							</th>
 						</tr>
 						<tr><th style="width: 8vw;">狀&nbsp;&nbsp;&nbsp;&nbsp;況</th>
@@ -68,18 +68,19 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td style="text-align: center; font-weight:bold;">一般狀況</td><td>星期日早晨申請截止之前即已經知道親友或家人需要祈福或迴向</td>
-							<td>由本網頁直接申請</td><td>平常星期日早晨 8:00；<br/>供佛日星期日早晨 8:30</td>
+							<td style="text-align: center; font-weight:bold;">一般狀況</td><td>星期天早晨申請截止之前，即已經知道有家人或親友，需要祈福或回向</td>
+							<td>在本網頁直接填寫申請</td><td>平常星期天早晨 9:00；<br/>供佛日星期天早晨 8:30</td>
 						</tr>
 						<tr>
-							<td style="text-align: center; font-weight: bold;">突發狀況</td><td>星期日早晨申請截止之後才知道親友或家人需要祈福或迴向</td>
-							<td>傳真、簡訊、或到場填寫</td><td>星期日早課開始 15 分鐘之前</td>
+							<td style="text-align: center; font-weight: bold;">突發狀況</td><td>星期天早晨申請截止之後，才知道有家人或親友，需要祈福或回向</td>
+							<td>傳真、簡訊、或現場填寫</td><td>平常星期天早晨 9:45；<br/>供佛日星期天早晨 9:15</td>
+							<!-- <td>星期日早課開始 15 分鐘之前</td> -->
 						</tr>
 						<tr>
 							<td colspan="4" style="text-align:center; font-weight:bold;">
 								<ul>
-									<li>傳真：(630) 428-9961;</li>
-									<li>簡訊 1: (630) 721-1130;</li>
+									<li>傳真：(630) 428-9961</li>
+									<li>簡訊 1: (312) 907-1652</li>
 									<li>簡訊 2: (630) 846-6844</li>
 								</ul>
 							</td>
@@ -87,16 +88,19 @@
 					</tbody>
 				</table>
 			</dd><br/>
-			<dt>祈福與迴向的次數</dt>
+			<dt>申請祈福與回向的次數</dt>
 			<dd>
-				若希望祈福或功德迴向多次者，申請時請註明明確之日期。<b>祈福以三次為限</b>。功德迴向若本人無法出席而由代表出席者，<b>以三次為限</b>；<br/>
-				功德迴向往生者若已往生超過七七，<b>以一次為限</b>。
+				若希望祈福或回向多次者，申請時請註明每次明確之日期。<b>祈福以三次為限</b>。回向若申請者本人無法出席而由代表出席者，<b>亦以三次為限</b>；
+				申請回向如果往生者已超過七七，<b>以一次為限</b>。
 			</dd><br/>
 			<dt>申請做功德主</dt>
+			<!--dd>
+				申請做功德主，辦法與上同，請於申請表“功德主”攔打勾，務必於佛堂早課開始前10分鐘到達佛堂練習。
+				未經練習者，恕不受理。
+			</dd -->
 			<dd>
-				申請做功德主者，辦法與上同，但請務必儘早與法務組師姐聯絡。
-				未曾在本館擔任過功德主者，也未曾與法務組義工練習過者，請恕無法安排擔任功德主。
-				<b>(請與法務組義工聯絡，安排練習。)</b>
+				同修若要申請做功德主，請先送 email 到佛堂(library@amitabhalibrary.org)，直接向副館長申請。
+				確認後，請務必於佛堂早課開始前<b>10分鐘</b>到達佛堂練習。未經確認或練習者，恕不受理。
 			</dd>
 		</dl><!-- End of dl -->        
 <?php
@@ -132,19 +136,20 @@
 					<tbody>
 						<tr>
 							<td style="text-align: center; font-weight:bold;">Normal Scenario</td>
-							<td>Situation known before 8:00am on Sunday</td>
-							<td>Submit request via this webpage online</td><td>8:00am on Sunday</td>
+							<td>Situation known before the Application Deadline on Sundays</td>
+							<td>Submit request via this webpage</td>
+							<td>9:00am on regular Sundays;<br/>8:30am on Sundays w/ Buddha Offering Ceremony<br/></td>
 						</tr>
 						<tr>
 							<td style="text-align: center; font-weight: bold;">Urgent Scenario</td>
-							<td>Situation learned after 8:00am on Sunday</td>
-							<td>Submit via fax, text, or on-site</td><td>15 minutes before Sunday Activity starts</td>
+							<td>Situation learned after the Application Deadline on Sundays</td>
+							<td>Submit via fax, text, or on-site</td><td>15 minutes before respective Sunday Activity starts</td>
 						</tr>
 						<tr>
 							<td colspan="4" style="text-align:center; font-weight:bold;">
 								<ul>
-									<li>Fax：(630) 428-9961;</li>
-									<li>Text Option 1: (630) 721-1130;</li>
+									<li>Fax：(630) 428-9961</li>
+									<li>Text Option 1: (312) 907-1652</li>
 									<li>Text Option 2: (630) 846-6844</li>
 								</ul>
 							</td>
@@ -155,14 +160,15 @@
 			<dt>Multi-Sunday Requests</dt>
 			<dd>
 				When submitting requests, please indicate clearly the Sunday(s) on which your requests will be applied.
-				If you will be represented by designees, then you cannot request for more than three Sundays.
+				For Well-wishing, the requests are limited to three times.
+				For Merit-dedication and you cannot be present, the requests are limited to three times;
+				for Merit-dedication and the deceased has been beyond 49 days, the request is limited to the immediate applicable Sunday only.
 			</dd><br/>
 			<dt>Request to Serve as a Sponsor</dt>
-			<dd>
-				If you want to request to serve as a sponsor, the same procedures and methods apply.
-				In addition, you must contact the volunteer in-charge for Dharma Activities.
-				If you never served such a role in a retreat, you must be trained before your request can be accepted.
-				<b>(Please contact the Dharma-Activity in-charge to arrange the training.)</b>
+			<dd>				
+				If you want to request to serve as a sponsor, please send email to us (library@amitabhalibrary.org).
+				If you reveive a confirmation email, please arrive at the Pure Land Center at least <b>10 minutes</b> before the Sunday
+				activity starts for training. Otherwise, your request will not be granted.				
 			</dd>
 		</dl><!-- End of dl -->        
 <?php

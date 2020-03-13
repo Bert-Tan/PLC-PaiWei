@@ -284,7 +284,7 @@ function hdlr_tabClick() {
         loadSundayDueForm();
         break;
     case 'dnldPrint':
-        alert("Line 187: Download & Print clicked");
+		window.location.href = "dnldPrint.php";
         break
     case 'sundayDash':
         loadSundayDashboard();
