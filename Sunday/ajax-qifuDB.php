@@ -43,8 +43,8 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_CHN => "往生者<br/>年齡",
 			SESS_LANG_ENG => "Age Died" ),
 		'Deceased_D' =>	array (
-			SESS_LANG_CHN => "往生日期<br/>(西元 年-月-日)",
-			SESS_LANG_ENG => "Date Deceased<br/>YYYY-MM-DD" ),
+			SESS_LANG_CHN => "往生日期<br/>(西元 年-月-日<br/>或 月/日/年)",
+			SESS_LANG_ENG => "Date Deceased<br/>YYYY-MM-DD or<br/>MM/DD/YYYY" ),
 		'Deceased_P' =>	array (
 			SESS_LANG_CHN => "往生地點",
 			SESS_LANG_ENG => "Place Deceased" ),

@@ -312,6 +312,12 @@ function hdlr_dataChg() { // on Blur
         }
     }
     if ( fldN == 'Deceased_D' ) { // data change or input in 往生日期 field
+        // convert MM/DD/YYYY to YYYY-MM-DD        
+        if( newV.match( /^(0?[1-9]|1[012])[\/\/](0?[1-9]|[12][0-9]|3[01])[\/\/]\d{4}$/) ) { // match MM/DD/YYYY
+            var d = newV.split( /[\/\/]/ ); // d[0]: MM; d[1]: DD; d[2]: YYYY
+            newV = d[2].concat("-", d[0], "-", d[1]); // YYYY-MM-DD
+        }       
+
         if ( ! isValidDate( newV, false, true ) ) { // an invalid date
             $(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
             return;
