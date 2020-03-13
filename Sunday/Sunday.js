@@ -245,6 +245,10 @@ function loadTblData( tblName, usrName, frameID ) { // alert( "loadTblData - Use
                 tblDataWrapper.find("tr").remove();
             }
             dataFrame.append( tblHdrWrapper, tblDataWrapper, footerWrapper );
+            //if no existing data, add an empty and editable row
+            if ( _tblSize == 0 ) {
+                hdlr_addRow();
+            }
             rdy_edit();
         }, // success handler
         error: function ( jqXHR, textStatus, errorThrown ) {

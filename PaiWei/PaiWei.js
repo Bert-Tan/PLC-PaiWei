@@ -252,6 +252,9 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 				if ( _sessLang != SESS_LANG_CHN ) {
 					$(".dataBodyWrapper").find("h1").css( "letter-spacing", "normal");
 				}
+
+				//if no existing data, add an empty and editable row
+				addRowBtnHdlr();
 			}
 			_sessMode = SESS_MODE_EDIT;
 			ready_edit();
