@@ -266,13 +266,16 @@ function getSundayTblData ( $dbInfoX ) {
 
 	$tblName = $dbInfoX[ 'tblName' ];
 	$Rqstr = $dbInfoX[ 'rqstr' ];
+	$refDate = $dbInfoX[ 'refDate' ];
 
-	$sql = "LOCK TABLES `{$tblName}` READ, `sundayRq2Usr` READ;";
-	$_db->query( $sql );
+	$sql = "LOCK TABLES `{$tblName}` READ, `sundayRq2Usr` READ, `sundayRq2Days` READ;";
+	$_db->query( $sql );	
+	// Sunday Qifu/Merit data NOT earlier than $refDate
 	$sql = "SELECT * FROM `{$tblName}` WHERE `ID` IN "
-		 . "(SELECT `rqID` FROM `sundayRq2Usr` WHERE `TblName` = \"{$tblName}\" AND `UsrName` = \"{$Rqstr}\") "
-		 . "ORDER BY `ID`"
-		 . ";";
+		. "(SELECT DISTINCT `sundayRq2Usr`.`rqID` FROM `sundayRq2Usr` INNER JOIN `sundayRq2Days` "
+		. "ON (`sundayRq2Usr`.`rqID` = `sundayRq2Days`.`rqID` AND `sundayRq2Usr`.`TblName` = `sundayRq2Days`.`TblName`) "
+		. "WHERE `sundayRq2Usr`.`TblName` = \"{$tblName}\" AND `sundayRq2Usr`.`UsrName` = \"{$Rqstr}\" "
+		. "AND `sundayRq2Days`.`rqDate` >= \"{$refDate}\") ORDER BY ID;";		 
 	$rslt = $_db->query( $sql );
 	$tblSize = $rslt->num_rows;
 	$rows = $rslt->fetch_all( MYSQLI_ASSOC );

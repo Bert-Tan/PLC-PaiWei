@@ -43,6 +43,7 @@
 	$sessLang = $_SESSION[ 'sessLang' ];
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$fontSize = ( $useChn ) ? "1.0em;" : "0.9em;";
+	$sessType = $_SESSION[ 'sessType' ];
 ?>
 
 <!DOCTYPE html>
