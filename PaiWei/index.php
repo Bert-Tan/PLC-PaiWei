@@ -251,7 +251,7 @@ table.dataRows tr:nth-child(even) input[type=text] {
 ?>
 		<div style="width: 45%; margin: auto; margin-top: 5vh; text-align: center; font-size: 1.7em; font-weight: bold;
 			color: blue; border: 8px solid #00b300; border-radius: 8px; padding: 2px 5px;
-			display:<?php if (sizeof($txt)==0) { echo "none"; } else { echo "block"; }; ?>;">
+			display:<?php if (strlen($txt)==0) { echo "none"; } else { echo "block"; }; ?>;">
 			<?php echo $txt; ?>
 		</div>
 	</div>

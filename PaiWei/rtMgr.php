@@ -172,6 +172,7 @@ input[type=submit] {
 	<div class="dataArea">
 		<div class="centerMeQ dataTitle" style="font-size: 2.0em;">請更新法會資料</div>
 <?php
+	$mbxTxtA = "";
 	$mbxDisplay = "none";
     if ( isset( $_POST[ 'rtUpdData' ] ) ) {
 		$mbxDisplay = "block";

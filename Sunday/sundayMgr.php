@@ -130,8 +130,14 @@
 			$tpl->setVariable("rowSum", $rslt->num_rows);
 			foreach ( $tblNames as $tblName ) {
 				$tpl->setCurrentBlock("dashboardCell");
-				$_db->query("LOCK TABLES `sundayRq2Usr` READ;");
-				$rslt = $_db->query("SELECT `TblName` FROM `sundayRq2Usr` WHERE `TblName` = \"{$tblName}\" AND `UsrName` = \"{$icoName}\";");
+				$_db->query("LOCK TABLES `sundayRq2Usr` READ, `sundayRq2Days` READ;");				
+				$now = date("Y-m-d");				
+				$sql = "SELECT DISTINCT `sundayRq2Usr`.`TblName`, `sundayRq2Usr`.`rqID` "
+					 . "FROM `sundayRq2Usr` INNER JOIN `sundayRq2Days` "
+					 . "ON (`sundayRq2Usr`.`rqID` = `sundayRq2Days`.`rqID` AND `sundayRq2Usr`.`TblName` = `sundayRq2Days`.`TblName`) "
+					 . "WHERE `sundayRq2Usr`.`TblName` = \"{$tblName}\" AND `sundayRq2Usr`.`UsrName` = \"{$icoName}\" "
+					 . "AND `sundayRq2Days`.`rqDate` >= \"{$now}\";";			
+				$rslt = $_db->query($sql);				
 				$_db->query("UNLOCK TABLES;");
 				$tpl->setVariable("tblName", $tblName);
 				$tpl->setVariable("usrTblSum", $rslt->num_rows);

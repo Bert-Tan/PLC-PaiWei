@@ -68,6 +68,7 @@
 	$resetURLroot = ( $_os == 'DAR' ) ? "http://www.localplc.org/admin" : "https://www.amitabhalibrary.org/admin";
 	$href_url = $resetURLroot . "/$myDir" . "/$myBasename";
 	$msgTxt = '';
+	$mbxTxtA = "";
 	$mbxDisplay = "none";
 	$mbxBC = "#00b300";
 	if (isset($_GET[ 'my_Req' ])) { // $_GET[ 'my_Req' ] may have Chinese characters; use 'usr_Req'!
