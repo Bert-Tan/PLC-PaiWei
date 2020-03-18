@@ -75,6 +75,7 @@
 	
 	$sessType = SESS_TYP_USR;
 	$msgTxt = '';
+	$mbxTxtA = "";
 	$mbxDisplay = "none";
 	$mbxBC = "#00b300";
 	if (isset($_POST[ 'usr_Req' ])) {

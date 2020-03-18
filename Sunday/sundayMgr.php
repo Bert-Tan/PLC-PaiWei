@@ -106,11 +106,16 @@
 		global $_db;
 		$rpt = array();
 		$tblNames = array( 'sundayQifu', 'sundayMerit' );
-		$sqlUsrs = "SELECT DISTINCT `UsrName` FROM `sundayRq2Usr` WHERE `UsrName` NOT IN "
-				 . "(SELECT `UsrName` FROM `inCareOf`) ORDER BY `UsrName`;";
-		$sqlInCareOf = "SELECT DISTINCT `UsrName` FROM `sundayRq2Usr` WHERE `UsrName` IN "
-					 . "(SELECT `UsrName` FROM `inCareOf`) ORDER BY `UsrName`;";
-		$_db->query("LOCK TABLES `sundayRq2Usr` READ, `inCareOf` READ;");
+		$now = date("Y-m-d");
+		$sqlUsrs = "SELECT DISTINCT `UsrName` FROM `sundayRq2Usr` INNER JOIN `sundayRq2Days` "
+				 . "ON (`sundayRq2Usr`.`rqID` = `sundayRq2Days`.`rqID` AND `sundayRq2Usr`.`TblName` = `sundayRq2Days`.`TblName`) "
+				 . "WHERE `UsrName` NOT IN (SELECT `UsrName` FROM `inCareOf`) "
+				 . "AND `sundayRq2Days`.`rqDate` >= \"{$now}\" ORDER BY `UsrName`;";
+		$sqlInCareOf = "SELECT DISTINCT `UsrName` FROM `sundayRq2Usr` INNER JOIN `sundayRq2Days` "
+					 . "ON (`sundayRq2Usr`.`rqID` = `sundayRq2Days`.`rqID` AND `sundayRq2Usr`.`TblName` = `sundayRq2Days`.`TblName`) "
+					 . "WHERE `UsrName` IN (SELECT `UsrName` FROM `inCareOf`) "
+					 . "AND `sundayRq2Days`.`rqDate` >= \"{$now}\" ORDER BY `UsrName`;";
+		$_db->query("LOCK TABLES `sundayRq2Usr` READ, `sundayRq2Days` READ, `inCareOf` READ;");
 		$rslt = $_db->query( $sqlUsrs );
 		$usrNames = $rslt->fetch_all(MYSQLI_ASSOC);
 		$rslt = $_db->query( $sqlInCareOf );
@@ -130,8 +135,13 @@
 			$tpl->setVariable("rowSum", $rslt->num_rows);
 			foreach ( $tblNames as $tblName ) {
 				$tpl->setCurrentBlock("dashboardCell");
-				$_db->query("LOCK TABLES `sundayRq2Usr` READ;");
-				$rslt = $_db->query("SELECT `TblName` FROM `sundayRq2Usr` WHERE `TblName` = \"{$tblName}\" AND `UsrName` = \"{$icoName}\";");
+				$_db->query("LOCK TABLES `sundayRq2Usr` READ, `sundayRq2Days` READ;");							
+				$sql = "SELECT DISTINCT `sundayRq2Usr`.`TblName`, `sundayRq2Usr`.`rqID` "
+					 . "FROM `sundayRq2Usr` INNER JOIN `sundayRq2Days` "
+					 . "ON (`sundayRq2Usr`.`rqID` = `sundayRq2Days`.`rqID` AND `sundayRq2Usr`.`TblName` = `sundayRq2Days`.`TblName`) "
+					 . "WHERE `sundayRq2Usr`.`TblName` = \"{$tblName}\" AND `sundayRq2Usr`.`UsrName` = \"{$icoName}\" "
+					 . "AND `sundayRq2Days`.`rqDate` >= \"{$now}\";";			
+				$rslt = $_db->query($sql);			
 				$_db->query("UNLOCK TABLES;");
 				$tpl->setVariable("tblName", $tblName);
 				$tpl->setVariable("usrTblSum", $rslt->num_rows);
