@@ -2,9 +2,7 @@
 /**********************************************************
  *    Sunday Qifu & Merit Dedication Request Rules        *
  **********************************************************/
-/*
- * To fit into the PaiWei SW architecture, the '#ugDesc' <div> will be loaded by the PaiWei.js
- */ 
+
 	require_once( '../pgConstants.php' );
 	require_once( 'dbSetup.php' );
 	require_once( 'ChkTimeOut.php' );
