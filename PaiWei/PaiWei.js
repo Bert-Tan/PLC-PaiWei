@@ -101,6 +101,12 @@ function readSessParam() {
 			ready_init();
 			//a PaiWei table is chosen: display PaiWei date
 			if ( _tblName != null ) {
+				$(".pwTbl").removeClass("active").css("border", "1px solid white");
+				$("#upld").removeClass("active").css("border", "1px solid white");
+				$(".ugld").removeClass("active").css("border", "1px solid white");
+				$(".pwTbl[data-tbl=\""+_tblName+"\"]").addClass("active").css("border-bottom", "1px solid green");
+
+				$("#tabDataFrame").find("*").unbind(); $("#tabDataFrame").empty();
 				loadTblData( _tblName, 1, 30, _icoName, "tabDataFrame" );
 				enableTooltip();
 			}

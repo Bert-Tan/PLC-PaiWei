@@ -9,11 +9,11 @@
 
     function readUsrPwRows() { // returns a string reflecting a <select> html element
         global $_db;
-		$tblNames = array(	'W001A_4', 'DaPaiWei', 'L001A', 'C001A', 'Y001A', 'D001A' );
-		$pwTotal = array(	'W001A_4' => 0, 'DaPaiWei' => 0, 'L001A' => 0,
-							'C001A' => 0, 'Y001A' => 0, 'D001A' => 0 , 'grandTotal' => 0 );
-		$pwSheets = array(	'W001A_4' => 0, 'DaPaiWei' => 0, 'L001A' => 0,
-							'C001A' => 0, 'Y001A' => 0, 'D001A' => 0 , 'grandTotal' => 0 );
+		$tblNames = array(	'C001A', 'W001A_4', 'DaPaiWei', 'L001A', 'Y001A', 'D001A' );
+		$pwTotal = array(	'C001A' => 0, 'W001A_4' => 0, 'DaPaiWei' => 0,
+							'L001A' => 0, 'Y001A' => 0, 'D001A' => 0 , 'grandTotal' => 0 );
+		$pwSheets = array(	'C001A' => 0, 'W001A_4' => 0, 'DaPaiWei' => 0,
+							'L001A' => 0,'Y001A' => 0, 'D001A' => 0 , 'grandTotal' => 0 );
 		$_db->query( "LOCK TABLES inCareOf READ, pw2Usr READ;" );
 		$sql  =	"SELECT DISTINCT `pwUsrName` FROM `pw2Usr` WHERE `pwUsrName` IN "
 			  .	"(SELECT `UsrName` FROM `inCareOf`) ORDER BY `pwUsrName`;";
@@ -312,9 +312,14 @@ table.dataHdr th select {
 						</th>
 					</tr>
 					<tr>
-						<th>蓮友登錄識別</th><th>往生者蓮位</th>
-						<th>(一年內)<br/>往生者蓮位</th><th>歷代祖先蓮位</th>
-						<th>祈福消災牌位</th><th>累劫冤親債主<br/>蓮位</th><th>地基主蓮位</th><th>總&nbsp;&nbsp;計</th>
+						<th>蓮友登錄識別</th>
+						<th>祈福消災牌位</th>
+						<th>往生者蓮位</th>
+						<th>(一年內)<br/>往生者蓮位</th>
+						<th>歷代祖先蓮位</th>
+						<th>累劫冤親債主<br/>蓮位</th>
+						<th>地基主蓮位</th>
+						<th>總&nbsp;&nbsp;計</th>
 					</tr>
 				</thead>
 			</table>
