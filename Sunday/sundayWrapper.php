@@ -29,7 +29,7 @@
 	} // function xLate();
 
 	session_start();
-	$_SESSION[ 'sessLang' ] = ( $_GET[ 'l' ] == 'c' ) ? SESS_LANG_CHN : SESS_LANG_ENG;
+	$_SESSION[ 'sessLang' ] = ( (isset($_GET[ 'l' ])) && ($_GET[ 'l' ] == 'e') ) ? SESS_LANG_ENG : SESS_LANG_CHN;
 	$sessLang = $_SESSION[ 'sessLang' ];
 	$sessType = SESS_TYP_USR;
 	$useChn = ( $sessLang == SESS_LANG_CHN );

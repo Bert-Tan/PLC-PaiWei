@@ -209,8 +209,8 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr, frameID ) {	/* dataOnly p
 	// before introducing page-by-page surfing, the dataonly parameter isn't really needed
 	var dataArea = $( "#" + frameID );
 	var tblHdrWrapper =	'<div class="dataHdrWrapper"></div>';
-	var tabDataFrameHeight = "65vh";
-	if (tblName == 'DaPaiWei') tabDataFrameHeight = "60vh";
+	var tabDataFrameHeight = "59vh";
+	if (tblName == 'DaPaiWei') tabDataFrameHeight = "53vh";
 	var tblDataWrapper = '<div class="dataBodyWrapper" style="height: ' + tabDataFrameHeight + '"></div>';
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? '沒有找到所選擇的法會的牌位，<br/>請輸入或上載牌位資料。'
 												 : 'No record found!<br/>Please input or upload Data';

@@ -31,6 +31,9 @@
 			'featFuture' => array (
 				SESS_LANG_CHN => "其他未來會提供的功能<br/>(結緣法寶申請，等等。)",
 				SESS_LANG_ENG => "Future:<br/>(Dharma Items Request; etc.)" ),			
+			'paiweiTitle' => array (
+				SESS_LANG_CHN => "法會牌位申請",
+				SESS_LANG_ENG => "Application for Merit Dedication Name Plaques during Retreats" ),
 			'pwC' => array (
 				SESS_LANG_CHN => "祈福消災牌位",
 				SESS_LANG_ENG => "Well Blessing" ),
@@ -57,7 +60,7 @@
 				SESS_LANG_ENG => "User Guide" ),
 			'alertMsg' => array (
 				SESS_LANG_CHN => "**** 除有特殊困難，牌位申請者須本人親自( 或由指定代表 ) 前來參加法會 ****",
-				SESS_LANG_ENG => "**** Note: You or your designee shall be present in the retreat unless you have difficulties ****" )
+				SESS_LANG_ENG => "**** You or your designee shall be present in the retreat unless you have difficulties ****" )
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
@@ -71,6 +74,7 @@
 	$sessType = $_SESSION[ 'sessType' ];
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$fontSize = ( $useChn ) ? "1.0em" : "0.9em";
+	$ltrSpacing = ( $useChn ) ? "20px" : "normal";
 ?>
 
 <!DOCTYPE html>
@@ -129,7 +133,7 @@
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
 		width: 98%;
-		height: 75vh;
+		height: 68vh;
 		margin: auto;
 		margin-top: 0px;
 		margin-bottom: 0px;
@@ -161,18 +165,9 @@
 	<table class="tabMenu">
 		<thead>
 			<tr>
-				<?php
-					if ( $sessType == SESS_TYP_USR ) {
-				?>
+				<?php    if ( $sessType == SESS_TYP_USR ) {    ?>
 				<th class="ugld"><?php echo xLate( 'pwUG' ); ?></th>
-				<?php
-					} else {
-				?>
-				<th id="dnld" data-urlIdx="urlDnld">下載牌位列印</th>
-				<?php
-					}
-				?>
-
+				<?php    }    ?>
 				<th class="pwTbl" data-tbl="C001A"><?php echo xLate( 'pwC' ); ?></th>
 				<th class="pwTbl" data-tbl="W001A_4"><?php echo xLate( 'pwW' ); ?></th>
 				<th class="pwTbl" data-tbl="DaPaiWei"><?php echo xLate( 'pwBIG' ); ?></th>
@@ -183,7 +178,8 @@
 			</tr>
 		</thead>
 	</table>
-	<div class="dataArea">		
+	<div class="dataArea">
+		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>;"><?php echo xLate( 'paiweiTitle' ); ?></h2>		
 		<h2 style="color: darkred; margin-top: 5px; margin-bottom: 10px;"><?php echo xLate( 'alertMsg' ); ?></h2>
 		<div id="tabDataFrame">
 			<!-- Frame to load Tab Data -->				

@@ -66,8 +66,8 @@
 <?php
 	if ( $useChn ) { // Chinese version
  ?>
-		<h2 style="margin-top: 6vh; text-align: center; letter-spacing: 1px;">
-			法會牌位申請用戶指南
+		<h2 style="text-align: center; letter-spacing: 1px;">
+			用戶指南
 		</h2>
         <span style="display: block; width: 95%; margin: auto; padding-top: 2vh; font-size: 1.3em;
 			font-weight: bold; line-height: 1.4em;"><!-- Intro phrase -->
@@ -259,8 +259,8 @@
 <?php
 	} else { // English version
 ?>
-		<h2 style="margin-top: 6vh; text-align: center; letter-spacing: normal;">
-			User Guide to Request for Merit Dedication Name Plaques during Retreats</h2>
+		<h2 style="text-align: center; letter-spacing: normal;">
+			User Guide</h2>
         <span style="display: block; width: 95%; margin: auto; padding-top: 2vh; font-size: 1.3em;
 			font-weight: bold; line-height: 1.1em;"><!-- Intro phrase -->
             Users can apply for specific Merit Dedication Name Plaques during Retreats from this page:
