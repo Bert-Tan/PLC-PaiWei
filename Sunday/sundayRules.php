@@ -25,9 +25,12 @@
 
 	$hdrURL = URL_ROOT . "/admin/index.php";
 	$useChn = ( $sessLang == SESS_LANG_CHN );
-	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
-		header( "location: " . $hdrURL );
-	} // redirect
+
+	if ( (! isset( $_SESSION[ 'byPass' ] )) || $_SESSION[ 'byPass' ] == false) {
+		if ( !isset( $_SESSION[ 'usrName' ] ) ) {
+			header( "location: " . $hdrURL );
+		} // redirect
+	}
 ?>
 
 <!DOCTYPE html>
