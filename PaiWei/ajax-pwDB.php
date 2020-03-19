@@ -46,8 +46,8 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_CHN =>	"往&nbsp;生&nbsp;親&nbsp;友&nbsp;姓&nbsp;名",
 			SESS_LANG_ENG =>	"Full Name of the Deceased" ),
 		'deceasedDate' => array (
-			SESS_LANG_CHN =>	"往生日期<br/>年(西元)&nbsp;&ndash;&nbsp;月&nbsp;&ndash;&nbsp;日",
-			SESS_LANG_ENG =>	"Deceased Date (within 12 months): YYYY-MM-DD"	),
+			SESS_LANG_CHN =>	"往生日期<br/>(西元 年-月-日<br/>或 月/日/年)",
+			SESS_LANG_ENG =>	"Deceased Date (within 12 months)<br>YYYY-MM-DD or MM/DD/YYYY"	),
 		'R_Title' => array (
 			SESS_LANG_CHN =>	"陽&nbsp;上&nbsp;啟&nbsp;請&nbsp;人&nbsp;稱&nbsp;謂",
 			SESS_LANG_ENG =>	"Requestor's Title; e.g., Great Grand Nephew" ),

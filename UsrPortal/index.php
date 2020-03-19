@@ -10,6 +10,9 @@
 	function xLate( $what ) {
 		global $sessLang;
 		$htmlNames = array (
+			'WebsiteHome' => array (
+				SESS_LANG_CHN => "回到<br/>網站首頁",
+				SESS_LANG_ENG => "Back to<br/>Homepage" ),
 			'htmlTitle' => array (
 				SESS_LANG_CHN => "淨土念佛堂一般用戶主頁",
 				SESS_LANG_ENG => "Pure Land Center User Portal" ),

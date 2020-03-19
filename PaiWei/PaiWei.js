@@ -30,12 +30,7 @@ var _wtList = null;	// W_Title & R_Title selection list
 var _rtList = null;
 var _icoName = null;
 var _rqTbls = [ 'D001A', 'L001A', 'Y001A', 'W001A_4', 'DaPaiWei' ];
-var _url2Go = {
-	"urlAdmHome" : "../AdmPortal/index.php",
-	"urlUsrHome" : "../UsrPortal/index.php",
-	"urlDnld" : "./dnldPaiWeiForm.php",
-	"usrLogout" : "../Login/Logout.php"
-};
+
 /**********************************************************
  *                    Support functions                   *
  **********************************************************/
@@ -104,9 +99,14 @@ function readSessParam() {
 			_alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！' : 'Unsaved Data will be LOST!';
 			_blankData = ( _sessLang == SESS_LANG_CHN ) ? "空白" : "BLANK";
 			ready_init();
+			//a PaiWei table is chosen: display PaiWei date
 			if ( _tblName != null ) {
-				loadTblData( _tblName, 1, 30, _icoName );
+				loadTblData( _tblName, 1, 30, _icoName, "tabDataFrame" );
 				enableTooltip();
+			}
+			//no PaiWei table is chosen: display PaiWei User Guide
+			else {
+				$(".ugld").trigger( 'click' );
 			}
 		}, // Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
@@ -199,11 +199,13 @@ function isJSON( str ) {
     return true;
 } // isJSON()
 
-function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter is eliminated */
+function loadTblData( tblName, pgNbr, numRec, sessUsr, frameID ) {	/* dataOnly parameter is eliminated */
 	// before introducing page-by-page surfing, the dataonly parameter isn't really needed
-	var dataArea = $(".dataArea");
+	var dataArea = $( "#" + frameID );
 	var tblHdrWrapper =	'<div class="dataHdrWrapper"></div>';
-	var tblDataWrapper = '<div class="dataBodyWrapper"></div>';
+	var tabDataFrameHeight = "65vh";
+	if (tblName == 'DaPaiWei') tabDataFrameHeight = "60vh";
+	var tblDataWrapper = '<div class="dataBodyWrapper" style="height: ' + tabDataFrameHeight + '"></div>';
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? '沒有找到所選擇的法會的牌位，<br/>請輸入或上載牌位資料。'
 												 : 'No record found!<br/>Please input or upload Data';
 	var errMsg =	'<h1 class="centerMe errMsg">' + errText + '</h1>';
@@ -223,7 +225,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 		data:	_ajaxData,
 		success: function ( rsp ) { // SUCCESS handler
 			var rspV = JSON.parse( rsp );
-			$(".dataArea").css("overflow-y", "initial");
+			$("#tabDataFrame").css("overflow-y", "initial");
 			for ( var X in rspV ) {
 				switch( X ) {
 					case 'URL':
@@ -276,13 +278,15 @@ function pwTblHdlr() {
 	_tblName = $(this).attr("data-tbl");	
 
 	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
-	
-	$(".pwTbl").removeClass("active");
-	$("#upld").removeClass("active");
-	$(".ugld").removeClass("active");
-	$(this).addClass("active");
 
-	loadTblData( _tblName, 1, 30, ( ( _icoName != null ) ? _icoName : _sessUsr ) );
+	$(".pwTbl").removeClass("active").css("border", "1px solid white");
+	$("#upld").removeClass("active").css("border", "1px solid white");
+	$(".ugld").removeClass("active").css("border", "1px solid white");
+	$(this).addClass("active").css("border-bottom", "1px solid green");
+
+	$("#tabDataFrame").find("*").unbind(); $("#tabDataFrame").empty();
+
+	loadTblData( _tblName, 1, 30, ( ( _icoName != null ) ? _icoName : _sessUsr ), "tabDataFrame" );
 	
 	//new page: show hover message
 	enableTooltip();
@@ -318,10 +322,10 @@ function myPaiWeiUpLoad ( e ) {
  * Event Handler - When the Upload Request is clicked     *
  **********************************************************/
 function upldHdlr () { // load the upload form and bind it to the form submit handler
-	$(".pwTbl").removeClass("active");
-	$(".ugld").removeClass("active");
-	$(this).addClass("active");
-	$(".dataArea").load("./upldPaiWeiForm.php #forUpld", function( rsp ) {
+	$(".pwTbl").removeClass("active").css("border", "1px solid white");
+	$(".ugld").removeClass("active").css("border", "1px solid white");
+	$(this).addClass("active").css("border-bottom", "1px solid green");
+	$("#tabDataFrame").load("./upldPaiWeiForm.php #forUpld", function( rsp ) {
 		if ( isJSON( rsp ) ) {
 			rspV = JSON.parse( rsp );
 			location.replace( rspV['URL']);
@@ -340,17 +344,19 @@ function upldHdlr () { // load the upload form and bind it to the form submit ha
  * Event Handler - When the User Guide is requested       *
  **********************************************************/
 function ugLoader () { // load the PaiWei User Guide
-	$(".pwTbl").removeClass("active");
-	$("#upld").removeClass("active");
-	$(this).addClass("active");
-	$(".pwTbl").removeClass("active");
-	$(".dataArea").load("./UG.php #ugDesc", function ( rsp ) {
+	$(".pwTbl").removeClass("active").css("border", "1px solid white");
+	$("#upld").removeClass("active").css("border", "1px solid white");
+	$(this).addClass("active").css("border-bottom", "1px solid green");
+
+	$("#tabDataFrame").find("*").unbind(); $("#tabDataFrame").empty();
+
+	$("#tabDataFrame").load("./UG.php #ugDesc", function ( rsp ) {
 		$(this).find("table").addClass("UGsteps");
 		$(this).find("tr").css("background-color", "transparent");
 		$(this).find("img").addClass("UGstepImg");
 		return false; // so the link won't fire
 	});
-	$(".dataArea").css("overflow-y", "auto");
+	$("#tabDataFrame").css("overflow-y", "auto");
 	return false; // so the link won't fire
 } // ugLoader()
 
@@ -894,6 +900,12 @@ function dataChgHdlr() {	// on 'blur' handler
 		return;
 	}
 	if ( fldN == 'deceasedDate' ) {
+		// convert MM/DD/YYYY to YYYY-MM-DD        
+        if( newV.match( /^(0?[1-9]|1[012])[\/\/](0?[1-9]|[12][0-9]|3[01])[\/\/]\d{4}$/) ) { // match MM/DD/YYYY
+            var d = newV.split( /[\/\/]/ ); // d[0]: MM; d[1]: DD; d[2]: YYYY
+            newV = d[2].concat("-", d[0], "-", d[1]); // YYYY-MM-DD
+		}
+		
 		if ( !chkDate( newV ) ) {
 			alert( errText );
 			if ( oldV.length > 0 ) {
@@ -994,7 +1006,7 @@ $(document).ready(function() {
 	 */
 	$(".future").on( 'click', futureAlert );
 	$(".soon").on( 'click', soonAlert );
-	$(".pgMenu th[data-urlIdx]").on('click', function() {
+	$("th[data-urlIdx]").on('click', function() {
 		location.replace( _url2Go[$(this).attr("data-urlIdx")] );
 	});
 }) // document ready

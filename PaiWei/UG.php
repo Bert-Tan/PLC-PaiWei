@@ -53,7 +53,7 @@
 }
 
 .UGstepImg {
-	width: 90%;
+	width:95%;
 	height: auto;
 	border: 1px solid black;
 }
@@ -80,7 +80,7 @@
             <ol id="viaInput">
                 <li>
 					當您在用戶功能選項的主頁點擊『法會牌位申請』之後，您即可看到法會牌位申請的用戶界面如下：<br/><br/>
-					<img src="./img/pwMain.png" alt=""><br/><br/>
+					<img src="./img/pwMain.png" alt="" style="width: 100%; height: auto;"><br/><br/>
 					<table>
 						<tr><th style="width:18%;">往生者蓮位</th>
 							<td>
@@ -131,7 +131,7 @@
 				</li><br/>
 				<li>當您點選以上任何一種牌位後，您即可更改或刪除已設立的牌位，搜尋您要更改或刪除的牌位，或輸入新的牌位。
 					下面僅以『一年內往生者蓮位』為例說明。<br/><br/>
-					<img src="./img/editDaPaiWei.png" alt=""><br/><br/>
+					<img src="./img/editDaPaiWei.png" alt="" style="width: 100%; height: auto;"><br/><br/>
 					<table>
 						<tr><th style="18%;">刪除</th>
 							<td>點擊『刪除』，本行牌位資料即會從資料庫中刪除。</td>
@@ -143,7 +143,7 @@
 							</td>
 						</tr>
 					</table><br/>
-					<img src="./img/saveChgDaPaiWei.png" alt=""><br/><br/>
+					<img src="./img/saveChgDaPaiWei.png" alt="" style="width: 100%; height: auto;"><br/><br/>
 					<table>
 						<tr><th style="18%;">搜尋</th>
 							<td>點擊『搜尋』，讓您可以找到您所要更改或刪除的牌位。</td>
@@ -154,7 +154,7 @@
 							</td>
 						</tr>
 					</table><br/>
-					<img src="./img/newDaPaiWei.png" alt=""><br/><br/>
+					<img src="./img/newDaPaiWei.png" alt="" style="width: 100%; height: auto;"><br/><br/>
 					<table>
 						<tr><th></th>
 							<td>『往生親友稱謂』 與 『陽上啟請人稱謂』 為 下拉列表選項；
@@ -184,11 +184,11 @@
 						<li>此樣式檔案是微軟的 EXCEL 檔，每一個標籤反應上面所述的各類牌位種類；
 							點擊您所要申請牌位的標籤，即可開始書寫牌位資料；我們仍然以『一年內往生親友蓮位』為例說明。<br/>
 							當您點擊『一年內往生親友蓮位』標籤後，您會看到如下的輸入表：<br/><br/>
-							<img src="./img/inputXLS.png" alt="">
+							<img src="./img/inputXLS.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>按住『控制鍵』/[Ctrl] (或『指令鍵』/ [cmd] - 如果是蘋果電腦)，點選所有有色的說明圖案；
 							如下圖：<br/><br/>
-							<img src="./img/allImgXLS.png" alt="">
+							<img src="./img/allImgXLS.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>按下『刪除鍵』/[Del]，將所有的有色圖案刪除，您就有一個乾淨的輸入表；在此輸入表內完成您所
 							要輸入的資料。
@@ -197,14 +197,14 @@
 							<span style="color: blue; font-weight: bold;">
 								(若您的微軟 EXCEL 為 2013 年或更早的版本，請繼續依循 <a href="#OLD">(j) 以下的存檔步骤。</a>)
 							</span><br/><br/>
-							<img src="./img/saveAsSel.png" alt="" style="width: 500px; height: auto;">
+							<img src="./img/saveAsSel.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>點擊『保存為』後，您會看到如下的『對話框』；請於『保存為』(Save As) 資料格中輸入您要的檔案名，
 							並於『檔案格式』(File Format) 資料格中選擇 『CSV UTF-8』 為保存檔案的資料格式; 然後點擊右下角的『保存』(Save)。<br/><br/>
-							<img src="./img/saveAsCSV.png" alt="" style="width: 700px; height: auto;">
+							<img src="./img/saveAsCSV.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>微軟 EXCEL 會提醒您您只能保存當下所選標籤的輸入表為所要的格式，如下：<br/><br/>
-							<img src="./img/saveActive.png" alt="" style="width: 400px; height: auto;">
+							<img src="./img/saveActive.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>在點擊『確認』/ [OK] 後，您的輸入表即會以『逗號分隔值』/ (CSV) 的資料格式及您所命名的檔案名，
 							保存在您以所選擇的目錄中。
@@ -220,7 +220,7 @@
 							然後您會看到如下的『對話框』(Dialog Box)；請於『檔案名』(File Name) 資料格中輸入您要的檔案名, 
 							並於『保存格式』(Save As Type) 資料格的下拉選項中選擇『CSV (MS-DOS) (*.csv)』為保存檔案的資料格式;
 							然後點擊右下角的『保存』(Save)。<br/><br/>
-							<img src="./img/o_saveAsCSV.png" alt="" style="width: 700px; height: auto;">
+							<img src="./img/o_saveAsCSV.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>請用微軟的 Notepad 開啟您剛才所存的牌位檔案，並於左上角『檔案』的下拉選項中選擇『保存為』(Save As) 後，
 							您會看到如下的『對話框』; 請於『檔案名』(File Name) 資料格中確認您要的檔案名, 於『保存格式』(Save As Type)
@@ -239,13 +239,13 @@
 				<li>上載牌位資料檔案，請按下列的步驟：
 					<ol type="a">
 						<li>在本頁的右上方，點擊『上載牌位檔案』，在本頁的正下方即會看到如下的『對話框』：<br/><br/>
-							<img src="./img/upldBox.png" alt="" style="width: 600px; height: auto;">
+							<img src="./img/upldBox.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>點擊在左邊的 『Browse』框，電腦會讓您移到您所存檔案的目錄中選擇您要用的牌位檔案，選擇它。<br/><br/>
-							<img src="./img/upldFile.png" alt="" style="width: 600px; height: auto;">
+							<img src="./img/upldFile.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>點擊在右邊的 『請選擇牌位用途』框，由下拉列表中選擇牌位的用途；<br/><br/>
-							<img src="./img/upldPaiWei.png" alt="" style="width: 600px; height: auto;">
+							<img src="./img/upldPaiWei.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>最後點擊『上載』，您的牌位資料即會上載存入資料庫中。
 						</li>
@@ -275,7 +275,7 @@
                 <li>
 					When you click the "Name Plaque Application for Merit Dedication in Retreats",
 					you will see the "Retreat Merit Dedication Request Page" with selections as below：<br/><br/>
-					<img src="./img/e_pwMain.png" alt=""><br/><br/>
+					<img src="./img/e_pwMain.png" alt="" style="width: 100%; height: auto;"><br/><br/>
 					<table>
 						<tr><th>Deceased</th>
 							<td>For dedicating merits to the requestor's parents, relatives, teachers, friends, sons, daughters,
@@ -333,7 +333,7 @@
 				<li>When you click on any of the above name plaque selection, you will be able to edit or delete
 					the name plaques of that type already in the system, search for specific ones of the same, or
 					input new name plaque requests. We will take the "Recently Deceased" as an illustration example.<br/><br/>
-					<img src="./img/e_editDaPaiWei.png" alt=""><br/><br/>
+					<img src="./img/e_editDaPaiWei.png" alt="" style="width: 100%; height: auto;"><br/><br/>
 					<table>
 						<tr><th>Delete</th>
 							<td>Click "Delete": This particular Name Plaque entry from the database。</td>
@@ -345,7 +345,7 @@
 							</td>
 						</tr>
 					</table><br/>
-					<img src="./img/e_saveChgDaPaiWei.png" alt=""><br/><br/>
+					<img src="./img/e_saveChgDaPaiWei.png" alt="" style="width: 100%; height: auto;"><br/><br/>
 					<table>
 						<tr><th>Search</th>
 							<td>Click on "Search" allows you to search for the Name Plaques to edit or delete</td>
@@ -355,7 +355,7 @@
 								data table; you may enter new Name Plaque data here.</td>
 						</tr>
 					</table><br/>
-					<img src="./img/e_newDaPaiWei.png" alt=""><br/><br/>
+					<img src="./img/e_newDaPaiWei.png" alt="" style="width: 100%; height: auto;"><br/><br/>
 					<table>
 						<tr><th></th>
 							<td>The "Title of the Deceased" and "Requestor's Title" describe the title and
@@ -388,11 +388,11 @@
 						</li>
 						<li>This is an MS EXCEL template file; every tab supports a Name Plaque type above.
 							Select the tab for the Name Plaque type you want to input the Name Plaque data.<br/><br/>
-							<img src="./img/e_inputXLS.png" alt="">
+							<img src="./img/e_inputXLS.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>Press and hold the [Ctrl] key (or [cmd] key for Mac), click/select all colored
 							illustration arrows as below:<br/><br/>
-							<img src="./img/e_allImgXLS.png" alt="">
+							<img src="./img/e_allImgXLS.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>Click [Del] key to remove all of them; now you have a clean input sheet
 							for entering the Name Plaque data as desired.
@@ -403,15 +403,15 @@
 								If you have an MS EXCEL 2013 or older version, 
 								<a href="#OLD_E">please continue with Step (j).</a>
 							</span><br/><br/>
-							<img src="./img/saveAsSel.png" alt="" style="width: 500px; height: auto;">
+							<img src="./img/saveAsSel.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>Click "Save As..." and you will see the dialog box as below;
 							Please enter the filename in the "Save As:" field, and select "CSV UTF-8" from the dropdown
 							list of the "File Format:" field; then, click "Save" on the bottom right.<br/><br/>
-							<img src="./img/saveAsCSV.png" alt="" style="width: 700px; height: auto;">
+							<img src="./img/saveAsCSV.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>MS EXCEL will remind you that only the Active Sheet can be saved in the desired format:<br/><br/>
-							<img src="./img/saveActive.png" alt="" style="width: 400px; height: auto;">
+							<img src="./img/saveActive.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>Click "OK" and your input sheet is save in the CSV format and in the given filename and folder.
 						</li>
@@ -425,7 +425,7 @@
 							click on "Other Formats" and a dialog box will be shown as below. In this dialog box,
 							enter your file name in the "File Name" field, select "CSV (MS-DOS) (*.csv)" in the
 							"Save As Type" field, and click "Save" button on the lower right bottom of the box.<br/><br/>
-							<img src="./img/o_saveAsCSV.png" alt="" style="width: 700px; height: auto;">
+							<img src="./img/o_saveAsCSV.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>Use MS Notepad and open the file you just saved. Click "File" on the upper left corner
 							and select "Save As" in the dropdown list, and a dialog box will be shown as below.
@@ -436,7 +436,7 @@
 								Note: You must select "All Files (*.*)" in the "Save As Type" field such that
 								your filename extension, ".csv", will be kept, which is required by upload.
 							</span><br/><br/>
-							<img src="./img/o_SaveAsUTF8.png" alt="" style="width: 700px; height: auto;">
+							<img src="./img/o_SaveAsUTF8.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>Repeat applicable steps above across every tab if you have more than one input sheets.
 						</li>
@@ -446,13 +446,13 @@
 					<ol type="a">
 						<li>Click "Upload CSV Files" on the upper right corner of the page,
 							the following dialog box appears:<br/><br/>
-							<img src="./img/e_upldBox.png" alt="" style="width: 600px; height: auto;">
+							<img src="./img/e_upldBox.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>Click "Browse" on the left and surf to the folder and select the file you want to upload.<br/><br/>
-							<img src="./img/e_upldFile.png" alt="" style="width: 600px; height: auto;">
+							<img src="./img/e_upldFile.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>Select a Name Plaque type from the dropdown list on the right.<br/><br/>
-							<img src="./img/e_upldPaiWei.png" alt="" style="width: 600px; height: auto;">
+							<img src="./img/e_upldPaiWei.png" alt="" style="width: 100%; height: auto;">
 						</li><br/>
 						<li>Click "Upload", and the data will be stored in the database.
 						</li>

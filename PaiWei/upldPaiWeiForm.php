@@ -68,11 +68,11 @@ input[type=submit] {
 			style="font-weight:bold; padding: 5px;">
 			<table class="dialog">
 				<tr>
-		    		<td style="">請選擇上載牌位資料檔案:<br/>
+		    		<td style="width: 300px;">請選擇上載牌位資料檔案:<br/>
 						<input type="file" name="upldedFiles" id="fileToUpload" style="font-size: 1.0em;">
 					</td>
-					<td style="">牌位是為了:<br/>
-						<select name="dbTblName" style="width: 250px; font-size: 1.1em;" required>
+					<td style="width: 300px;">牌位是為了:<br/>
+						<select name="dbTblName" style="width: 290px; font-size: 1.1em;" required>
 						<option value="">--請選擇牌位用途--</option>
 				  		<option value="C001A">祈福消災</option>
 						<option value="W001A_4">超薦往生超過一年的親友</option>
@@ -115,13 +115,13 @@ input[type=submit] {
 			style="font-weight:bold; padding: 5px;">
 			<table class="dialog">
 				<tr>
-		    	<td style="">Please Select a File to Upload:<br/>
+		    	<td style="width: 300px;">Please Select a File to Upload:<br/>
 		    		<!-- div style="width: 90%; margin: auto;text-align: left;"><br/-->
 							<input type="file" name="upldedFiles" id="fileToUpload" style="font-size: 1.0em;">
 						<!--/div-->
 					</td>
-					<td style="">The File is for:<br/>
-						<select name="dbTblName" style="width: 250px; font-size: 1.1em;" required>
+					<td style="width: 300px;">The File is for:<br/>
+						<select name="dbTblName" style="width: 290px; font-size: 1.1em;" required>
 						<option value="">--Please Select a Type--</option>
 				  	<option value="C001A">Well Blessing</option>
 					  <option value="W001A_4">Deceased</option>
