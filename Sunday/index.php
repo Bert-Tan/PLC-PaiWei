@@ -64,6 +64,7 @@
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$fontSize = ( $useChn ) ? "1.0em;" : "0.9em;";
 	$ltrSpacing = ( $useChn ) ? "20px" : "normal";
+	unset( $_SESSION[ 'byPass' ] );
 ?>
 
 <!DOCTYPE html>
