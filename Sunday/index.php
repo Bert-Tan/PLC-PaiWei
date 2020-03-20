@@ -36,7 +36,7 @@
 				SESS_LANG_CHN => "週日早課<br/>申請祈福與回向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Application for Well-wishing&nbsp;&amp;&nbsp;Merit Dedication" ),
 			'ruleTab' => array (
-				SESS_LANG_CHN => "申請需知",
+				SESS_LANG_CHN => "申請要求與辦法",
 				SESS_LANG_ENG => "Application Requirements" ),
 			'qifuTab' => array (
 				SESS_LANG_CHN => "祈福申請表",
