@@ -11,6 +11,9 @@
 	function xLate( $what ) {
 		global $sessLang;
 		$htmlNames = array (
+			'WebsiteHome' => array (
+				SESS_LANG_CHN => "回到<br/>網站首頁",
+				SESS_LANG_ENG => "Back to<br/>Homepage" ),
 			'htmlTitle' => array (
 				SESS_LANG_CHN => "淨土念佛堂一般用戶主頁",
 				SESS_LANG_ENG => "Pure Land Center User Portal" ),
@@ -30,7 +33,7 @@
 				SESS_LANG_CHN => "用戶<br/>撤出",
 				SESS_LANG_ENG => "User<br/>Logout" ),
 			'qifuTitle' => array (
-				SESS_LANG_CHN => "週日早課<br/>申請祈福與回向辦法",
+				SESS_LANG_CHN => "週日早課<br/>申請祈福與回向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Application for Well-wishing&nbsp;&amp;&nbsp;Merit Dedication" ),
 			'ruleTab' => array (
 				SESS_LANG_CHN => "申請需知",
@@ -140,7 +143,9 @@
 	<table class="tabMenu">
 		<thead>
 			<tr>
+				<?php    if ( $sessType == SESS_TYP_USR ) {   ?>
 				<th data-table="sundayRule"><?php echo xLate( 'ruleTab' ); ?></th>
+				<?php    }   ?>
 				<th data-table="sundayQifu"><?php echo xLate( 'qifuTab' ); ?></th>
 				<th data-table="sundayMerit"><?php echo xLate( 'meritTab' ); ?></th>
 				<!-- <th class="future" data-table="sundayGongDeZhu"><?php echo xLate( 'gongDeZhuTab' ); ?></th> -->
