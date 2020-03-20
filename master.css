@@ -77,10 +77,6 @@ table.pgMenu th {
 	/* The following are adjustable */
 	line-height: 1.4em;
 	height: 100%;
-}
-
-table.pgMenu th[data-urlIdx=urlUsrHome], table.pgMenu th[data-urlIdx=urlAdmHome] {
-	width: 4.2vw;
 	border-left: none; /* always the left-most table cell */
 }
 
