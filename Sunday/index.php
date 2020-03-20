@@ -36,7 +36,7 @@
 				SESS_LANG_CHN => "週日早課<br/>申請祈福與回向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Application for Well-wishing&nbsp;&amp;&nbsp;Merit Dedication" ),
 			'ruleTab' => array (
-				SESS_LANG_CHN => "申請需知",
+				SESS_LANG_CHN => "申請要求與辦法",
 				SESS_LANG_ENG => "Application Requirements" ),
 			'qifuTab' => array (
 				SESS_LANG_CHN => "祈福申請表",
@@ -64,6 +64,7 @@
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$fontSize = ( $useChn ) ? "1.0em;" : "0.9em;";
 	$ltrSpacing = ( $useChn ) ? "20px" : "normal";
+	unset( $_SESSION[ 'byPass' ] );
 ?>
 
 <!DOCTYPE html>
@@ -111,7 +112,7 @@
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
 		width: 98%;
-		height: 65vh;
+		height: 60vh;
 		margin: auto;
 		margin-top: 0px;
 		margin-bottom: 0px;
