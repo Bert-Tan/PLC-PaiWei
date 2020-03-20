@@ -16,7 +16,7 @@
 				SESS_LANG_CHN => "回到<br/>網站首頁",
 				SESS_LANG_ENG => "Back to<br/>Homepage" ),					
 			'login' => array (
-				SESS_LANG_CHN => "登錄<br/>申請",
+				SESS_LANG_CHN => "登錄申請<br/>祈福回向",
 				SESS_LANG_ENG => "Login to<br/>Request" ),			
 			'qifuTitle' => array (
 				SESS_LANG_CHN => "週日早課<br/>申請祈福與回向辦法",

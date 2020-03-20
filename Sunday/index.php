@@ -112,7 +112,7 @@
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
 		width: 98%;
-		height: 65vh;
+		height: 60vh;
 		margin: auto;
 		margin-top: 0px;
 		margin-bottom: 0px;
