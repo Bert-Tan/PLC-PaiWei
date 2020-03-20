@@ -47,7 +47,9 @@
 <?php
 	if ( $useChn ) { // Chinese version
  ?>
-		<!-- <h2>申請要求與辦法</h2> -->
+		<?php if ( (! isset( $_SESSION[ 'byPass' ] )) || $_SESSION[ 'byPass' ] == false) { ?>
+		<h2>申請要求與辦法</h2>
+		<?php } ?>
 		<dl>
 			<dt>親自出席</dt><br/>
 			<dd>申請人必須親自參加早課或供佛典禮，或有指定的代表在場。
@@ -112,9 +114,11 @@
 <?php
 	} else { // English version
 ?>
+		<?php if ( (! isset( $_SESSION[ 'byPass' ] )) || $_SESSION[ 'byPass' ] == false) { ?>
 		<h2 style="margin-top: 0px; text-align: center; letter-spacing: normal; color: blue;">
             Requirements and Prodedures
-        </h2>
+		</h2>
+		<?php } ?>
 		<dl>
 			<dt>Be Present</dt>
 			<dd>The requestor shall be present in the Sunday activities during which the well-wish and/or merit dedication
