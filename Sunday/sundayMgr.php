@@ -161,10 +161,14 @@
 		$inCareOfNames = array();
 		$usrNames = array();
 
-		$sql1 = "SELECT `UsrName` FROM `inCareOf` WHERE `UsrName` NOT IN "
-			  . "(SELECT DISTINCT `UsrName` FROM `sundayRq2Usr`);";
-		$sql2 = "SELECT `UsrName` FROM `Usr` WHERE `UsrName` NOT IN "
-			  . "(SELECT DISTINCT `UsrName` FROM `sundayRq2Usr`);";
+		$now = date("Y-m-d");
+		// query all user names which have VALILD Sunday requests (for future Sundays)
+		$sqlUsrsRq = "SELECT DISTINCT `UsrName` FROM `sundayRq2Usr` INNER JOIN `sundayRq2Days` "
+				   . "ON (`sundayRq2Usr`.`rqID` = `sundayRq2Days`.`rqID` AND `sundayRq2Usr`.`TblName` = `sundayRq2Days`.`TblName`) "
+				   . "WHERE `sundayRq2Days`.`rqDate` >= \"{$now}\"";
+		$sql1 = "SELECT `UsrName` FROM `inCareOf` WHERE `UsrName` NOT IN (" . $sqlUsrsRq . ");";
+		$sql2 = "SELECT `UsrName` FROM `Usr` WHERE `UsrName` NOT IN (" . $sqlUsrsRq . ");";	
+
 		$_db->query( "LOCK TABLES `inCareOf` READ，`sundayRq2Usr` READ, `Usr` READ;" );
 		$rslt = $_db->query( $sql1 );
 		if ( $rslt->num_rows > 0) {
