@@ -220,10 +220,12 @@
 			$_SESSION[ 'tblName' ] = $dbInfo[ 'tblName' ];
 			break;
 		case 'icoSelected':
-			unset( $_SESSION[ 'tblName' ] );
+			//unset( $_SESSION[ 'tblName' ] );
+			$_SESSION[ 'tblName' ] = 'sundayQifu';
 			break;
 		case 'icoInput':
-			unset( $_SESSION[ 'tblName' ] );
+			//unset( $_SESSION[ 'tblName' ] );
+			$_SESSION[ 'tblName' ] = 'sundayQifu';
 			setIcoName( $dbInfo['icoName'] );
 			break;
 		} // switch()
@@ -279,13 +281,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="../futureAlert.js"></script>
 <script src="../AdmPortal/AdmCommon.js"></script>
-<!-- script src="./Sunday.js"></script -->
 <script src="./sundayMgr.js"></script>
 <style type="text/css">
 /* local customization */
-	table.pgMenu {
-		table-layout: auto;
-	}
 	div.dataArea {
 		height: 84vh;
 		margin-top: 0px;
@@ -317,10 +315,8 @@
 		height: 70vh;
 		margin: auto;
 		margin-top: 0px;
-		margin-bottom: 0px;
-		overflow-y: auto;
+		margin-bottom: 0px;		
 	}
-
 	input {
 		font-size: 1.0em;
 	}
@@ -365,6 +361,10 @@
 	}
 
 /* for dashboard */
+	div.dataBodyWrapper { /* For loading tab data */		
+		height: 55vh;
+		overflow-y: auto;	
+	}
 	table.dataRows td[data-tblN]:hover {
 	/*	color: no change; */
 		background-color: #ffff80;

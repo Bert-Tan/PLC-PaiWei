@@ -7,8 +7,14 @@
 		  . "WHERE `rtEvent` = \"{$_POST[ 'rtEvent' ]}\";";
 	$_db->query("LOCK TABLES `pwParam` READ;");
 	$_rslt = $_db->query( $_sql );
-	$_suwenData = $_rslt->fetch_all(MYSQLI_ASSOC)[0];
 	$_db->query("UNLOCK TABLES;");
+	/*
+	if($_rslt->num_rows == 0) {		
+		header( "location: " . URL_ROOT . "/admin/PaiWei/Dashboard.php" );
+		exit;
+	}
+	*/
+	$_suwenData = $_rslt->fetch_all(MYSQLI_ASSOC)[0];	
 
 	//retreat date, type, and reason
 	$rtrtDate = $_suwenData [ 'rtrtDate' ];

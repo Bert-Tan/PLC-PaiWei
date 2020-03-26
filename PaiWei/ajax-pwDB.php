@@ -464,16 +464,6 @@ function updTblData( $dbInfo ) {
 } // updTblData()
 
 /**********************************************************
- *                      For Dashboard                     *
- **********************************************************/
-function dashBoardSetting( $dbInfo ) {
-	global $_SESSION;
-	$_SESSION['icoName'] = $dbInfo['icoName'];
-	$_SESSION['tblName'] = $dbInfo['tblName'];
-	$rpt[ 'url' ] = URL_ROOT . '/admin/PaiWei/index.php';
-	return $rpt;
-} // dashBoardSetting()
-/**********************************************************
  *								 Main Functional Code										*
  **********************************************************/
 $_dbReq = $_POST[ 'dbReq' ];
@@ -500,9 +490,6 @@ switch ( $_dbReq ) {
 		break;
 	case 'dbUPD':
 		echo json_encode ( updTblData ( $_dbInfo ), JSON_UNESCAPED_UNICODE );
-		break;
-	case 'pwDashboard':
-		echo json_encode ( dashBoardSetting( $_dbInfo ), JSON_UNESCAPED_UNICODE);
 		break;
 } // switch()
 

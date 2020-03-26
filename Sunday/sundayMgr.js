@@ -1,4 +1,5 @@
 var _activeTab = null;
+var _alertUnsaved = '未保存的更動會被丟棄！';
 
 function isJSON( str ) {
     try {
@@ -71,7 +72,7 @@ function dashboardRedirect( dbInfo ) {
 
 function hdlr_dataCellClick() {
     var thisRow = $(this).closest("tr");
-    var dbInfo = {}
+    var dbInfo = {};
     dbInfo[ 'icoName' ] = thisRow.find("td[data-uName]").attr("data-uName");
     dbInfo[ 'icoNameType' ] = 'icoDerived';
     dbInfo[ 'tblName' ] = $(this).attr("data-tblN");
@@ -81,9 +82,9 @@ function hdlr_dataCellClick() {
 
 function hdlr_icoInput() {
     var dbInfo = {};
-    var icoName = $(this).closest("th").find("#icoInput").val();
-    if ( icoName == '請輸入蓮友識別名' ) {
-        alert( icoName ); return false;
+    var icoName = $(this).closest("th").find("#icoInput").val().trim();
+    if ( icoName == '請輸入蓮友識別名' || icoName == '' ) {
+        alert( '請輸入蓮友識別名' ); return false;
     }
     dbInfo[ 'icoName' ] = icoName;
     dbInfo[ 'icoNameType' ] = 'icoInput';
@@ -261,8 +262,11 @@ function hdlr_formSubmit() {
 } // function hdlr_formSubmit()
 
 function hdlr_tabClick() {
-    var rqTblName = $(this).attr("data-table");
-    var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
+    // unsaved data
+	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
+	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
+
+    var rqTblName = $(this).attr("data-table");    
     if ( rqTblName == _activeTab ) return false; /* nothing to do */
     _activeTab = rqTblName;
     $(".tabMenu th").removeClass("active").css("border", "1px solid white");
@@ -284,7 +288,7 @@ function hdlr_tabClick() {
         loadSundayDueForm();
         break;
     case 'dnldPrint':
-		window.location.href = "dnldPrint.php";
+        location.replace( "./dnldPrint.php" );
         break
     case 'sundayDash':
         loadSundayDashboard();

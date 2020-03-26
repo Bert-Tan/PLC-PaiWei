@@ -1,0 +1,35 @@
+<h2 style="margin-top: 4vh; text-align: center; letter-spacing: 20px;">
+	更新法會資料
+</h2>
+<form action="" method="post" id="retreatUpd" style="font-weight:bold; padding: 10px;">
+	<input type="hidden" name="ID" value="">
+	<table class="dialog">
+		<thead><tr><th>法會開始日期</th><th>牌位申請截止日期</th><th>法會類別</th></tr></thead>
+		<tbody>
+			<tr>
+				<td>
+					<input type="text" name="rtrtDate" value="" data-oldV="" data-fldN="rtrtDate" data-changed="false">
+				</td>
+					<td>
+						<input type="text" name="pwExpires" value="" data-oldV="" data-fldN="pwExpires" data-changed="false">
+					</td>
+					<td>
+						<select name="rtEvent" required value="" data-oldV="" data-fldN="rtEvent" data-changed="false">
+							<option value="">- 請選擇法會類別 -</option>
+							<option value="Qingming">清明祭祖法會</option>
+							<option value="Zhongyuan">中元祭祖法會</option>
+							<option value="ThriceYearning">三時繫念佛事法會</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" style="text-align: left; padding: 4px 10px;">
+						<span style="font-weight: bold;">三時繫念法會因緣：</span><br/>
+						<input type="text" name="rtReason" style="display:inline-block; float:right; width:95%;"
+							value="" data-oldV="" data-fldN="rtReason" data-changed="false" disabled>
+					</td>
+				</tr>
+				<tr><td colspan="3"><input type="button" name="rtUpdData" value="更新法會資料"></td></tr>
+			</tbody>
+		</table>
+	</form>

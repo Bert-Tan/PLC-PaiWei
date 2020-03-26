@@ -23,41 +23,8 @@
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="../master.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script type="text/javascript" src="../futureAlert.js"></script>
-<script type="text/javascript" src="../AdmPortal/AdmCommon.js"></script>
-<style type="text/css">
-table.dialog {
-	width: 60%;
-}
-
-table.dialog td {
-	padding-top: 2px;
-	padding-left: 2vw;
-	height: 6vh;
-	font-size: 1.1em;
-	text-align: left;
-	vertical-align: top;
-}
-
-input[type=submit] {
-	margin: auto;
-	line-height: 40px;
-	text-align:center;
-	vertical-align: middle;
-	font-size: 1.1em;
-	background-color: aqua;
-	border: 1px solid blue;
-	border-radius: 10px;
-}
-</style>
-<script type="text/javascript">
-	$(document).ready(function() {
-		pgMenu_rdy();
-	})
-</script>
 </HEAD>
 <BODY>
-	<?php require_once("../AdmPortal/AdmPgHeader.htm"); ?>
 	<div class="dataArea"><!-- style="width: 60%; margin: auto; border: 2px solid #00b300;" -->
 		<div id="forDnld"><!-- for download into the main PaiWei Admin Page -->
 		<h2 style="margin-top: 4vh; text-align: center; letter-spacing: 20px;">
@@ -68,8 +35,8 @@ input[type=submit] {
 				<thead><th>法會祭、疏文類別</th><th>下載列印指令</th></thead>
 				<tbody>
 					<tr>
-						<td style="vertical-align: middle;">
-							<select name="rtEvent" style="width: 230px; font-size: 1.2em;" required>
+						<td>
+							<select name="rtEvent" style="font-size: 1.2em;" required>
 								<option value="">-- 請選擇法會祭、疏文類別 --</option>
 								<option value="Qingming">清明祭祖法會</option>
 								<option value="Zhongyuan">中元祭祖法會</option>
