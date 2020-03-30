@@ -16,7 +16,9 @@ function loadSundayDashboard() {
         ajaxData[ 'dbReq' ] = 'dbLoadSundayDashboard';
         ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
         $.ajax({
-            url: '', method: 'post', data: ajaxData,
+            url: './ajax-SundayMgr.php',
+            method: 'post',
+            data: ajaxData,
             success: function( rsp ) {
                 rspX = isJSON( rsp );
                 if ( ! rspX ) { alert( rsp ); return false; }
@@ -39,7 +41,7 @@ function loadSundayDashboard() {
                 $("#icoSelBtn").on( 'click', hdlr_icoSelect );
             }, // SUCCESS handler
             error: function ( jqXHR, textStatus, errorThrown ) {
-                alert( "loadSundayDueForm()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+                alert( "loadSundayDashboard()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
             } // error handler
         }); // AJAX Call
     });
@@ -50,7 +52,9 @@ function dashboardRedirect( dbInfo ) {
     ajaxData[ 'dbReq' ] = 'dashboardRedirect';
     ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
     $.ajax({
-        url: '', method: 'post', data: ajaxData,
+        url: './ajax-SundayMgr.php',
+        method: 'post',
+        data: ajaxData,
         success: function ( rsp ) {
             var rspX = isJSON( rsp );
             if ( ! rspX ) { alert ( rsp ); return false; }
@@ -65,7 +69,7 @@ function dashboardRedirect( dbInfo ) {
             }
         }, // SUCCESS HANDLER
         error: function ( jqXHR, textStatus, errorThrown ) {
-            alert( "hdlr_dataCellClick()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+            alert( "dashboardRedirect()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
         } // error handler
     }); // AJAX Call
 } // function dashboardRedirect()
@@ -113,7 +117,9 @@ function loadSundayDueForm() {
         ajaxData[ 'dbReq' ] = 'dbReadSundayDue';
         ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
         $.ajax({
-            url: '', method: 'post', data: ajaxData,
+            url: './ajax-SundayMgr.php',
+            method: 'post',
+            data: ajaxData,
             success: function( rsp ) {
                 rspX = isJSON( rsp );
                 if ( !rspX ) { alert( rsp ); return false; }
@@ -145,8 +151,8 @@ function loadSundayDueForm() {
                     $("input[name=expMM]").attr( 'data-oldV', $("input[name=expMM]").attr( 'value' ) );
                 }
                 // now connect handlers
-                $("form input[type=text]").on( 'focus', hdlr_onFocus );
-                $("form input[type=text]").on( 'blur', hdlr_dataChg );
+                $("form input[type=text]").on( 'focus', hdlr_onFocus_mgr );
+                $("form input[type=text]").on( 'blur', hdlr_dataChg_mgr );
                 $("form").on( 'submit', hdlr_formSubmit );
             }, // Success Handler
             error: function ( jqXHR, textStatus, errorThrown ) {
@@ -156,16 +162,16 @@ function loadSundayDueForm() {
     });
 } // function loadSundayDueForm()
 
-function hdlr_onFocus() {
+function hdlr_onFocus_mgr() {
     var newV = $(this).val().trim().replace( /<br>$/gm, '');
     var pmptV = ( $(this).attr("data-pmptV") !== undefined ) ? $(this).attr("data-pmptv").trim() : '';
     if ( pmptV.length > 0 ) return;
     $(this).attr( 'data-pmptV', newV ); // save it before blanking out
 	$(this).val( '' ); // blank out the field for input
 	return;
-} // function hdlr_onFocus()
+} // function hdlr_onFocus_mgr()
 
-function hdlr_dataChg() {
+function hdlr_dataChg_mgr() {
     var newV = $(this).val().trim().replace( /<br>$/gm, '');
     var oldV = $(this).attr( "data-oldV" ).trim();
     var pmptV = ( $(this).attr("data-pmptV") !== undefined ) ? $(this).attr("data-pmptv").trim() : '';
@@ -206,7 +212,7 @@ function hdlr_dataChg() {
         $(this).val( newV );
         $(this).attr( 'data-changed', "true" );
     }
-} // function hdlr_dataChg()
+} // function hdlr_dataChg_mgr()
 
 function hdlr_formSubmit() {
     var ajaxData = {}, dbInfo = {};
@@ -229,7 +235,7 @@ function hdlr_formSubmit() {
     ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo ); 
     ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
     $.ajax({
-        url : '',
+        url : './ajax-SundayMgr.php',
         method : 'post',
         data : ajaxData,
         success: function ( rsp ) {
@@ -255,13 +261,13 @@ function hdlr_formSubmit() {
             } // for loop
         }, // Success Handler
         error : function ( jqXHR, textStatus, errorThrown ) {
-            alert( "loadSundayDueForm()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+            alert( "hdlr_formSubmit()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
         } // error handler
     }); // AJAX Call
     return false; // so the HTML submit won't fire
 } // function hdlr_formSubmit()
 
-function hdlr_tabClick() {
+function hdlr_tabClick_mgr() {
     // unsaved data
 	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
 	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
@@ -289,16 +295,9 @@ function hdlr_tabClick() {
         break;
     case 'dnldPrint':
         location.replace( "./dnldPrint.php" );
-        break
+        break;
     case 'sundayDash':
         loadSundayDashboard();
         break;
     } // switch()
-} // function tabClick()
-
-$(document).ready(function() {
-    pgMenu_rdy();
-    $(".tabMenu th").on( 'click', hdlr_tabClick );
-    $(".tabMenu th.future").unbind().on( 'click', futureAlert );
-    $("table.tabMenu th:first-child").trigger( 'click' );
-})
+} // function hdlr_tabClick_mgr()

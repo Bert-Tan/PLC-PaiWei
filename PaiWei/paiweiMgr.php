@@ -139,7 +139,7 @@ table.dialog input[type=button] {
 
 /* for PaiWei dashboard */
 div.dataBodyWrapper {
- 	height: 50vh;
+ 	height: 56vh;
  	overflow-y: auto;
 }
 table.dataHdr th, table.dataRows td {
@@ -192,8 +192,7 @@ table.dataHdr th select {
 		</thead>
 	</table>
 	<div class="dataArea">
-		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>;"><?php echo xLate( 'paiweiTitle' ); ?></h2>		
-		<h2 style="color: darkred; margin-top: 5px; margin-bottom: 10px;"><?php echo xLate( 'alertMsg' ); ?></h2>		
+		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>;"><?php echo xLate( 'paiweiTitle' ); ?></h2>			
 		<div id="tabDataFrame">
 			<!-- Frame to load Tab Data -->
 		</div><!-- tabDataFrame -->

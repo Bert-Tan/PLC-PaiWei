@@ -437,6 +437,13 @@ function hdlr_tabClick() {
     case 'sundayMerit':
         loadTblData( _tblName, ( ( _icoName == null ) ? _sessUsr : _icoName ), "tabDataFrame" );
         break;
+    case 'sundayParam':
+        //???
+        loadSundayDueForm();
+        break;
+    case 'dnldPrint':
+        location.replace( "./dnldPrint.php" );
+        break;
     } // switch()
 } // function tabClick()
 
@@ -826,11 +833,3 @@ function hdlr_canBtn() {
     td.find(".editBtn").on( 'click', hdlr_editBtn );
     td.find(".delBtn").on( 'click', hdlr_delBtn );
 } // function hdlr_canBtn()
-
-$(document).ready(function() {
-    $(".future").on( 'click', futureAlert );
-    $("th[data-urlIdx]").on( 'click', function() {
-        location.replace( _url2Go[ $(this).attr( "data-urlIdx" ) ]);
-    });
-    readSundayParam();
-})

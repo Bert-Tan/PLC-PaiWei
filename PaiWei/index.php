@@ -120,20 +120,14 @@ $(document).ready(function() {
 .engClass {
 	font-size: 0.7em;
 }
-
 table.pgMenu tr th:last {
 	border-left: 1px solid white;
 }
-
 table.pgMenu th[data-urlIdx=usrLogout] {
 	border-left: 1px solid white;
 }
 table.pgMenu th[data-urlIdx=urlUsrHome] {
 	font-size: <?php echo $fontSize; ?>;
-}
-/* for loaded PaiWei Upload Form */
-table.dialog {
-	width: 60%;
 }
 
 h2 {
@@ -157,6 +151,9 @@ div#tabDataFrame { /* For loading tab data */
 	height: 66vh;
 }
 
+table.dialog {
+	width: 60%;
+}
 table.dialog td {
  	height: 6vh;
 	font-size: 1.1em;
@@ -198,21 +195,16 @@ table.dialog input[type=button] {
 	vertical-align: top;
 }
 
-
-
 /* for loaded User Guide */
 .UGsteps {
 	font-size: 0.9em;
 }
-
 .UGsteps th, td {
 	vertical-align: top;
 }
-
 .UGsteps th {
 	width: 15%;
 }
-
 .UGstepImg {
 	width: 90%;
 	height: auto;
@@ -220,29 +212,30 @@ table.dialog input[type=button] {
 }
 
 /* localization for loaded data tables */
-
 table.dataHdr, table.dataRows {
 	table-layout: auto;
 }
-
 table.dataHdr tr th:last-child, table.dataRows tr td:last-child {
 	width: 28%;
 }
-
 table.dataHdr th, table.dataRows td {
 	height: 22px;
 	line-height: 1.2em;
 }
-
 table.dataRows tr td:not(:last) {
 	text-align: left;
+}
+table.dataRows tr:nth-child(odd) input[type=text] {
+	background-color: #ffffe6;
+}
+table.dataRows tr:nth-child(even) input[type=text] {
+	background-color: #ffffcc;
 }
 
 /* local specific for Data Input fields */
 input {
 	font-size: 1.0em;
 }
-
 input[type=button] {
   background-color: aqua;
   text-align: center;
@@ -250,20 +243,11 @@ input[type=button] {
   border: 1px solid blue;
   border-radius: 4px;
 }
-
 input[type=text] {
 	width: 100%;
 	box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-}
-
-table.dataRows tr:nth-child(odd) input[type=text] {
-	background-color: #ffffe6;
-}
-
-table.dataRows tr:nth-child(even) input[type=text] {
-	background-color: #ffffcc;
 }
 </style>
 </head>
