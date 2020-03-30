@@ -98,21 +98,17 @@ function readSessParam() {
 			} // for loop
 			_alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！' : 'Unsaved Data will be LOST!';
 			_blankData = ( _sessLang == SESS_LANG_CHN ) ? "空白" : "BLANK";
-			ready_init();
 			//a PaiWei table is chosen: display PaiWei date
 			if ( _tblName != null ) {
-				$(".pwTbl").removeClass("active").css("border", "1px solid white");
-				$("#upld").removeClass("active").css("border", "1px solid white");
-				$(".ugld").removeClass("active").css("border", "1px solid white");
-				$(".pwTbl[data-tbl=\""+_tblName+"\"]").addClass("active").css("border-bottom", "1px solid green");
-
+				$(".tabMenu th").removeClass("active").css("border", "1px solid white");
+				$(".tabMenu th[data-tbl=\""+_tblName+"\"]").addClass("active").css("border-bottom", "1px solid green");
 				$("#tabDataFrame").find("*").unbind(); $("#tabDataFrame").empty();
 				loadTblData( _tblName, 1, 30, _icoName, "tabDataFrame" );
 				enableTooltip();
 			}
 			//no PaiWei table is chosen: display PaiWei User Guide
 			else {
-				$(".ugld").trigger( 'click' );
+				$(".tabMenu th[data-tbl=ug]").trigger( 'click' );
 			}
 		}, // Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
@@ -274,32 +270,6 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr, frameID ) {	/* dataOnly p
 	}); // ajax call	
 } // loadTblData()
 
-/**********************************************************
- * Event Handler - When a Pai Wei menu item is clicked    *
- **********************************************************/
-function pwTblHdlr() { 
-	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
-
-	$(".errMsg").remove();
-	_tblName = $(this).attr("data-tbl");	
-
-	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
-
-	$(".pwTbl").removeClass("active").css("border", "1px solid white");
-	$("#upld").removeClass("active").css("border", "1px solid white");
-	$(".ugld").removeClass("active").css("border", "1px solid white");
-	$(this).addClass("active").css("border-bottom", "1px solid green");
-
-	$("#tabDataFrame").find("*").unbind(); $("#tabDataFrame").empty();
-
-	loadTblData( _tblName, 1, 30, ( ( _icoName != null ) ? _icoName : _sessUsr ), "tabDataFrame" );
-	
-	//new page: show hover message
-	enableTooltip();
-	
-	return;	
-} // function pwTblHdlr()
-
 /************************************************************
  * Event Handler - when the PaiWei Upload Form is submitted *
  ************************************************************/
@@ -323,48 +293,6 @@ function myPaiWeiUpLoad ( e ) {
 		} // End of ERROR Handler		
 	}); // AJAX Call
 } // myPaiWeiUpLoad()
-
-/**********************************************************
- * Event Handler - When the Upload Request is clicked     *
- **********************************************************/
-function upldHdlr () { // load the upload form and bind it to the form submit handler
-	$(".pwTbl").removeClass("active").css("border", "1px solid white");
-	$(".ugld").removeClass("active").css("border", "1px solid white");
-	$(this).addClass("active").css("border-bottom", "1px solid green");
-	$("#tabDataFrame").load("./upldPaiWeiForm.php #forUpld", function( rsp ) {
-		if ( isJSON( rsp ) ) {
-			rspV = JSON.parse( rsp );
-			location.replace( rspV['URL']);
-			return;
-		}
-		$("form#upldForm").unbind(); // in case it was bound before
-		$("form#upldForm").on( 'submit', myPaiWeiUpLoad );
-
-		$(this).find(".future").on( 'click', futureAlert );
-		$(this).find(".ugld").on( 'click', ugLoader );
-	});
-	return false; // so, the hyperlink won't fire
-} // upldHdlr()
-
-/**********************************************************
- * Event Handler - When the User Guide is requested       *
- **********************************************************/
-function ugLoader () { // load the PaiWei User Guide
-	$(".pwTbl").removeClass("active").css("border", "1px solid white");
-	$("#upld").removeClass("active").css("border", "1px solid white");
-	$(this).addClass("active").css("border-bottom", "1px solid green");
-
-	$("#tabDataFrame").find("*").unbind(); $("#tabDataFrame").empty();
-
-	$("#tabDataFrame").load("./UG.php #ugDesc", function ( rsp ) {
-		$(this).find("table").addClass("UGsteps");
-		$(this).find("tr").css("background-color", "transparent");
-		$(this).find("img").addClass("UGstepImg");
-		return false; // so the link won't fire
-	});
-	$("#tabDataFrame").css("overflow-y", "auto");
-	return false; // so the link won't fire
-} // ugLoader()
 
 /**********************************************************
  * Event Handler - When the Add_a_Row Button is clicked   *
@@ -976,20 +904,77 @@ function ready_edit() {
 	_delAllBtn.on( 'click', delAllBtnHdlr )
 } // ready_edit()
 
-function ready_init() {
-	if ( _sessType == SESS_TYP_USR ) {
-		$(".pwTbl").on('click', pwTblHdlr );
-		$(".ugld").on( 'click', ugLoader );
-		$("#upld").on( 'click', upldHdlr );
-		return;
-	}
-	if ( _icoName ) {
-		$(".pwTbl").on('click', pwTblHdlr );
-		$("#upld").on( 'click', upldHdlr );
-		return;
-	}
-	alert( "由於沒有點選蓮友為之處理牌位，\n牌位管理功能僅限於下載牌位列印！" );
-}
+/**********************************************************
+ * Event Handler - When the Upload Request is clicked     *
+ **********************************************************/
+function upldHdlr () { // load the upload form and bind it to the form submit handler
+	$("#tabDataFrame").load("./upldPaiWeiForm.php #forUpld", function( rsp ) {
+		if ( isJSON( rsp ) ) {
+			rspV = JSON.parse( rsp );
+			location.replace( rspV['URL']);
+			return;
+		}
+		$("form#upldForm").unbind(); // in case it was bound before
+		$("form#upldForm").on( 'submit', myPaiWeiUpLoad );		
+	});
+	return false; // so, the hyperlink won't fire
+} // upldHdlr()
+
+/**********************************************************
+ * Event Handler - When the User Guide is requested       *
+ **********************************************************/
+function ugLoader () { // load the PaiWei User Guide
+	$("#tabDataFrame").load("./UG.php #ugDesc", function ( rsp ) {
+		$(this).find("table").addClass("UGsteps");
+		$(this).find("tr").css("background-color", "transparent");
+		$(this).find("img").addClass("UGstepImg");
+		return false; // so the link won't fire
+	});
+	$("#tabDataFrame").css("overflow-y", "auto");
+	return false; // so the link won't fire
+} // ugLoader()
+
+function hdlr_tabClick() {
+	// unsaved data
+	var dirtyCells = $("tbody input[type=text][data-changed=true]").length + $("#retreatUpd select[data-changed=true]").length;
+	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
+
+	var rqTblName = $(this).attr("data-tbl");
+	if ( rqTblName == _tblName ) return; /* nothing to do */
+	_tblName = rqTblName;
+
+	$(".tabMenu th").removeClass("active").css("border", "1px solid white");
+	$(this).addClass("active").css("border-bottom", "1px solid green");
+	$("#tabDataFrame").find("*").unbind();
+	$("#tabDataFrame").empty();
+
+	switch ( _tblName ) {
+		case 'C001A':
+		case 'W001A_4':
+		case 'DaPaiWei':
+		case 'L001A':
+		case 'Y001A':
+		case 'D001A':
+			loadTblData( _tblName, 1, 30, ( ( _icoName != null ) ? _icoName : _sessUsr ), "tabDataFrame" );
+			enableTooltip(); // show hover message
+			break;	
+		case 'ug':
+			ugLoader();
+			break;
+		case 'upld':
+			upldHdlr();
+			break;
+		case 'RtData':
+			loadRtMgrForm();
+			break;
+		case 'DnldJiWen':
+			$("#tabDataFrame").load("./dnldJiWenForm.php #forDnld");
+			break;
+		case 'DnldPaiWei':
+			$("#tabDataFrame").load("./dnldPaiWeiForm.php #forDnld");
+			break; 		
+	} // switch()
+} // function tabClick()
 
 /**********************************************************
  * Enable Tooltip to Show Hover Message                   *
@@ -999,20 +984,3 @@ function enableTooltip() {
 	$(document).tooltip({content: hoverMsg});
 	$(document).tooltip("enable");
 } // enableTooltip()
-	
-
-/**********************************************************
- * Document Ready                                         *
- **********************************************************/
-$(document).ready(function() {
-	readSessParam();
-	/*
-	 * Due to AJAX asynchronous nature, binding handlers to buttons are done in
-	 * readSessParam() when ajax receives the response from the Server.
-	 */
-	$(".future").on( 'click', futureAlert );
-	$(".soon").on( 'click', soonAlert );
-	$("th[data-urlIdx]").on('click', function() {
-		location.replace( _url2Go[$(this).attr("data-urlIdx")] );
-	});
-}) // document ready

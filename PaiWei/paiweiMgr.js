@@ -9,6 +9,50 @@ function isJSON( str ) {
 	return false;
 } // isJSON()
 
+function leapYear_mgr( yr ) {
+	return( ( yr % 100 === 0 ) ? ( yr % 400 === 0 ) : ( yr % 4 === 0 ) );
+} // function leapYear_mgr()
+
+function chkDate_mgr ( dateString, formatOnly ) { // in YYYY-MM-DD format
+	var D = new Date(); // current
+	var YYYY = D.getFullYear();
+	var patString = "^(" + YYYY + "|" + (YYYY+1) + ")-(0?[1-9]|1[0-2])-(0?[1-9]|[12]\\d|3[01])$";
+	var pattern = new RegExp( patString );
+
+	if ( !dateString.match( pattern ) ) return false;
+	if ( formatOnly ) return true;
+
+	var d = dateString.split( '-' ); // d[0] => yyyy, d[1] => mm, d[2] = dd
+	var dd = 0;
+
+	switch ( Number( d[1] ) ) {
+		case 2:
+			var dd = leapYear_mgr( d[0] ) ? 29 : 28;
+			break;
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+			dd = 31;
+			break;
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			dd = 30;
+			break;
+		default:
+			return false;
+	} // switch on mm
+
+	var nxtD = new Date( YYYY+1, D.getMonth(), D.getDate(), D.getHours(), D.getMinutes(), D.getSeconds() ); // a year from now
+	var rtD = new Date( dateString );
+	return ( ( ( 1 <= Number(d[2]) ) && ( Number(d[2]) <= dd ) ) && ( ( D <= rtD ) && ( rtD < nxtD ) ) );
+} // function chkDate_mgr()
+
 
 function loadPaiWeiDashboard() {
 	$("#tabDataFrame").load("./Templates/pwDashboard.htm", function() {
@@ -209,14 +253,14 @@ function hdlr_dataChg() {
 	switch ( fldN ) { // sanity check data value
 		case 'rtrtDate':
 		case 'pwExpires':
-			if ( chkDate( newV, false ) == false ) {
+			if ( chkDate_mgr( newV, false ) == false ) {
 				alert( "法會開始及牌位截止日期必須是在一年之內的有效日期！" );
 				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
 				return;
 			}
 			break;
 		case 'rtReason':	
-			if ( rtRsn == '不適用' || rtRsn == '請輸入法會因緣' ) {
+			if ( newV == '不適用' || newV == '請輸入法會因緣' ) {
 				alert( "請輸入三時繫念法會因緣!" );
 				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
 				return;
@@ -256,7 +300,7 @@ function updRetreatData() {
 	if ( rtEvent == "" ) {
 		alert( "請選擇法會類別！" ); return;
 	}
-	if ( chkDate( rtDate, false ) == false || chkDate( pwDate, true ) == false ) {
+	if ( chkDate_mgr( rtDate, false ) == false || chkDate_mgr( pwDate, true ) == false ) {
 		alert( "法會開始及牌位截止日期必須是在一年之內的有效日期！" ); return;
 	}
 	if ( rtD <= pwD ) {
@@ -312,7 +356,7 @@ function updRetreatData() {
     }); // AJAX Call
 } // function updRetreatData()
 
-function hdlr_tabClick() {
+function hdlr_tabClick_mgr() {
 	// unsaved data
 	var dirtyCells = $("#retreatUpd input[data-changed=true]").length + $("#retreatUpd select[data-changed=true]").length;	
 	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;  
@@ -339,11 +383,5 @@ function hdlr_tabClick() {
 		loadPaiWeiDashboard();
    	    break;
    	} // switch()
-} // function tabClick()
+} // function hdlr_tabClick_mgr()
 
-$(document).ready(function() {
-	pgMenu_rdy(); // ../AdmPortal/AdmCommon.js file, javascript for header menu	
-	$(".tabMenu th").on( 'click', hdlr_tabClick );
-	$(".tabMenu th.future").unbind().on( 'click', futureAlert );
-	$("table.tabMenu th:first-child").trigger( 'click' );
-})

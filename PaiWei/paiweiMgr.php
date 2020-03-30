@@ -25,7 +25,7 @@
 			'DnldPaiWei' => array (
 				SESS_LANG_CHN => "下載牌位列印",
 				SESS_LANG_ENG => "" ),
-			'forOthers' => array (
+			'PaiWeiDash' => array (
 				SESS_LANG_CHN => "處理蓮友牌位",
 				SESS_LANG_ENG => "" ),			
 			'alertMsg' => array (
@@ -57,117 +57,125 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="../futureAlert.js"></script>
 <script type="text/javascript" src="../AdmPortal/AdmCommon.js"></script>
-<script type="text/javascript" src="./chkRtDate.js"></script>
 <script type="text/javascript" src="./paiweiMgr.js"></script>
-<style>
-/* Below are completely local */
+<script type="text/javascript">
+$(document).ready(function() {
+	pgMenu_rdy(); // ../AdmPortal/AdmCommon.js file, javascript for header menu	
+	$(".tabMenu th").on( 'click', hdlr_tabClick_mgr );
+	$(".tabMenu th.future").unbind().on( 'click', futureAlert );
+	$("table.tabMenu th:first-child").trigger( 'click' );
+})
+</script>
+<style type="text/css">
+/* local customization */
 h2 {
-   	margin-top: 0px;
-   	text-align: center;
-    letter-spacing: 1px;
-    color: blue;
-    text-align: center;
+	margin-top: 0px;
+	text-align: center;
+ 	letter-spacing: 1px;
+ 	color: blue;
+ 	text-align: center;
 }
 div.dataArea {
 	height: 84vh;
-	margin-top: 0px;
-	border: 2px solid green; /* same as the active tab color */
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
+ 	margin-top: 0px;
+ 	border: 2px solid green; /* same as the active tab color */
+ 	box-sizing: border-box;
+ 	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 }
 div#tabDataFrame { /* For loading tab data */
-	width: 98%;
-	height: 70vh;
-	margin: auto;
-	margin-top: 0px;
-	margin-bottom: 0px;
+	width: 100%;
+	height: 68vh;
+ 	margin: auto;
+ 	margin-top: 0px;
+ 	margin-bottom: 0px;
 }
 input {
-	font-size: 1.0em;
+ 	font-size: 1.0em;
 }
-input[type=button] {
-	font-size: 0.8em;
-	background-color: aqua;
-	text-align: center;
-	display: inline-block;
-	border: 1px solid blue;
-	border-radius: 4px;
-}
+
 input[type=text] {
-	width: 100%;
-	box-sizing: border-box;
-   	-moz-box-sizing: border-box;
-   	-webkit-box-sizing: border-box;
+ 	width: 100%;
+ 	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 }
 
 /* for Dialog box */
 table.dialog {
-	width: 60%;
+ 	width: 60%;
 }
 table.dialog td {
-	height: 6vh;
+ 	height: 6vh;
 	font-size: 1.1em;
-	vertical-align: middle;
-	text-align: center;
+ 	vertical-align: middle;
+ 	text-align: center;
 }
 table.dialog input, select {
-    font-size: 1.1em;
+ 	font-size: 1.1em;
 }
 table.dialog input[type=text] {
-	width: 80%;
-	margin: auto;
+ 	width: 80%;
+ 	margin: auto;
 }
 table.dialog input[type=submit] {
-	background-color: aqua;
-    text-align: center;
-    display: inline-block;
-    height: 1.5em;
-    border: 1px solid blue;
-	border-radius: 3px;
-	font-size: 1.2em;
+ 	background-color: aqua;
+ 	text-align: center;
+ 	display: inline-block;
+ 	height: 1.5em;
+ 	border: 1px solid blue;
+ 	border-radius: 3px;
+ 	font-size: 1.2em;
 }
 table.dialog input[type=button] {
-	background-color: aqua;
-    text-align: center;
-    display: inline-block;
-    height: 1.5em;
-    border: 1px solid blue;
-	border-radius: 3px;
-	font-size: 1.2em;
+ 	background-color: aqua;
+ 	text-align: center;
+ 	display: inline-block;
+ 	height: 1.5em;
+ 	border: 1px solid blue;
+ 	border-radius: 3px;
+ 	font-size: 1.2em;
 }
 
-/* for dashboard */
+/* for PaiWei dashboard */
 div.dataBodyWrapper {
-	height: 50vh;
-	overflow-y: auto;
+ 	height: 50vh;
+ 	overflow-y: auto;
 }
-table.dataRows tr:last-child td { /* the Summary Row */
-	color: yellow;
-	background-color: #00b300;
-	font-weight: bold;
+table.dataHdr th, table.dataRows td {
+	height: 22px;
+	line-height: 1.2em;
 }
+table.dataRows tr td:not(:last) {
+	text-align: left;		
+}
+
 table.dataRows td[data-tblN]:hover {
 /*	color: no change; */
-	background-color: #ffff80;
-	cursor: pointer;
+ 	background-color: #ffff80;
+ 	cursor: pointer;
+}
+table.dataRows tr:last-child td { /* the Summary Row */
+ 	color: yellow;
+ 	background-color: #00b300;
+ 	font-weight: bold;
 }
 table.dataHdr th input {
-	font-size: 1.0em;
-	background-color: aqua;
-	border: 1px solid blue;
+ 	font-size: 1.0em;
+ 	background-color: aqua;
+ 	border: 1px solid blue;
 }
 table.dataHdr th input[type=button] {
-	margin-top: 3px;
-	display: inline-block;
-	float: right;
-	border: 1px solid blue;
-	border-radius: 6px;
+ 	margin-top: 3px;
+ 	display: inline-block;
+ 	float: right;
+ 	border: 1px solid blue;
+ 	border-radius: 6px;
 }
 table.dataHdr th select {
-	width: 70%;
-	background-color: aqua;
-	border: 1px solid blue;
+ 	width: 70%;
+ 	background-color: aqua;
+ 	border: 1px solid blue;
 }
 </style>
 </head>
@@ -179,7 +187,7 @@ table.dataHdr th select {
 				<th data-table="RtData"><?php echo xLate( 'setRtData' ); ?></th>
 				<th data-table="DnldJiWen"><?php echo xLate( 'DnldJiWen' ); ?></th>
 				<th data-table="DnldPaiWei"><?php echo xLate( 'DnldPaiWei' ); ?></th>
-				<th data-table="PaiWeiDash"><?php echo xLate( 'forOthers' ); ?></th>
+				<th data-table="PaiWeiDash"><?php echo xLate( 'PaiWeiDash' ); ?></th>
 			</tr>
 		</thead>
 	</table>
