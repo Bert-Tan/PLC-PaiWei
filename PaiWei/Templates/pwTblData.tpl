@@ -12,7 +12,8 @@
 		<td>
 			<input class="editBtn" type="button" value="{editBtnTxt}">&nbsp;&nbsp;
 			<input class="delBtn" type="button" value="{delBtnTxt}">&nbsp;&nbsp;
-			<input class="dupBtn" type="button" value="{dupBtnTxt}">
+			<input class="dupBtn" type="button" value="{dupBtnTxt}">&nbsp;&nbsp;
+			<input class="validBtn" type="button" value="{validBtnTxt}" {validStr}>
 		</td>
 		<!-- END dataEditCol -->
 	</tr>

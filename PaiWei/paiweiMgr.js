@@ -192,6 +192,8 @@ function loadRtMgrForm() {
 						$("input[name=rtReason]").val( rspX[X] );
 						$("input[name=rtReason]").attr( 'value', rspX[X] );
 						break;	
+					case 'lastRtrtDate':
+						break;	
 					case 'ERR':
 						alert( rspX[X]);
 						return;
@@ -292,6 +294,7 @@ function updRetreatData() {
 	}
 
 	var tupID = $("input[name=ID]").val();
+	var lastRtDate = $("input[name=rtrtDate]").attr('data-oldV');
 	var rtDate = $("input[name=rtrtDate]").val(); var rtD = new Date(rtDate);
 	var pwDate = $("input[name=pwExpires]").val(); var pwD = new Date(pwDate);
 	var rtEvent = $("select[name=rtEvent]").val();
@@ -316,6 +319,7 @@ function updRetreatData() {
 	var ajaxData = {}, dbInfo = {};
 	dbInfo[ 'tblName' ] = 'pwParam'; // filler; will not be used
 	dbInfo[ 'ID' ] = tupID;
+	dbInfo[ 'lastRtrtDate' ] = lastRtDate;
     dbInfo[ 'rtrtDate' ] = rtDate;
 	dbInfo[ 'pwExpires' ] = pwDate;
 	dbInfo[ 'rtEvent' ] = rtEvent;

@@ -122,7 +122,7 @@ function readPwParam( $_dbInfo ) {
 	if ( isset($_SESSION[ 'pwPlqDate' ]) ) {
 		/*
 		 * The session is active and the parameters had been read before; no need to access DB
-		 */
+		 */		
 		$rpt[ 'pwPlqDate' ] = $_SESSION[ 'pwPlqDate' ];
 		$rpt[ 'rtrtDate' ] = $_SESSION[ 'rtrtDate' ];
 		$rpt[ 'wtList' ] = $_SESSION[ 'wtList' ];
@@ -135,8 +135,8 @@ function readPwParam( $_dbInfo ) {
 		$sql = "SELECT * FROM $tblName WHERE \"{$currDate}\" <= `pwExpires`;";
 	} else {
 		$sql = "SELECT * FROM $tblName;";
-	}
-	$rslt = $_db->query( $sql );
+	}	
+	$rslt = $_db->query( $sql );	
 	if ( $_db->errno ) {
 		$_errCount++;
 		$_errRec[] = __FUNCTION__ . "()\t" . __LINE__
@@ -149,12 +149,16 @@ function readPwParam( $_dbInfo ) {
 		$rpt[ 'notActive' ] = true; /* disable PaiWei Function for general users */
 		return $rpt;
 	}
-	
-	$rtrtDate = $rslt->fetch_all(MYSQLI_ASSOC)[0][ 'rtrtDate' ]; 
+
+	$rsltArray = $rslt->fetch_all(MYSQLI_ASSOC)[0];
+	$rtrtDate = $rsltArray['rtrtDate'];	
+	$lastRtrtDate = $rsltArray['lastRtrtDate'];	
+	if ( ! isset($lastRtrtDate) )	$lastRtrtDate = "1970-01-01";	
 	$rpt[ 'rtrtDate' ] = $rtrtDate;
 	$rpt[ 'pwPlqDate' ] = date( "Y-m-d", strtotime( $rtrtDate . " -1 year" ) );
 	$_SESSION[ 'pwPlqDate' ] = $rpt[ 'pwPlqDate' ];
 	$_SESSION[ 'rtrtDate' ] = $rtrtDate;
+	$_SESSION[ 'lastRtrtDate' ] = $lastRtrtDate;
 	$_SESSION[ 'wtList' ] = readPWTitleList( 'pwParam_wtList' );
 	$_SESSION[ 'rtList' ] = readPWTitleList( 'pwParam_rtList' );
 	$rpt[ 'wtList' ] = $_SESSION[ 'wtList' ];
@@ -163,7 +167,7 @@ function readPwParam( $_dbInfo ) {
 } // function readPwParam()
 
 function constructTblData ( $rows, $dbTblName ) { // $rows =  $mysqlresult->fetch_all( MYSQLI_ASSOC )
-	global $_sessLang;
+	global $_sessLang, $_SESSION;
 	
 	if ( $rows == null ) { // construct an empty data table with an empty row
 		$fldN = getPaiWeiTblFlds( $dbTblName );
@@ -171,50 +175,63 @@ function constructTblData ( $rows, $dbTblName ) { // $rows =  $mysqlresult->fetc
 			$row[ $colName ] = '';
 		}
 		$rows[0] = $row;
-	}
+	}	
+
+	$lastRtrtDate = $_SESSION[ 'lastRtrtDate' ];
 	
 	$cellWidth = (int)( 72 / ( sizeof($rows[0]) - 1 ) );
 	
-  $tpl = new HTML_Template_IT("./Templates");
-  $tpl->loadTemplatefile("pwTblData.tpl", true, true);
+	$tpl = new HTML_Template_IT("./Templates");
+	$tpl->loadTemplatefile("pwTblData.tpl", true, true);
   
-  $tpl->setCurrentBlock("data_tbl") ;
-  $tpl->setVariable("dbTblName", $dbTblName );
-  $rowCount = 0;
-  foreach( $rows as $row ) {
-  	$rowCount++;
-  	$tpl->setCurrentBlock("data_row");
-  	$i = 0;
-  	foreach ( $row as $key => $val ) {
-  		if ( $i == 0 ) {
-  			$tpl->setVariable("tupKeyN", $key);
-  			$tpl->setVariable("tupKeyV", $val);
-  			$i++; continue;
-  		}
+	$tpl->setCurrentBlock("data_tbl") ;
+	$tpl->setVariable("dbTblName", $dbTblName );
+	$rowCount = 0;
+	foreach( $rows as $row ) {
+  		$rowCount++;
+  		$tpl->setCurrentBlock("data_row");
+		$i = 0;
+		  
+  		foreach ( $row as $key => $val ) {
+			// first field is the tuple key
+			if ( $i == 0 ) {
+  				$tpl->setVariable("tupKeyN", $key);
+  				$tpl->setVariable("tupKeyV", $val);
+  				$i++; continue;
+			}
+
+			// last field is the request/validate date, used to enable/disable "valid" button
+			if( $key == "rqDate" ) {
+				$tpl->setCurrentBlock("dataEditCol");				
+				if ( $_sessLang == SESS_LANG_CHN ) {
+					$tpl->setVariable( "editBtnTxt", "更改");
+					$tpl->setVariable( "delBtnTxt", "刪除");
+					$tpl->setVariable( "dupBtnTxt", "複製");
+					$tpl->setVariable( "validBtnTxt", "驗證");
+				} else {
+					$tpl->setVariable("editBtnTxt", "Edit");
+					$tpl->setVariable("delBtnTxt", "Del");
+					$tpl->setVariable( "dupBtnTxt", "Dup");
+					$tpl->setVariable( "validBtnTxt", "Valid");
+				}
+				$validStr = $val > $lastRtrtDate ? "disabled" : "";
+				$tpl->setVariable("validStr", $validStr);
+				$tpl->parse("dataEditCol");
+				continue;
+			}
+			
 			$tpl->setCurrentBlock("data_cell");
 			if ( $rowCount == 1 ) $tpl->setVariable("cellWidth", "{$cellWidth}%;" ) ;
 			$tpl->setVariable("dbFldN", $key); 
 			$tpl->setVariable("dbFldV", $val); 
-	    $tpl->parse("data_cell");  		
-  	} // $row
-  	$tpl->setCurrentBlock("dataEditCol");
-
-		if ( $_sessLang == SESS_LANG_CHN ) {
-			$tpl->setVariable( "editBtnTxt", "更改");
-			$tpl->setVariable( "delBtnTxt", "刪除");
-			$tpl->setVariable( "dupBtnTxt", "複製");
-		} else {
-			$tpl->setVariable("editBtnTxt", "Edit");
-			$tpl->setVariable("delBtnTxt", "Del");
-			$tpl->setVariable( "dupBtnTxt", "Dup");
-		}  	
-	  $tpl->parse("dataEditCol");
-	  /* User assignment selection code goes here */
-	  $tpl->parse("data_row") ;
-  } // $rows
+			$tpl->parse("data_cell");  							
+		} // $row
+	
+		$tpl->parse("data_row");	  
+	} // $rows
   
-  $tpl->parse("data_tbl");
-  $tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
+ 	$tpl->parse("data_tbl");
+	$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
 	return preg_replace( "/(^\t*)/", "  ", $tmp );
 } // constructTblData()
 
@@ -236,6 +253,8 @@ function constructTblHeader( $dbTblName ) {
 	foreach ( $fldN as $key ) {
 		// first field is the tuple key; not visible to the users
 		if ( $i == 0 ) { $i++; continue; }
+		// last field is the request/validate date, used to enable/disable "valid" button
+		if ( $key == "rqDate" )	continue;
 
 		$tpl->setCurrentBlock("hdr_cell");
 		$tpl->setVariable("cellWidth", "{$cellWidth}%;" ) ;
@@ -248,10 +267,12 @@ function constructTblHeader( $dbTblName ) {
 		$tpl->setVariable("addBtnTxt", '加行輸入');
 		$tpl->setVariable("srchBtnTxt", '搜尋');
 		$tpl->setVariable("delAllBtnTxt", '全部刪除');
+		$tpl->setVariable("validAllBtnTxt", '全部驗證');
 	} else {
 		$tpl->setVariable("addBtnTxt", 'AddInputRow');
 		$tpl->setVariable("srchBtnTxt", 'Search');
 		$tpl->setVariable("delAllBtnTxt", 'DelAll');
+		$tpl->setVariable("validAllBtnTxt", 'ValidAll');
 	}	 	
 	$tpl->parse("dataEditCol");
   $tpl->parse("hdr_tbl");
@@ -360,7 +381,7 @@ function delTblData( $dbInfo ) {
 	$sql = "UNLOCK TABLES;";
 	$_db->query( $sql );
 	$_db->autocommit(true);
-	$rpt [ 'delSUCCESS' ] = ( $useChn ) ? "牌位資料刪除完畢！" : "{$_delCount} records deleted";	
+	$rpt [ 'delSUCCESS' ] = ( $useChn ) ? "牌位資料刪除完畢！" : "Record Deleted!";	
 	return $rpt;
 } // delTblData()
 
@@ -389,12 +410,45 @@ function delTblUsrData( $dbInfo ) {
 	$_db->commit();
 	$_db->query( "UNLOCK TABLES;" );
 	$_db->autocommit(true);
-	$rpt [ 'delSUCCESS' ] = ( $useChn ) ? "{$_delCount} 項牌位資料刪除完畢！" : "{$_delCount} records deleted";	
+	$rpt [ 'delSUCCESS' ] = ( $useChn ) ? "{$_delCount} 項牌位資料刪除完畢！" : "{$_delCount} Records Deleted!";	
 	return $rpt;
 } // delTblUsrData()
 
 /**********************************************************
- *				For dbINS																				*
+ *						For dbVALIDX					  *
+ **********************************************************/
+function validTblUsrData( $dbInfo ) {
+	/*
+	 * The receiving AJAX switch on 'URL', 'delSUCCESS', 'errCount'
+	 */
+
+	global $_db, $_errCount, $_errRec, $_validCount;
+	global $useChn;
+	$rpt = array();
+
+	$tblName = $dbInfo['tblName'];
+	$_db->autocommit(false);
+	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
+	$sql = "LOCK TABLES {$tblName};";
+	$_db->query( $sql );
+	if ( ! validPaiWeiUsrTuple( $dbInfo['tblName'], $dbInfo['pwRqstr' ] ) ) {
+		$_db->rollback();
+		if ( $_errCount ) {
+			$rpt [ 'errCount' ] = $_errCount;
+			$rpt [ 'errRec' ] = $_errRec;
+		}
+		return $rpt;
+	}
+	$_db->commit();
+	$sql = "UNLOCK TABLES;";
+	$_db->query( $sql );
+	$_db->autocommit(true);
+	$rpt [ 'validSUCCESS' ] = ( $useChn ) ? "{$_validCount} 項牌位資料驗證完畢！" : "{$_validCount} Records Validated!";
+	return $rpt;
+} // validTblUsrData()
+
+/**********************************************************
+ *						For dbINS					*
  **********************************************************/
 function insTblData( $dbInfo ) {
 	/*
@@ -458,6 +512,7 @@ function updTblData( $dbInfo ) {
 	}
 	$_db->commit();
 	$sql = "UNLOCK TABLES;";
+	$_db->query( $sql );
 	$_db->autocommit(true);
 	$rpt [ 'updSUCCESS' ] = true;
 	return $rpt;													
@@ -490,6 +545,9 @@ switch ( $_dbReq ) {
 		break;
 	case 'dbUPD':
 		echo json_encode ( updTblData ( $_dbInfo ), JSON_UNESCAPED_UNICODE );
+		break;
+	case 'dbVALIDX': /* valid PaiWei table data that belongs to a specific user */
+		echo json_encode ( validTblUsrData( $_dbInfo ), JSON_UNESCAPED_UNICODE );
 		break;
 } // switch()
 

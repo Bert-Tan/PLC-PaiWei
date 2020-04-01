@@ -275,6 +275,7 @@
 	function getData() {	
 		global $_db, $paiweiTable;
 		global $paiweiArray, $reqArray, $reqSuffixArray, $addressArray;
+		global $_SESSION;		
 
 		$_blank = '(空白|BLANK)'; // regExp to blank out the blank data field	
 		$KouJian = '(叩薦|Sincerely Recommend)'; //regExp to filter '叩薦'
@@ -307,11 +308,18 @@
 				$reqFlds = "concat( ifnull($_tblFlds[4], ''), ' ', ifnull($_tblFlds[5], '') ) AS $_tblFlds[5]";
 				break;
 		}
+
+		session_start();
+		$lastRtrtDate = $_SESSION[ 'lastRtrtDate' ];
+		if(! isset($lastRtrtDate)) {
+			$rslt = $_db->query("SELECT * FROM `pwParam`;");
+			$lastRtrtDate = $rslt->fetch_all(MYSQLI_ASSOC)[0][ 'lastRtrtDate' ];
+		}
 				
 		//PaiWei data
 		if($paiweiFlds != '') {
 			$_selFlds = $paiweiFlds;
-			$_sql = getSQL($_selFlds);
+			$_sql = getSQL($_selFlds, $lastRtrtDate);
 			$_rslt = $_db->query( $_sql );
 			$_Rows = $_rslt->fetch_all ( MYSQLI_NUM );	
 
@@ -325,7 +333,7 @@
 		//requester data
 		if($reqFlds != '') {
 			$_selFlds = $reqFlds;
-			$_sql = getSQL($_selFlds);
+			$_sql = getSQL($_selFlds, $lastRtrtDate);
 			$_rslt = $_db->query( $_sql );
 			$_Rows = $_rslt->fetch_all ( MYSQLI_NUM );
 
@@ -349,7 +357,7 @@
 		//DiJiZhu address data
 		if($addressFlds != '') {
 			$_selFlds = $addressFlds;
-			$_sql = getSQL($_selFlds);
+			$_sql = getSQL($_selFlds, $lastRtrtDate);
 			$_rslt = $_db->query( $_sql );
 			$_Rows = $_rslt->fetch_all ( MYSQLI_NUM );
 			
@@ -363,17 +371,20 @@
 	}
 	
 	//get query SQL statement
-	function getSQL($_selFlds) {
+	function getSQL($_selFlds, $lastRtrtDate) {
 		global $paiweiTable;
 		if ( $_POST[ 'dnldUsrName' ] == 'ALL' ) {
 			//group PaiWei data by pwUsrName
-			$_sql = "SELECT $_selFlds FROM {$paiweiTable} LEFT JOIN pw2Usr ON (ID = pwID AND TblName = \"{$paiweiTable}\") ORDER BY pwUsrName, ID;";
+			$_sql = "SELECT $_selFlds FROM {$paiweiTable} LEFT JOIN pw2Usr "
+				  . "ON (ID = pwID AND TblName = \"{$paiweiTable}\") "
+				  . "WHERE rqDate > \"{$lastRtrtDate}\" "
+				  . "ORDER BY pwUsrName, ID;";
 		} else {
 			$_dnldUsrName = $_POST[ 'dnldUsrName' ];
 			$_sql	= "SELECT {$_selFlds} FROM {$paiweiTable} WHERE ID IN "
-					.	"(SELECT pwID FROM pw2Usr WHERE TblName = \"{$paiweiTable}\" AND pwUsrName = \"{$_dnldUsrName}\") "
-					. "ORDER BY ID;"
-					;
+					. "(SELECT pwID FROM pw2Usr WHERE TblName = \"{$paiweiTable}\" AND pwUsrName = \"{$_dnldUsrName}\") "
+					. "AND rqDate > \"{$lastRtrtDate}\" "
+					. "ORDER BY ID;";
 		}
 		return $_sql;
 	}

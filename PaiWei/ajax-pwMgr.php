@@ -155,8 +155,12 @@ function updRtData( $dbInfo ) {
 	} else {
 		$tupID = $dbInfo[ 'ID' ];
 		$sql = "UPDATE `pwParam` SET `pwExpires` = \"{$dbInfo[ 'pwExpires' ]}\", `rtrtDate` = \"{$dbInfo[ 'rtrtDate' ]}\", "
-			 . "`rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\" "
-			 . "WHERE `ID` = \"{$tupID}\";";
+			 . "`rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\" ";
+		// update "lastRtrtDate" field
+		if ($dbInfo[ 'rtrtDate' ] != $dbInfo[ 'lastRtrtDate' ]) {
+			$sql = $sql . ", `lastRtrtDate` = \"{$dbInfo[ 'lastRtrtDate' ]}\" ";	
+		}
+		$sql = $sql . "WHERE `ID` = \"{$tupID}\";";
 	}
 
 	$_db->query("LOCK TABLES `pwParam`;");
@@ -178,7 +182,7 @@ function updRtData( $dbInfo ) {
  *				For dbReadRtData			   			  *
  **********************************************************/
 function readRtData( $dbInfo ) {
-	global $_db;
+	global $_db, $_SESSION;
 	$rpt = array ();
 
 	$sql = "SELECT * FROM `pwParam` WHERE true;";
@@ -191,9 +195,12 @@ function readRtData( $dbInfo ) {
 			$rpt[ 'pwExpires' ] = "請輸入牌位申請截止日期";
 			$rpt[ 'rtEvent' ] = "";
 			$rpt[ 'rtReason' ] = "請輸入法會因緣";
+			$rpt[ 'lastRtrtDate' ] = "";
 			return $rpt;
 		case 1:
-			return( $rslt->fetch_all(MYSQLI_ASSOC)[0] );
+			$rsltArray = $rslt->fetch_all(MYSQLI_ASSOC)[0];
+			$_SESSION[ 'lastRtrtDate' ] = $rsltArray[ 'lastRtrtDate' ];
+			return $rsltArray;
 		default:
 			$rpt[ 'ERR' ] = "資料庫發生錯誤；無法讀取法會資料！最後所執行的資料庫指令為：\n {$sql}";
 			return $rpt;
