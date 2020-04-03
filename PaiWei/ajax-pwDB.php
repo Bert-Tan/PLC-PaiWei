@@ -201,7 +201,7 @@ function constructTblData ( $rows, $dbTblName ) { // $rows =  $mysqlresult->fetc
 			}
 
 			// last field is the request/validate date, used to enable/disable "valid" button
-			if( $key == "rqDate" ) {
+			if( $key == "timestamp" ) {
 				$tpl->setCurrentBlock("dataEditCol");				
 				if ( $_sessLang == SESS_LANG_CHN ) {
 					$tpl->setVariable( "editBtnTxt", "更改");
@@ -210,9 +210,9 @@ function constructTblData ( $rows, $dbTblName ) { // $rows =  $mysqlresult->fetc
 					$tpl->setVariable( "validBtnTxt", "驗證");
 				} else {
 					$tpl->setVariable("editBtnTxt", "Edit");
-					$tpl->setVariable("delBtnTxt", "Del");
+					$tpl->setVariable("delBtnTxt", "&nbsp;Delete&nbsp;");
 					$tpl->setVariable( "dupBtnTxt", "Dup");
-					$tpl->setVariable( "validBtnTxt", "Valid");
+					$tpl->setVariable( "validBtnTxt", "Validate");
 				}
 				$validStr = $val > $lastRtrtDate ? "disabled" : "";
 				$tpl->setVariable("validStr", $validStr);
@@ -254,7 +254,7 @@ function constructTblHeader( $dbTblName ) {
 		// first field is the tuple key; not visible to the users
 		if ( $i == 0 ) { $i++; continue; }
 		// last field is the request/validate date, used to enable/disable "valid" button
-		if ( $key == "rqDate" )	continue;
+		if ( $key == "timestamp" )	continue;
 
 		$tpl->setCurrentBlock("hdr_cell");
 		$tpl->setVariable("cellWidth", "{$cellWidth}%;" ) ;
@@ -265,14 +265,14 @@ function constructTblHeader( $dbTblName ) {
 	$tpl->setCurrentBlock("dataEditCol");
 	if ( $_sessLang == SESS_LANG_CHN) {
 		$tpl->setVariable("addBtnTxt", '加行輸入');
-		$tpl->setVariable("srchBtnTxt", '搜尋');
+		$tpl->setVariable("srchBtnTxt", '&nbsp;&nbsp;搜&nbsp;&nbsp;尋&nbsp;&nbsp;');
 		$tpl->setVariable("delAllBtnTxt", '全部刪除');
 		$tpl->setVariable("validAllBtnTxt", '全部驗證');
 	} else {
 		$tpl->setVariable("addBtnTxt", 'AddInputRow');
 		$tpl->setVariable("srchBtnTxt", 'Search');
-		$tpl->setVariable("delAllBtnTxt", 'DelAll');
-		$tpl->setVariable("validAllBtnTxt", 'ValidAll');
+		$tpl->setVariable("delAllBtnTxt", '&nbsp;DeleteAll&nbsp;');
+		$tpl->setVariable("validAllBtnTxt", 'ValidateAll');
 	}	 	
 	$tpl->parse("dataEditCol");
   $tpl->parse("hdr_tbl");

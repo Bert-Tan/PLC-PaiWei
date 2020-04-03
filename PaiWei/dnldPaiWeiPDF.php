@@ -377,13 +377,13 @@
 			//group PaiWei data by pwUsrName
 			$_sql = "SELECT $_selFlds FROM {$paiweiTable} LEFT JOIN pw2Usr "
 				  . "ON (ID = pwID AND TblName = \"{$paiweiTable}\") "
-				  . "WHERE rqDate > \"{$lastRtrtDate}\" "
+				  . "WHERE timestamp > \"{$lastRtrtDate}\" "
 				  . "ORDER BY pwUsrName, ID;";
 		} else {
 			$_dnldUsrName = $_POST[ 'dnldUsrName' ];
 			$_sql	= "SELECT {$_selFlds} FROM {$paiweiTable} WHERE ID IN "
 					. "(SELECT pwID FROM pw2Usr WHERE TblName = \"{$paiweiTable}\" AND pwUsrName = \"{$_dnldUsrName}\") "
-					. "AND rqDate > \"{$lastRtrtDate}\" "
+					. "AND timestamp > \"{$lastRtrtDate}\" "
 					. "ORDER BY ID;";
 		}
 		return $_sql;

@@ -117,10 +117,10 @@ function updatePaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 			$i++;
 		}
 	} // loop through attribute (Name, Value) pairs
-	// update "rqDate" field in PaiWei table
+	// update "timestamp" field in PaiWei table
 	$currDate = date("Y-m-d");
 	if ( $updParams != "" ) $updParams .= ", ";
-	$updParams .= "`rqDate` = \"{$currDate}\"";
+	$updParams .= "`timestamp` = \"{$currDate}\"";
 	$sql = "UPDATE {$pwTable} SET {$updParams} WHERE ID = \"{$tupID}\";";
 	$_db->query( $sql );
 	if ( $_db->errno ) {
@@ -215,7 +215,7 @@ function validPaiWeiUsrTuple( $pwTable, $usr ) { // echo "Table= $pwTable; User=
 	global $useChn;	
 
 	$currDate = date("Y-m-d");
-	$sql = "UPDATE {$pwTable} SET `rqDate` = \"{$currDate}\" WHERE `ID` IN "
+	$sql = "UPDATE {$pwTable} SET `timestamp` = \"{$currDate}\" WHERE `ID` IN "
 		 . "(SELECT `pwID` FROM `pw2Usr` WHERE `tblName` = \"{$pwTable}\" AND `pwUsrName` = \"{$usr}\");";	
 	$_db->query( $sql );
 
@@ -252,9 +252,9 @@ function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 		$tupValX[] = $attrV;
 		$i++;
 	}
-	// fomulate "rqDate" field to be inserted in PaiWei table
-	// "rqDate" field NOT in $qryCond
-	$tupAttrX[] = 'rqDate';
+	// fomulate "timestamp" field to be inserted in PaiWei table
+	// "timestamp" field NOT in $qryCond
+	$tupAttrX[] = 'timestamp';
 	$tupValX[] = date("Y-m-d");
 	$tupAttrs = "( " . implode( ', ', $tupAttrX ) . " )";
 	$tupVal = "( \"" . implode( "\", \"", $tupValX ) . "\" )";

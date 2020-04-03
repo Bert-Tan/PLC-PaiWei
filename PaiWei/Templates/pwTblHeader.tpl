@@ -9,7 +9,7 @@
 		<!-- BEGIN dataEditCol -->
 		<th>
 			<input type="button" id="addRowBtn" value="{addBtnTxt}">&nbsp;
-			<input type="button" id="srchBtn" value="{srchBtnTxt}">&nbsp;
+			<input type="button" id="srchBtn" value="{srchBtnTxt}"><br>
 			<input type="button" id="delAllBtn" value="{delAllBtnTxt}">&nbsp;
 			<input type="button" id="validAllBtn" value="{validAllBtnTxt}">
 		</th>
