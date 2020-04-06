@@ -2,7 +2,8 @@
 	require_once( '../pgConstants.php' );
 	require_once( 'dbSetup.php' );
 	require_once( 'Login_Funcs.php' );
-	require_once( 'plcMailerSetup.php' );
+	require_once( 'plcSMTPMailer.php' );
+//	require_once( 'plcMailerSetup.php' );
 
 	function xLate ( $what ) {
 		global $sessLang;
@@ -85,6 +86,13 @@
 					$resetToken = $rtnV [ 'Token' ];
 				}
 				if ( isset( $myID ) ) {
+					$toMe = array(
+						array (
+							'email' => $myEmail,
+							'name'	=> ''
+						)
+					);
+					$subject = 'Login/Password Recovery 恢復登錄密碼';
 					$txtBlock = ( $useChn ) ? "ChnTxt" : "EngTxt";
 					$dateTxt = date(DateFormatLtr);
 					if ( $useChn ) $dateTxt = mmddyyyy2Chn( $dateTxt );
@@ -99,10 +107,7 @@
 					$msg->setVariable("reset_param", $href_param );
 					$msg->parse("{$txtBlock}");
 					$msg->parse("msgBlock");
-					if ( $_os == 'DAR' ) { // on Mac
-						echo $msg->get(); exit;
-					} else {
-						plcSendMail ( $myEmail, "Login/Password Recovery", $msg->get() );
+					if ( plcSendEmailAttachment( $toMe, null, $subject, $msg->get(), null, null ) ) {
 						$msgTxt = ( $useChn)
 							? "恢復密碼的網鍊已經送到您註冊過的郵電地址，請由那網鍊處重新設立密碼。"
 							: "A link was sent to your registered email address; please follow it to reset.";

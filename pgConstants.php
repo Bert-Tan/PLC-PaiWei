@@ -10,28 +10,50 @@
 	$_os = strtoupper( substr( PHP_OS, 0, 3 ) ); 
 	switch ( $_os ) {
 		case 'DAR': /* Mac */
-			  error_reporting( E_ALL );
+				error_reporting( E_ALL );
 				DEFINE ( 'URL_ROOT', 'http://www.localplc.org' );
 				DEFINE ( 'DOCU_ROOT', $_SERVER[ "DOCUMENT_ROOT" ] );
 				DEFINE ( 'ADM_ROOT', '/Users/berttan/MacPLC/admin' );
 				DEFINE ( 'PEAR_INCL', '/Users/berttan/pear/share/pear' );
 				DEFINE ( 'PDF_INCL', '/Library/WebServer/Documents/tcpdf');
+				DEFINE ( 'PHPMAILER_INCL', '/Library/WebServer/Documents/PHPMailer' );
+				DEFINE ( 'DKIM_private', '/Users/berttan/MacPLC/admin/Mailer/dkim_private.key' );
 				DEFINE ( 'ARCHIVEDIR', '/Users/berttan/MacPLC/Archive' );
 				DEFINE ( 'IDLE_THRESHOLD', 3600 ); // Session idle time
 				DEFINE ( 'DEBUG', true );
 				break;
 		case 'LIN': /* Linux - Web Server*/
-			  error_reporting( E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED & ~E_WARNING );
+				error_reporting( E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED & ~E_WARNING );
 				DEFINE ( 'URL_ROOT', 'https://www.amitabhalibrary.org' );
 				DEFINE ( 'DOCU_ROOT', $_SERVER[ "DOCUMENT_ROOT" ] );
 				DEFINE ( 'ADM_ROOT', '/home/amitabha/public_html/admin' );
 				DEFINE ( 'PEAR_INCL', '/home/amitabha/php' );
 				DEFINE ( 'PDF_INCL', '/home/amitabha/tcpdf' );
+				DEFINE ( 'PHPMAILER_INCL', '/home/amitabha/PHPMailer' );
+				DEFINE ( 'DKIM_private', '/home/amitabha/public_html/admin/Mailer/dkim_private.key');
 				DEFINE ( 'ARCHIVEDIR', '/home/amitabha/Archive' );
 				DEFINE ( 'IDLE_THRESHOLD', 1800 );
 				DEFINE ( 'DEBUG', false );
 				break;
 	}
+
+/*
+ * For DKIM email sendings; to avoid being spammed
+ */
+	DEFINE ( 'DKIM_selector', 'amituofo' );
+	DEFINE ( 'DKIM_identity', NULL );
+	DEFINE ( 'DKIM_passphrase', 'plc@1120e' );
+	DEFINE ( 'DKIM_domain', 'amitabhalibrary.org' );
+//	DEFINE ( 'DKIM_private', 'defined above: DKIM_private' );	
+
+/*
+ * For SMTP settings; to avoid being spammed
+ */
+	DEFINE ( 'SMTP_host', 'smtp.gmail.com' );
+	DEFINE ( 'SMTP_port', 587 );
+	DEFINE ( 'SMTP_user', 'amitabhalibrary@gmail.com' );
+	DEFINE ( 'SMTP_pass', '9941@1120e' );
+//	DEFINE ( 'SMTP_secure', 'already defined by PHPMAILER: ENCRYPTION_STARTLS' );
 
 /*
  * Session Types
@@ -50,6 +72,7 @@
 									. ':' . ADM_ROOT
 									. ':' . ADM_ROOT . "/includes"
 									. ':' . ADM_ROOT . "/Mailer"
+									. ':' . PHPMAILER_INCL
 									. ':' . PEAR_INCL
 									. ':' . PDF_INCL
 									);
