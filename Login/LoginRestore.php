@@ -2,8 +2,7 @@
 	require_once( '../pgConstants.php' );
 	require_once( 'dbSetup.php' );
 	require_once( 'Login_Funcs.php' );
-	require_once( 'plcSMTPMailer.php' );
-//	require_once( 'plcMailerSetup.php' );
+	require_once( 'plcMailerSetup.php' );
 
 	function xLate ( $what ) {
 		global $sessLang;
