@@ -22,7 +22,7 @@ $prtTo = array (
         'name' => "Printer @ PLC"
     )
 );
-/* BEGIN test parameters
+/*** BEGIN test parameters
 $testTo = array (
     array (
         'email' => 'bert.tan@comcast.net',
@@ -31,20 +31,20 @@ $testTo = array (
 );
 $testCc = array (
     array (
-        'email' => 'tsutetan@gmail.com',
+        'email' => 'chunhui.guo01@gmail.com',
         'name'  => '郭春輝'
     )
 );
 $testAttachments = array (
     array (
-        'path' => '/Users/berttan/MacPLC/Annc/pandemic.pdf',
+        'path' => DOCU_ROOT . '/Annc/pandemic.pdf',
         'name' =>  'stay-at-home'
     )
 );
 $testSubject = "Test sending email attachments using SMTP";
 $testHtml_Msg = "Test sending email attachments using SMTP: <b>Success!</b>";
 $testTxt_Msg = "Test sending email attachments using SMTP: Success!";
-  End test parameters
+ *** End test parameters
  */
 
 // Instantiation and passing `true` enables exceptions
@@ -59,14 +59,21 @@ $mail->DKIM_passphrase = DKIM_passphrase;
 $mail->DKIM_private = DKIM_private;
 
 // Server settings
-$mail->SMTPDebug  = SMTP::DEBUG_OFF;
-$mail->isSMTP();
-$mail->Host       = SMTP_host;  // 'smtp.gmail.com';
-$mail->Port       = SMTP_port;
-$mail->SMTPAuth   = true;
-$mail->Username   = SMTP_user;
-$mail->Password   = SMTP_pass;
-$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+if ( $_os == 'DAR' || $_os == 'WIN' ) {
+    /*
+     * QualityHostOnline SMTP is not allowing connecting to other SMTP Servers because *@amitabhalibrary.org
+     * are hosted by MS Exchange. This does not make sense, but it is the way it is.
+     * SMTP can only be used if running on Mac or Windows
+     */ 
+    $mail->SMTPDebug  = SMTP::DEBUG_OFF;
+    $mail->isSMTP();
+    $mail->Host       = SMTP_host;  // 'smtp.gmail.com';
+    $mail->Port       = SMTP_port;
+    $mail->SMTPAuth   = true;
+    $mail->Username   = SMTP_user;
+    $mail->Password   = SMTP_pass;
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+}
 
 // From me
 $mail->setFrom( FROM_ADDR, APPEARANCE );
