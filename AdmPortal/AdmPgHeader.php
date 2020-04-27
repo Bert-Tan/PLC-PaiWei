@@ -7,7 +7,7 @@
 			<span style="letter-spacing: 1px;">淨土念佛堂管理用戶主頁</span><br/>
 			<span class="engClass">Pure Land Center Admin Portal</span>
 		</div>
-		<table class="pgMenu centerMeV" style="width: 52vw;">	
+		<table class="pgMenu centerMeV">	
 			<thead>
 				<tr>
 					<th data-urlIdx="urlWebsiteHome">回到<br/>網站首頁</th>

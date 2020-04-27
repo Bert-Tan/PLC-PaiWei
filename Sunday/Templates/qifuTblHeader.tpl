@@ -15,8 +15,8 @@
 		-->
 		<!-- END GongDeZhuCol -->
 		<!-- BEGIN dataEditCol -->
-		<th>
-			<input type="button" id="addRowBtn" value="{addBtnTxt}">&nbsp;
+		<th style="line-height: 2px;">
+			<input type="button" id="addRowBtn" value="{addBtnTxt}"><br><br> <!-- second 'br' add space between button rows -->
 			<input type="button" id="delAllBtn" value="{delAllBtnTxt}">
 		</th>
 		<!-- END dataEditCol -->

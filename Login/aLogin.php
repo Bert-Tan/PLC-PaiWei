@@ -94,7 +94,7 @@
 				<tr>
 					<th data-urlIdx="urlWebsiteHome">回到<br/>網站首頁</th>
 					<th data-urlIdx="usrHome">淨土念佛堂<br/>用戶主頁</th>
-					<th class="future">其他未來會提供的功能<br/>( 週日早課祈福及迴向申請，結緣法寶申請，等等。)</th>
+					<th class="future">其他未來會提供的功能</th>
 					<th data-urlIdx="usrLogout">用戶<br/>撤出</th>
 				</tr>
 			</thead>

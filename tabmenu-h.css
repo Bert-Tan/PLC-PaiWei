@@ -3,7 +3,7 @@
 table.tabMenu {
     border-collapse: collapse;
     border: none;
-    width: 75%;
+    width: 85%;
     margin: auto;
     margin-top: 0px; /* follows the previous element immediately */
     table-layout: fixed;

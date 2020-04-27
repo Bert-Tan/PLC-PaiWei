@@ -29,8 +29,8 @@
 				SESS_LANG_CHN => "早課<br/>祈福回向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Merit Dedication" ),
 			'featFuture' => array (
-				SESS_LANG_CHN => "其他未來會提供的功能<br/>(結緣法寶申請，等等。)",
-				SESS_LANG_ENG => "Future:<br/>(Dharma Items Request; etc.)" ),			
+				SESS_LANG_CHN => "其他未來會提供的功能",
+				SESS_LANG_ENG => "Future<br/>Functions" ),			
 			'paiweiTitle' => array (
 				SESS_LANG_CHN => "法會牌位申請",
 				SESS_LANG_ENG => "Application for Merit Dedication Name Plaques during Retreats" ),
@@ -84,6 +84,7 @@
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$fontSize = ( $useChn ) ? "1.0em" : "0.9em";
 	$ltrSpacing = ( $useChn ) ? "20px" : "normal";
+	$h2TopMargin = ( $useChn ) ? "4px" : "6px";
 ?>
 
 <!DOCTYPE html>
@@ -120,6 +121,9 @@ $(document).ready(function() {
 .engClass {
 	font-size: 0.7em;
 }
+table.pgMenu {
+		table-layout: auto;
+}
 table.pgMenu tr th:last {
 	border-left: 1px solid white;
 }
@@ -131,7 +135,7 @@ table.pgMenu th[data-urlIdx=urlUsrHome] {
 }
 
 h2 {
-	margin-top: 0px;
+	margin-bottom: 6px;
 	text-align: center;
  	letter-spacing: 1px;
  	color: blue;
@@ -148,7 +152,11 @@ div.dataArea {
 }
 div#tabDataFrame { /* For loading tab data */		
 	overflow-y: auto;
-	height: 66vh;
+	height: 69vh;
+	width: 99%;
+	margin: auto;
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 
 table.dialog {
@@ -216,7 +224,7 @@ table.dataHdr, table.dataRows {
 	table-layout: auto;
 }
 table.dataHdr tr th:last-child, table.dataRows tr td:last-child {
-	width: 28%;
+	width: 14%;
 }
 table.dataHdr th, table.dataRows td {
 	height: 22px;
@@ -275,8 +283,8 @@ input[type=text] {
 		</thead>
 	</table>
 	<div class="dataArea">
-		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>;"><?php echo xLate( 'paiweiTitle' ); ?></h2>		
-		<h2 style="color: darkred; margin-top: 5px; margin-bottom: 10px;"><?php echo xLate( 'alertMsg' ); ?></h2>
+		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'paiweiTitle' ); ?></h2>		
+		<h2 style="color: darkred; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'alertMsg' ); ?></h2>
 		<div id="tabDataFrame">
 			<!-- Frame to load Tab Data -->				
 		</div><!-- tabDataFrame -->	

@@ -163,74 +163,38 @@ function chkDate ( dateString ) { // in YYYY-MM-DD format
 	return ( ( ( 1 <= Number(d[2]) ) && ( Number(d[2]) <= dd ) ) && ( ( plqD <= pwD ) && ( pwD < rtD ) ) );
 } // function chkDate()
 
-function chgEdit2Upd ( editBtn ) {	
-	var td = editBtn.parent();
-	var updBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "保存更動" : "Update";
-	var canBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "取消更動" : "Cancel";
+function chgEdit2Upd ( editBtn ) {
+	var updBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "保存更動" : " Update  ";
+	var canBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "取消更動" : "  Cancel  ";
 	var canBtn = editBtn.clone();	
-	var htmlString = '';
-	var oldUpdBtnString = '';
-	var newUpdBtnString = '';
-	var oldCanBtnString = '';
-	var newCanBtnString = '';
-	var oldDelBtnString = '';
-	var newDelBtnString = '';
+	var td = editBtn.parent();
+	var validBtn = td.find(".validBtn");
+	
+	editBtn.unbind(); // unbind Edit Button Handler
+	editBtn.attr( "value", updBtnVal ); // change 'Edit' button to become an 'Update' button
+	editBtn.removeClass( 'editBtn' ).addClass( 'updBtn' ); // change class
+	editBtn.on( 'click', updBtnHdlr );
 
-	td.find("*").unbind();	
-	editBtn.attr( "value", updBtnVal ); // change myself to become an 'Update' button
-	editBtn.removeClass( 'editBtn' ).addClass( 'updBtn' ); // change my class	
+	canBtn.unbind(); // unbind Edit Button Handler
 	canBtn.attr( "value", canBtnVal );
 	canBtn.removeClass( 'editBtn' ).addClass( 'canBtn' );
-	editBtn.after( canBtn );
+	canBtn.on( 'click', canBtnHdlr );
+	validBtn.after( canBtn ); // display 'Cancel' button
 
-	oldUpdBtnString = ( _sessLang == SESS_LANG_CHN ) ? '<input class="updBtn" type="button" value="保存更動">' : '<input class="updBtn" type="button" value="Update">';
-	newUpdBtnString = ( _sessLang == SESS_LANG_CHN ) ? '<input class="updBtn" type="button" value="保存更動">&nbsp;&nbsp;' : '<input class="updBtn" type="button" value="Update">&nbsp;&nbsp;';
-	oldCanBtnString = ( _sessLang == SESS_LANG_CHN ) ? '<input class="canBtn" type="button" value="取消更動">&nbsp;&nbsp;' : '<input class="canBtn" type="button" value="Cancel">&nbsp;&nbsp;';
-	newCanBtnString = ( _sessLang == SESS_LANG_CHN ) ? '<input class="canBtn" type="button" value="取消更動"><br>' : '<input class="canBtn" type="button" value="Cancel"><br>';
-	oldDelBtnString = ( _sessLang == SESS_LANG_CHN ) ? '<input class="delBtn" type="button" value="刪除"><br>' : '<input class="delBtn" type="button" value="&nbsp;Delete&nbsp;"><br>';
-	newDelBtnString = ( _sessLang == SESS_LANG_CHN ) ? '&nbsp;&nbsp;<input class="delBtn" type="button" value="刪除">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : '<input class="delBtn" type="button" value="Delete">&nbsp;&nbsp;&nbsp;&nbsp;';
-	htmlString = td.html();
-	htmlString = htmlString.replace(oldUpdBtnString, newUpdBtnString);
-	htmlString = htmlString.replace(oldCanBtnString, newCanBtnString);
-	htmlString = htmlString.replace(oldDelBtnString, newDelBtnString);
-	td.html( htmlString );
-
-	td.find(".updBtn").on( 'click', updBtnHdlr );
-	td.find(".canBtn").on( 'click', canBtnHdlr );
-	td.find(".delBtn").on( 'click', delBtnHdlr );
-	td.find(".dupBtn").on( 'click', dupBtnHdlr );
-	td.find(".validBtn").on( 'click', validBtnHdlr );
-	td.find(".validBtn").hide();	
+	validBtn.hide(); // hide Valid Button	
 } // chgEdit2Upd()
 
 function chgUpd2Edit ( updBtn ) {
-	var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "更改" : "Edit";
+	var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "更改" : "    Edit    ";
 	var td = updBtn.parent();
-	var htmlString = '';
-	var oldEditBtnString = '';
-	var newEditBtnString = '';
-	var oldDelBtnString = '';
-	var newDelBtnString = '';
 
-	td.find("*").unbind();
-	td.find(".canBtn").remove();	
+	updBtn.unbind(); // unbind Update Button Handler
+	updBtn.attr( "value", editBtnVal ); // change 'Update' button to become an 'Edit' button
+	updBtn.removeClass( 'updBtn' ).addClass( 'editBtn' ); // change class
+	updBtn.on( 'click', editBtnHdlr );	
+
+	td.find(".canBtn").remove(); // remove 'Cancel' button	
 	td.find(".validBtn").show(); // show Valid Button
-	updBtn.attr( "value", editBtnVal ); // change myself to 'Edit' button & class
-	updBtn.removeClass( 'updBtn' ).addClass( 'editBtn' );
-	
-	oldEditBtnString = ( _sessLang == SESS_LANG_CHN ) ? '<input class="editBtn" type="button" value="更改">&nbsp;&nbsp;<br>' : '<input class="editBtn" type="button" value="Edit">&nbsp;&nbsp;<br>';
-	newEditBtnString = ( _sessLang == SESS_LANG_CHN ) ? '<input class="editBtn" type="button" value="更改">&nbsp;&nbsp;' : '<input class="editBtn" type="button" value="Edit">&nbsp;&nbsp;';
-	oldDelBtnString = ( _sessLang == SESS_LANG_CHN ) ? '&nbsp;&nbsp;<input class="delBtn" type="button" value="刪除">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : '<input class="delBtn" type="button" value="Delete">&nbsp;&nbsp;&nbsp;&nbsp;';
-	newDelBtnString = ( _sessLang == SESS_LANG_CHN ) ? '<input class="delBtn" type="button" value="刪除"><br>' : '<input class="delBtn" type="button" value="&nbsp;Delete&nbsp;"><br>';
-	htmlString = td.html();
-	htmlString = htmlString.replace(oldEditBtnString, newEditBtnString);
-	htmlString = htmlString.replace(oldDelBtnString, newDelBtnString);	
-	td.html( htmlString );	
-
-	td.find(".editBtn").on( 'click', editBtnHdlr );
-	td.find(".delBtn").on( 'click', delBtnHdlr );
-	td.find(".dupBtn").on( 'click', dupBtnHdlr );
-	td.find(".validBtn").on( 'click', validBtnHdlr );
 } // chgUpd2Edit()
 
 function isJSON( str ) {
@@ -246,8 +210,8 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr, frameID ) {	/* dataOnly p
 	// before introducing page-by-page surfing, the dataonly parameter isn't really needed
 	var dataArea = $( "#" + frameID );
 	var tblHdrWrapper =	'<div class="dataHdrWrapper"></div>';
-	var tabDataFrameHeight = "59vh";
-	if (tblName == 'DaPaiWei') tabDataFrameHeight = "53vh";
+	var tabDataFrameHeight = "57vh";
+	if (tblName == 'DaPaiWei') tabDataFrameHeight = "55vh";
 	var tblDataWrapper = '<div class="dataBodyWrapper" style="height: ' + tabDataFrameHeight + '"></div>';
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? '沒有找到所選擇的法會的牌位，<br/>請輸入或上載牌位資料。'
 												 : 'No record found!<br/>Please input or upload Data';
@@ -352,7 +316,7 @@ function addRowBtnHdlr() {
 	var newRow = _pilotDataRow.clone();
 	var newRowDataCells = newRow.find("input[type=text]");
 	var lastTd = newRow.find("td:last");
-	var cellText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入牌位資料" : "Name Plaque Text";
+	var cellText = ( _sessLang == SESS_LANG_CHN ) ? "輸入牌位資料" : "Name Plaque";
 	var	dateText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "YYYY-MM-DD";
 	
 	$(".errMsg").remove();
@@ -390,32 +354,28 @@ function addRowBtnHdlr() {
 } // addRowBtnHdlr()
 
 function chgSrch2Lookup ( srchBtn ) {
+	var exitSrchBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "退出搜尋" : "Exit Search";
 	var td = srchBtn.parent();	
-	var exitSrchBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "退出搜尋" : "Exit Search";	
-	var exitSrchBtn = srchBtn.clone();
+	var exitSrchBtn = srchBtn.clone();	
 
-	td.find("#delAllBtn").hide();
-	td.find("#validAllBtn").hide();
-	srchBtn.prop("disabled", true);
-	
-	exitSrchBtn.attr( "id", "exitSrchBtn" );
+	exitSrchBtn.unbind();
 	exitSrchBtn.attr( "value", exitSrchBtnVal );
+	exitSrchBtn.attr( "id", "exitSrchBtn" );
 	exitSrchBtn.on( 'click', exitSrchBtnHdlr );
 	srchBtn.after( exitSrchBtn );
-	exitSrchBtn.before( "&nbsp;&nbsp;" ); // space it	
+
+	srchBtn.hide();
+	td.find("#delAllBtn").hide();
+	td.find("#validAllBtn").hide();
 } // chgSrch2Lookup()
 
 function chgLookup2Srch ( exitSrchBtn ) {
 	var td = exitSrchBtn.parent();
-	var htmlString = '';
 
+	exitSrchBtn.remove();
 	td.find("#delAllBtn").show();
 	td.find("#validAllBtn").show();
-	td.find("#srchBtn").prop("disabled", false);
-	exitSrchBtn.remove();
-
-	htmlString = td.html().replace(/(&nbsp;)+/g, '&nbsp;&nbsp;');
-	td.html( htmlString );
+	td.find("#srchBtn").show();
 } // chgLookup2Srch()
 
 /**********************************************************
@@ -426,7 +386,6 @@ function exitSrchBtnHdlr() {
 	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
 	
 	loadTblData( _tblName, 1, 30, ( ( _icoName != null ) ? _icoName : _sessUsr ), "tabDataFrame" );
-	chgLookup2Srch($(this));
 } // exitSrchBtnHdlr()
 
 /**********************************************************
@@ -644,10 +603,9 @@ function insBtnHdlr() {
 	var validBtnText = ( _sessLang == SESS_LANG_CHN ) ? '驗證' : 'Validate';
 	var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入完整的牌位資料" : "Please enter complete plaque data";
 	var myEditBtns = '<input class="editBtn" type="button" value="' + editBtnText + '">&nbsp;&nbsp;&nbsp;' +
-					 '<input class="delBtn" type="button" value="' + delBtnText + '">&nbsp;&nbsp;&nbsp;' +
-					 '<input class="dupBtn" type="button" value="' + dupBtnText + '">&nbsp;&nbsp;&nbsp;' +
-					 '<input class="validBtn" type="button" value="' + validBtnText + '" disabled>'
-					;
+					 '<input class="delBtn" type="button" value="' + delBtnText + '"><br><br>' +
+					 '<input class="validBtn" type="button" value="' + validBtnText + '" disabled>&nbsp;&nbsp;&nbsp;' + 
+					 '<input class="dupBtn" type="button" value="' + dupBtnText + '">';
 	var thisRow = $(this).closest("tr");
 	var cellsChanged = thisRow.find("input[data-changed=true]");
 	var noDropdown = ( thisRow.find("select").length == 0 );

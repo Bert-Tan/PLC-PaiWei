@@ -118,7 +118,7 @@ $(document).ready(function() {
 	}
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
-		width: 98%;
+		width: 99%;
 		height: 70vh;
 		margin: auto;
 		margin-top: 0px;
@@ -201,7 +201,7 @@ $(document).ready(function() {
 
 </head>
 <body>
-	<?php require_once("../AdmPortal/AdmPgHeader.htm");?>
+	<?php require_once("../AdmPortal/AdmPgHeader.php");?>
 	<table class="tabMenu">
 		<thead>
 			<tr>

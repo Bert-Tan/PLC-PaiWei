@@ -34,7 +34,7 @@ body {
 div.hdrRibbon {
 	position: relative;
     top: 0px;
-	width: 80vw;
+	width: 85%;
     height: 10vh; /* Adjustable by local CSS */
     margin: auto;
 	margin-top: 0px;
@@ -61,7 +61,7 @@ div.hdrRibbon #pgTitle { /* for the page Title */
 table.pgMenu {
 	border-collapse: collapse;
 	border-right: none;
-    table-layout: fixed;
+    table-layout: auto;
 	/* The following are adjustable */
 	right: 0px;
 	width: 46vw;
@@ -102,7 +102,7 @@ table.pgMenu th.active {
  *             The data table in the dataArea on every Admin Page             *
  ******************************************************************************/
 div.dataArea {
-	width: 75%;
+	width: 85%;
 	margin: auto;
 	margin-top: 3px;
 	height: 87vh;

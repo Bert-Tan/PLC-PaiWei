@@ -438,7 +438,6 @@ function hdlr_tabClick() {
         loadTblData( _tblName, ( ( _icoName == null ) ? _sessUsr : _icoName ), "tabDataFrame" );
         break;
     case 'sundayParam':
-        //???
         loadSundayDueForm();
         break;
     case 'dnldPrint':

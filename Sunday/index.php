@@ -27,8 +27,8 @@
 				SESS_LANG_CHN => "早課<br/>祈福回向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Merit Dedication" ),
 			'featFuture' => array (
-				SESS_LANG_CHN => "其他未來會提供的功能<br/>(結緣法寶申請，等等。)",
-				SESS_LANG_ENG => "Future:<br/>(Dharma Items Request; etc.)" ),
+				SESS_LANG_CHN => "其他未來會提供的功能",
+				SESS_LANG_ENG => "Future<br/>Functions" ),
 			'logOut' => array (
 				SESS_LANG_CHN => "用戶<br/>撤出",
 				SESS_LANG_ENG => "User<br/>Logout" ),
@@ -70,6 +70,7 @@
 	$useChn = ( $sessLang == SESS_LANG_CHN );
 	$fontSize = ( $useChn ) ? "1.0em;" : "0.9em;";
 	$ltrSpacing = ( $useChn ) ? "20px" : "normal";
+	$h2TopMargin = ( $useChn ) ? "4px" : "6px";
 	unset( $_SESSION[ 'byPass' ] );
 ?>
 
@@ -100,13 +101,20 @@ $(document).ready(function() {
 	table.pgMenu {
 		table-layout: auto;
 	}
+	h2 {
+		margin-bottom: 6px;
+		text-align: center;
+ 		letter-spacing: 1px;
+ 		color: blue;
+ 		text-align: center;
+	}
 	div.dataArea {
 		height: 84vh;
 		margin-top: 0px;
 		border: 2px solid green; /* same as the active tab color */
     	box-sizing: border-box;
     	-moz-box-sizing: border-box;
-    	-webkit-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
 	}
 	table.dataHdr, table.dataRows {
 		table-layout: auto;
@@ -127,8 +135,8 @@ $(document).ready(function() {
 	}
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
-		width: 98%;
-		height: 60vh;
+		width: 99%;
+		height: 67vh;
 		margin: auto;
 		margin-top: 0px;
 		margin-bottom: 0px;
@@ -139,7 +147,7 @@ $(document).ready(function() {
 		font-size: 1.0em;
 	}
 	input[type=button] {
-		font-size: 0.8em;
+		font-size: 1.0em;
 		background-color: aqua;
 		text-align: center;
 		display: inline-block;
@@ -197,8 +205,8 @@ table.dialog {
 		</thead>
 	</table>
 	<div class="dataArea">
-		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>;"><?php echo xLate( 'qifuTitle' ); ?></h2>
-		<h2 style="color: darkred;"><?php echo xLate( 'present' ); ?></h2>
+		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'qifuTitle' ); ?></h2>
+		<h2 style="color: darkred; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'present' ); ?></h2>
 		<div id="tabDataFrame">
 			<!-- Frame to load Tab Data -->				
 		</div><!-- tabDataFrame -->	

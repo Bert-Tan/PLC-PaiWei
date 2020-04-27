@@ -244,8 +244,8 @@ function constructTblHeader( $dbTblName ) {
 		$tpl->setVariable("addBtnTxt", '加行輸入');
 		$tpl->setVariable("delAllBtnTxt", '全部刪除');
 	} else {
-		$tpl->setVariable("addBtnTxt", 'AddRow');
-		$tpl->setVariable("delAllBtnTxt", 'DelAll');
+		$tpl->setVariable("addBtnTxt", '&nbsp;Add Row&nbsp;');
+		$tpl->setVariable("delAllBtnTxt", 'Dellete All');
 	}	 	
 	$tpl->parse("dataEditCol");
 	$tpl->parse("hdr_tbl");
@@ -266,16 +266,18 @@ function getSundayTblData ( $dbInfoX ) {
 
 	$tblName = $dbInfoX[ 'tblName' ];
 	$Rqstr = $dbInfoX[ 'rqstr' ];
+	//$refDate = $dbInfoX[ 'refDate' ];
+	// if today is Sunday, $dbInfoX[ 'refDate' ] is the NEXT Suanday, $refDate is THIS Sunday (today)
+	$refDate = date("Y-m-d");
 
 	$sql = "LOCK TABLES `{$tblName}` READ, `sundayRq2Usr` READ, `sundayRq2Days` READ;";
 	$_db->query( $sql );	
-	// Sunday Qifu/Merit data NOT earlier than $now (data begining with following Sunday)
-	$now = date("Y-m-d");
+	// Sunday Qifu/Merit data NOT earlier than $refDate (data begining with following Sunday)
 	$sql = "SELECT * FROM `{$tblName}` WHERE `ID` IN "
 		. "(SELECT DISTINCT `sundayRq2Usr`.`rqID` FROM `sundayRq2Usr` INNER JOIN `sundayRq2Days` "
 		. "ON (`sundayRq2Usr`.`rqID` = `sundayRq2Days`.`rqID` AND `sundayRq2Usr`.`TblName` = `sundayRq2Days`.`TblName`) "
 		. "WHERE `sundayRq2Usr`.`TblName` = \"{$tblName}\" AND `sundayRq2Usr`.`UsrName` = \"{$Rqstr}\" "
-		. "AND `sundayRq2Days`.`rqDate` >= \"{$now}\") ORDER BY ID;";	 
+		. "AND `sundayRq2Days`.`rqDate` >= \"{$refDate}\") ORDER BY ID;";
 	$rslt = $_db->query( $sql );
 	$tblSize = $rslt->num_rows;
 	$rows = $rslt->fetch_all( MYSQLI_ASSOC );
@@ -286,7 +288,7 @@ function getSundayTblData ( $dbInfoX ) {
 	if ( $tblSize == 0 ) {
   		$rows = null;
   	}
-	$rpt [ 'myData' ] = constructTblData( $rows, $tblName, $dbInfoX[ 'refDate' ] );
+	$rpt [ 'myData' ] = constructTblData( $rows, $tblName, $refDate );
 	$rpt [ 'myDataSize' ] = $tblSize;
 	return $rpt;
 } // getSundayTblData()

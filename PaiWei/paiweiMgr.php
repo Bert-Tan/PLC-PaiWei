@@ -84,7 +84,7 @@ div.dataArea {
 	-webkit-box-sizing: border-box;
 }
 div#tabDataFrame { /* For loading tab data */
-	width: 100%;
+	width: 99%;
 	height: 68vh;
  	margin: auto;
  	margin-top: 0px;
@@ -180,7 +180,7 @@ table.dataHdr th select {
 </style>
 </head>
 <body>
-	<?php require_once("../AdmPortal/AdmPgHeader.htm"); ?>
+	<?php require_once("../AdmPortal/AdmPgHeader.php"); ?>
 	<table class="tabMenu">
 		<thead>
 			<tr>
