@@ -294,7 +294,7 @@ function hdlr_tabClick_mgr() {
         loadSundayDueForm();
         break;
     case 'dnldPrint':
-        location.replace( "./dnldPrint.php" );
+        location.replace( "./dnldPrint.php?view=true" );
         break;
     case 'sundayDash':
         loadSundayDashboard();
