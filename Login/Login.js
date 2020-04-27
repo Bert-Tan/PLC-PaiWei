@@ -1,4 +1,5 @@
 var _usrPlace = {
+	'urlWebsiteHome' : "https://www.amitabhalibrary.org/",
 	'usrHome' : "../index.php",
 	'cUG' : "../UsrPortal/UG.php",
 	'eUG' : "../UsrPortal/eUG.php",

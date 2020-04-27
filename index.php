@@ -24,6 +24,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
 	var _appPlaces = {
+		'urlWebsiteHome' : "https://www.amitabhalibrary.org/",
 		"uLogin" : "./Login/Login.php?l=c",
 		"UG" : "./UsrPortal/UG.php",
 		"eLogin" : "./Login/Login.php?l=e",
@@ -56,6 +57,7 @@ table.pgMenu th:last-child {
 		<table class="pgMenu centerMeV">
 			<thead>
 				<tr>
+					<th data-urlIdx="urlWebsiteHome">網站首頁<br/>Homepage</th>	
 					<th data-urlIdx="uLogin">一般用戶登錄<br/>(中文)</th>
 					<th data-urlIdx="UG">用戶指南<br/>(中文)</th>
 					<th data-urlIdx="eLogin">User Login<br/>(English)</a></th>

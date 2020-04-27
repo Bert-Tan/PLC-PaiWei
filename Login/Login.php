@@ -6,6 +6,9 @@
 	function xLate( $what ) {
 		global $sessLang;
 		$htmlNames = array (
+			'WebsiteHome' => array (
+				SESS_LANG_CHN => "回到<br/>網站首頁",
+				SESS_LANG_ENG => "Back to<br/>Homepage" ),
 			'htmlTitle' => array (
 				SESS_LANG_CHN => "淨土念佛堂用戶登錄主頁",
 				SESS_LANG_ENG => "Pure Land Center User Login Page" ),
@@ -13,8 +16,8 @@
 				SESS_LANG_CHN => "淨土念佛堂<br/>用戶主頁",
 				SESS_LANG_ENG => "Pure Land Center<br/>User Portal" ),
 			'featFuture' => array (
-				SESS_LANG_CHN => "其他未來會提供的功能<br/>( 週日早課祈福及迴向申請，結緣法寶申請，等等。)",
-				SESS_LANG_ENG => "Future Capabilities<br/>(e.g., Req. for Dharma Items; etc.)" ),
+				SESS_LANG_CHN => "其他未來會提供的功能",
+				SESS_LANG_ENG => "Future<br>Functions" ),
 			'logOut' => array (
 				SESS_LANG_CHN => "用戶<br/>撤出",
 				SESS_LANG_ENG => "User<br/>Logout" ),
@@ -173,6 +176,7 @@
 		<table class="pgMenu centerMeV">
 			<thead>
 				<tr>
+					<th data-urlIdx="urlWebsiteHome"><?php echo xLate( 'WebsiteHome' ); ?></th>
 					<th data-urlIdx="usrHome"><?php echo xLate( 'featPW' ); ?></th>
 					<th data-urlIdx="<?php echo xLate('ugLidx');?>"><?php echo xLate( 'rUG' ); ?></th>
 					<th class="future"><?php echo xLate( 'featFuture' ); ?></th>

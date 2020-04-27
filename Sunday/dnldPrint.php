@@ -90,6 +90,16 @@
 	//Close and output PDF document
 	$pdf->Output('Qifu Merit Request ' . date('Y-m-d') . '.pdf', 'I');
 	
+	/*
+	//???
+	$pdf->Output('Qifu Merit Request ' . date('Y-m-d') . '.pdf', 'H???');
+	//???
+	if (?crontab) {
+		if(NOT exist file?) {
+			send
+		}
+	}
+	*/
 	
 	
 	
