@@ -79,7 +79,7 @@ table.pgMenu th {
 	height: 100%;
 }
 
-table.pgMenu th[data-urlIdx=urlUsrHome], table.pgMenu th[data-urlIdx=urlAdmHome] {
+table.pgMenu th[data-urlIdx=urlWebsiteHome] {
 	width: 4.2vw;
 	border-left: none; /* always the left-most table cell */
 }

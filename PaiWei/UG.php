@@ -70,8 +70,8 @@
 		<?php if ( (! isset( $_SESSION[ 'byPass' ] )) || $_SESSION[ 'byPass' ] == false) { ?>
 		<h2 style="text-align: center; letter-spacing: 1px;">
 			用戶指南
-		</h2>
-		<?php } ?>
+		</h2>		
+		<?php } ?>		
         <span style="display: block; width: 95%; margin: auto; padding-top: 2vh; font-size: 1.3em;
 			font-weight: bold; line-height: 1.4em;"><!-- Intro phrase -->
             用戶將可經由此法會牌位申請主頁選擇所要申請設立的牌位：往生者蓮位、(一年內)往生者蓮位、歷代祖先蓮位、祈福消災牌位、

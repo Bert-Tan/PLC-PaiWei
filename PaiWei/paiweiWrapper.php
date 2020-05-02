@@ -23,7 +23,10 @@
 				SESS_LANG_ENG => "Application for Merit Dedication Name Plaques during Retreats<br/>User Guide" ),
 			'present' => array (
 				SESS_LANG_CHN => "**** 除有特殊困難，牌位申請者須本人親自( 或由指定代表 ) 前來參加法會 ****",
-				SESS_LANG_ENG => "**** You or your designee shall be present in the retreat unless you have difficulties ****" )
+				SESS_LANG_ENG => "**** You or your designee shall be present in the retreat unless you have difficulties ****" ),
+			'userguide' => array (
+				SESS_LANG_CHN => "[&nbsp;如果您還沒有註冊賬戶，請參考<a href='../UsrPortal/UG.php'>一般用戶指南</a>&nbsp;]",
+				SESS_LANG_ENG => "[&nbsp;If you do not have a login account, please refer to <a href='../UsrPortal/eUG.php'>general user guide</a>&nbsp;]" )
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
@@ -81,7 +84,7 @@ h2 {
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
 		width: 98%;
-		height: 75vh;
+		height: 70vh;
 		margin: auto;
 		margin-top: 0px;
 		margin-bottom: 0px;
@@ -134,7 +137,12 @@ h2 {
 	<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>;">
 			<?php echo xLate( 'paiweiTitle' ); ?>
 		</h2>
-		<h2 style="color: darkred;"><?php echo xLate( 'present' ); ?></h2>
+		<h2 style="color: darkred;">
+			<?php echo xLate( 'present' ); ?><br>
+			<div style="margin-top: 9px">
+			<?php echo xLate( 'userguide' ); ?>
+			</div>
+		</h2>
 		<div id="tabDataFrame">
 			<!-- Frame to load Tab Data -->				
 		</div><!-- tabDataFrame -->	
