@@ -23,7 +23,10 @@
 				SESS_LANG_ENG => "Sunday Chanting<br/>Application for Well-wishing&nbsp;&amp;&nbsp;Merit Dedication" ),
 			'present' => array (
 				SESS_LANG_CHN => "**** 申請人務必親自、或有指定代表出席參加，否則恕不受理 ****",
-				SESS_LANG_ENG => "**** The Requestor or a Delegate Must Be Present ****" )
+				SESS_LANG_ENG => "**** The Requestor or a Delegate Must Be Present ****" ),
+			'userguide' => array (
+				SESS_LANG_CHN => "[&nbsp;如果您還沒有註冊賬戶，請參考<a href='../UsrPortal/UG.php'>一般用戶指南</a>&nbsp;]",
+				SESS_LANG_ENG => "[&nbsp;If you do not have a login account, please refer to <a href='../UsrPortal/eUG.php'>general user guide</a>&nbsp;]" )
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
@@ -76,7 +79,7 @@ $(document).ready(function() {
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
 		width: 98%;
-		height: 75vh;
+		height: 70vh;
 		margin: auto;
 		margin-top: 0px;
 		margin-bottom: 0px;
@@ -114,7 +117,12 @@ $(document).ready(function() {
 	<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>;">
 			<?php echo xLate( 'qifuTitle' ); ?>
 		</h2>
-		<h2 style="color: darkred;"><?php echo xLate( 'present' ); ?></h2>
+		<h2 style="color: darkred;">
+			<?php echo xLate( 'present' ); ?><br>
+			<div style="margin-top: 9px">
+			<?php echo xLate( 'userguide' ); ?>
+			</div>
+		</h2>
 		<div id="tabDataFrame">
 			<!-- Frame to load Tab Data -->				
 		</div><!-- tabDataFrame -->	
