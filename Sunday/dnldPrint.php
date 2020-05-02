@@ -106,6 +106,12 @@
 				'name' => "Printer @ PLC"
 			)
 		);	
+		$plcCc = array (
+			array (
+				'email' => 'library@amitabhalibrary.org',
+				'name' => "Pure Land Center"
+			)
+		);
 		/*
 		$testTo = array (
 			array (
@@ -130,7 +136,7 @@
 		$msg = "Attached is the Sunday Qifu and Merit request report for ". date('Y-m-d') . ".";
 
 		//plcSendEmailAttachment( $testTo, $testCc, $subject, $msg, null, $attachments);
-		plcSendEmailAttachment( $prtTo, null, $subject, $msg, null, $attachments);
+		plcSendEmailAttachment( $prtTo, $plcCc, $subject, $msg, null, $attachments);
 	}
 	
 
