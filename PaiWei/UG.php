@@ -27,9 +27,11 @@
 
 	$hdrURL = URL_ROOT . "/admin/index.php";
 	$useChn = ( $sessLang == SESS_LANG_CHN );
-	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
-		header( "location: " . $hdrURL );
-	} // redirect
+	if ( (! isset( $_SESSION[ 'byPass' ] )) || $_SESSION[ 'byPass' ] == false) {
+		if ( !isset( $_SESSION[ 'usrName' ] ) ) {
+			header( "location: " . $hdrURL );
+		} // redirect
+	}	
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +41,6 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="../master.css">
 <style type="text/css">
-
 .UGsteps {
 	font-size: 0.9em;
 }
@@ -66,9 +67,11 @@
 <?php
 	if ( $useChn ) { // Chinese version
  ?>
+		<?php if ( (! isset( $_SESSION[ 'byPass' ] )) || $_SESSION[ 'byPass' ] == false) { ?>
 		<h2 style="text-align: center; letter-spacing: 1px;">
 			用戶指南
 		</h2>
+		<?php } ?>
         <span style="display: block; width: 95%; margin: auto; padding-top: 2vh; font-size: 1.3em;
 			font-weight: bold; line-height: 1.4em;"><!-- Intro phrase -->
             用戶將可經由此法會牌位申請主頁選擇所要申請設立的牌位：往生者蓮位、(一年內)往生者蓮位、歷代祖先蓮位、祈福消災牌位、
@@ -259,8 +262,11 @@
 <?php
 	} else { // English version
 ?>
+		<?php if ( (! isset( $_SESSION[ 'byPass' ] )) || $_SESSION[ 'byPass' ] == false) { ?>
 		<h2 style="text-align: center; letter-spacing: normal;">
-			User Guide</h2>
+			User Guide
+		</h2>
+		<?php } ?>
         <span style="display: block; width: 95%; margin: auto; padding-top: 2vh; font-size: 1.3em;
 			font-weight: bold; line-height: 1.1em;"><!-- Intro phrase -->
             Users can apply for specific Merit Dedication Name Plaques during Retreats from this page:
