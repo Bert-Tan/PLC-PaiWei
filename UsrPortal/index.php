@@ -26,7 +26,6 @@
 				SESS_LANG_CHN => "早課<br/>祈福迴向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Merit Dedication" ),
 			'featFuture' => array (
-				//?????
 				SESS_LANG_CHN => "其他未來會提供的功能",
 				SESS_LANG_ENG => "Future<br/>Functions" ),
 			'logOut' => array (

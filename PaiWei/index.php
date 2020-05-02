@@ -85,6 +85,7 @@
 	$fontSize = ( $useChn ) ? "1.0em" : "0.9em";
 	$ltrSpacing = ( $useChn ) ? "20px" : "normal";
 	$h2TopMargin = ( $useChn ) ? "4px" : "6px";
+	unset( $_SESSION[ 'byPass' ] );
 ?>
 
 <!DOCTYPE html>
