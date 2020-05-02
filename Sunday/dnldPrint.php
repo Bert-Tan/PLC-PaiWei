@@ -2,10 +2,16 @@
 	require_once("../pgConstants.php");
 	require_once("dbSetup.php");
 	require_once("sunday_DBfuncs.php");
-	
+	require_once("plcMailerSetup.php");
+
+	//pdf file path and name
+	$pdfPath = DOCU_ROOT. "/QifuReqReport\/";
+	$pdfTitle = "QifuMeritReq-" . date('Y-m-d');
+	$pdfName = $pdfTitle . '.pdf';
+		
 	//pdf configuration settings
 	$pageSize = 'LETTER'; $unit = 'in'; //inch
-	$pdfTitle = '祈福回向申請表'; $pageOrientation = 'L';
+	$pageOrientation = 'L';
 	$topMargin = 0.5; $bottomMargin = 0.5;
 	$leftMargin = 0.5; $rightMargin = 0.5;
 	
@@ -88,10 +94,46 @@
 	printData($meritDataArray, $meritHeaderData, $meritCellHeightArray, $meritHeaderHeight, $meritCellWidthArray, $meritDateStrHeightArray, $meritTableTitle);
 	
 	//Close and output PDF document
-	$pdf->Output('Qifu Merit Request ' . date('Y-m-d') . '.pdf', 'I');
+	if( isset($_GET[ 'view' ]) && $_GET[ 'view' ]=='true' ) { //view in web browser
+		$pdf->Output($pdfName, 'I');
+	}
+	else { //send to PLC printer
+		$pdf->Output($pdfPath . $pdfName, 'F');
+
+		$prtTo = array (
+			array (
+				'email' => 'plc-mfc@hpeprint.com',
+				'name' => "Printer @ PLC"
+			)
+		);	
+		/*
+		$testTo = array (
+			array (
+				'email' => 'chunhui.guo01@gmail.com',
+				'name'  => '郭春輝'
+			)
+		);	
+		$testCc = array (
+			array (
+				'email' => 'bert.tan@comcast.net',
+				'name'  => '譚祖德'
+			)
+		);
+		*/
+		$attachments = array (
+			array (
+				'path' => $pdfPath . $pdfName,
+				'name' =>  $pdfName
+			)
+		);
+		$subject = $pdfTitle;
+		$msg = "Attached is the Sunday Qifu and Merit request report for ". date('Y-m-d') . ".";
+
+		//plcSendEmailAttachment( $testTo, $testCc, $subject, $msg, null, $attachments);
+		plcSendEmailAttachment( $prtTo, null, $subject, $msg, null, $attachments);
+	}
 	
-	
-	
+
 	
 	
 	//print data

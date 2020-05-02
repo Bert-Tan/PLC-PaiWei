@@ -10,7 +10,7 @@
 $_errRec = array(); $_dupRec = array();
 $_errCount = 0; $_dupCount = 0; $_insCount = 0;
 $_updCount = 0; $_delCount = 0; $_totCount = 0;
-$_srchCount = 0; $_srchRec = array();
+$_srchCount = 0; $_srchRec = array(); $_validCount = 0;
 
 function userSelectionList() {
 	global $_db, $_errCount, $_errRec;
@@ -117,6 +117,10 @@ function updatePaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 			$i++;
 		}
 	} // loop through attribute (Name, Value) pairs
+	// update "timestamp" field in PaiWei table
+	$currDate = date("Y-m-d");
+	if ( $updParams != "" ) $updParams .= ", ";
+	$updParams .= "`timestamp` = \"{$currDate}\"";
 	$sql = "UPDATE {$pwTable} SET {$updParams} WHERE ID = \"{$tupID}\";";
 	$_db->query( $sql );
 	if ( $_db->errno ) {
@@ -130,7 +134,7 @@ function updatePaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
 	} // error condition
 	// No other tables involved in UPDATE
 	$_updCount++;
-	return $_updCount;	
+	return true;	
 } // updatePaiWeiTuple ()
 
 function deletePaiWeiTuple( $pwTable, $pwTupNVs, $usr ) {
@@ -206,6 +210,29 @@ function deletePaiWeiUsrTuple( $pwTable, $usr ) { // echo "Table= $pwTable; User
 	return true;
 } // deletePaiWeiUsrTuple()
 
+function validPaiWeiUsrTuple( $pwTable, $usr ) { // echo "Table= $pwTable; User= $usr <br/>"; exit;
+	global $_db, $_errCount, $_errRec, $_validCount;
+	global $useChn;	
+
+	$currDate = date("Y-m-d");
+	$sql = "UPDATE {$pwTable} SET `timestamp` = \"{$currDate}\" WHERE `ID` IN "
+		 . "(SELECT `pwID` FROM `pw2Usr` WHERE `tblName` = \"{$pwTable}\" AND `pwUsrName` = \"{$usr}\");";	
+	$_db->query( $sql );
+
+	if ( $_db->errno ) {
+		if ( DEBUG ) {
+			$_errRec[] = __FUNCTION__ . "()\t" . __LINE__ . ":\t{$_db->error} while executing: {$sql}\n";
+		} else {
+			$_errRec[] = ( $useChn ) ? "資料庫內部發生錯誤！" : "Database Internal Error!";
+		}
+		$_errCount++;
+		return false;
+	} // error condition
+
+	$_validCount = $_db->affected_rows;
+	return true;
+} // validPaiWeiUsrTuple()
+
 function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 	global $_db, $_insCount, $_dupCount, $_errCount;
 	global $_errRec, $_dupRec, $useChn;
@@ -225,10 +252,14 @@ function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 		$tupValX[] = $attrV;
 		$i++;
 	}
+	// fomulate "timestamp" field to be inserted in PaiWei table
+	// "timestamp" field NOT in $qryCond
+	$tupAttrX[] = 'timestamp';
+	$tupValX[] = date("Y-m-d");
 	$tupAttrs = "( " . implode( ', ', $tupAttrX ) . " )";
 	$tupVal = "( \"" . implode( "\", \"", $tupValX ) . "\" )";
 
-	// check existence in the Pai Wei Table
+	// check existence in the PaiWei Table
 	$sql = "SELECT `ID` FROM $pwTable WHERE {$qryCond};";
 	$rslt = $_db->query( $sql );
 	if ( $_db->errno ) {

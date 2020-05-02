@@ -24,18 +24,15 @@ var _editBtns = null;
 var _addRowBtn = null;
 var _srchBtn = null;
 var _delAllBtn = null;
+var _validBtn = null;
+var _validAllBtn = null;
 var _alertUnsaved = null;
 var _blankData = null; // blank data filler for W_Title & R_Title fields; they can be blank
 var _wtList = null;	// W_Title & R_Title selection list
 var _rtList = null;
 var _icoName = null;
 var _rqTbls = [ 'D001A', 'L001A', 'Y001A', 'W001A_4', 'DaPaiWei' ];
-var _url2Go = {
-	"urlAdmHome" : "../AdmPortal/index.php",
-	"urlUsrHome" : "../UsrPortal/index.php",
-	"urlDnld" : "./dnldPaiWeiForm.php",
-	"usrLogout" : "../Login/Logout.php"
-};
+
 /**********************************************************
  *                    Support functions                   *
  **********************************************************/
@@ -49,7 +46,7 @@ function readSessParam() {
 		method: 'POST',
 		data: _ajaxData,
 		success: function( rsp ) {
-			var rspV = JSON.parse ( rsp );
+			var rspV = JSON.parse ( rsp );			
 			for ( var X in rspV ) {
 				switch ( X ) {
 					case 'URL':
@@ -103,10 +100,17 @@ function readSessParam() {
 			} // for loop
 			_alertUnsaved = ( _sessLang == SESS_LANG_CHN ) ? '未保存的更動會被丟棄！' : 'Unsaved Data will be LOST!';
 			_blankData = ( _sessLang == SESS_LANG_CHN ) ? "空白" : "BLANK";
-			ready_init();
+			//a PaiWei table is chosen: display PaiWei date
 			if ( _tblName != null ) {
-				loadTblData( _tblName, 1, 30, _icoName );
+				$(".tabMenu th").removeClass("active").css("border", "1px solid white");
+				$(".tabMenu th[data-tbl=\""+_tblName+"\"]").addClass("active").css("border-bottom", "1px solid green");
+				$("#tabDataFrame").find("*").unbind(); $("#tabDataFrame").empty();
+				loadTblData( _tblName, 1, 30, _icoName, "tabDataFrame" );
 				enableTooltip();
+			}
+			//no PaiWei table is chosen: display PaiWei User Guide
+			else {
+				$(".tabMenu th[data-tbl=ug]").trigger( 'click' );
 			}
 		}, // Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
@@ -160,34 +164,37 @@ function chkDate ( dateString ) { // in YYYY-MM-DD format
 } // function chkDate()
 
 function chgEdit2Upd ( editBtn ) {
-	var updBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "保存更動" : "Update";
-	var canBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "取消更動" : "Cancel";
-	var canBtn = editBtn.clone();
+	var updBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "保存更動" : " Update  ";
+	var canBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "取消更動" : "  Cancel  ";
+	var canBtn = editBtn.clone();	
+	var td = editBtn.parent();
+	var validBtn = td.find(".validBtn");
 	
-	editBtn.unbind(); // unbind myself from the Edit Button Handler
-	editBtn.attr( "value", updBtnVal ); // change myself to become an 'Update' button
-	editBtn.removeClass( 'editBtn' ).addClass( 'updBtn' ); // change my class
+	editBtn.unbind(); // unbind Edit Button Handler
+	editBtn.attr( "value", updBtnVal ); // change 'Edit' button to become an 'Update' button
+	editBtn.removeClass( 'editBtn' ).addClass( 'updBtn' ); // change class
 	editBtn.on( 'click', updBtnHdlr );
+
+	canBtn.unbind(); // unbind Edit Button Handler
 	canBtn.attr( "value", canBtnVal );
 	canBtn.removeClass( 'editBtn' ).addClass( 'canBtn' );
-	canBtn.on( 'click', canBtnHdlr )
-	editBtn.after( canBtn );
-	editBtn.siblings(".canBtn").before( "&nbsp;&nbsp;" ); // space it
+	canBtn.on( 'click', canBtnHdlr );
+	validBtn.after( canBtn ); // display 'Cancel' button
+
+	validBtn.hide(); // hide Valid Button	
 } // chgEdit2Upd()
 
 function chgUpd2Edit ( updBtn ) {
-	var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "更改" : "Edit";
+	var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "更改" : "    Edit    ";
 	var td = updBtn.parent();
-	var htmlString = '';
-	td.find("*").unbind();
-	td.find(".canBtn").remove();	
-	updBtn.attr( "value", editBtnVal ); // change myself to 'Edit' button & class
-	updBtn.removeClass( 'updBtn' ).addClass( 'editBtn' );
-	htmlString = td.html().replace(/(&nbsp;)+/g, '&nbsp;&nbsp;');
-	td.html( htmlString );
-	td.find(".editBtn").on( 'click', editBtnHdlr );
-	td.find(".delBtn").on( 'click', delBtnHdlr );
-	td.find(".dupBtn").on( 'click', dupBtnHdlr );
+
+	updBtn.unbind(); // unbind Update Button Handler
+	updBtn.attr( "value", editBtnVal ); // change 'Update' button to become an 'Edit' button
+	updBtn.removeClass( 'updBtn' ).addClass( 'editBtn' ); // change class
+	updBtn.on( 'click', editBtnHdlr );	
+
+	td.find(".canBtn").remove(); // remove 'Cancel' button	
+	td.find(".validBtn").show(); // show Valid Button
 } // chgUpd2Edit()
 
 function isJSON( str ) {
@@ -199,11 +206,13 @@ function isJSON( str ) {
     return true;
 } // isJSON()
 
-function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter is eliminated */
+function loadTblData( tblName, pgNbr, numRec, sessUsr, frameID ) {	/* dataOnly parameter is eliminated */
 	// before introducing page-by-page surfing, the dataonly parameter isn't really needed
-	var dataArea = $(".dataArea");
+	var dataArea = $( "#" + frameID );
 	var tblHdrWrapper =	'<div class="dataHdrWrapper"></div>';
-	var tblDataWrapper = '<div class="dataBodyWrapper"></div>';
+	var tabDataFrameHeight = "57vh";
+	if (tblName == 'DaPaiWei') tabDataFrameHeight = "55vh";
+	var tblDataWrapper = '<div class="dataBodyWrapper" style="height: ' + tabDataFrameHeight + '"></div>';
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? '沒有找到所選擇的法會的牌位，<br/>請輸入或上載牌位資料。'
 												 : 'No record found!<br/>Please input or upload Data';
 	var errMsg =	'<h1 class="centerMe errMsg">' + errText + '</h1>';
@@ -223,7 +232,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 		data:	_ajaxData,
 		success: function ( rsp ) { // SUCCESS handler
 			var rspV = JSON.parse( rsp );
-			$(".dataArea").css("overflow-y", "initial");
+			$("#tabDataFrame").css("overflow-y", "initial");
 			for ( var X in rspV ) {
 				switch( X ) {
 					case 'URL':
@@ -266,30 +275,6 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr ) {	/* dataOnly parameter 
 	}); // ajax call	
 } // loadTblData()
 
-/**********************************************************
- * Event Handler - When a Pai Wei menu item is clicked    *
- **********************************************************/
-function pwTblHdlr() { 
-	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
-
-	$(".errMsg").remove();
-	_tblName = $(this).attr("data-tbl");	
-
-	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
-	
-	$(".pwTbl").removeClass("active");
-	$("#upld").removeClass("active");
-	$(".ugld").removeClass("active");
-	$(this).addClass("active");
-
-	loadTblData( _tblName, 1, 30, ( ( _icoName != null ) ? _icoName : _sessUsr ) );
-	
-	//new page: show hover message
-	enableTooltip();
-	
-	return;	
-} // function pwTblHdlr()
-
 /************************************************************
  * Event Handler - when the PaiWei Upload Form is submitted *
  ************************************************************/
@@ -315,46 +300,6 @@ function myPaiWeiUpLoad ( e ) {
 } // myPaiWeiUpLoad()
 
 /**********************************************************
- * Event Handler - When the Upload Request is clicked     *
- **********************************************************/
-function upldHdlr () { // load the upload form and bind it to the form submit handler
-	$(".pwTbl").removeClass("active");
-	$(".ugld").removeClass("active");
-	$(this).addClass("active");
-	$(".dataArea").load("./upldPaiWeiForm.php #forUpld", function( rsp ) {
-		if ( isJSON( rsp ) ) {
-			rspV = JSON.parse( rsp );
-			location.replace( rspV['URL']);
-			return;
-		}
-		$("form#upldForm").unbind(); // in case it was bound before
-		$("form#upldForm").on( 'submit', myPaiWeiUpLoad );
-
-		$(this).find(".future").on( 'click', futureAlert );
-		$(this).find(".ugld").on( 'click', ugLoader );
-	});
-	return false; // so, the hyperlink won't fire
-} // upldHdlr()
-
-/**********************************************************
- * Event Handler - When the User Guide is requested       *
- **********************************************************/
-function ugLoader () { // load the PaiWei User Guide
-	$(".pwTbl").removeClass("active");
-	$("#upld").removeClass("active");
-	$(this).addClass("active");
-	$(".pwTbl").removeClass("active");
-	$(".dataArea").load("./UG.php #ugDesc", function ( rsp ) {
-		$(this).find("table").addClass("UGsteps");
-		$(this).find("tr").css("background-color", "transparent");
-		$(this).find("img").addClass("UGstepImg");
-		return false; // so the link won't fire
-	});
-	$(".dataArea").css("overflow-y", "auto");
-	return false; // so the link won't fire
-} // ugLoader()
-
-/**********************************************************
  * Event Handler - When the Add_a_Row Button is clicked   *
  **********************************************************/
 function addRowBtnHdlr() {
@@ -371,7 +316,7 @@ function addRowBtnHdlr() {
 	var newRow = _pilotDataRow.clone();
 	var newRowDataCells = newRow.find("input[type=text]");
 	var lastTd = newRow.find("td:last");
-	var cellText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入牌位資料" : "Name Plaque Text";
+	var cellText = ( _sessLang == SESS_LANG_CHN ) ? "輸入牌位資料" : "Name Plaque";
 	var	dateText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入 年-月-日" : "YYYY-MM-DD";
 	
 	$(".errMsg").remove();
@@ -408,6 +353,41 @@ function addRowBtnHdlr() {
 	tbody.append( newRow );
 } // addRowBtnHdlr()
 
+function chgSrch2Lookup ( srchBtn ) {
+	var exitSrchBtnVal = ( _sessLang == SESS_LANG_CHN ) ? "退出搜尋" : "Exit Search";
+	var td = srchBtn.parent();	
+	var exitSrchBtn = srchBtn.clone();	
+
+	exitSrchBtn.unbind();
+	exitSrchBtn.attr( "value", exitSrchBtnVal );
+	exitSrchBtn.attr( "id", "exitSrchBtn" );
+	exitSrchBtn.on( 'click', exitSrchBtnHdlr );
+	srchBtn.after( exitSrchBtn );
+
+	srchBtn.hide();
+	td.find("#delAllBtn").hide();
+	td.find("#validAllBtn").hide();
+} // chgSrch2Lookup()
+
+function chgLookup2Srch ( exitSrchBtn ) {
+	var td = exitSrchBtn.parent();
+
+	exitSrchBtn.remove();
+	td.find("#delAllBtn").show();
+	td.find("#validAllBtn").show();
+	td.find("#srchBtn").show();
+} // chgLookup2Srch()
+
+/**********************************************************
+ * Event Handler - When a Exit Search Button is clicked   *
+ **********************************************************/
+function exitSrchBtnHdlr() {
+	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
+	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
+	
+	loadTblData( _tblName, 1, 30, ( ( _icoName != null ) ? _icoName : _sessUsr ), "tabDataFrame" );
+} // exitSrchBtnHdlr()
+
 /**********************************************************
  * Event Handler - When the Lookup Button is clicked      *
  **********************************************************/
@@ -442,7 +422,7 @@ function lookupBtnHdlr() {
 		method: 'POST',
 		data: _ajaxData,
 		success: function ( rsp ) {
-			rspV = JSON.parse ( rsp );
+			var rspV = JSON.parse ( rsp );
 			for ( var X in rspV ) {
 				switch ( X ) {
 					case 'URL':
@@ -485,7 +465,7 @@ function lookupBtnHdlr() {
 /**********************************************************
  * Event Handler - When the Search Button is clicked	  *
  **********************************************************/
-function srchBtnHdlr() {
+function srchBtnHdlr() {	
 	var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
 	var lookupBtnText = ( _sessLang == SESS_LANG_CHN ) ? "查詢" : "Look Up";
 	var lookupBtn = '<input class="lookupBtn" type="button" value="' + lookupBtnText + '">';
@@ -498,7 +478,7 @@ function srchBtnHdlr() {
 	
 	$(".errMsg").remove();
 	if ( _sessMode == SESS_MODE_SRCH ) {
-		var alert_txt = ( _sessLang == SESS_LANG_CHN ) ? "已經在搜索狀態!" : "Already in Search Mode!";
+		var alert_txt = ( _sessLang == SESS_LANG_CHN ) ? "已經在搜尋狀態!" : "Already in Search Mode!";
 		alert( alert_txt );
 		return;
 	}
@@ -520,6 +500,8 @@ function srchBtnHdlr() {
 	tbody.find("tr").remove(); // remove all data rows
 	tbody.append( newRow );
 	_sessMode = SESS_MODE_SRCH;
+
+	chgSrch2Lookup($(this));
 } // srchBtnHdlr()
 
 /**********************************************************
@@ -541,7 +523,7 @@ function delAllBtnHdlr() {
 		method: 'POST',
 		data:	_ajaxData,
 		success: function( rsp ) { // alert ( rsp ); // return; // Success Handler
-			rspV = JSON.parse ( rsp );
+			var rspV = JSON.parse ( rsp );
 			for ( var X in rspV ) {
 				switch ( X ) {
 				case 'URL':
@@ -570,6 +552,47 @@ function delAllBtnHdlr() {
 } // delAllBtnHdlr()
 
 /**********************************************************
+ * Event Handler - When the Valid ALL Button is clicked	  *
+ **********************************************************/
+function validAllBtnHdlr() {
+	_ajaxData = {}; _dbInfo = {};
+	_dbInfo[ 'tblName' ] = _tblName;
+	_dbInfo[ 'pwRqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;
+	_ajaxData [ 'dbReq' ] = 'dbVALIDX';
+	_ajaxData [ 'dbInfo' ] = JSON.stringify ( _dbInfo );
+	$.ajax({
+		url: "./ajax-pwDB.php",
+		method: 'POST',
+		data:	_ajaxData,
+		success: function( rsp ) { // alert ( rsp ); // return; // Success Handler
+			var rspV = JSON.parse ( rsp );
+			for ( var X in rspV ) {
+				switch ( X ) {
+				case 'URL':
+					location.replace( rspV[ X ] );
+					return;
+				case 'validSUCCESS':
+					alert( rspV [ X ] );
+					$("table.dataRows").find(".validBtn").prop( "disabled", true ); // disable Valid Button
+					return;
+				case 'errCount':
+					x = rspV [ X ];
+					var eMSG = ( _sessLang == SESS_LANG_CHN ) ? "牌位資料驗證失敗！\n" : "Validation Failed!\n";
+					for ( i=0; i < x; i++ ) {
+						eMSG += rspV [ 'errRec' ][i] + "\n";
+					}
+					alert( eMSG );
+					return;
+				} // switch()
+			} // for loop
+		}, // End of Success Handler
+		error: function (jqXHR, textStatus, errorThrown) {
+			alert( "validAllBtnHdlr()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+		} // End of ERROR Handler
+	}); // AJAX Call
+} // validAllBtnHdlr()
+
+/**********************************************************
  * Event Handler - When an Insert Button is clicked       *
  **********************************************************/
 function insBtnHdlr() {
@@ -577,11 +600,12 @@ function insBtnHdlr() {
 	var editBtnText = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
 	var delBtnText = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Del';
 	var dupBtnText = ( _sessLang == SESS_LANG_CHN ) ? '複製' : 'Dup';
+	var validBtnText = ( _sessLang == SESS_LANG_CHN ) ? '驗證' : 'Validate';
 	var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入完整的牌位資料" : "Please enter complete plaque data";
 	var myEditBtns = '<input class="editBtn" type="button" value="' + editBtnText + '">&nbsp;&nbsp;&nbsp;' +
-					 '<input class="delBtn" type="button" value="' + delBtnText + '">&nbsp;&nbsp;&nbsp;' +
-					 '<input class="dupBtn" type="button" value="' + dupBtnText + '">'
-					;
+					 '<input class="delBtn" type="button" value="' + delBtnText + '"><br><br>' +
+					 '<input class="validBtn" type="button" value="' + validBtnText + '" disabled>&nbsp;&nbsp;&nbsp;' + 
+					 '<input class="dupBtn" type="button" value="' + dupBtnText + '">';
 	var thisRow = $(this).closest("tr");
 	var cellsChanged = thisRow.find("input[data-changed=true]");
 	var noDropdown = ( thisRow.find("select").length == 0 );
@@ -648,7 +672,7 @@ function insBtnHdlr() {
 		method: 'POST',
 		data: _ajaxData,
 		success: function( rsp ) {
-			rspV = JSON.parse ( rsp );
+			var rspV = JSON.parse ( rsp );
 			for ( var X in rspV ) {
 				switch ( X ) {
 					case 'URL':
@@ -677,6 +701,7 @@ function insBtnHdlr() {
 						lastTd.find(".editBtn").on( 'click', editBtnHdlr ); // bind to the Edit click handler
 						lastTd.find(".delBtn").on( 'click', delBtnHdlr ); // bind to the Del click handler
 						lastTd.find(".dupBtn").on( 'click', dupBtnHdlr ); // bind to the Dup click handler
+						lastTd.find(".validBtn").on( 'click', validBtnHdlr ); // bind to the Valid click handler
 						alert( alertMsg );
 						return;							
 					case 'errCount':
@@ -742,7 +767,7 @@ function delBtnHdlr() {
 		method: 'POST',
 		data:	_ajaxData,
 		success: function( rsp ) { // Success Handler
-			rspV = JSON.parse ( rsp );
+			var rspV = JSON.parse ( rsp );
 			for ( var X in rspV ) {
 				switch ( X ) {
 				case 'URL':
@@ -835,7 +860,8 @@ function updBtnHdlr() {
 						var alertMsg = ( _sessLang == SESS_LANG_CHN ) ? "牌位資料更新完畢！" : "Record Updated!";
 						cellsChanged.each(function(i) {
 							$(this).attr( "data-oldv", $(this).val() ); // remember the current value
-						}); // cellsChanged
+						}); // cellsChanged						
+						updBtn.parent().find(".validBtn").prop( "disabled", true ); // disable Valid Button
 						alert( alertMsg );
 						break;
 					case 'errCount':
@@ -867,6 +893,51 @@ function updBtnHdlr() {
 } // updBtnHdlr()
 
 /**********************************************************
+ * Event Handler - When an Valid Button is clicked       *
+ **********************************************************/
+function validBtnHdlr() {
+	var tblFlds = {};
+	var validBtn = $(this);
+	var thisRow = $(this).closest("tr");
+	_ajaxData = {}; _dbInfo = {};
+
+	tblFlds [ thisRow.attr("data-keyn") ] = thisRow.attr("id");
+	_dbInfo[ 'tblName' ] = _tblName;
+	_dbInfo[ 'tblFlds' ] = tblFlds;
+	_dbInfo[ 'pwRqstr' ] = ( _icoName != null ) ? _icoName : _sessUsr;  // actually not used by the DB function)
+	_ajaxData[ 'dbReq' ] = 'dbUPD';
+	_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
+	$.ajax({
+		url: "./ajax-pwDB.php",
+		method: 'POST',
+		data: _ajaxData,
+		success: function( rsp ) { // Success Handler 
+			var rspV = JSON.parse ( rsp );
+			for ( var X in rspV ) {
+				switch ( X ) {
+					case 'URL':
+						location.replace( rspV[ X ] );
+						return;
+					case 'updSUCCESS':
+						var alertMsg = ( _sessLang == SESS_LANG_CHN ) ? "牌位資料驗證完畢！" : "Record Validated!";		
+						validBtn.prop( "disabled", true ); // disable Valid Button
+						alert( alertMsg );
+						break;
+					case 'errCount':
+						var alertMsg = ( _sessLang == SESS_LANG_CHN ) ? "牌位資料驗證失敗！" : "Validation Failed!";						
+						alert( alertMsg + rspV[ 'errRec' ] );
+						break;
+				} // switch
+			} // for loop			
+			return;					
+		}, // End of Success Handler
+		error: function (jqXHR, textStatus, errorThrown) {
+			alert( "validBtnHdlr()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+		} // End of ERROR Handler					
+	}); // AJAX Call
+} // validBtnHdlr()
+
+/**********************************************************
  * Event Handler - When a cell data is changed            *
  **********************************************************/
 function dataChgHdlr() {	// on 'blur' handler
@@ -894,6 +965,12 @@ function dataChgHdlr() {	// on 'blur' handler
 		return;
 	}
 	if ( fldN == 'deceasedDate' ) {
+		// convert MM/DD/YYYY to YYYY-MM-DD        
+        if( newV.match( /^(0?[1-9]|1[012])[\/\/](0?[1-9]|[12][0-9]|3[01])[\/\/]\d{4}$/) ) { // match MM/DD/YYYY
+            var d = newV.split( /[\/\/]/ ); // d[0]: MM; d[1]: DD; d[2]: YYYY
+            newV = d[2].concat("-", d[0], "-", d[1]); // YYYY-MM-DD
+		}
+		
 		if ( !chkDate( newV ) ) {
 			alert( errText );
 			if ( oldV.length > 0 ) {
@@ -942,6 +1019,9 @@ function ready_edit() {
 	if ( _addRowBtn != null ) _addRowBtn.unbind();
 	if ( _srchBtn != null ) _srchBtn.unbind();
 	if ( _delAllBtn != null ) _delAllBtn.unbind();
+	if ( _validBtn != null ) _validBtn.unbind();
+	if ( _validAllBtn != null ) _validAllBtn.unbind();
+
 
 	_delBtns = $(".delBtn");
 	_editBtns = $(".editBtn");
@@ -949,29 +1029,90 @@ function ready_edit() {
 	_addRowBtn = $("#addRowBtn");
 	_srchBtn = $("#srchBtn");
 	_delAllBtn = $("#delAllBtn");
+	_validBtn = $(".validBtn");
+	_validAllBtn = $("#validAllBtn");
 
 	_delBtns.on( 'click', delBtnHdlr );
 	_editBtns.on( 'click', editBtnHdlr );
 	_dupBtns.on( 'click', dupBtnHdlr );
 	_addRowBtn.on( 'click', addRowBtnHdlr );
 	_srchBtn.on( 'click', srchBtnHdlr );
-	_delAllBtn.on( 'click', delAllBtnHdlr )
+	_delAllBtn.on( 'click', delAllBtnHdlr );
+	_validBtn.on( 'click', validBtnHdlr );
+	_validAllBtn.on( 'click', validAllBtnHdlr );
 } // ready_edit()
 
-function ready_init() {
-	if ( _sessType == SESS_TYP_USR ) {
-		$(".pwTbl").on('click', pwTblHdlr );
-		$(".ugld").on( 'click', ugLoader );
-		$("#upld").on( 'click', upldHdlr );
-		return;
-	}
-	if ( _icoName ) {
-		$(".pwTbl").on('click', pwTblHdlr );
-		$("#upld").on( 'click', upldHdlr );
-		return;
-	}
-	alert( "由於沒有點選蓮友為之處理牌位，\n牌位管理功能僅限於下載牌位列印！" );
-}
+/**********************************************************
+ * Event Handler - When the Upload Request is clicked     *
+ **********************************************************/
+function upldHdlr () { // load the upload form and bind it to the form submit handler
+	$("#tabDataFrame").load("./upldPaiWeiForm.php #forUpld", function( rsp ) {
+		if ( isJSON( rsp ) ) {
+			rspV = JSON.parse( rsp );
+			location.replace( rspV['URL']);
+			return;
+		}
+		$("form#upldForm").unbind(); // in case it was bound before
+		$("form#upldForm").on( 'submit', myPaiWeiUpLoad );		
+	});
+	return false; // so, the hyperlink won't fire
+} // upldHdlr()
+
+/**********************************************************
+ * Event Handler - When the User Guide is requested       *
+ **********************************************************/
+function ugLoader () { // load the PaiWei User Guide
+	$("#tabDataFrame").load("./UG.php #ugDesc", function ( rsp ) {
+		$(this).find("table").addClass("UGsteps");
+		$(this).find("tr").css("background-color", "transparent");
+		$(this).find("img").addClass("UGstepImg");
+		return false; // so the link won't fire
+	});
+	$("#tabDataFrame").css("overflow-y", "auto");
+	return false; // so the link won't fire
+} // ugLoader()
+
+function hdlr_tabClick() {
+	// unsaved data
+	var dirtyCells = $("tbody input[type=text][data-changed=true]").length + $("#retreatUpd select[data-changed=true]").length;
+	if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
+
+	var rqTblName = $(this).attr("data-tbl");
+	if ( rqTblName == _tblName ) return; /* nothing to do */
+	_tblName = rqTblName;
+
+	$(".tabMenu th").removeClass("active").css("border", "1px solid white");
+	$(this).addClass("active").css("border-bottom", "1px solid green");
+	$("#tabDataFrame").find("*").unbind();
+	$("#tabDataFrame").empty();
+
+	switch ( _tblName ) {
+		case 'C001A':
+		case 'W001A_4':
+		case 'DaPaiWei':
+		case 'L001A':
+		case 'Y001A':
+		case 'D001A':
+			loadTblData( _tblName, 1, 30, ( ( _icoName != null ) ? _icoName : _sessUsr ), "tabDataFrame" );
+			enableTooltip(); // show hover message
+			break;	
+		case 'ug':
+			ugLoader();
+			break;
+		case 'upld':
+			upldHdlr();
+			break;
+		case 'RtData':
+			loadRtMgrForm();
+			break;
+		case 'DnldJiWen':
+			$("#tabDataFrame").load("./dnldJiWenForm.php #forDnld");
+			break;
+		case 'DnldPaiWei':
+			$("#tabDataFrame").load("./dnldPaiWeiForm.php #forDnld");
+			break; 		
+	} // switch()
+} // function tabClick()
 
 /**********************************************************
  * Enable Tooltip to Show Hover Message                   *
@@ -981,20 +1122,3 @@ function enableTooltip() {
 	$(document).tooltip({content: hoverMsg});
 	$(document).tooltip("enable");
 } // enableTooltip()
-	
-
-/**********************************************************
- * Document Ready                                         *
- **********************************************************/
-$(document).ready(function() {
-	readSessParam();
-	/*
-	 * Due to AJAX asynchronous nature, binding handlers to buttons are done in
-	 * readSessParam() when ajax receives the response from the Server.
-	 */
-	$(".future").on( 'click', futureAlert );
-	$(".soon").on( 'click', soonAlert );
-	$(".pgMenu th[data-urlIdx]").on('click', function() {
-		location.replace( _url2Go[$(this).attr("data-urlIdx")] );
-	});
-}) // document ready

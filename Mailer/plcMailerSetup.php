@@ -95,7 +95,7 @@ function plcSendEmailAttachment( $to, $cc, $subject, $html_msg, $txt_msg, $attac
     }
     
     // Cc Recipients
-    if ( ( $cc != null ) || ( sizeof( $cc ) > 0 ) ) {
+    if ( ( $cc != null ) && ( sizeof( $cc ) > 0 ) ) {
         foreach ( $cc as $recipient ) {
             $mail->addCC( $recipient[ 'email' ], $recipient[ 'name' ] );     // Add a recipient; name is optional
         }

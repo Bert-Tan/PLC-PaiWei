@@ -9,6 +9,7 @@
         <table class="pgMenu centerMeV">	
             <thead>
                 <tr>
+                    <th data-urlIdx="urlWebsiteHome"><?php echo xLate( 'WebsiteHome' ); ?></th>
 <?php
     if ( $sessType != SESS_TYP_USR ) {
 ?>		

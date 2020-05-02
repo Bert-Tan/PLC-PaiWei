@@ -31,7 +31,7 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-	<?php require_once("./AdmPgHeader.htm"); ?>
+	<?php require_once("./AdmPgHeader.php"); ?>
 	<div class="dataArea">
 		<div class="dataTitle centerMe" style="font-size: 2.0em;">請點選管理功能</div>
 	</div>

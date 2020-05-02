@@ -7,10 +7,11 @@
 		<th style="width: {cellWidth}">{htmlFldName}</th>
 		<!-- END hdr_cell -->
 		<!-- BEGIN dataEditCol -->
-		<th>
+		<th style="line-height: 2px;">
 			<input type="button" id="addRowBtn" value="{addBtnTxt}">&nbsp;
+			<input type="button" id="delAllBtn" value="{delAllBtnTxt}"><br><br> <!-- second 'br' add space between button rows -->
 			<input type="button" id="srchBtn" value="{srchBtnTxt}">&nbsp;
-			<input type="button" id="delAllBtn" value="{delAllBtnTxt}">
+			<input type="button" id="validAllBtn" value="{validAllBtnTxt}">
 		</th>
 		<!-- END dataEditCol -->
     </tr>

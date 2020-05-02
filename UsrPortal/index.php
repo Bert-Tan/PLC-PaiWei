@@ -10,6 +10,9 @@
 	function xLate( $what ) {
 		global $sessLang;
 		$htmlNames = array (
+			'WebsiteHome' => array (
+				SESS_LANG_CHN => "回到<br/>網站首頁",
+				SESS_LANG_ENG => "Back to<br/>Homepage" ),
 			'htmlTitle' => array (
 				SESS_LANG_CHN => "淨土念佛堂一般用戶主頁",
 				SESS_LANG_ENG => "Pure Land Center User Portal" ),
@@ -23,8 +26,9 @@
 				SESS_LANG_CHN => "早課<br/>祈福迴向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Merit Dedication" ),
 			'featFuture' => array (
-				SESS_LANG_CHN => "其他未來會提供的功能<br/>(結緣法寶申請，等等。)",
-				SESS_LANG_ENG => "Future:<br/>(Dharma Items Request; etc.)" ),
+				//?????
+				SESS_LANG_CHN => "其他未來會提供的功能",
+				SESS_LANG_ENG => "Future<br/>Functions" ),
 			'logOut' => array (
 				SESS_LANG_CHN => "用戶<br/>撤出",
 				SESS_LANG_ENG => "User<br/>Logout" ),

@@ -1,10 +1,8 @@
 var _url2Go = {
+    'urlWebsiteHome' : "https://www.amitabhalibrary.org/",
     'urlAdmHome' : "../AdmPortal/index.php",
     'urlUmgr' : "../AdmPortal/AdmUMgr.php", /* test only; real path: "../AdmPortal/AdmUMgr.php", */
-    'urlRtData' : "../PaiWei/rtMgr.php", /* test only; real path: "../PaiWei/rtMgr.php", */
-    'urlDnldJiWen' : "../PaiWei/dnldJiWenForm.php",
-    'urlDnld' : "../PaiWei/dnldPaiWeiForm.php",
-    'url4Others' : "../PaiWei/Dashboard.php",
+    'urlPaiWeiMgr' : "../PaiWei/paiweiMgr.php",
     'urlSundayMgr' : "../Sunday/sundayMgr.php",
     'usrLogout' : "../Login/Logout.php"
 } // anchors where each pgMenu TH points to
