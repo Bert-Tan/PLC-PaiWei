@@ -80,12 +80,9 @@
 		$tpl->setCurrentBlock("dashboardBody");
 		foreach ( $allNames as $Name ) {
 			$icoName = $Name[ 'UsrName' ];
-			$_db->query("LOCK TABLES `sundayRq2Usr` READ;");
-			$rslt = $_db->query("SELECT `TblName` FROM `sundayRq2Usr` WHERE `UsrName` = \"{$icoName}\";");
-			$_db->query("UNLOCK TABLES;");
-			$tpl->setCurrentBlock("dashboardRow");			
+			$tpl->setCurrentBlock("dashboardRow");
 			$tpl->setVariable("usrName", $icoName);
-			$tpl->setVariable("rowSum", $rslt->num_rows);
+			$rowSum = 0;
 			foreach ( $tblNames as $tblName ) {
 				$tpl->setCurrentBlock("dashboardCell");
 				$_db->query("LOCK TABLES `sundayRq2Usr` READ, `sundayRq2Days` READ;");							
@@ -98,8 +95,11 @@
 				$_db->query("UNLOCK TABLES;");
 				$tpl->setVariable("tblName", $tblName);
 				$tpl->setVariable("usrTblSum", $rslt->num_rows);
+				$rowSum = $rowSum + $rslt->num_rows;
 				$tpl->parse("dashboardCell");
 			} // loop over tables
+			$tpl->setCurrentBlock("dashboardRow");
+			$tpl->setVariable("rowSum", $rowSum);
 			$tpl->parse("dashboardRow");
 		} // loop over all Names to construct row data
 		$tpl->parse("dashboardBody");

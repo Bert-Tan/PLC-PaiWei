@@ -50,13 +50,9 @@ $testTxt_Msg = "Test sending email attachments using SMTP: Success!";
 // Instantiation and passing `true` enables exceptions
 $mail = new PHPMailer(true);    // $mail->setLanguage( 'ch' ); needed for debug only
 $mail->CharSet = 'UTF-8';
+$mail->AllowEmpty = true; // allow empty email body
 
-// DKIM settings
-$mail->DKIM_selector = DKIM_selector;
-$mail->DKIM_domain = DKIM_domain;
-$mail->DKIM_identity = DKIM_identity;
-$mail->DKIM_passphrase = DKIM_passphrase;
-$mail->DKIM_private = DKIM_private;
+
 
 // Server settings
 if ( $_os == 'DAR' || $_os == 'WIN' ) {
@@ -79,14 +75,24 @@ if ( $_os == 'DAR' || $_os == 'WIN' ) {
 $mail->setFrom( FROM_ADDR, APPEARANCE );
 $mail->addReplyTo( REPLY_TO, APPEARANCE );
 
-function plcSendEmailAttachment( $to, $cc, $subject, $html_msg, $txt_msg, $attachments ) {
+function plcSendEmailAttachment( $to, $cc, $subject, $html_msg, $txt_msg, $attachments, $dkim ) {
     global $mail;
     /*
      * $to, $cc:    Array of recipients. each element has ( <email>, <name> )
      * $html_msg:   Message Body in HTML format
      * $txt_msg:    Message Body in plain text format
-     * $attachments:Array of files, each element has ( <full path to the file>, <filename to appear> )
+     * $attachments: Array of files, each element has ( <full path to the file>, <filename to appear> )
+     * $dkim:       use DKIM or not
      */
+
+     // DKIM settings
+    if ( $dkim ) {        
+        $mail->DKIM_selector = DKIM_selector;
+        $mail->DKIM_domain = DKIM_domain;
+        $mail->DKIM_identity = DKIM_identity;
+        $mail->DKIM_passphrase = DKIM_passphrase;
+        $mail->DKIM_private = DKIM_private;
+    }
 
     //Recipients
     if ( ( $to == null ) || ( sizeof( $to ) == 0 ) ) return;
@@ -112,7 +118,7 @@ function plcSendEmailAttachment( $to, $cc, $subject, $html_msg, $txt_msg, $attac
     }
  
     // Attachments
-    if ( ( $attachments != null ) || ( sizeof($attachments) > 0 ) ) {
+    if ( ( $attachments != null ) && ( sizeof($attachments) > 0 ) ) {
         foreach ( $attachments as $attachment  ) {
             $mail->addAttachment( $attachment[ 'path' ], $attachment[ 'name' ] );  
         }
@@ -129,6 +135,6 @@ function plcSendEmailAttachment( $to, $cc, $subject, $html_msg, $txt_msg, $attac
 } // function plcSendEmailAttachment()
 
 // test call to the function
-//    plcSendEmailAttachment( $prtTo, null, $testSubject, $testHtml_Msg, $testTxt_Msg, $testAttachments );
-
+    //plcSendEmailAttachment( $prtTo, null, $testSubject, $testHtml_Msg, $testTxt_Msg, $testAttachments, false );
+   
 ?>

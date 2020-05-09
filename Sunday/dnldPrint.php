@@ -5,7 +5,7 @@
 	require_once("plcMailerSetup.php");
 
 	//pdf file path and name
-	$pdfPath = DOCU_ROOT. "/QifuReqReport\/";
+	$pdfPath = DOCU_ROOT. "/QifuReqReport/";
 	$pdfTitle = "QifuMeritReq-" . date('Y-m-d');
 	$pdfName = $pdfTitle . '.pdf';
 		
@@ -86,57 +86,54 @@
 	
 	//get data
 	getData(); 
-	
-	//print Sunday Qifu data
-	printData($qifuDataArray, $qifuHeaderData, $qifuCellHeightArray, $qifuHeaderHeight, $qifuCellWidthArray, $qifuDateStrHeightArray, $qifuTableTitle);
-	
-	//print Sunday Merit data
-	printData($meritDataArray, $meritHeaderData, $meritCellHeightArray, $meritHeaderHeight, $meritCellWidthArray, $meritDateStrHeightArray, $meritTableTitle);
+
+	// no request for this coming Sunday
+	if ($qifuDataArray == null && $meritDataArray == null) {
+		$pdf->AddPage(); //add a page
+		//print no Qifu/Merit request msg
+		$pdf->Cell($totalWidth, 0, '本週日（'.date('Y-m-d').'）沒有祈福回向申請', 0, 0, 'L', false);
+	}
+	if ($qifuDataArray != null) {
+		//print Sunday Qifu data
+		printData($qifuDataArray, $qifuHeaderData, $qifuCellHeightArray, $qifuHeaderHeight, $qifuCellWidthArray, $qifuDateStrHeightArray, $qifuTableTitle);
+	}
+	if ($meritDataArray != null) {
+		//print Sunday Merit data
+		printData($meritDataArray, $meritHeaderData, $meritCellHeightArray, $meritHeaderHeight, $meritCellWidthArray, $meritDateStrHeightArray, $meritTableTitle);
+	}	
 	
 	//Close and output PDF document
 	if( isset($_GET[ 'view' ]) && $_GET[ 'view' ]=='true' ) { //view in web browser
 		$pdf->Output($pdfName, 'I');
 	}
 	else { //send to PLC printer
-		$pdf->Output($pdfPath . $pdfName, 'F');
+		// no request for this coming Sunday
+		if ($qifuDataArray == null && $meritDataArray == null) {
+			$msg = "There is NO Qifu/Merit request for this Sunday (" . date('Y-m-d'). ").";
+			$attachments = null;
+		}
+		else {
+			$pdf->Output($pdfPath . $pdfName, 'F');
 
-		$prtTo = array (
-			array (
-				'email' => 'plc-mfc@hpeprint.com',
-				'name' => "Printer @ PLC"
-			)
-		);	
-		$plcCc = array (
-			array (
+			$msg = "";
+			$attachments = array (
+				array (
+					'path' => $pdfPath . $pdfName,
+					'name' =>  $pdfName
+				)
+			);
+		}
+
+		$libraryTo = array (
+			array (				
 				'email' => 'library@amitabhalibrary.org',
 				'name' => "Pure Land Center"
 			)
-		);
-		/*
-		$testTo = array (
-			array (
-				'email' => 'chunhui.guo01@gmail.com',
-				'name'  => '郭春輝'
-			)
 		);	
-		$testCc = array (
-			array (
-				'email' => 'bert.tan@comcast.net',
-				'name'  => '譚祖德'
-			)
-		);
-		*/
-		$attachments = array (
-			array (
-				'path' => $pdfPath . $pdfName,
-				'name' =>  $pdfName
-			)
-		);
-		$subject = $pdfTitle;
-		$msg = "Attached is the Sunday Qifu and Merit request report for ". date('Y-m-d') . ".";
+		$subject = $pdfTitle;			
 
-		//plcSendEmailAttachment( $testTo, $testCc, $subject, $msg, null, $attachments);
-		plcSendEmailAttachment( $prtTo, $plcCc, $subject, $msg, null, $attachments);
+		//send email
+		plcSendEmailAttachment( $libraryTo, null, $subject, $msg, null, $attachments, false);
 	}
 	
 
@@ -296,8 +293,12 @@
 		*/
 		
 		//pre-process data
-		preprocessData($qifuDataArray, $qifuHeaderData, $qifuCellHeightArray, $qifuHeaderHeight, $qifuCellWidthArray, $qifuDateStrHeightArray);
-		preprocessData($meritDataArray, $meritHeaderData, $meritCellHeightArray, $meritHeaderHeight, $meritCellWidthArray, $meritDateStrHeightArray);
+		if ($qifuDataArray != null) {
+			preprocessData($qifuDataArray, $qifuHeaderData, $qifuCellHeightArray, $qifuHeaderHeight, $qifuCellWidthArray, $qifuDateStrHeightArray);
+		}
+		if ($meritDataArray != null) {
+			preprocessData($meritDataArray, $meritHeaderData, $meritCellHeightArray, $meritHeaderHeight, $meritCellWidthArray, $meritDateStrHeightArray);
+		}
 	}
 	
 	//data pre-process:
