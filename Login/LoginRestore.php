@@ -106,7 +106,7 @@
 					$msg->setVariable("reset_param", $href_param );
 					$msg->parse("{$txtBlock}");
 					$msg->parse("msgBlock");
-					if ( plcSendEmailAttachment( $toMe, null, $subject, $msg->get(), null, null ) ) {
+					if ( plcSendEmailAttachment( $toMe, null, $subject, $msg->get(), null, null, true ) ) {
 						$msgTxt = ( $useChn)
 							? "恢復密碼的網鍊已經送到您註冊過的郵電地址，請由那網鍊處重新設立密碼。"
 							: "A link was sent to your registered email address; please follow it to reset.";

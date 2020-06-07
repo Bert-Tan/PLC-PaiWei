@@ -107,14 +107,14 @@
 		$pdf->Output($pdfName, 'I');
 	}
 	else { //send to PLC printer
+		$pdf->Output($pdfPath . $pdfName, 'F');
+		
 		// no request for this coming Sunday
 		if ($qifuDataArray == null && $meritDataArray == null) {
 			$msg = "There is NO Qifu/Merit request for this Sunday (" . date('Y-m-d'). ").";
 			$attachments = null;
 		}
 		else {
-			$pdf->Output($pdfPath . $pdfName, 'F');
-
 			$msg = "";
 			$attachments = array (
 				array (
@@ -127,13 +127,13 @@
 		$libraryTo = array (
 			array (				
 				'email' => 'library@amitabhalibrary.org',
-				'name' => "Pure Land Center"
+				'name' => 'Pure Land Center'
 			)
 		);	
-		$subject = $pdfTitle;			
+		$subject = $pdfTitle;		
 
 		//send email
-		plcSendEmailAttachment( $libraryTo, null, $subject, $msg, null, $attachments, false);
+		plcSendEmailAttachment( $libraryTo, null, $subject, $msg, null, $attachments, true);
 	}
 	
 
