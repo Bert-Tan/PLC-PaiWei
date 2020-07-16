@@ -1,0 +1,16 @@
+h2 {
+    text-align: center;
+    letter-spacing: 1px;
+    color: blue;
+    text-align: center;
+}
+
+.dharmaItemsRuleTxt {
+    text-align: center;
+    width: 95%;
+    margin: auto;
+    margin-top: 2vh;
+    padding: 0px 3px;
+    font-size: 20px;
+    border: 5px solid black;
+}

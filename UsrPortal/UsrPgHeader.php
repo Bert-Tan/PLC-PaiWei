@@ -22,6 +22,7 @@
     }
 ?>                    
                     <th data-urlIdx="urlPaiWei"><?php echo xLate( 'featPW' ); ?></th>
+                    <th data-urlIdx="urlDharmaItems"><?php echo xLate( 'featDharmaItems' ); ?></th>
                     <th data-urlIdx="urlSunday"><?php echo xLate( 'featSun' ); ?></th>
                     <th class="future"><?php echo xLate( 'featFuture' ); ?></th>
                     <th data-urlIdx="usrLogout"><?php echo xLate( 'logOut' ); ?></div>

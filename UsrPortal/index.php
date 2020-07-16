@@ -22,11 +22,14 @@
 			'featPW' => array (
 				SESS_LANG_CHN => "申請<br/>法會牌位",
 				SESS_LANG_ENG => "Name Plaque for<br/>Retreat Merit Dedication" ),
+			'featDharmaItems' => array (
+				SESS_LANG_CHN => "申請<br/>結緣法寶",
+				SESS_LANG_ENG => "Name Plaque for<br/>Retreat Merit Dedication" ),
 			'featSun' => array (
-				SESS_LANG_CHN => "早課<br/>祈福迴向",
+				SESS_LANG_CHN => "申請早課<br/>祈福迴向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Merit Dedication" ),
 			'featFuture' => array (
-				SESS_LANG_CHN => "其他未來會提供的功能",
+				SESS_LANG_CHN => "未來其他功能",
 				SESS_LANG_ENG => "Future<br/>Functions" ),
 			'logOut' => array (
 				SESS_LANG_CHN => "用戶<br/>撤出",

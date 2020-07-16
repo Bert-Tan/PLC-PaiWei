@@ -25,7 +25,7 @@
 				SESS_LANG_ENG => "Name Plaque for<br/>Retreat Merit Dedication" ),
 			'featDharmaItems' => array (
 				SESS_LANG_CHN => "申請<br/>結緣法寶",
-				SESS_LANG_ENG => "Name Plaque for<br/>Retreat Merit Dedication" ),	
+				SESS_LANG_ENG => "Name Plaque for<br/>Retreat Merit Dedication" ),
 			'featSun' => array (
 				SESS_LANG_CHN => "申請早課<br/>祈福回向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Merit Dedication" ),
@@ -35,18 +35,21 @@
 			'logOut' => array (
 				SESS_LANG_CHN => "用戶<br/>撤出",
 				SESS_LANG_ENG => "User<br/>Logout" ),
-			'qifuTitle' => array (
-				SESS_LANG_CHN => "週日早課<br/>申請祈福與回向",
-				SESS_LANG_ENG => "Sunday Chanting<br/>Application for Well-wishing&nbsp;&amp;&nbsp;Merit Dedication" ),
-			'ruleTab' => array (
-				SESS_LANG_CHN => "申請要求與辦法",
-				SESS_LANG_ENG => "Application Requirements" ),
-			'qifuTab' => array (
-				SESS_LANG_CHN => "祈福申請表",
-				SESS_LANG_ENG => "Well-wishing Request Form" ),
-			'meritTab' => array (
-				SESS_LANG_CHN => "回向申請表",
-				SESS_LANG_ENG => "Merit Dedication Request Form" ),
+			'dharmaItemsTitle' => array (
+				SESS_LANG_CHN => "結緣法寶申請辦法",
+				SESS_LANG_ENG => "Dharma Items Application Procedure" ),
+			'dharmaItemsAlert' => array (
+				SESS_LANG_CHN => "*** 請您仔細閱讀下列注意事項 ***",
+				SESS_LANG_ENG => "*** Please carefully read this note before submitting an application ***" ),
+			'dharmaItemsRuleTab' => array (
+				SESS_LANG_CHN => "結緣法寶申請要求與辦法",
+				SESS_LANG_ENG => "Dharma Item Application Requirements" ),
+			'dharmaItemsReqTab' => array (
+				SESS_LANG_CHN => "結緣法寶申請表",
+				SESS_LANG_ENG => "Dharma Item Request Form" ),
+			'dharmaItemsRqrTab' => array (
+				SESS_LANG_CHN => "結緣法寶申請人資料",
+				SESS_LANG_ENG => "Dharma Item Requestor Information" ),
 			'gongDeZhuTab' => array (
 				SESS_LANG_CHN => "申請做功德主",
 				SESS_LANG_ENG => "Request to Serve as<br/>A Ceremony Sponsor" ),
@@ -84,19 +87,19 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="../master.css">
 <link rel="stylesheet" type="text/css" href="../tabmenu-h.css">
-<link rel="stylesheet" type="text/css" href="./sundayRules.css">
+<link rel="stylesheet" type="text/css" href="./DharmaItemsRules.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="../futureAlert.js"></script>
 <script src="../UsrPortal/UsrCommon.js"></script>
-<script src="./Sunday.js"></script>
-<script src="./sundayMgr.js"></script>
+<script src="./DharmaItems.js"></script>
+<!-- script src="./sundayMgr.js"></script -->
 <script type="text/javascript">
 $(document).ready(function() {
     $(".future").on( 'click', futureAlert );
     $("th[data-urlIdx]").on( 'click', function() {
         location.replace( _url2Go[ $(this).attr( "data-urlIdx" ) ]);
     });
-    readSundayParam();
+    init_done();
 })
 </script>
 <style type="text/css">
@@ -194,22 +197,22 @@ table.dialog {
 	<table class="tabMenu">
 		<thead>
 			<tr>
-				<?php    if ( $sessType == SESS_TYP_USR ) {    ?>
-				<th data-table="sundayRule"><?php echo xLate( 'ruleTab' ); ?></th>
-				<?php    } else {    ?>
+			<?php    if ( $sessType == SESS_TYP_USR ) {    ?>
+				<th data-table="dharmaItemsRules"><?php echo xLate( 'dharmaItemsRuleTab' ); ?></th>
+			<?php    } else {    ?>
+				<!-- Some Admin Functions for Dharma Items to be done here -->
 				<th data-table="sundayParam"><?php echo xLate( 'setDueTime' ); ?></th>
 				<th data-table="dnldPrint"><?php echo xLate( 'dnldPrint' ); ?></th>
-				<?php    }    ?>
+			<?php    }    ?>
 
-				<th data-table="sundayQifu"><?php echo xLate( 'qifuTab' ); ?></th>
-				<th data-table="sundayMerit"><?php echo xLate( 'meritTab' ); ?></th>
-				<!-- <th class="future" data-table="sundayGongDeZhu"><?php echo xLate( 'gongDeZhuTab' ); ?></th> -->
+				<th data-table="dharmaItemsRqrInfo"><?php echo xLate( 'dharmaItemsRqrTab' ); ?></th>
+				<th data-table="dharmaItemsReqForm"><?php echo xLate( 'dharmaItemsReqTab' ); ?></th>
 			</tr>
 		</thead>
 	</table>
 	<div class="dataArea">
-		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'qifuTitle' ); ?></h2>
-		<h2 style="color: darkred; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'present' ); ?></h2>
+		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'dharmaItemsTitle' ); ?></h2>
+		<h2 style="color: darkred; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'dharmaItemsAlert' ); ?></h2>
 		<div id="tabDataFrame">
 			<!-- Frame to load Tab Data -->				
 		</div><!-- tabDataFrame -->	

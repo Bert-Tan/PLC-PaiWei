@@ -4,6 +4,7 @@ var _url2Go = {
     'urlUsrHome' : "../UsrPortal/index.php",
     'urlPaiWei' : "../PaiWei/index.php",
     "urlDnld" : "../PaiWei/dnldPaiWeiForm.php",
+    'urlDharmaItems' : "../DharmaItems/index.php",
     'urlSunday' : "../Sunday/index.php",
     'usrLogout' : "../Login/Logout.php"
 } // anchors where each pgMenu TH points to
