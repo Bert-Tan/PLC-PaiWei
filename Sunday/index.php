@@ -25,7 +25,7 @@
 				SESS_LANG_ENG => "Name Plaque for<br/>Retreat Merit Dedication" ),
 			'featDharmaItems' => array (
 				SESS_LANG_CHN => "申請<br/>結緣法寶",
-				SESS_LANG_ENG => "Name Plaque for<br/>Retreat Merit Dedication" ),	
+				SESS_LANG_ENG => "Request for<br/>Dharma Items" ),	
 			'featSun' => array (
 				SESS_LANG_CHN => "申請早課<br/>祈福回向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Merit Dedication" ),

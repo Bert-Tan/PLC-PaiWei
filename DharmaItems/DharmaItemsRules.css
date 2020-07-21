@@ -7,10 +7,54 @@ h2 {
 
 .dharmaItemsRuleTxt {
     text-align: center;
-    width: 95%;
+    width: 96%;
     margin: auto;
-    margin-top: 2vh;
+    margin-top: 0.4vh;
     padding: 0px 3px;
     font-size: 20px;
-    border: 5px solid black;
+}
+
+.bulletItem {
+    margin-top: 1vh;
+    text-align: left;
+/*    border: 1px black solid; */
+}
+
+.dharmaItemsAppreciate {
+    text-align: center;
+    width: 50%;
+    margin: auto;
+    padding: 6px 0px;
+    font-size: 1.2em;
+    color: green;
+    border: 5px green solid;
+}
+
+dt {
+    font-weight: bold;
+}
+
+table.plcOrgs {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 1px solid black;
+    width: 90%;
+}
+
+table.plcOrgs th, td {
+    border: 1px solid black;
+}
+
+table.plcOrgs th {
+    height: 2.0em;
+    color: white;
+    background-color: #00b300;
+    vertical-align: middle;
+    text-align: center;
+}
+
+table.plcOrgs td {
+    padding-left: 1vw;
+    color: black;
+    background-color: #ffffe6;
 }
