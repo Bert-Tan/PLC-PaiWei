@@ -1,7 +1,7 @@
 <?php
 /**********************************************************
- *               Sunday QiFu / HuiXiang Page              *
- *                  admin/Sunday/index.php                *
+ *                Dharma Items Request Page               *
+ *               admin/DharmaItems/index.php              *
  **********************************************************/
  
 	require_once( '../pgConstants.php' );
@@ -47,21 +47,9 @@
 			'dharmaItemsReqTab' => array (
 				SESS_LANG_CHN => "結緣法寶申請表",
 				SESS_LANG_ENG => "Dharma Item Request Form" ),
-			'dharmaItemsRqrTab' => array (
-				SESS_LANG_CHN => "結緣法寶申請人資料",
-				SESS_LANG_ENG => "Dharma Item Requestor Information" ),
-			'gongDeZhuTab' => array (
-				SESS_LANG_CHN => "申請做功德主",
-				SESS_LANG_ENG => "Request to Serve as<br/>A Ceremony Sponsor" ),
-			'setDueTime' => array (
-                SESS_LANG_CHN => "設定祈福迴向申請截止時間",
-                SESS_LANG_ENG => "" ),  // management function - Chinese only
-            'dnldPrint' => array (
-                SESS_LANG_CHN => "下載列印祈福迴向啟請資料",
-                SESS_LANG_ENG => "" ),  // management function - Chinese only
-			'present' => array (
-				SESS_LANG_CHN => "**** 申請人務必親自、或有指定代表出席參加，否則恕不受理 ****",
-				SESS_LANG_ENG => "**** The Requestor or a Delegate Must Be Present ****" ),
+			'addrInfoTab' => array (
+				SESS_LANG_CHN => "結緣法寶寄送資料",
+				SESS_LANG_ENG => "Dharma Item Shipping Information" )
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
@@ -98,8 +86,8 @@ $(document).ready(function() {
     $(".future").on( 'click', futureAlert );
     $("th[data-urlIdx]").on( 'click', function() {
         location.replace( _url2Go[ $(this).attr( "data-urlIdx" ) ]);
-    });
-    init_done();
+	});
+	readDI_Param();
 })
 </script>
 <style type="text/css">
@@ -118,26 +106,42 @@ $(document).ready(function() {
 		height: 84vh;
 		margin-top: 0px;
 		border: 2px solid green; /* same as the active tab color */
+/*
     	box-sizing: border-box;
     	-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
-	}
-	table.dataHdr, table.dataRows {
-		table-layout: auto;
-	}
-/*
-	table.dataHdr th:last-child, table.dataRows td:last-child {
-		padding-left: 1px;
-		padding-right: 1px;
-	}
  */
-	table.dataHdr th, table.dataRows td {
-		height: 22px;
+	}
+
+	table.dataRows {
+		width: 85%;
+		margin: auto;
+		font-size: 1.2em;
+	}
+
+	table.dataRows th, table.dataRows td {
+		height: 1.5em;
 		line-height: 1.2em;
 	}
 
-	table.dataRows tr td:not(:last) {
-		text-align: left;		
+	table.dataRows td {
+		padding-left: 1vw;
+		padding-right: 1vw;
+		padding-bottom: 0.5vw;
+		text-align: left;
+	}
+	
+	table.dataRows th {
+		color: white;
+		background-color: #00b300;
+		font-size: 1.25em;
+		padding-top: 1vh;
+		padding-bottom: 1vh;
+	}
+	
+	table.dataRows tbody tr:last-child td {
+		text-align: center;
+		height: 2.0em;
 	}
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
@@ -149,10 +153,7 @@ $(document).ready(function() {
 		overflow-y: auto;
 	}
 
-	input {
-		font-size: 1.0em;
-	}
-	input[type=button] {
+	table.dataRows input[type=button] {
 		font-size: 1.0em;
 		background-color: aqua;
 		text-align: center;
@@ -160,11 +161,8 @@ $(document).ready(function() {
 		border: 1px solid blue;
 		border-radius: 4px;
 	}
-	input[type=text] {
+	table.dataRows input[type=text] {
 		width: 100%;
-		box-sizing: border-box;
-    	-moz-box-sizing: border-box;
-    	-webkit-box-sizing: border-box;
 	}
 
 /* for Admin Dialog box */
@@ -201,18 +199,15 @@ table.dialog {
 				<th data-table="dharmaItemsRules"><?php echo xLate( 'dharmaItemsRuleTab' ); ?></th>
 			<?php    } else {    ?>
 				<!-- Some Admin Functions for Dharma Items to be done here -->
-				<th data-table="sundayParam"><?php echo xLate( 'setDueTime' ); ?></th>
-				<th data-table="dnldPrint"><?php echo xLate( 'dnldPrint' ); ?></th>
 			<?php    }    ?>
-
-				<th data-table="dharmaItemsRqrInfo"><?php echo xLate( 'dharmaItemsRqrTab' ); ?></th>
+				<th data-table="addrInfoForm"><?php echo xLate( 'addrInfoTab' ); ?></th>
 				<th data-table="dharmaItemsReqForm"><?php echo xLate( 'dharmaItemsReqTab' ); ?></th>
 			</tr>
 		</thead>
 	</table>
 	<div class="dataArea">
-		<h2 class="dataTitle" style="letter-spacing: <?php echo $ltrSpacing; ?>; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'dharmaItemsTitle' ); ?></h2>
-		<h2 style="color: darkred; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'dharmaItemsAlert' ); ?></h2>
+		<h2 class="dataTitle" id="dt" style="letter-spacing: <?php echo $ltrSpacing; ?>; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'dharmaItemsTitle' ); ?></h2>
+		<h2 id="dtAlert" style="color: darkred; margin-top: <?php echo $h2TopMargin; ?>;"><?php echo xLate( 'dharmaItemsAlert' ); ?></h2>
 		<div id="tabDataFrame">
 			<!-- Frame to load Tab Data -->				
 		</div><!-- tabDataFrame -->	
