@@ -35,6 +35,11 @@ function appendUnique( thisStr, objStr ) {
     return ( objStr + ', ' + thisStr );
 } // function appendUnique()
 
+function replaceChinesePunctuation( dateString ) {
+    // replace Chinese punctuations (comma, slash, dash) in date strings
+    return dateString.replace( /，/g, "," ).replace( /／/g, "/" ).replace( /－/g, "-" );
+} // function replaceChinesePunctuation()
+
 function leapYr( yr ) {
     return( ( yr % 100 === 0 ) ? ( yr % 400 === 0 ) : ( yr % 4 === 0 ) );
 } // function leapYr()
@@ -316,6 +321,7 @@ function hdlr_dataChg() { // on Blur
         }
     }
     if ( fldN == 'Deceased_D' ) { // data change or input in 往生日期 field
+        newV = replaceChinesePunctuation( newV ); // replace Chinese punctuations
         // convert MM/DD/YYYY to YYYY-MM-DD        
         if( newV.match( /^(0?[1-9]|1[012])[\/\/](0?[1-9]|[12][0-9]|3[01])[\/\/]\d{4}$/) ) { // match MM/DD/YYYY
             var d = newV.split( /[\/\/]/ ); // d[0]: MM; d[1]: DD; d[2]: YYYY
@@ -335,7 +341,7 @@ function hdlr_dataChg() { // on Blur
 
     if ( fldN == 'reqDates' ) {
         // it could be for 祈福 (max 3 times), or for 迴向 (1 or upto 7 times ); need to validate
-        var dateStr = newV.replace("，", ",");
+        var dateStr = replaceChinesePunctuation( newV ); // replace Chinese punctuations
         var dateArray = dateStr.split( /,\s*/ );
         if ( dateArray[0].length == 0 ) dateArray.shift();
 
