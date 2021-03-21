@@ -23,7 +23,7 @@
 				SESS_LANG_CHN => "申請<br/>法會牌位",
 				SESS_LANG_ENG => "Name Plaque for<br/>Retreat Merit Dedication" ),
 			'featSun' => array (
-				SESS_LANG_CHN => "早課<br/>祈福迴向",
+				SESS_LANG_CHN => "早課<br/>祈福回向",
 				SESS_LANG_ENG => "Sunday Chanting<br/>Merit Dedication" ),
 			'featFuture' => array (
 				SESS_LANG_CHN => "其他未來會提供的功能",

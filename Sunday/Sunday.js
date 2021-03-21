@@ -147,7 +147,7 @@ function readSundayParam() {
 } // function readSundayParam()
 
 function init_done() {
-    var ackStart = ( _sessLang == SESS_LANG_CHN) ? "今天的祈福迴向申請已截止，祈福迴向將從下星期日開始！"
+    var ackStart = ( _sessLang == SESS_LANG_CHN) ? "今天的祈福回向申請已截止，祈福迴向將從下星期日開始！"
                                                  : "Today's request is overdue; submitted request will begin next Sunday";
     var defaultTbl = "sundayRule";
     if ( _tblName != null )  {
@@ -165,9 +165,12 @@ function init_done() {
     _startingSunday = new Date(); _startingSunday.setTime( _nowV + ( days2Sunday * 86400 * 1000 ) ); // tentative
     tY = _startingSunday.getFullYear(); tM = _startingSunday.getMonth();  tD = _startingSunday.getDate();
     expV = ( new Date( tY, tM, tD, _expHH, _expMM ) ).getTime();
-    if ( _nowV > expV ) {
-        if ( _now.getDay() == 0 ) { alert ( ackStart ); days2Sunday += 7; }   
-    }
+    // admin user can insert/edit data after request deadlilne
+    if (_sessType == 0) {
+        if ( _nowV > expV ) {
+            if ( _now.getDay() == 0 ) { alert ( ackStart ); days2Sunday += 7; }   
+        }
+    }    
     _startingSunday.setTime( _nowV + ( days2Sunday * 86400 * 1000 ) ); // recalculate
     tY = _startingSunday.getFullYear(); tM = _startingSunday.getMonth();  tD = _startingSunday.getDate();
     _startingSunday = new Date( tY, tM, tD );
@@ -377,6 +380,7 @@ function hdlr_dataChg() { // on Blur
                 alert( ackDateStart + _startingSundayStr + '!' );
             }
             newV = newVx;
+            $(this).val( newV );
         } // for 祈福消災; max 3 times
         if ( _tblName == 'sundayMerit' ) { // for 功德迴向
             // need to have the Deceased data; either it was just entered, or was being edited          
