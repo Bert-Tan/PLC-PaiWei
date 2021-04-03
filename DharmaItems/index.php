@@ -79,8 +79,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="../futureAlert.js"></script>
 <script src="../UsrPortal/UsrCommon.js"></script>
-<script src="./DharmaItems.js"></script>
-<!-- script src="./sundayMgr.js"></script -->
+<script src="./DI_shippAddr.js"></script>
+<script src="./DI_rqForm.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $(".future").on( 'click', futureAlert );
@@ -113,7 +113,7 @@ $(document).ready(function() {
  */
 	}
 
-	table.dataRows {
+	table.dataRows, table.dataHdr {
 		width: 85%;
 		margin: auto;
 		font-size: 1.2em;
@@ -163,6 +163,10 @@ $(document).ready(function() {
 	}
 	table.dataRows input[type=text] {
 		width: 100%;
+	}
+
+	table.dataRows input[type=checkbox] {
+		transform: scale(2.0);
 	}
 
 /* for Admin Dialog box */

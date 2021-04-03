@@ -1,5 +1,5 @@
 <!-- BEGIN shippingInfoForm -->
-<form id="shippingInfo" action="./ajax-DharmaItemsDB.php">
+<form id="shippingInfo" action="./ajax-DI_shippAddrDB.php">
     <table class="dataRows">
         <thead>
             <tr>

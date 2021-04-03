@@ -29,18 +29,13 @@ function isJSON( str ) {
     return false;
 } // isJSON()
 
-function chkAddrInfoRqmt( form ) {
-    // when insert a new Address Info, this function validates all required fields are filled
-    nonBlnkFlds = array ( 'Addressee', 'TelNo', 'Email', 'StNum', 'City', 'US_State', 'ZipCode');
-}
-
 function readDI_Param() {
     var ajaxData = {}, dbInfo = {}, rspX = null;
     dbInfo[ 'tblName' ] = 'di_Param'; // *** Not Used
     ajaxData[ 'dbReq' ] = 'readDI_Param';
     ajaxData[ 'dbInfo' ] = JSON.stringify ( dbInfo );
     $.ajax({
-        url: "./ajax-DharmaItemsDB.php",
+        url: "./ajax-DI_shippAddrDB.php",
         method: "post",
         data: ajaxData,
         success: function( rsp ) {
@@ -117,7 +112,7 @@ function loadShippingInfoForm( primary ) { // alert( "Passed in 'Primary' = " + 
     ajaxData[ 'dbReq' ] = 'dbReadAddrForm';
     ajaxData[ 'dbInfo' ] = JSON.stringify ( dbInfo );
     $.ajax({
-        url: "./ajax-DharmaItemsDB.php",
+        url: "./ajax-DI_shippAddrDB.php",
         method: "post",
         data: ajaxData,
         success: function( rsp ) { // alert( "Received:\n" + rsp ); return;
@@ -357,7 +352,7 @@ function hdlr_shippingInfoDel() {
     var cfrmAlt = ( _sessLang == SESS_LANG_CHN) ? "請確定要刪除此一地址？" : "Please confirm to delete!";
     var cfrmPrim = ( _sessLang == SESS_LANG_CHN) ? "請確定要刪除主要地址？" : "Please confirm to delete primary address!";
     var ajaxData = {}, dbInfo = {}, tblFlds = {}, rspX = null;
-    var myHdlr = $("form").prop('action'); // "./ajax-DharmaItemsDB.php";
+    var myHdlr = $("form").prop('action'); // "./ajax-DI_shippAddrDB.php";
     var thisAddrID = $("input[name=AddrID]").val();
     var cfrmMsg = '';
 

@@ -1,7 +1,7 @@
 <?php
 	require_once( '../pgConstants.php' );
 	require_once( 'dbSetup.php' );
-	require_once( 'DharmaItems_DBfuncs.php' );
+	require_once( 'DI_shippAddr_DBfuncs.php' );
 	require_once( 'ChkTimeOut.php' );
 	
 	$_sessType = $_SESSION[ 'sessType' ];
