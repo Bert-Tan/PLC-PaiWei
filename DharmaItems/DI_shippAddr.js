@@ -439,7 +439,7 @@ function hdlr_tabClick() {
         $("#dtAlert").text('');
         loadShippingInfoForm( true );
         break;
-    case 'dharmaItemsReqForm':
+    case 'dharmaItemsReqForm': // load Dharma Item Choices as the starting point
         $("#dt").text( _dt_diAppForm );
         $("#dtAlert").text('');
         alert( "Will load Request Application Form here" );

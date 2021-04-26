@@ -30,7 +30,7 @@
 	}
 
 	function parseCSV_XLS ( $line, &$rtnV ) {
-		global $_errCount, $_errRec;
+		global $_errCount, $_errRec, $_totCount;
 		$scratch = array();
 		$remainder = '';
 		
