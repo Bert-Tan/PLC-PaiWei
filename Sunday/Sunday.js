@@ -585,6 +585,7 @@ function hdlr_delBtn() {
 function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).closest("tr").html() );
     var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入完整的資料" : "Please enter complete data";
     //var exceedGongDeZhuMsg = ( _sessLang == SESS_LANG_CHN) ? "功德主已超過三人，您在等待名單中！" : "Sponsor requests exceed the max-limit, you are in the waiting list!";
+    var exceedQifuLimitMsg = ( _sessLang == SESS_LANG_CHN ) ? "您可以申請的次數是 " : "Your available request number is ";
     var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
     var delBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Del';
     var editBtn = $('<input class="editBtn" type="button" value="' + editBtnVal + '">');
@@ -673,6 +674,9 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
                         case 'exceedGongDeZhu':
                         return;  
                     */ 
+                    case 'exceedQifuLimit':
+                        alert(exceedQifuLimitMsg + rspX[X]);
+                        return;
                     default: // Error cases - details later
                         alert( 'Insert Error occurred; received: "' + rspX[X] + '"' );
                         return;
@@ -690,6 +694,7 @@ function hdlr_updBtn() {
     var ackMsg = ( _sessLang == SESS_LANG_CHN ) ? "祈福迴向資料更新完畢！" : "Update Completed!";
     var errMsg = ( _sessLang == SESS_LANG_CHN ) ? "祈福迴向資料更新發生錯誤！" : "Update Failed!";
     //var exceedGongDeZhuMsg = ( _sessLang == SESS_LANG_CHN) ? "功德主已超過三人，您在等待名單中！" : "Sponsor requests exceed the max-limit, you are in the waiting list!";
+    var exceedQifuLimitMsg = ( _sessLang == SESS_LANG_CHN ) ? "您可以申請的次數是 " : "Your available request number is ";
     var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
     var delBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Del';
     var editBtn = $('<input class="editBtn" type="button" value="' + editBtnVal + '">');
@@ -775,6 +780,9 @@ function hdlr_updBtn() {
                         case 'exceedGongDeZhu':
                             return;
                     */
+                   case 'exceedQifuLimit':
+                        alert(exceedQifuLimitMsg + rspX[X]);
+                        return;
                     default: // Error cases - details later
                         alert( 'Insert Error occurred; received: "' + rspX[X] + '"' );
                         cellsChanged.each(function(i) {
