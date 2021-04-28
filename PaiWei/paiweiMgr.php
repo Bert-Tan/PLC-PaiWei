@@ -58,12 +58,14 @@
 <script type="text/javascript" src="../futureAlert.js"></script>
 <script type="text/javascript" src="../AdmPortal/AdmCommon.js"></script>
 <script type="text/javascript" src="./paiweiMgr.js"></script>
+<script type="text/javascript" src="./dnldPaiWei.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	pgMenu_rdy(); // ../AdmPortal/AdmCommon.js file, javascript for header menu	
 	$(".tabMenu th").on( 'click', hdlr_tabClick_mgr );
 	$(".tabMenu th.future").unbind().on( 'click', futureAlert );
 	$("table.tabMenu th:first-child").trigger( 'click' );
+	readSessionParam();
 })
 </script>
 <style type="text/css">

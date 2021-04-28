@@ -1109,7 +1109,10 @@ function hdlr_tabClick() {
 			$("#tabDataFrame").load("./dnldJiWenForm.php #forDnld");
 			break;
 		case 'DnldPaiWei':
-			$("#tabDataFrame").load("./dnldPaiWeiForm.php #forDnld");
+			$("#tabDataFrame").load("./dnldPaiWeiForm.php #forDnld", function() {
+				$(".dnldCSVBtn").on( 'click', dnldCSVBtnHdlr );
+				$(".dnldPDFBtn").on( 'click', dnldPDFBtnHdlr );
+			});
 			break; 		
 	} // switch()
 } // function tabClick()
