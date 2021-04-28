@@ -70,7 +70,7 @@
 		<h2 style="margin-top: 4vh; text-align: center; letter-spacing: <?php echo $ltrSpacing; ?>;">
 		<?php echo xLate( 'frameTitle' ); ?>
 		</h2>
-		<form action="dnldPaiWeiPDF" method="post" enctype="multipart/form-data" id="dnldForm"
+		<form action="dnldPaiWeiPDF.php" method="post" enctype="multipart/form-data" id="dnldForm"
 			style="font-weight:bold; padding: 10px;">
 			<table class="dialog">
 				<thead><th><?php echo xLate( 'user' ); ?></th><th><?php echo xLate( 'pwType' ); ?></th></thead>
