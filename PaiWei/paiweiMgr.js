@@ -1,3 +1,13 @@
+/**********************************************************
+ *                    Global variables                    *
+ **********************************************************/
+ var SESS_LANG_CHN = 1;	// These variables are used as CONSTANTS
+ var SESS_TYP_USR = 0;
+ var SESS_TYP_MGR = 1;
+ var SESS_TYP_WEBMASTER = 2;
+ 
+ var _sessUsr = null, _sessType = null, _sessLang = null;
+
 var _activeTab = null;
 var _alertUnsaved = '未保存的更動會被丟棄！';
 
@@ -52,6 +62,36 @@ function chkDate_mgr ( dateString, formatOnly ) { // in YYYY-MM-DD format
 	var rtD = new Date( dateString );
 	return ( ( ( 1 <= Number(d[2]) ) && ( Number(d[2]) <= dd ) ) && ( ( D <= rtD ) && ( rtD < nxtD ) ) );
 } // function chkDate_mgr()
+
+function readSessionParam() {
+	_ajaxData = {}; _dbInfo = {};
+	_ajaxData[ 'dbReq' ] = 'readSessParam';
+	_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
+	$.ajax({
+		url: "./ajax-pwMgr.php",
+		method: 'POST',
+		data: _ajaxData,
+		success: function( rsp ) {
+			var rspV = JSON.parse ( rsp );			
+			for ( var X in rspV ) {
+				switch ( X ) {					
+					case 'usrName':
+						_sessUsr = rspV[X];
+						break;
+					case 'sessType':
+						_sessType = rspV[X];
+						break;
+					case 'sessLang':
+						_sessLang = rspV[X];
+						break;					
+				} // switch()
+			} // for loop
+		}, // Success Handler
+		error: function (jqXHR, textStatus, errorThrown) {
+			alert( "readSessionParam()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+		} // End of ERROR Handler							
+	}); // AJAX call
+} // readSessionParam()
 
 
 function loadPaiWeiDashboard() {
@@ -204,7 +244,7 @@ function loadRtMgrForm() {
 					$("input[name=pwExpires]").attr( 'data-oldV', $("input[name=pwExpires]").attr( 'value' ) );
 					$("select[name=rtEvent]").attr( 'data-oldV', $("select[name=rtEvent]").attr( 'value' ) );
 					$("input[name=rtReason]").attr( 'data-oldV', $("input[name=rtReason]").attr( 'value' ) );
-						if ( $("select[name=rtEvent]").val() != "ThriceYearning" ) {
+					if ( $("select[name=rtEvent]").val() != "ThriceYearning" ) {
 						$("input[name=rtReason]").prop("disabled", true ).val("不適用");
 					}
 					else {
@@ -381,11 +421,13 @@ function hdlr_tabClick_mgr() {
 		$("#tabDataFrame").load("./dnldJiWenForm.php #forDnld");
 		break;
 	case 'DnldPaiWei':
-		$("#tabDataFrame").load("./dnldPaiWeiForm.php #forDnld");			
+		$("#tabDataFrame").load("./dnldPaiWeiForm.php #forDnld", function() {
+			$(".dnldCSVBtn").on( 'click', dnldCSVBtnHdlr );
+			$(".dnldPDFBtn").on( 'click', dnldPDFBtnHdlr );
+		});
    	    break;
    	case 'PaiWeiDash':
 		loadPaiWeiDashboard();
    	    break;
    	} // switch()
 } // function hdlr_tabClick_mgr()
-

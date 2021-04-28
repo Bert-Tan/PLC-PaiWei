@@ -224,12 +224,12 @@
 		global $_db, $_errCount, $_errRec;
 
 		$escName = $_db->real_escape_string( $usrName );
-		$escPass = $_db->real_escape_string( $usrPass );		
+		$escPass = $_db->real_escape_string( $usrPass );
 	
 		if ( $sessType == SESS_TYP_USR ) {
-			$sql = "SELECT * FROM Usr WHERE `UsrName` = \"{$escName}\";";
+			$sql = "SELECT * FROM Usr WHERE `UsrName` = BINARY \"{$escName}\";";
 		} else {
-			$sql = "SELECT * FROM Usr WHERE UsrName = \"{$escName}\" AND ID IN "
+			$sql = "SELECT * FROM Usr WHERE `UsrName` = BINARY \"{$escName}\" AND ID IN "
 				 . "( SELECT ID FROM admUsr WHERE `SessTyp` = \"{$sessType}\" );";
 		}
 

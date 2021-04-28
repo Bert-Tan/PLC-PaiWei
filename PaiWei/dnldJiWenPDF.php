@@ -265,6 +265,21 @@
 				$xTitleJiwen=9.7; $xTitleShuwen=10.3;
 				setJizuJiwen(); setJizuShuwen();			
 				break;
+			case 'Anniversary':
+				$pdfTitle=$rtYear.'週年館慶祭文疏文'; $rtName = '週年館慶';
+				$strTitleJiwen='   祭  文';
+				$strTitleShuwen='   祭 祖 追 薦 疏 文';
+				$fontSizeJiwen=24; $fontSizeShuwen=20;
+				$fontSizeTitleJiwen=28; $fontSizeTitleShuwen = 24;
+				$rotateXadjustJiwen=1.0*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeJiwen, false);
+				$textXadjustJiwen=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeJiwen, false);
+				$rotateXadjustShuwen=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeShuwen, false);
+				$textXadjustShuwen=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeShuwen, false);
+				$xIniJiwen=9; $xStepJiwen=0.5; $yTopJiwen=0.5;
+				$xIniShuwen=9.3; $xStepShuwen=0.35; $yTopShuwen=0.5;
+				$xTitleJiwen=9.7; $xTitleShuwen=10;
+				setJizuJiwen(); setJizuShuwen();		
+				break;
 			case 'ThriceYearning':
 				$pdfTitle=$rtYear.'三時繫念疏文';
 				$strTitleShuwen='      一誠上達';

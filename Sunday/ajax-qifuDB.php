@@ -394,6 +394,18 @@ function insSundayTblData( $dbInfo ) {
 	global $_db, $_errRec, $_errCount, $_insCount, $_dupCount, $_dupRec;
 	$rpt = array();
 	$tblName = $dbInfo['tblName'];
+
+	// check vacant Qifu counts: three times within three months
+	if ($tblName == "sundayQifu") {
+		// return array (existingReqDateNum, newReqDateNum)
+		$reqDateNums = checkVacantQifuCounts(	$dbInfo['tblName'], $dbInfo['tblFlds'] );
+		
+		if($reqDateNums[0] + $reqDateNums[1] > 3) {
+			$rpt [ 'exceedQifuLimit' ] = (3 - $reqDateNums[0] < 0) ? 0 : (3 - $reqDateNums[0]);
+			return $rpt;
+		}		
+	}
+
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
 	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`;";
@@ -443,6 +455,18 @@ function updSundayTblData( $dbInfo ) {
 	$rpt = array();
 
 	$tblName = $dbInfo['tblName'];
+
+	// check vacant Qifu counts: three times within three months
+	if ($tblName == "sundayQifu") {
+		// return array (existingReqDateNum, newReqDateNum)
+		$reqDateNums = checkVacantQifuCounts(	$dbInfo['tblName'], $dbInfo['tblFlds'] );
+		
+		if($reqDateNums[0] + $reqDateNums[1] > 3) {
+			$rpt [ 'exceedQifuLimit' ] = (3 - $reqDateNums[0] < 0) ? 0 : (3 - $reqDateNums[0]);
+			return $rpt;
+		}		
+	}
+
 	$_db->autocommit(false);
 	$_db->begin_transaction(MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT);
 	$sql = "LOCK TABLES `{$tblName}`, `sundayRq2Usr`, `sundayRq2Days`;";

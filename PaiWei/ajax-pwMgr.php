@@ -249,12 +249,28 @@ function dashboardRedirect( $dbInfo ) {
 } // function dashboardRedirect()
 
 /**********************************************************
+ *				For readSessParam			   			  *
+ **********************************************************/
+function readSessParam( ) {
+	$rpt = array();
+
+	$rpt[ 'usrName'] = $_SESSION[ 'usrName' ];
+	$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
+	$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
+	
+	return $rpt;	
+} // function readSessParam()
+
+/**********************************************************
  *					Main Functional Code		    	   *
  **********************************************************/
 $_dbReq = $_POST[ 'dbReq' ];
 
 $_dbInfo = json_decode( $_POST [ 'dbInfo' ], true );
 switch ( $_dbReq ) {
+	case 'readSessParam':
+		echo json_encode( readSessParam( $_dbInfo ), JSON_UNESCAPED_UNICODE );
+		break;
 	case 'dbReadRtData':
 		echo json_encode( readRtData( $_dbInfo ), JSON_UNESCAPED_UNICODE );
 		break;
