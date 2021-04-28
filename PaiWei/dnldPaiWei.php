@@ -86,7 +86,9 @@
 		formHeaderData();
 		formPaiweiData(searchDB());
 			
+		$_BOM = pack("C*", 0xef,0xbb,0xbf);
 		$_FP = fopen( $_fileName, "w"); // Temp file handle
+		fputs( $_FP, $_BOM ); // write the BOM character to fix UTF-8 in Excel
 		foreach ($_data as $line) {
 			fputcsv( $_FP, $line );
 		}
