@@ -244,7 +244,7 @@ function loadRtMgrForm() {
 					$("input[name=pwExpires]").attr( 'data-oldV', $("input[name=pwExpires]").attr( 'value' ) );
 					$("select[name=rtEvent]").attr( 'data-oldV', $("select[name=rtEvent]").attr( 'value' ) );
 					$("input[name=rtReason]").attr( 'data-oldV', $("input[name=rtReason]").attr( 'value' ) );
-						if ( $("select[name=rtEvent]").val() != "ThriceYearning" ) {
+					if ( $("select[name=rtEvent]").val() != "ThriceYearning" ) {
 						$("input[name=rtReason]").prop("disabled", true ).val("不適用");
 					}
 					else {
