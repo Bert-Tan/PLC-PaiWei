@@ -284,7 +284,10 @@ input[type=text] {
 				<th data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th>	
 				<th data-tbl="D001A"><?php echo xLate( 'pwD' ); ?></th>
 				<th data-tbl="upld"><?php echo xLate( 'pwUpld' ); ?></th>
-				<th data-tbl="DnldPaiWei"><?php echo xLate( 'pwDnld' ); ?></th>
+				<?php
+					if ($sessType == SESS_TYP_USR)
+						echo "<th data-tbl='DnldPaiWei'>" . xLate( 'pwDnld' ) ."</th>";
+				?>				
 			</tr>
 		</thead>
 	</table>
