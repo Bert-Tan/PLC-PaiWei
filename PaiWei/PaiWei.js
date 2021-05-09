@@ -1053,6 +1053,11 @@ function ready_edit() {
 	_delAllBtn.on( 'click', delAllBtnHdlr );
 	_validBtn.on( 'click', validBtnHdlr );
 	_validAllBtn.on( 'click', validAllBtnHdlr );
+
+	// disable ValidAll button for DaPaiWei
+	if ( _tblName == "DaPaiWei" ) {
+		_validAllBtn.prop( "disabled", true );
+	}
 } // ready_edit()
 
 /**********************************************************
