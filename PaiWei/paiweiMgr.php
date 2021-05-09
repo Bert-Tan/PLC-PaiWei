@@ -179,6 +179,9 @@ table.dataHdr th select {
  	background-color: aqua;
  	border: 1px solid blue;
 }
+table.dataHdr th[data-icoName], table.dataRows td[data-icoName] {
+	width: 120pt;
+}
 </style>
 </head>
 <body>
