@@ -83,81 +83,94 @@
 	$addressArray = array(); //DiJiZhu address data
 	
 	getData(); //get data
-	$paiweiCount = ( count($paiweiArray)==0 ) ? count($reqArray) : count($paiweiArray);
-		
-	for($i=0; $i<ceil($paiweiCount/$paiweiNumPerPage); ++$i) {		
-		
-		//$subStr=array(); $widths=array(); $isChinese=array();
-		
+	
+	if(count($paiweiArray)==0 && count($reqArray)==0) { // NO PaiWei data to print 
+		$pdf->SetMargins(1,1);
 		$pdf->AddPage(); //add a page
-		//put PaiWei images
-		for ($j=0; $j<$paiweiNumPerPage; ++$j) {
-			$pdf->Image($imgPath, '', '', $imgWidth, $imgHeight, $imgType, '', 'T', true, 300, $imgAlign, false, false, 0, false, false, false);
-		}
-		//reset positions
-		$pdf->SetAbsXY(0, 0, false);
-		$xPaiwei = $xIniPaiwei;
-		$xReq = $xIniReq;
-		$xAddress = $xIniAddress;
+
+		$pdf->SetFont('cid0csh', 'B', 18);
+		$pdf->Write(0, '沒有（驗證過的）牌位！', '', 0, 'L', true, 0, false, false, 0);
+		$pdf->SetFont('times', 'B', 18);
+		$pdf->Write(0, 'There is NO (validated) name plaques!', '', 0, 'L', true, 0, false, false, 0);
+	}
+	else { // HAVE PaiWei data to print
+		$paiweiCount = ( count($paiweiArray)==0 ) ? count($reqArray) : count($paiweiArray);
 		
-		for($j=0; $j<$paiweiNumPerPage; ++$j) {
-			//print prefix and suffix of PaiWei
-			$pdf->SetFont($ChineseFont, $fontStylePaiwei, $fontSizePrefixPaiwei);
-			$pdf->Text($xPaiwei, $yPrefixPaiwei, $prefixPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
-			$pdf->Text($xPaiwei, $ySuffixPaiwei, $suffixPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);			
+		for($i=0; $i<ceil($paiweiCount/$paiweiNumPerPage); ++$i) {		
 			
-			$index = $i*$paiweiNumPerPage + $j; // data index in the array
-			$dataType = '';
+			//$subStr=array(); $widths=array(); $isChinese=array();
 			
-			//print PaiWei data
-			if(count($paiweiArray) > 0) {
-				$dataType = 'PaiWei';
-				if($index < $paiweiCount) //some PaiWei images maybe empty (no PaiWei information)
-					printStr($paiweiArray[$index], $fontStylePaiwei, $fontSizePaiwei, $xPaiwei, $yTopPaiwei, $yBottomPaiwei, $rotateXadjustPaiwei, $textXadjustPaiwei, $mulLineXadjustPaiwei, $dataType);
-				else { //empty PaiWei data, just print common PaiWei string (i.e., '氏歷代祖先')	
+			$pdf->AddPage(); //add a page
+			//put PaiWei images
+			for ($j=0; $j<$paiweiNumPerPage; ++$j) {
+				$pdf->Image($imgPath, '', '', $imgWidth, $imgHeight, $imgType, '', 'T', true, 300, $imgAlign, false, false, 0, false, false, false);
+			}
+			//reset positions
+			$pdf->SetAbsXY(0, 0, false);
+			$xPaiwei = $xIniPaiwei;
+			$xReq = $xIniReq;
+			$xAddress = $xIniAddress;
+			
+			for($j=0; $j<$paiweiNumPerPage; ++$j) {
+				//print prefix and suffix of PaiWei
+				$pdf->SetFont($ChineseFont, $fontStylePaiwei, $fontSizePrefixPaiwei);
+				$pdf->Text($xPaiwei, $yPrefixPaiwei, $prefixPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
+				$pdf->Text($xPaiwei, $ySuffixPaiwei, $suffixPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);			
+				
+				$index = $i*$paiweiNumPerPage + $j; // data index in the array
+				$dataType = '';
+				
+				//print PaiWei data
+				if(count($paiweiArray) > 0) {
+					$dataType = 'PaiWei';
+					if($index < $paiweiCount) //some PaiWei images maybe empty (no PaiWei information)
+						printStr($paiweiArray[$index], $fontStylePaiwei, $fontSizePaiwei, $xPaiwei, $yTopPaiwei, $yBottomPaiwei, $rotateXadjustPaiwei, $textXadjustPaiwei, $mulLineXadjustPaiwei, $dataType);
+					else { //empty PaiWei data, just print common PaiWei string (i.e., '氏歷代祖先')	
+						$pdf->SetFont($ChineseFont, $fontStylePaiwei, $fontSizePaiwei);
+						$pdf->Text($xPaiwei, $yPaiweiCommon, $commonStrPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);			
+					}
+				}
+				else { //paiWei data are common (i.e., '地基主' and '累劫冤親債主')
 					$pdf->SetFont($ChineseFont, $fontStylePaiwei, $fontSizePaiwei);
 					$pdf->Text($xPaiwei, $yPaiweiCommon, $commonStrPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);			
 				}
-			}
-			else { //paiWei data are common (i.e., '地基主' and '累劫冤親債主')
-				$pdf->SetFont($ChineseFont, $fontStylePaiwei, $fontSizePaiwei);
-				$pdf->Text($xPaiwei, $yPaiweiCommon, $commonStrPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);			
-			}
-		
-			//print requester data
-			if(count($reqArray) > 0) {
-				$dataType = 'Req';
-				if($index < $paiweiCount) { //some PaiWei images maybe empty (no requester information)
-					$lineNum = printStr($reqArray[$index], $fontStyleReq, $fontSizeReq, $xReq, $yTopReq, $yBottomReq, $rotateXadjustReq, $textXadjustReq, $mulLineXadjustReq, $dataType);
-					
-					//adjusted requester's prefix/suffix X position (center-aligned, multiple lines of requester information)
-					$xReqAdjusted = $xReq - ($lineNum-1)*$mulLineXadjustReq;
-					
-					//print requester's prefix and suffix
-					$pdf->SetFont($ChineseFont, $fontStyleReq, $fontSizePrefixReq);
-					$pdf->Text($xReqAdjusted, $yPrefixReq, $prefixReq, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
-					$pdf->Text($xReqAdjusted, $ySuffixReq, $reqSuffixArray[$index], false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
-				}
-				else { //empty requester data, just print requester's prefix and suffix
-					$pdf->SetFont($ChineseFont, $fontStyleReq, $fontSizePrefixReq);
-					$pdf->Text($xReq, $yPrefixReq, $prefixReq, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
-					$pdf->Text($xReq, $ySuffixReq, $suffixReq, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
-				}
-			}			
-		
-			//print DiJiZhu address data
-			if(count($addressArray) > 0) {
-				$dataType = 'Address';
-				if($index < $paiweiCount) //some PaiWei images maybe empty (no DiJiZhu address information)
-					printStr($addressArray[$index], $fontStyleAddress, $fontSizeAddress, $xAddress, $yTopAddress, $yBottomAddress, $rotateXadjustAddress, $textXadjustAddress, $mulLineXadjustAddress, $dataType);
-			}
 			
-			//calculate X position for the next PaiWei
-			$xPaiwei = $xPaiwei - $xStepPaiwei;
-			$xReq = $xReq - $xStepReq;
-			$xAddress = $xAddress - $xStepAddress;
-		}	
+				//print requester data
+				if(count($reqArray) > 0) {
+					$dataType = 'Req';
+					if($index < $paiweiCount) { //some PaiWei images maybe empty (no requester information)
+						$lineNum = printStr($reqArray[$index], $fontStyleReq, $fontSizeReq, $xReq, $yTopReq, $yBottomReq, $rotateXadjustReq, $textXadjustReq, $mulLineXadjustReq, $dataType);
+						
+						//adjusted requester's prefix/suffix X position (center-aligned, multiple lines of requester information)
+						$xReqAdjusted = $xReq - ($lineNum-1)*$mulLineXadjustReq;
+						
+						//print requester's prefix and suffix
+						$pdf->SetFont($ChineseFont, $fontStyleReq, $fontSizePrefixReq);
+						$pdf->Text($xReqAdjusted, $yPrefixReq, $prefixReq, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
+						$pdf->Text($xReqAdjusted, $ySuffixReq, $reqSuffixArray[$index], false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
+					}
+					else { //empty requester data, just print requester's prefix and suffix
+						$pdf->SetFont($ChineseFont, $fontStyleReq, $fontSizePrefixReq);
+						$pdf->Text($xReq, $yPrefixReq, $prefixReq, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
+						$pdf->Text($xReq, $ySuffixReq, $suffixReq, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);
+					}
+				}			
+			
+				//print DiJiZhu address data
+				if(count($addressArray) > 0) {
+					$dataType = 'Address';
+					if($index < $paiweiCount) //some PaiWei images maybe empty (no DiJiZhu address information)
+						printStr($addressArray[$index], $fontStyleAddress, $fontSizeAddress, $xAddress, $yTopAddress, $yBottomAddress, $rotateXadjustAddress, $textXadjustAddress, $mulLineXadjustAddress, $dataType);
+				}
+				
+				//calculate X position for the next PaiWei
+				$xPaiwei = $xPaiwei - $xStepPaiwei;
+				$xReq = $xReq - $xStepReq;
+				$xAddress = $xAddress - $xStepAddress;
+			}	
+		}		
 	}
+
 
 	//Close and output PDF document
 	$pdf->Output($pdfTitle.'.pdf', 'I');

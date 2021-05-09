@@ -71,5 +71,5 @@ function dnldCSVBtnHdlr() {
 	var emptyPwMsg = ( _sessLang == SESS_LANG_CHN ) ? '請選擇牌位！' : 'Please select name plaque type!';
 
 	if($("select[name=dbTblName]").val() == "")
-		alert(emptyPwMsg);	
+		alert(emptyPwMsg);
 } // dnldPDFBtnHdlr()

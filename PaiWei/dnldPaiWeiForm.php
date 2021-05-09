@@ -71,17 +71,22 @@
 		<?php echo xLate( 'frameTitle' ); ?>
 		</h2>
 		<form action="dnldPaiWeiPDF.php" method="post" enctype="multipart/form-data" id="dnldForm"
-			style="font-weight:bold; padding: 10px;">
+			style="font-weight:bold; padding: 10px;" target="_blank">
 			<table class="dialog">
 				<thead><th><?php echo xLate( 'user' ); ?></th><th><?php echo xLate( 'pwType' ); ?></th></thead>
 				<tr><!-- Selection Row -->
 			    <td>
-						<?php 
-							if ($sessType == SESS_TYP_USR)
-								echo $_SESSION[ 'usrName' ];
-							else						
-								echo userSelectionList();
-						?>
+					<?php
+						if ($sessType == SESS_TYP_USR) {
+							echo $_SESSION[ 'usrName' ];
+					?>
+							<input type="hidden" name="dnldUsrName" value="<?php echo $_SESSION[ 'usrName' ]; ?>" />
+					<?php
+						}
+						else {						
+							echo userSelectionList();
+						}	
+					?>
 			    </td>
 		    	<td>
 						<select name="dbTblName" style="font-size: 1.2em;" required>
@@ -96,12 +101,11 @@
 			    </td>
 			  </tr>
 			  <tr><!-- Submit Row -->
-			    <td colspan="2" style="text-align: center; vertical-align: middle; padding: 1vh 0px;">
-					<input class="dnldCSVBtn" type="button" value="<?php echo xLate( 'btn' ); if ($sessType != SESS_TYP_USR) echo " CSV"; ?>">	
-					<?php 
-						if ($sessType != SESS_TYP_USR)
-							echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class='dnldPDFBtn' type='submit' value='" . xLate( 'btn' ) . " PDF" . "'>";	
-					?>				
+			    <td style="text-align: center; vertical-align: middle; padding: 1vh 0px;">
+					<input id="dnldCSVBtn" type="button" value="<?php echo xLate( 'btn' ) . "&nbsp;&nbsp;CSV"; ?>">				
+			    </td>
+				<td style="text-align: center; vertical-align: middle; padding: 1vh 0px;">
+					<input id="dnldPDFBtn" type="submit" value="<?php echo xLate( 'btn' ) . "&nbsp;&nbsp;PDF"; ?>">				
 			    </td>
 		  	</tr>
 		  </table>

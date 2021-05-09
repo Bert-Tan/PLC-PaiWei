@@ -422,8 +422,8 @@ function hdlr_tabClick_mgr() {
 		break;
 	case 'DnldPaiWei':
 		$("#tabDataFrame").load("./dnldPaiWeiForm.php #forDnld", function() {
-			$(".dnldCSVBtn").on( 'click', dnldCSVBtnHdlr );
-			$(".dnldPDFBtn").on( 'click', dnldPDFBtnHdlr );
+			$("#dnldCSVBtn").on( 'click', dnldCSVBtnHdlr );
+			$("#dnldPDFBtn").on( 'click', dnldPDFBtnHdlr );
 		});
    	    break;
    	case 'PaiWeiDash':
