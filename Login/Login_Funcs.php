@@ -104,6 +104,21 @@
 			$_errRec[] = $errMsg;
 			return false;
 		}
+
+		// update password successfully, delete password reset token
+		$sql = "DELETE FROM UsrRst WHERE `ID` = \"{$usrID}\";";
+		$rslt = $_db->query( $sql );
+		if ( $_db->errno ) {
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
+			$_errCount++;
+			if (!DEBUG) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
+			return false;
+		}
+
 		return true;
 	} // updPass()
 
@@ -130,18 +145,7 @@
 		}
 		$row = $rslt->fetch_all( MYSQLI_ASSOC )[0];
 		$dbExpires = $row[ 'Expires' ];
-		$sql = "DELETE FROM UsrRst WHERE `ID` = \"{$usrID}\" ;"; // No longer needed
-		$rslt = $_db->query( $sql );
-		if ( $_db->errno ) {
-			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
-			$_errCount++;
-			if (!DEBUG) {
-				$_errRec[] = $errMsg;
-			} else {
-				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
-			}
-			return false;
-		}
+		
 		if ( time() > strtotime( $dbExpires ) ) {
 			$errMsg = ( $rspChn ) ? "恢復密碼的請求已過期！" : "Reset Timer Expired!";
 			$_errCount++;
@@ -200,10 +204,31 @@
 		}
 
 		$row = $rslt->fetch_all( MYSQLI_ASSOC )[0];
-		$myID = $row [ 'ID' ];
-		$myToken = password_hash( date(DateFormatSQL, time() ), PASSWORD_BCRYPT, [ 'cost' => HASH_COST ] );
+		$myID = $row [ 'ID' ];		
+		$sql = "SELECT `Token` FROM UsrRst WHERE `ID` = {$myID};";
+		$rslt = $_db->query( $sql );
+		if ( $_db->errno ) {
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
+			$_errCount++;
+			if (!DEBUG) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
+			return false;
+		}
+
+		$myToken = null;
 		$myExpiration = date( DateFormatSQL, strtotime( ' + 30 minutes' ) );
-		$sql = "INSERT INTO UsrRst ( ID, Token, Expires ) VALUES ( {$myID}, \"{$myToken}\", \"{$myExpiration}\" );";
+		if ( $rslt->num_rows == 0 ) { // no existing token, insert
+			$myToken = password_hash( date(DateFormatSQL, time() ), PASSWORD_BCRYPT, [ 'cost' => HASH_COST ] );
+			$sql = "INSERT INTO UsrRst ( ID, Token, Expires ) VALUES ( {$myID}, \"{$myToken}\", \"{$myExpiration}\" );";
+		}
+		else { // exist a token, update expire time
+			$myToken = $rslt->fetch_all( MYSQLI_ASSOC )[0]['Token'];
+			$sql = "UPDATE UsrRst SET Expires = \"{$myExpiration}\" WHERE `ID` = {$myID};";
+		}		
+
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
 			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
@@ -269,6 +294,21 @@
 			return false;
 		}
 		$rtnV[ 'usrEmail' ]  = $row[ 'UsrEmail' ];
+
+		// login successfully, delete password reset token
+		$sql = "DELETE FROM UsrRst WHERE `ID` = \"{$row[ 'ID' ]}\";";
+		$rslt = $_db->query( $sql );
+		if ( $_db->errno ) {
+			$errMsg = ( $rspChn ) ? "資料庫內部錯誤!" : "DB internal error!";
+			$_errCount++;
+			if (!DEBUG) {
+				$_errRec[] = $errMsg;
+			} else {
+				$_errRec[] = __FUNCTION__ . '() ' . __LINE__ . ":&nbsp;$_db->error;&nbsp;{$errMsg}";
+			}
+			return false;
+		}
+
 		return true;
 	} // validateUser()
 

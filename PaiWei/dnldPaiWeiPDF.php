@@ -2,6 +2,9 @@
 	require_once("../pgConstants.php");
 	require_once("dbSetup.php");
 	require_once("PaiWei_DBfuncs.php");
+
+	session_start(); // create or retrieve
+	$sessLang = $_SESSION[ 'sessLang' ];
 	
 	$paiweiTable = $_POST [ 'dbTblName' ]; //PaiWei type
 	
@@ -88,10 +91,14 @@
 		$pdf->SetMargins(1,1);
 		$pdf->AddPage(); //add a page
 
-		$pdf->SetFont('cid0csh', 'B', 18);
-		$pdf->Write(0, '沒有（驗證過的）牌位！', '', 0, 'L', true, 0, false, false, 0);
-		$pdf->SetFont('times', 'B', 18);
-		$pdf->Write(0, 'There is NO (validated) name plaques!', '', 0, 'L', true, 0, false, false, 0);
+		if($sessLang == SESS_LANG_CHN) {
+			$pdf->SetFont('cid0csh', 'B', 18);
+			$pdf->Write(0, '沒有（驗證過的）'.xLate($paiweiTable).'！', '', 0, 'L', true, 0, false, false, 0);
+		}
+		else {
+			$pdf->SetFont('times', 'B', 18);
+			$pdf->Write(0, 'There is NO (validated) '.xLate($paiweiTable).'!', '', 0, 'L', true, 0, false, false, 0);
+		}		
 	}
 	else { // HAVE PaiWei data to print
 		$paiweiCount = ( count($paiweiArray)==0 ) ? count($reqArray) : count($paiweiArray);
@@ -322,7 +329,7 @@
 				break;
 		}
 
-		session_start();
+		//session_start();
 		$lastRtrtDate = $_SESSION[ 'lastRtrtDate' ];
 		if(! isset($lastRtrtDate)) {
 			$rslt = $_db->query("SELECT * FROM `pwParam`;");
@@ -580,4 +587,30 @@
 		
 		return $newStrsArray;
 	}
+
+
+	function xLate( $what ) {
+		global $sessLang;
+		$htmlNames = array (			
+			'C001A' => array (
+				SESS_LANG_CHN => "祈福消災牌位",
+				SESS_LANG_ENG => "Well Blessing name plaque" ),
+			'D001A' => array (
+				SESS_LANG_CHN => "地基主蓮位",
+				SESS_LANG_ENG => "Site Guardians name plaque" ),
+			'L001A' => array (
+				SESS_LANG_CHN => "歷代祖先蓮位",
+				SESS_LANG_ENG => "Ancestors name plaque" ),
+			'W001A_4' => array (
+				SESS_LANG_CHN => "往生者蓮位",
+				SESS_LANG_ENG => "Deceased name plaque" ),
+			'Y001A' => array (
+				SESS_LANG_CHN => "累劫冤親債主蓮位",
+				SESS_LANG_ENG => "Karmic Creditors name plaque" ),
+			'DaPaiWei' => array (
+				SESS_LANG_CHN => "一年內往生者大牌位",
+				SESS_LANG_ENG => "Recently Deceased name plaque" )			
+		);
+		return $htmlNames[ $what ][ $sessLang ];
+	} // function xLate();
 ?>
