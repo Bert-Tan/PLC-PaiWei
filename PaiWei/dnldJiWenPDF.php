@@ -274,8 +274,8 @@
 				$textXadjustJiwen=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeJiwen, false);
 				$rotateXadjustShuwen=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeShuwen, false);
 				$textXadjustShuwen=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeShuwen, false);
-				$xIniJiwen=9; $xStepJiwen=0.5; $yTopJiwen=0.5;
-				$xIniShuwen=9.3; $xStepShuwen=0.35; $yTopShuwen=0.5;
+				$xIniJiwen=9; $xStepJiwen=0.5; $yTopJiwen=0.35;
+				$xIniShuwen=9.3; $xStepShuwen=0.35; $yTopShuwen=0.4;
 				$xTitleJiwen=9.7; $xTitleShuwen=10;		
 				break;
 			case 'ThriceYearning':
@@ -352,7 +352,7 @@
 		
 		$str = array();
 		if ($rtEvent == 'Anniversary') {
-			array_push($str, 'BLUE'.$annivYear);
+			array_push($str, 'BLUE'.$annivYear.' ');
 			array_push($str, 'BLUE'.$rtName.' ');
 		}
 		else {
@@ -400,7 +400,7 @@
 		$str = array();		
 		if ($rtEvent == 'Anniversary') {
 			array_push($str, 'BLACK茲值本念佛堂 ');
-			array_push($str, 'BLUE'.$annivYear);
+			array_push($str, 'BLUE'.$annivYear.' ');
 			array_push($str, 'BLUE'.$rtName.' ');
 		}
 		else {
