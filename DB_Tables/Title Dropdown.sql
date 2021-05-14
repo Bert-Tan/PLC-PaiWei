@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS pwParam_wtList
+(
+	ID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	tName Varchar (20),
+    tLang ENUM ( 'Chn', 'Eng' ),
+	UNIQUE ( tName )
+) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS pwParam_rtList
+(
+	ID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	tName Varchar (20),
+    tLang ENUM ( 'Chn', 'Eng' ),
+	UNIQUE ( tName )
+) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;

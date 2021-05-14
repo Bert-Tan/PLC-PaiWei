@@ -30,7 +30,7 @@
 		<h2 style="margin-top: 4vh; text-align: center; letter-spacing: 20px;">
 			下載列印祭文與疏文
 		</h2>		
-		<form action="dnldJiWenPDF.php" method="post" id="dnldJiWen" style="font-weight:bold; padding: 10px;">
+		<form action="dnldJiWenPDF.php" method="post" id="dnldJiWen" style="font-weight:bold; padding: 10px;" target="_blank">
 			<table class="dialog">
 				<thead><th>法會祭、疏文類別</th><th>下載列印指令</th></thead>
 				<tbody>

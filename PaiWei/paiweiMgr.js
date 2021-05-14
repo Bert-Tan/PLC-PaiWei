@@ -231,6 +231,10 @@ function loadRtMgrForm() {
 					case 'rtReason':
 						$("input[name=rtReason]").val( rspX[X] );
 						$("input[name=rtReason]").attr( 'value', rspX[X] );
+						break;
+					case 'annivYear':
+						$("input[name=annivYear]").val( rspX[X] );
+						$("input[name=annivYear]").attr( 'value', rspX[X] );
 						break;	
 					case 'lastRtrtDate':
 						break;	
@@ -244,11 +248,19 @@ function loadRtMgrForm() {
 					$("input[name=pwExpires]").attr( 'data-oldV', $("input[name=pwExpires]").attr( 'value' ) );
 					$("select[name=rtEvent]").attr( 'data-oldV', $("select[name=rtEvent]").attr( 'value' ) );
 					$("input[name=rtReason]").attr( 'data-oldV', $("input[name=rtReason]").attr( 'value' ) );
+					$("input[name=annivYear]").attr( 'data-oldV', $("input[name=annivYear]").attr( 'value' ) );
 					if ( $("select[name=rtEvent]").val() != "ThriceYearning" ) {
 						$("input[name=rtReason]").prop("disabled", true ).val("不適用");
 					}
 					else {
 						$("input[name=rtReason]").prop("disabled", false ); // Allow edit
+						/* do not want to set value because it could be read from the DB */
+					}
+					if ( $("select[name=rtEvent]").val() != "Anniversary" ) {
+						$("input[name=annivYear]").prop("disabled", true ).val("不適用");
+					}
+					else {
+						$("input[name=annivYear]").prop("disabled", false ); // Allow edit
 						/* do not want to set value because it could be read from the DB */
 					}
 				}
@@ -307,6 +319,18 @@ function hdlr_dataChg() {
 				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
 				return;
 			}	
+			break;			
+		case 'annivYear':	
+			if ( newV == '不適用' || newV == '請輸入週年年數' ) {
+				alert( "請輸入週年館慶年數!" );
+				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
+				return;
+			}
+			if ( newV.match(/^\d+$/) == null ) {
+				alert( "週年館慶年數必須是整數!" );
+				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
+				return;
+			}
 			break;
 	} // switch()
 	
@@ -325,6 +349,11 @@ function selChange() {
 	} else {
 		$("input[name=rtReason]").prop("disabled", false ).val("請輸入法會因緣");
 	}
+	if ( chgdTo != "Anniversary" ) {
+		$("input[name=annivYear]").prop("disabled", true ).val("不適用");
+	} else {
+		$("input[name=annivYear]").prop("disabled", false ).val("請輸入週年年數");
+	}
 } // function selChange()
 
 function updRetreatData() {
@@ -339,6 +368,7 @@ function updRetreatData() {
 	var pwDate = $("input[name=pwExpires]").val(); var pwD = new Date(pwDate);
 	var rtEvent = $("select[name=rtEvent]").val();
 	var rtRsn = $("input[name=rtReason]").val();
+	var annivYear = $("input[name=annivYear]").val();
 
 	if ( rtEvent == "" ) {
 		alert( "請選擇法會類別！" ); return;
@@ -352,8 +382,17 @@ function updRetreatData() {
 	if ( rtEvent == "ThriceYearning" && ( rtRsn == '不適用' || rtRsn == '請輸入法會因緣') ) {
 		alert( "請輸入三時繫念法會因緣!" ); return;
 	}
+	if ( rtEvent == "Anniversary" && ( annivYear == '不適用' || annivYear == '請輸入週年年數') ) {
+		alert( "請輸入週年館慶年數!" ); return;
+	}
+	if ( rtEvent == "Anniversary" && annivYear.match(/^\d+$/) == null ) {
+		alert( "週年館慶年數必須是整數!" ); return;
+	}
 	if ( rtEvent != "ThriceYearning" ) {
-		rtRsn = "";
+		rtRsn = null;
+	}
+	if ( rtEvent != "Anniversary" ) {
+		annivYear = null;
 	}
 
 	var ajaxData = {}, dbInfo = {};
@@ -364,6 +403,7 @@ function updRetreatData() {
 	dbInfo[ 'pwExpires' ] = pwDate;
 	dbInfo[ 'rtEvent' ] = rtEvent;
 	dbInfo[ 'rtReason' ] = rtRsn;
+	dbInfo[ 'annivYear' ] = annivYear;
 	ajaxData[ 'dbReq' ] = 'dbUpdRtData';
 	ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
 	$.ajax({
