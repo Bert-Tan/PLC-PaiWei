@@ -1,3 +1,13 @@
+/**********************************************************
+ *                    Global variables                    *
+ **********************************************************/
+ var SESS_LANG_CHN = 1;	// These variables are used as CONSTANTS
+ var SESS_TYP_USR = 0;
+ var SESS_TYP_MGR = 1;
+ var SESS_TYP_WEBMASTER = 2;
+ 
+ var _sessUsr = null, _sessType = null, _sessLang = null;
+
 var _activeTab = null;
 var _alertUnsaved = '未保存的更動會被丟棄！';
 
@@ -52,6 +62,36 @@ function chkDate_mgr ( dateString, formatOnly ) { // in YYYY-MM-DD format
 	var rtD = new Date( dateString );
 	return ( ( ( 1 <= Number(d[2]) ) && ( Number(d[2]) <= dd ) ) && ( ( D <= rtD ) && ( rtD < nxtD ) ) );
 } // function chkDate_mgr()
+
+function readSessionParam() {
+	_ajaxData = {}; _dbInfo = {};
+	_ajaxData[ 'dbReq' ] = 'readSessParam';
+	_ajaxData[ 'dbInfo' ] = JSON.stringify ( _dbInfo );
+	$.ajax({
+		url: "./ajax-pwMgr.php",
+		method: 'POST',
+		data: _ajaxData,
+		success: function( rsp ) {
+			var rspV = JSON.parse ( rsp );			
+			for ( var X in rspV ) {
+				switch ( X ) {					
+					case 'usrName':
+						_sessUsr = rspV[X];
+						break;
+					case 'sessType':
+						_sessType = rspV[X];
+						break;
+					case 'sessLang':
+						_sessLang = rspV[X];
+						break;					
+				} // switch()
+			} // for loop
+		}, // Success Handler
+		error: function (jqXHR, textStatus, errorThrown) {
+			alert( "readSessionParam()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+		} // End of ERROR Handler							
+	}); // AJAX call
+} // readSessionParam()
 
 
 function loadPaiWeiDashboard() {
@@ -191,6 +231,10 @@ function loadRtMgrForm() {
 					case 'rtReason':
 						$("input[name=rtReason]").val( rspX[X] );
 						$("input[name=rtReason]").attr( 'value', rspX[X] );
+						break;
+					case 'annivYear':
+						$("input[name=annivYear]").val( rspX[X] );
+						$("input[name=annivYear]").attr( 'value', rspX[X] );
 						break;	
 					case 'lastRtrtDate':
 						break;	
@@ -204,11 +248,19 @@ function loadRtMgrForm() {
 					$("input[name=pwExpires]").attr( 'data-oldV', $("input[name=pwExpires]").attr( 'value' ) );
 					$("select[name=rtEvent]").attr( 'data-oldV', $("select[name=rtEvent]").attr( 'value' ) );
 					$("input[name=rtReason]").attr( 'data-oldV', $("input[name=rtReason]").attr( 'value' ) );
-						if ( $("select[name=rtEvent]").val() != "ThriceYearning" ) {
+					$("input[name=annivYear]").attr( 'data-oldV', $("input[name=annivYear]").attr( 'value' ) );
+					if ( $("select[name=rtEvent]").val() != "ThriceYearning" ) {
 						$("input[name=rtReason]").prop("disabled", true ).val("不適用");
 					}
 					else {
 						$("input[name=rtReason]").prop("disabled", false ); // Allow edit
+						/* do not want to set value because it could be read from the DB */
+					}
+					if ( $("select[name=rtEvent]").val() != "Anniversary" ) {
+						$("input[name=annivYear]").prop("disabled", true ).val("不適用");
+					}
+					else {
+						$("input[name=annivYear]").prop("disabled", false ); // Allow edit
 						/* do not want to set value because it could be read from the DB */
 					}
 				}
@@ -267,6 +319,18 @@ function hdlr_dataChg() {
 				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
 				return;
 			}	
+			break;			
+		case 'annivYear':	
+			if ( newV == '不適用' || newV == '請輸入週年年數' ) {
+				alert( "請輸入週年館慶年數!" );
+				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
+				return;
+			}
+			if ( newV.match(/^\d+$/) == null ) {
+				alert( "週年館慶年數必須是整數!" );
+				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
+				return;
+			}
 			break;
 	} // switch()
 	
@@ -285,6 +349,11 @@ function selChange() {
 	} else {
 		$("input[name=rtReason]").prop("disabled", false ).val("請輸入法會因緣");
 	}
+	if ( chgdTo != "Anniversary" ) {
+		$("input[name=annivYear]").prop("disabled", true ).val("不適用");
+	} else {
+		$("input[name=annivYear]").prop("disabled", false ).val("請輸入週年年數");
+	}
 } // function selChange()
 
 function updRetreatData() {
@@ -299,6 +368,7 @@ function updRetreatData() {
 	var pwDate = $("input[name=pwExpires]").val(); var pwD = new Date(pwDate);
 	var rtEvent = $("select[name=rtEvent]").val();
 	var rtRsn = $("input[name=rtReason]").val();
+	var annivYear = $("input[name=annivYear]").val();
 
 	if ( rtEvent == "" ) {
 		alert( "請選擇法會類別！" ); return;
@@ -312,8 +382,17 @@ function updRetreatData() {
 	if ( rtEvent == "ThriceYearning" && ( rtRsn == '不適用' || rtRsn == '請輸入法會因緣') ) {
 		alert( "請輸入三時繫念法會因緣!" ); return;
 	}
+	if ( rtEvent == "Anniversary" && ( annivYear == '不適用' || annivYear == '請輸入週年年數') ) {
+		alert( "請輸入週年館慶年數!" ); return;
+	}
+	if ( rtEvent == "Anniversary" && annivYear.match(/^\d+$/) == null ) {
+		alert( "週年館慶年數必須是整數!" ); return;
+	}
 	if ( rtEvent != "ThriceYearning" ) {
-		rtRsn = "";
+		rtRsn = null;
+	}
+	if ( rtEvent != "Anniversary" ) {
+		annivYear = null;
 	}
 
 	var ajaxData = {}, dbInfo = {};
@@ -324,6 +403,7 @@ function updRetreatData() {
 	dbInfo[ 'pwExpires' ] = pwDate;
 	dbInfo[ 'rtEvent' ] = rtEvent;
 	dbInfo[ 'rtReason' ] = rtRsn;
+	dbInfo[ 'annivYear' ] = annivYear;
 	ajaxData[ 'dbReq' ] = 'dbUpdRtData';
 	ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
 	$.ajax({
@@ -381,11 +461,13 @@ function hdlr_tabClick_mgr() {
 		$("#tabDataFrame").load("./dnldJiWenForm.php #forDnld");
 		break;
 	case 'DnldPaiWei':
-		$("#tabDataFrame").load("./dnldPaiWeiForm.php #forDnld");			
+		$("#tabDataFrame").load("./dnldPaiWeiForm.php #forDnld", function() {
+			$("#dnldCSVBtn").on( 'click', dnldCSVBtnHdlr );
+			$("#dnldPDFBtn").on( 'click', dnldPDFBtnHdlr );
+		});
    	    break;
    	case 'PaiWeiDash':
 		loadPaiWeiDashboard();
    	    break;
    	} // switch()
 } // function hdlr_tabClick_mgr()
-

@@ -150,12 +150,12 @@ function updRtData( $dbInfo ) {
 
     if ( strlen( $dbInfo['ID'] ) == 0 ) {
 		$tupID = null;
-		$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`, `rtEvent`, `rtReason` ) VALUE "
-			 . "( \"{$dbInfo['rtrtDate']}\", \"{$dbInfo['pwExpires']}\", \"{$dbInfo['rtEvent']}\", \"{$dbInfo['rtReason']}\");";
+		$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`, `rtEvent`, `rtReason`,  `annivYear`) VALUE "
+			 . "( \"{$dbInfo['rtrtDate']}\", \"{$dbInfo['pwExpires']}\", \"{$dbInfo['rtEvent']}\", \"{$dbInfo['rtReason']}\", \"{$dbInfo['annivYear']}\");";
 	} else {
 		$tupID = $dbInfo[ 'ID' ];
 		$sql = "UPDATE `pwParam` SET `pwExpires` = \"{$dbInfo[ 'pwExpires' ]}\", `rtrtDate` = \"{$dbInfo[ 'rtrtDate' ]}\", "
-			 . "`rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\" ";
+			 . "`rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\", `annivYear` = \"{$dbInfo['annivYear']}\" ";
 		// update "lastRtrtDate" field
 		if ($dbInfo[ 'rtrtDate' ] != $dbInfo[ 'lastRtrtDate' ]) {
 			$sql = $sql . ", `lastRtrtDate` = \"{$dbInfo[ 'lastRtrtDate' ]}\" ";	
@@ -195,6 +195,7 @@ function readRtData( $dbInfo ) {
 			$rpt[ 'pwExpires' ] = "請輸入牌位申請截止日期";
 			$rpt[ 'rtEvent' ] = "";
 			$rpt[ 'rtReason' ] = "請輸入法會因緣";
+			$rpt[ 'annivYear' ] = "請輸入週年年數";
 			$rpt[ 'lastRtrtDate' ] = "";
 			return $rpt;
 		case 1:
@@ -249,12 +250,28 @@ function dashboardRedirect( $dbInfo ) {
 } // function dashboardRedirect()
 
 /**********************************************************
+ *				For readSessParam			   			  *
+ **********************************************************/
+function readSessParam( ) {
+	$rpt = array();
+
+	$rpt[ 'usrName'] = $_SESSION[ 'usrName' ];
+	$rpt[ 'sessType' ] = $_SESSION[ 'sessType' ];
+	$rpt[ 'sessLang' ] = $_SESSION[ 'sessLang' ];
+	
+	return $rpt;	
+} // function readSessParam()
+
+/**********************************************************
  *					Main Functional Code		    	   *
  **********************************************************/
 $_dbReq = $_POST[ 'dbReq' ];
 
 $_dbInfo = json_decode( $_POST [ 'dbInfo' ], true );
 switch ( $_dbReq ) {
+	case 'readSessParam':
+		echo json_encode( readSessParam( $_dbInfo ), JSON_UNESCAPED_UNICODE );
+		break;
 	case 'dbReadRtData':
 		echo json_encode( readRtData( $_dbInfo ), JSON_UNESCAPED_UNICODE );
 		break;

@@ -30,7 +30,7 @@
 		<h2 style="margin-top: 4vh; text-align: center; letter-spacing: 20px;">
 			下載列印祭文與疏文
 		</h2>		
-		<form action="dnldJiWenPDF.php" method="post" id="dnldJiWen" style="font-weight:bold; padding: 10px;">
+		<form action="dnldJiWenPDF.php" method="post" id="dnldJiWen" style="font-weight:bold; padding: 10px;" target="_blank">
 			<table class="dialog">
 				<thead><th>法會祭、疏文類別</th><th>下載列印指令</th></thead>
 				<tbody>
@@ -41,6 +41,7 @@
 								<option value="Qingming">清明祭祖法會</option>
 								<option value="Zhongyuan">中元祭祖法會</option>
 								<option value="ThriceYearning">三時繫念佛事法會</option>
+								<option value="Anniversary">週年館慶祭祖法會</option>
 							</select>
 						</td>
 						<td style="text-align: center; vertical-align: middle; padding: 1vh 0px;">

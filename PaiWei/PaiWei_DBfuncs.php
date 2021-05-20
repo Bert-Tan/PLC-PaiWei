@@ -216,7 +216,7 @@ function validPaiWeiUsrTuple( $pwTable, $usr ) { // echo "Table= $pwTable; User=
 
 	$currDate = date("Y-m-d");
 	$sql = "UPDATE {$pwTable} SET `timestamp` = \"{$currDate}\" WHERE `ID` IN "
-		 . "(SELECT `pwID` FROM `pw2Usr` WHERE `tblName` = \"{$pwTable}\" AND `pwUsrName` = \"{$usr}\");";	
+		 . "(SELECT `pwID` FROM `pw2Usr` WHERE `tblName` = \"{$pwTable}\" AND `pwUsrName` = \"{$usr}\");";
 	$_db->query( $sql );
 
 	if ( $_db->errno ) {

@@ -35,6 +35,11 @@ function appendUnique( thisStr, objStr ) {
     return ( objStr + ', ' + thisStr );
 } // function appendUnique()
 
+function replaceChinesePunctuation( dateString ) {
+    // replace Chinese punctuations (comma, slash, dash) in date strings
+    return dateString.replace( /，/g, "," ).replace( /／/g, "/" ).replace( /－/g, "-" );
+} // function replaceChinesePunctuation()
+
 function leapYr( yr ) {
     return( ( yr % 100 === 0 ) ? ( yr % 400 === 0 ) : ( yr % 4 === 0 ) );
 } // function leapYr()
@@ -142,7 +147,7 @@ function readSundayParam() {
 } // function readSundayParam()
 
 function init_done() {
-    var ackStart = ( _sessLang == SESS_LANG_CHN) ? "今天的祈福迴向申請已截止，祈福迴向將從下星期日開始！"
+    var ackStart = ( _sessLang == SESS_LANG_CHN) ? "今天的祈福回向申請已截止，祈福迴向將從下星期日開始！"
                                                  : "Today's request is overdue; submitted request will begin next Sunday";
     var defaultTbl = "sundayRule";
     if ( _tblName != null )  {
@@ -160,9 +165,12 @@ function init_done() {
     _startingSunday = new Date(); _startingSunday.setTime( _nowV + ( days2Sunday * 86400 * 1000 ) ); // tentative
     tY = _startingSunday.getFullYear(); tM = _startingSunday.getMonth();  tD = _startingSunday.getDate();
     expV = ( new Date( tY, tM, tD, _expHH, _expMM ) ).getTime();
-    if ( _nowV > expV ) {
-        if ( _now.getDay() == 0 ) { alert ( ackStart ); days2Sunday += 7; }   
-    }
+    // admin user can insert/edit data after request deadlilne
+    if (_sessType == 0) {
+        if ( _nowV > expV ) {
+            if ( _now.getDay() == 0 ) { alert ( ackStart ); days2Sunday += 7; }   
+        }
+    }    
     _startingSunday.setTime( _nowV + ( days2Sunday * 86400 * 1000 ) ); // recalculate
     tY = _startingSunday.getFullYear(); tM = _startingSunday.getMonth();  tD = _startingSunday.getDate();
     _startingSunday = new Date( tY, tM, tD );
@@ -316,6 +324,7 @@ function hdlr_dataChg() { // on Blur
         }
     }
     if ( fldN == 'Deceased_D' ) { // data change or input in 往生日期 field
+        newV = replaceChinesePunctuation( newV ); // replace Chinese punctuations
         // convert MM/DD/YYYY to YYYY-MM-DD        
         if( newV.match( /^(0?[1-9]|1[012])[\/\/](0?[1-9]|[12][0-9]|3[01])[\/\/]\d{4}$/) ) { // match MM/DD/YYYY
             var d = newV.split( /[\/\/]/ ); // d[0]: MM; d[1]: DD; d[2]: YYYY
@@ -335,7 +344,7 @@ function hdlr_dataChg() { // on Blur
 
     if ( fldN == 'reqDates' ) {
         // it could be for 祈福 (max 3 times), or for 迴向 (1 or upto 7 times ); need to validate
-        var dateStr = newV.replace("，", ",");
+        var dateStr = replaceChinesePunctuation( newV ); // replace Chinese punctuations
         var dateArray = dateStr.split( /,\s*/ );
         if ( dateArray[0].length == 0 ) dateArray.shift();
 
@@ -371,6 +380,7 @@ function hdlr_dataChg() { // on Blur
                 alert( ackDateStart + _startingSundayStr + '!' );
             }
             newV = newVx;
+            $(this).val( newV );
         } // for 祈福消災; max 3 times
         if ( _tblName == 'sundayMerit' ) { // for 功德迴向
             // need to have the Deceased data; either it was just entered, or was being edited          
@@ -575,6 +585,7 @@ function hdlr_delBtn() {
 function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).closest("tr").html() );
     var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入完整的資料" : "Please enter complete data";
     //var exceedGongDeZhuMsg = ( _sessLang == SESS_LANG_CHN) ? "功德主已超過三人，您在等待名單中！" : "Sponsor requests exceed the max-limit, you are in the waiting list!";
+    var exceedQifuLimitMsg = ( _sessLang == SESS_LANG_CHN ) ? "您可以申請的次數是 " : "Your available request number is ";
     var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
     var delBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Del';
     var editBtn = $('<input class="editBtn" type="button" value="' + editBtnVal + '">');
@@ -663,6 +674,9 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
                         case 'exceedGongDeZhu':
                         return;  
                     */ 
+                    case 'exceedQifuLimit':
+                        alert(exceedQifuLimitMsg + rspX[X]);
+                        return;
                     default: // Error cases - details later
                         alert( 'Insert Error occurred; received: "' + rspX[X] + '"' );
                         return;
@@ -680,6 +694,7 @@ function hdlr_updBtn() {
     var ackMsg = ( _sessLang == SESS_LANG_CHN ) ? "祈福迴向資料更新完畢！" : "Update Completed!";
     var errMsg = ( _sessLang == SESS_LANG_CHN ) ? "祈福迴向資料更新發生錯誤！" : "Update Failed!";
     //var exceedGongDeZhuMsg = ( _sessLang == SESS_LANG_CHN) ? "功德主已超過三人，您在等待名單中！" : "Sponsor requests exceed the max-limit, you are in the waiting list!";
+    var exceedQifuLimitMsg = ( _sessLang == SESS_LANG_CHN ) ? "您可以申請的次數是 " : "Your available request number is ";
     var editBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
     var delBtnVal = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Del';
     var editBtn = $('<input class="editBtn" type="button" value="' + editBtnVal + '">');
@@ -765,6 +780,9 @@ function hdlr_updBtn() {
                         case 'exceedGongDeZhu':
                             return;
                     */
+                   case 'exceedQifuLimit':
+                        alert(exceedQifuLimitMsg + rspX[X]);
+                        return;
                     default: // Error cases - details later
                         alert( 'Insert Error occurred; received: "' + rspX[X] + '"' );
                         cellsChanged.each(function(i) {

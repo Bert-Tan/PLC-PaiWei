@@ -895,11 +895,24 @@ function updBtnHdlr() {
 /**********************************************************
  * Event Handler - When an Valid Button is clicked       *
  **********************************************************/
-function validBtnHdlr() {
+function validBtnHdlr() {	
+	var errText = ( _sessLang == SESS_LANG_CHN ) ? 
+								"往生日期（年-月-日）必須屆於 " + _pwPlqDate + "(含) 及 " + _rtrtDate + "(不含) 之間。"  
+							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format";
+
 	var tblFlds = {};
 	var validBtn = $(this);
 	var thisRow = $(this).closest("tr");
 	_ajaxData = {}; _dbInfo = {};
+
+	// DaPaiWei and checking deceased Date (within 12 months)
+	if (_tblName == "DaPaiWei") {		
+		var deceasedDate = thisRow.find("input[data-fldn='deceasedDate']").val();		
+		if ( !chkDate( deceasedDate ) ) {
+			alert( errText );			
+			return;			
+		}
+	}
 
 	tblFlds [ thisRow.attr("data-keyn") ] = thisRow.attr("id");
 	_dbInfo[ 'tblName' ] = _tblName;
@@ -1040,6 +1053,11 @@ function ready_edit() {
 	_delAllBtn.on( 'click', delAllBtnHdlr );
 	_validBtn.on( 'click', validBtnHdlr );
 	_validAllBtn.on( 'click', validAllBtnHdlr );
+
+	// disable ValidAll button for DaPaiWei
+	if ( _tblName == "DaPaiWei" ) {
+		_validAllBtn.prop( "disabled", true );
+	}
 } // ready_edit()
 
 /**********************************************************
@@ -1109,7 +1127,10 @@ function hdlr_tabClick() {
 			$("#tabDataFrame").load("./dnldJiWenForm.php #forDnld");
 			break;
 		case 'DnldPaiWei':
-			$("#tabDataFrame").load("./dnldPaiWeiForm.php #forDnld");
+			$("#tabDataFrame").load("./dnldPaiWeiForm.php #forDnld", function() {
+				$("#dnldCSVBtn").on( 'click', dnldCSVBtnHdlr );
+				$("#dnldPDFBtn").on( 'click', dnldPDFBtnHdlr );
+			});
 			break; 		
 	} // switch()
 } // function tabClick()

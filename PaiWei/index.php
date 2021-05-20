@@ -58,6 +58,9 @@
 			'pwUpld' => array (
 				SESS_LANG_CHN => "上載牌位檔案",
 				SESS_LANG_ENG => "Upload CSV Files" ),
+			'pwDnld' => array (
+				SESS_LANG_CHN => "下載牌位檔案",
+				SESS_LANG_ENG => "Download Name Plaque Data" ),
 			'pwUG' => array (
 				SESS_LANG_CHN => "用戶指南",
 				SESS_LANG_ENG => "User Guide" ),
@@ -106,6 +109,7 @@
 <script type="text/javascript" src="../UsrPortal/UsrCommon.js"></script>
 <script type="text/javascript" src="./PaiWei.js"></script>
 <script type="text/javascript" src="./paiweiMgr.js"></script>
+<script type="text/javascript" src="./dnldPaiWei.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {	
 	$(".future").on( 'click', futureAlert );
@@ -283,6 +287,9 @@ input[type=text] {
 				<th data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th>	
 				<th data-tbl="D001A"><?php echo xLate( 'pwD' ); ?></th>
 				<th data-tbl="upld"><?php echo xLate( 'pwUpld' ); ?></th>
+				<?php if ($sessType == SESS_TYP_USR) { ?>
+					<th data-tbl='DnldPaiWei'><?php echo xLate( 'pwDnld' ); ?></th>
+				<?php } ?>				
 			</tr>
 		</thead>
 	</table>

@@ -226,6 +226,50 @@ function deleteSundayUsrTuple( $tblName, $usr ) {
 	return true;
 } // function deleteSundayUsrTuple()
 
+function checkVacantQifuCounts( $tblName, $tupNVs ) {
+	global $_db;
+	$existingReqDateNum = null;
+	$tupID = null;
+	$qWhom = null;
+	$reqDates = array();
+
+	foreach ( $tupNVs as $attrN => $attrV ) {
+		if ( $attrN == 'ID' ) { 
+			$tupID = $attrV; 
+			continue; 
+		}
+		if ($attrN == 'qWhom') {
+			$qWhom = $attrV;
+			continue;
+		}
+		if ( $attrN == 'reqDates') {
+			$reqDates = preg_split( "/,\s*/", $attrV );
+			continue;
+		}
+	}
+	$newReqDateNum = sizeof($reqDates);
+	$largestReqDate = date('Y-m-d');	
+	foreach ( $reqDates as $reqDate ) {		
+		if (strtotime($reqDate) > strtotime($largestReqDate)) {
+			$largestReqDate = $reqDate;			
+		}
+	}
+
+	// query existing Qifu counts within three months of the largest new request date
+	$sql = "SELECT COUNT(*) FROM `{$tblName}` Q INNER JOIN `sundayRq2Days` D ON Q.ID = D.rqID "
+			. "WHERE `qWhom` = '{$qWhom}' AND (`rqDate` BETWEEN SUBDATE('{$largestReqDate}', INTERVAL 3 MONTH) AND '{$largestReqDate}')";
+	if ($tupID != null)
+		$sql = $sql . " AND `ID` <> {$tupID}";
+		$sql = $sql . ";";
+
+	$rslt = $_db->query( $sql );
+	if ( $rslt->num_rows ) {
+		$existingReqDateNum = $rslt->fetch_all(MYSQLI_NUM)[0][0];
+	}
+
+	return array($existingReqDateNum, $newReqDateNum);
+} // function checkVacantQifuCounts()
+
 /*
 function checkboxInt2Str ( $intVal ) {
 	if ( $intVal == 1 )
