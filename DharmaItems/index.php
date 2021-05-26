@@ -116,7 +116,7 @@ $(document).ready(function() {
  		text-align: center;
 	}
 	div.dataArea {
-		height: 84vh;
+		height: 82vh;
 		margin-top: 0px;
 		border: 2px solid green; /* same as the active tab color */
 /*
@@ -159,7 +159,7 @@ $(document).ready(function() {
 /* local only */
 	div#tabDataFrame { /* For loading tab data */
 		width: 99%;
-		height: 67vh;
+		height: 69vh;
 		margin: auto;
 		margin-top: 0px;
 		margin-bottom: 0px;
