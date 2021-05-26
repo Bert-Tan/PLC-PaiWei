@@ -42,14 +42,26 @@
 				SESS_LANG_CHN => "*** 請您仔細閱讀下列注意事項 ***",
 				SESS_LANG_ENG => "*** Please carefully read this note before submitting an application ***" ),
 			'dharmaItemsRuleTab' => array (
-				SESS_LANG_CHN => "結緣法寶申請要求與辦法",
+				SESS_LANG_CHN => "結緣法寶<br/>申請要求與辦法",
 				SESS_LANG_ENG => "Dharma Item Application Requirements" ),
-			'dharmaItemsReqTab' => array (
-				SESS_LANG_CHN => "結緣法寶申請表",
-				SESS_LANG_ENG => "Dharma Item Request Form" ),
 			'addrInfoTab' => array (
-				SESS_LANG_CHN => "結緣法寶寄送資料",
-				SESS_LANG_ENG => "Dharma Item Shipping Information" )
+				SESS_LANG_CHN => "結緣法寶<br/>寄送資料",
+				SESS_LANG_ENG => "Dharma Item Shipping Information" ),
+			'bkItemsTab_C' => array (
+				SESS_LANG_CHN => "中文結緣書目<br/>申請表",
+				SESS_LANG_ENG => "Chinese Book Item Request" ),
+			'bkItemsTab_E' => array (
+				SESS_LANG_CHN => "英文結緣書目<br/>申請表",
+				SESS_LANG_ENG => "English Book Item Request" ),
+			'statuesTab' => array (
+				SESS_LANG_CHN => "佛菩薩聖像<br/>申請表",
+				SESS_LANG_ENG => "Buddha Statues Request" ),
+			'screensTab' => array (
+				SESS_LANG_CHN => "佛菩薩聖像屏風<br/>申請表",
+				SESS_LANG_ENG => "Buddha Image Screens Request" ),
+			'scrollsTab' => array (
+				SESS_LANG_CHN => "佛菩薩聖像捲軸<br/>申請表",
+				SESS_LANG_ENG => "Buddha Image Scrolls Request" ),	
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
@@ -79,8 +91,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="../futureAlert.js"></script>
 <script src="../UsrPortal/UsrCommon.js"></script>
+<script src="./DI_common.js"></script>
 <script src="./DI_shippAddr.js"></script>
-<script src="./DI_rqForm.js"></script>
+<script src="./DI_rqBkItems.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $(".future").on( 'click', futureAlert );
@@ -170,7 +183,7 @@ $(document).ready(function() {
 	}
 
 /* for Admin Dialog box */
-table.dialog {
+	table.dialog {
 		width: 46%;
 		margin: auto;
 	}
@@ -204,8 +217,14 @@ table.dialog {
 			<?php    } else {    ?>
 				<!-- Some Admin Functions for Dharma Items to be done here -->
 			<?php    }    ?>
-				<th data-table="addrInfoForm"><?php echo xLate( 'addrInfoTab' ); ?></th>
-				<th data-table="dharmaItemsReqForm"><?php echo xLate( 'dharmaItemsReqTab' ); ?></th>
+				<th data-table="addrInfoTab"><?php echo xLate( 'addrInfoTab' ); ?></th>
+			<?php 	if ( $useChn ) {	?>
+				<th data-table="invtBkTab_C"><?php echo xLate( 'bkItemsTab_C' ); ?></th>
+			<?php	}	?>
+				<th data-table="invtBkTab_E"><?php echo xLate( 'bkItemsTab_E' ); ?></th>
+				<th class="future" data-table="invtStatuesTab"><?php echo xLate( 'statuesTab' ); ?></th>
+				<th class="future" data-table="invtScreensTab"><?php echo xLate( 'screensTab' ); ?></th>
+				<th class="future" data-table="invtScrollsTab"><?php echo xLate( 'scrollsTab' ); ?></th>
 			</tr>
 		</thead>
 	</table>

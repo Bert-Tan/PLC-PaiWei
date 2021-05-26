@@ -43,7 +43,7 @@
             </tr>
             <tr>
                 <th colspan="4" style="font-size: 1.1em;">
-                    <input type="button" id="ldDharmaAppForm" data-table="dharmaItemsReqForm" value="{ldAppFormV}">
+                    {continueV}
                 </th>
             </tr>
         </tbody>
