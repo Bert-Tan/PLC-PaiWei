@@ -230,3 +230,67 @@ table.dialog td {
 .future {
 	opacity: 0.7;
 }
+
+/* Below are to replace the DataWrapper, etc., above and uses a single table with tbody Scrolling */
+table.dataTbl {
+    width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+}
+
+table.dataTbl thead th, table.dataTbl tfoot th {
+	border: 1px solid silver;
+	background-color: #00b300;
+    color: white;
+	text-align: center;
+	padding: 2px 5px;
+}
+
+table.dataTbl tbody td {
+	color: black;
+	border: 1px solid silver;
+	padding: 2px 5px;
+}
+
+table.dataTbl tbody tr:nth-child(even) {
+	color: black;
+	background-color: #ffffb3;
+}
+
+table.dataTbl tbody tr:nth-child(odd) {
+	color: black;
+	background-color: #ffffe6;
+}
+
+/*
+ * Below are for TBODY scrolling
+ */
+
+ table.tbodyScroll { /* the outer container is #tabDataFrame */
+    display: flex;
+    flex-flow: column; /* vertically */
+    height: 100%;
+    width: 100%;
+}
+
+table.tbodyScroll thead {
+    /* head takes the height it requires, and it's not scaled when table is resized */
+    flex: 0 0 auto;
+    width: calc(100% - 0.9em); /* 16px / 0.9em is the scrolling bar */
+}
+
+table.tbodyScroll tbody {
+    /* body takes up all the remaining space vertically */
+    flex: 1 1 auto;
+    display: block;
+	overflow-y: scroll;
+}
+
+table.tbodyScroll tbody tr {
+    width: 100%;
+}
+
+table.tbodyScroll thead, table.tbodyScroll tbody tr {
+    display: table;
+    table-layout: auto;
+}

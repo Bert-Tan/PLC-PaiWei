@@ -1,5 +1,5 @@
 <!-- BEGIN BL_Tbl -->
-<table class="bkListClass scrollable" data-dbTblName={dbTblName}>
+<table class="dataTbl tbodyScroll" data-dbTblName={dbTblName}>
 	<thead>
 		<tr><th colspan="{colSpan}">{htmlTblNameV}</th></tr>
 	<!-- BEGIN BL_hdrRow -->

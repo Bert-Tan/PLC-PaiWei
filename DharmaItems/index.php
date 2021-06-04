@@ -88,7 +88,7 @@
 <link rel="stylesheet" type="text/css" href="../master.css">
 <link rel="stylesheet" type="text/css" href="../tabmenu-h.css">
 <link rel="stylesheet" type="text/css" href="./DharmaItemsRules.css">
-<link rel="stylesheet" type="text/css" href="./bkListClass.css">
+<link rel="stylesheet" type="text/css" href="./bkListSpecific.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="../futureAlert.js"></script>
 <script src="../UsrPortal/UsrCommon.js"></script>
