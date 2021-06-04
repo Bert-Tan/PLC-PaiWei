@@ -1,104 +1,59 @@
 /****************************************************************
 *                    Global variables                           *
-* These are not needed because they were in the DI_common.js    *
+* They not needed because they are in DI_common.js which is     *
 * included before this JS file                                  *
 *****************************************************************/
-/*
-var SESS_LANG_CHN = 1;	// These variables are used as CONSTANTS
-var SESS_MODE_EDIT = 0;
-var SESS_MODE_SRCH = 1;
-var SESS_TYP_USR = 0;
-var SESS_TYP_MGR = 1;
-var SESS_TYP_WEBMASTER = 2;
 
-var _sessUsr = null, _sessPass = null, _sessType = null, _sessLang = null;
-var _icoName = null, _usrName = null;
-var _tblName = null, _tblSize = null;
-var _pilotRow = null;
-var _alertUnsaved = null;
+function hdlr_chkbox_bkItems() {
+    var tr = $(this).closest("tr");
+    alert( 'checkbox for ' + tr.attr("data-keyN") + ' = ' + tr.attr("data-keyV") );
+} // function hdlr_chkbox_bkItems()
 
-var _dt_diMOP = null;
-var _dt_diAlert = null;
-var _dt_diShipping = null;
-var _dt_diAppForm = null;
+function hdlr_biHua_bkItems() {
+    var stroke = $(this).val();
+    var tblName = $(this).closest("table").attr("data-dbTblName");
+//    alert( 'Bi Hua Selected: ' + stroke + '; database Table = "' + tblName + '"' );
 
-var _myAddrIDs = {};
-
-function isJSON( str ) {
-    try {
-        var x = JSON.parse(str);
-        if ( x && typeof x === "object" ) return x;
-    } catch (e) { } // do nothing
-    return false;
-} // isJSON()
-*/
-
+} // function hdlr_biHua_bkItems()
 /********************************************************************************
  * Function to load the Form for Chinese Book Items Request                     *
  ********************************************************************************/
-function loadBkRqForm_C() {
+function loadBkRqForm( tblname, stroke ) {
     var ajaxData = {}, dbInfo = {}, tblFldN = {}, rspX = null;
-    dbInfo[ 'tblName' ] = 'INVT_BK_C';
-    dbInfo[ 'usrName' ] = _sessUsr;
-    ajaxData[ 'dbReq' ] = 'dbReadBkList';
-    ajaxData[ 'dbInfo' ] = JSON.stringify ( dbInfo );
-alert( 'loadBkRqForm_C() formulated request: ' + ajaxData[ 'dbInfo'] ); return false;
-    $.ajax({
-        url: "./ajax-DI_rqBkItemsDB.php",
-        method: "post",
-        data: ajaxData,
-        success: function( rsp ) { // alert( "Received:\n" + rsp ); return;
-            rspX = isJSON ( rsp );
-            if ( !rspX ) {
-                alert( rsp ); return false;
-            }
-            for ( X in rspX ) {
-                switch( X ) {
-                case 'URL':
-                    location.replace( rspX[X] );
-                    return;
-                default: // the Form data in HTML format
-                    return;
-                } // switch( X )
-            } // for()
-        }, // success handler
-        error: function ( jqXHR, textStatus, errorThrown ) {
-            alert( "loadBkRqForm_C()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
-        } // error handler
-    }); // ajax call
-} // loadBkRqForm_C()
+    var tabDataFrame = $("#tabDataFrame");
 
-/********************************************************************************
- * Function to load the Form for English Book Items Request                     *
- ********************************************************************************/
- function loadBkRqForm_E() {
-    var ajaxData = {}, dbInfo = {}, tblFldN = {}, rspX = null;
-    dbInfo[ 'tblName' ] = 'INVT_BK_E';
+    // house cleaning work first 
+    tabDataFrame.find("*").unbind();
+    dbInfo[ 'tblName' ] = tblname;
+    dbInfo[ 'stroke' ] = stroke;
     dbInfo[ 'usrName' ] = _sessUsr;
     ajaxData[ 'dbReq' ] = 'dbReadBkList';
     ajaxData[ 'dbInfo' ] = JSON.stringify ( dbInfo );
-alert( 'loadBkRqForm_E() formulated request: ' + ajaxData[ 'dbInfo'] ); return false;
     $.ajax({
         url: "./ajax-DI_rqBkItemsDB.php",
         method: "post",
         data: ajaxData,
-        success: function( rsp ) { // alert( "Received:\n" + rsp ); return;
+        success: function( rsp ) { //alert( "Received:\n" + rsp ); return;
             rspX = isJSON ( rsp );
             if ( !rspX ) {
                 alert( rsp ); return false;
             }
-            for ( X in rspX ) {
+            for ( X in rspX ) { // handling each responses
                 switch( X ) {
                 case 'URL':
                     location.replace( rspX[X] );
                     return;
-                default: // the Form data in HTML format
-                    return;
+                case 'BkList_Tbl': // alert( rspX[X] );
+                    $("#tabDataFrame").html( rspX[ X ]);
+                    break;
                 } // switch( X )
             } // for()
+            // binding handlers below
+            $("input[type=checkbox]").on( 'change', hdlr_chkbox_bkItems );
+            $("select").on( 'change', hdlr_biHua_bkItems );
         }, // success handler
         error: function ( jqXHR, textStatus, errorThrown ) {
-            alert( "loadBkRqForm_E()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+            alert( "loadBkRqForm()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
         } // error handler
     }); // ajax call
-} // loadBkRqForm_E()
+} // loadBkRqForm()

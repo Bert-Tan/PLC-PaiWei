@@ -1,5 +1,6 @@
 <?php
 $_insCount = 0; $_updCount = 0; $_errCount = 0; $_errRec = array();
+$_strkRange = null; $_bkRows = array();
 
 function getDBTblFlds( $Table ) {
     /*
@@ -7,14 +8,13 @@ function getDBTblFlds( $Table ) {
      */
 	global $_db;
 	$fldN = array();
-	
 	$rslt = $_db->query("SHOW COLUMNS FROM `{$Table}`;");
 	$rows = $rslt->fetch_all(MYSQLI_ASSOC);
 	foreach ( $rows as $row ) {
 		$fldN[] = $row [ 'Field' ];
 	}	
 	return $fldN;
-} // getDBTblFlds()
+} // function getDBTblFlds()
 
 function upldBookItem( $tblName, $tupNVs, $recNo ) {
 	global $_db, $_insCount, $_updCount, $_errCount, $_errRec;
@@ -87,4 +87,42 @@ function upldBookItem( $tblName, $tupNVs, $recNo ) {
 	$_insCount++;
 	return true;
 } // function upldBookItem
+
+function readInvt_BK( $tblName, $stroke ) {
+	global $_db, $_errCount, $_errRec, $_strkRange, $_bkRows;
+	$rpt = array();
+	$sql = null;
+
+	switch ( $tblName ) {
+	case 'INVT_BK_C':
+		$sql = "SELECT MIN( Strokes ), MAX( Strokes ) FROM `INVT_BK_C`; ";
+		$rslt = $_db->query( $sql );
+		if ( $_db->errno ) {
+			$_errCount++;
+			$_errRec[]	= "readInvt_BK_C() DB Error No.: " . $_db->errno . ";<br/>"
+						. "&nbsp;&nbsp;SQL: '" . $sql . "'<br/><br/>";
+			return false;
+		}
+		$_strkRange = $rslt->fetch_all(MYSQLI_NUM)[0];
+		$strk_min = $_strkRange[0];
+		if ( ! $stroke ) $stroke = $strk_min; 
+		$sql = "SELECT `invtID`,`Strokes`,`Title`,`Author` FROM `{$tblName}` WHERE `Strokes` = \"{$stroke}\";";
+		// Let it fall through
+	case 'INVT_BK_E': // below code for both Chinese and English book lists
+		if ( ! $sql ) {
+			$sql = "SELECT `invtID`,`Title`,`Author` FROM `{$tblName}`;";
+		}
+		$rslt = $_db->query( $sql );
+		if ( $_db->errno ) {
+			$_errCount++;
+			$_errRec[]	= "readInvt_BK() DB Error No.: " . $_db->errno . ";<br/>"
+						. "&nbsp;&nbsp;SQL: '" . $sql . "'<br/><br/>";
+			return false;
+		}
+		$_bkRows = $rslt->fetch_all(MYSQLI_ASSOC);
+		break;
+	} // end switch()
+	return true;
+} // function readInvt_BK()
+
 ?>

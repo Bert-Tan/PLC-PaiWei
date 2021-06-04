@@ -22,7 +22,7 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_CHN => "請填具結緣法寶寄送地址",
 			SESS_LANG_ENG => "Please Fill Out Dharma Items Shipping Information" ),
 		'dt_diBkTab' => array (
-			SESS_LANG_CHN => "請填具結緣書目申請表",
+			SESS_LANG_CHN => "請由下列點選你要申請的項目",
 			SESS_LANG_ENG => "Please Select Book Items From the List" ),
 		'dt_diStatuesTab' => array (
 			SESS_LANG_CHN => "請選擇佛菩薩聖像",

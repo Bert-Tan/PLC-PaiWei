@@ -1,154 +1,159 @@
 <?php
-	require_once( '../pgConstants.php' );
-	require_once( 'dbSetup.php' );
-	require_once( 'DI_shippAddr_DBfuncs.php' );
-	require_once( 'ChkTimeOut.php' );
-	
-	$_sessType = $_SESSION[ 'sessType' ];
-	$_sessLang = $_SESSION[ 'sessLang' ];
-	$_sessUsr = $_SESSION[ 'usrName' ];
-	$_icoName = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
-	$_useChn = ( $_SESSION[ 'sessLang' ] == SESS_LANG_CHN );
+	require_once( 'ajax-DI_commonDB.php' );
+	require_once( 'DI_rqBkItems_DBfuncs.php' );
 
-function _dbName_2_htmlName ( $_dbName ) {
+function _dbName_2_bkTblhtmlName ( $_dbName ) {
 	global $_sessLang;
-	$_htmlNames = array (
-		'dt_diMOP' =>	array (
-			SESS_LANG_CHN => "結緣法寶申請辦法",
-			SESS_LANG_ENG => "Dharma Items Application Requirements" ),
-		'dt_diAlert' => array (
-			SESS_LANG_CHN => "*** 請您仔細閱讀下列注意事項 ***",
-			SESS_LANG_ENG => "*** Please read the following carefully ***" ),
-		'dt_diShipping' => array (
-			SESS_LANG_CHN => "請填具結緣法寶寄送地址",
-			SESS_LANG_ENG => "Please Fill Out Dharma Items Shipping Information" ),
-		'dt_diAppForm' => array (
-			SESS_LANG_CHN => "請填具結緣法寶申請表",
-			SESS_LANG_ENG => "Please Fille Out Dharma Item Application Form" ),
-		'di_shippingFormName' => array (
-			SESS_LANG_CHN => "結緣法寶寄送地址",
-			SESS_LANG_ENG => "Dharma Items Shipping Information" ),
-		'addr_orgNm' =>	array (
-			SESS_LANG_CHN => "個人、組織、或活動的全名",
-			SESS_LANG_ENG => "Full Name, Org. Name, or Activity Name" ),
-		'addr_telNo' =>	array (
-			SESS_LANG_CHN => "聯絡電話",
-			SESS_LANG_ENG => "Telphone No." ),
-		'addr_Email' =>	array (
-			SESS_LANG_CHN => "電郵地址",
-			SESS_LANG_ENG => "Email" ),
-		'addr_streetNum' =>	array (
-			SESS_LANG_CHN => "街道名稱及號碼",
-			SESS_LANG_ENG => "Street Name and Number" ),
-		'addr_unitNum' =>	array (
-			SESS_LANG_CHN => "單位號碼",
-			SESS_LANG_ENG => "Unit Number" ),
-		'addr_cityName' => array (
-			SESS_LANG_CHN => "城市名稱",
-			SESS_LANG_ENG => "City" ),
-		'addr_stateName' =>	array (
-			SESS_LANG_CHN => "(美國)州名",
-			SESS_LANG_ENG => "US State Name" ),
-		'addr_zipCode' =>	array (
-			SESS_LANG_CHN => "郵遞區號",
-			SESS_LANG_ENG => "Zip Code" )
+	$_htmlNames = array ( // 'dt' stands for 'data title'
+		'bkTblName' =>	array (
+			SESS_LANG_CHN => "本館館藏中文結緣書目",
+			SESS_LANG_ENG => "English Book Items in Our Collection" ),
+		'chChkBox' => array (	// 'ch' stands for 'column header'
+			SESS_LANG_CHN => "請點擊<br/>選項",
+			SESS_LANG_ENG => "Click to Select" ),
+		'chBiHua' => array (
+			SESS_LANG_CHN => "書名筆畫",
+			SESS_LANG_ENG => "Strokes of the First Character in the Title" ),	
+		'chTitle' =>	array (
+			SESS_LANG_CHN => "書&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名",
+			SESS_LANG_ENG => "Title" ),	
+		'chAuthor' =>	array (
+			SESS_LANG_CHN => "作者、翻譯者、編譯者、或出版者",
+			SESS_LANG_ENG => "Author, Translator, Collator, Publisher" ),	
 	);
-	return ( $_htmlNames[ $_dbName ][ $_sessLang ]  );
-} // _dbName_2_htmlName()
+
+	return ( $_htmlNames[ $_dbName ][ $_sessLang ]  );	
+} // function _dbName_2_bkTblhtmlName()
+
+/**********************************************************
+ *  Helping function: Chinese BiHua (Strokes) Selection	  *
+ **********************************************************/
+function constructStrokeSelector( $selected ) {
+	global $_strkRange;
+	$min = $_strkRange[0];
+	$max = $_strkRange[1];
+
+	$tpl = new HTML_Template_IT("./Templates");
+	$tpl->loadTemplatefile("invtBkChnBiHuaSel.tpl", true, true);
+	$tpl->setCurrentBlock("Selection");
+	for ( $i = $min; $i <= $max; $i++ ) {
+		$tpl->setCurrentBlock("selOption");
+		$tpl->setVariable("strkCntV", $i );
+		if ( $i == $selected ) {
+			$tpl->setVariable("selectedV", 'selected' );
+		}
+		$tpl->parse("selOption");
+	} // for loop
+	$tpl->parse("Selection");
+	$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
+	return preg_replace( "/(^\t*)/", "  ", $tmp );
+} // function constructStrokeSelector()
+
+function constructBkListTbl( $tblName ) { // function to use CSS TBODY Scroll trick
+	global $_strkRange, $_bkRows;
+	$cvChkBox = "<input type=checkbox>"; // cell value: checkbox input
+
+	$fldN = $fldN = getDBTblFlds( $tblName );
+	$colS = ( in_array( 'Strokes', $fldN ) ) ? 4 : 3; // determine Column Span; set it at the last action
+	$tpl = new HTML_Template_IT("./Templates");
+	$tpl->loadTemplatefile("bkListTbl.tpl", true, true);
+	$tpl->setCurrentBlock("BL_Tbl");
+	$tpl->setVariable("dbTblName", $tblName);
+	$tpl->setVariable("htmlTblNameV", _dbName_2_bkTblhtmlName( 'bkTblName' ));
+	$tpl->setVariable("colSpan", $colS);
+	$tpl->setCurrentBlock("BL_hdrRow");
+	foreach ( $fldN as $colName ) { // thru each column
+		$tpl->setCurrentBlock("BL_hdrCell");
+		switch ( $colName ) {
+		case 'invtID': // invisible to the users; use this column for checkbox in the Table Body
+			$tpl->setVariable("cellV", _dbName_2_bkTblhtmlName('chChkBox'));
+			break;
+		case 'Strokes': // constructStrokeSelector() uses $_strkRange Global to build dropdown list
+			$cellV = _dbName_2_bkTblhtmlName('chBiHua') . '<br/>' . constructStrokeSelector( null );
+			$tpl->setVariable("cellV", $cellV );
+			break;
+		case 'Title':
+			$tpl->setVariable("cellV", _dbName_2_bkTblhtmlName('chTitle'));
+			break;
+		case 'Author':
+			$tpl->setVariable("cellV", _dbName_2_bkTblhtmlName('chAuthor'));
+			break;
+		default: // ignore the remaining fields
+			break;
+		}
+		$tpl->parse("BL_hdrCell");
+	}; // foreach() loop thru columns
+	$tpl->parse("BL_hdrRow");
+	// now book list data rows; use the data in the $_bkRec Global
+	foreach ( $_bkRows as $row ) {
+		$tpl->setCurrentBlock("BL_dataRow");
+		foreach ( $row as $key => $val ) {
+			if ( $key == 'invtID' ) {
+				$tpl->setVariable("tupKeyN", $key);
+				$tpl->setVariable("tupKeyV", $val);
+			}
+
+			$tpl->setCurrentBlock("BL_dataCell");			
+			$tpl->setVariable( "cellV", ( $key == 'invtID' ) ? $cvChkBox : $val );
+			$tpl->parse("BL_dataCell");
+		} // foreach() loop thru data columns
+		$tpl->parse("BL_dataRow");
+	}
+	$tpl->parse("BL_Tbl");
+	$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
+	return preg_replace( "/(^\t*)/", "  ", $tmp );
+} // function constructBkListTbl()
+
+function constructBkRowsOnly() {
+	global $_bkRows;
+
+	$tpl = new HTML_Template_IT("./Templates");
+	$tpl->loadTemplatefile("bkListTbl.tpl", true, true);
+	foreach ( $_bkRows as $row ) {
+		$tpl->setCurrentBlock("BL_dataRow");
+		foreach ( $row as $key => $val ) {
+			if ( $key == 'invtID' ) {
+				$tpl->setVariable("tupKeyN", $key);
+				$tpl->setVariable("tupKeyV", $val);
+			}
+
+			$tpl->setCurrentBlock("BL_dataCell");			
+			$tpl->setVariable( "cellV", ( $key == 'invtID' ) ? $cvChkBox : $val );
+			$tpl->parse("BL_dataCell");
+		} // foreach() loop thru data columns
+		$tpl->parse("BL_dataRow");
+	}
+	$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
+	return preg_replace( "/(^\t*)/", "  ", $tmp );
+} // function constructBkRowsOnly()
 
 /**********************************************************
  *				  For dbReadBkList						  *
  **********************************************************/
 function readBkList( $dbInfoX ) {
-	$tblName = $dbInfoX[ 'tblName' ];
-	$usrName = $dbInfoX[ 'usrName' ];
-	switch ( $tblName ) {
-	case 'INVT_BK_C':
-		return readBkList_C( $tblName, $usrName, 1 );
-	case 'INVT_BK_E':
-		return readBkList_E( $tblName, $usrName );
-	}
-} // function readBkList()
-
-/**********************************************************
- *	Read/Return Chinese Book List: with $strokes of the first Title Character 						  *
- **********************************************************/
-function readBkList_C( $tblName, $usrName, $strokes ) {
-	global $_db, $_sessLang, $_SESSION, $_useChn;
+	global $_db, $_errCount, $_errRec;
 	$rpt = array();
 
+	$tblName = $dbInfoX[ 'tblName' ];
+	$usrName = $dbInfoX[ 'usrName' ];
+	$stroke = $dbInfoX[ 'stroke' ];
 	$_db->query("LOCKTABLE `{$tblName}` READ;");
-	/* determine range of Strokes */
-	$rslt = $_db->sql( "SELECT MAX(`Strokes`) FROM `{$tblName}`;" );
-	if ( $_db->errno ) {
-		$_errCount++;
-		$_errRec[] = ( ( $_useChn ) ? "資料庫有錯誤 (".$_db->errno.")! " : "Database Error (".$_db->errno.")! " )
-					. "\n\tExecuting SQL: '" . $sql . "'";
+	if ( ! readInvt_BK( $tblName, $stroke ) ) {
 		$_db->query("UNLOCK TABLES;");
+		$rpt[ 'errCount' ] = $_errCount;
+		$rpt[ 'errRec' ] = $_errRec;
 		return $rpt;
 	}
 
-	$sql = "SELECT `invtID`, `Strokes`, `Title`, `Author` FROM `{$tblName}` ORDER BY 'Strokes';";
-	$rslt = $_db->query( $sql );
-	if ( $_db->errno ) {
-		$_errCount++;
-		$_errRec[] = ( ( $_useChn ) ? "資料庫有錯誤 (".$_db->errno.")! " : "Database Error (".$_db->errno.")! " )
-					. "\n\tExecuting SQL: '" . $sql . "'";
-		$_db->query("UNLOCK TABLES;");
-		return $rpt;
-	}
-	$rows = $rslt->fetch_all( MYSQLI_ASSOC );
-	$rslt->free();
 	$_db->query("UNLOCK TABLES;");
-	$rpt[ 'addrIDs' ] = $addrIDs;
-	$rpt[ 'shippingForm' ] = constructShippingForm( $rows[0], $addrIDs[ 'prim' ] );
-	return ( $rpt );
-} // function readAddrForm()
 
-function constructShippingForm ( $row, $primAddrID ) {
-	global $_sessLang, $_useChn;
-	
-	$tpl = new HTML_Template_IT("./Templates");
-	$tpl->loadTemplatefile("shippingInfoForm.tpl", true, true);
-	$tpl->setCurrentBlock("shippingInfoForm");
-	if ( $row != null ) {
-		$tpl->setVariable("AddrIDV", $row[ 'AddrID' ] );
-		$tpl->setVariable("AddresseeV", $row[ 'Addressee' ] );
-		$tpl->setVariable("TelNoV", $row[ 'TelNo' ] );
-		$tpl->setVariable("EmailV", $row[ 'Email' ] );
-		$tpl->setVariable("StNumV", $row[ 'StNum' ] );
-		$tpl->setVariable("UnitV", $row[ 'Unit' ] );
-		$tpl->setVariable("CityV", $row[ 'City' ] );
-		$tpl->setVariable("US_StateV", $row[ 'US_State' ] );
-		$tpl->setVariable("ZipCodeV", $row[ 'ZipCode' ] );
-		$tpl->setVariable("PrimV", ($row[ 'AddrID' ] == $primAddrID ) ? 'checked' : null );
-	}
-	$tpl->setVariable("shippingFormName", _dbName_2_htmlName( 'di_shippingFormName' ) );
-	$tpl->setVariable("orgNameLbl", _dbName_2_htmlName( 'addr_orgNm' ) );
-	$tpl->setVariable("telNoLbl", _dbName_2_htmlName( 'addr_telNo' ) );
-	$tpl->setVariable("emailLbl", _dbName_2_htmlName( 'addr_Email' ) );
-	$tpl->setVariable("streetNumLbl", _dbName_2_htmlName( 'addr_streetNum' ) );
-	$tpl->setVariable("unitNumLbl", _dbName_2_htmlName( 'addr_unitNum' ) );
-	$tpl->setVariable("cityNameLbl", _dbName_2_htmlName( 'addr_cityName' ) );
-	$tpl->setVariable("stateNameLbl", _dbName_2_htmlName( 'addr_stateName' ) );
-	$tpl->setVariable("zipCodeLbl", _dbName_2_htmlName( 'addr_zipCode' ) );
-	$primLblV = $_useChn ? "設定此為主要地址" : "This is <b>primary</b> address";
-	$altInfoV = $_useChn ? "更新/添加 另一寄送地址" : "Update/Add <b>alternative</b> address";
-	$delBtnV = $_useChn ? "刪除 此一寄送地址" : "Delete this address";
-	$updSaveBtnV = $_useChn ? "保存/更新 寄送地址" : "Save/Update Shipping Address";
-	$ldAppFormV = $_useChn ? "繼續：填具法寶申請表" : "Next: Fill Application Form";
-	$tpl->setVariable("primLblV", $primLblV );
-	$tpl->setVariable("altInfoV", $altInfoV );
-	$tpl->setVariable("updSaveBtnV", $updSaveBtnV );
-	$tpl->setVariable("delBtnV", $delBtnV );
-	$tpl->setVariable("ldAppFormV", $ldAppFormV );
-	$tpl->parse("shippingInfoForm");
-	return( preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() ) );	
-} // constructShippingForm()
+	$rpt[ 'BkList_Tbl' ] = constructBkListTbl( $tblName );
+	return $rpt;
+} // function readBkList()
 
-/**********************************************************
- *								 Main Functional Code										*
- **********************************************************/
+/********************************************************
+ *				 Main Functional Code					*
+ ********************************************************/
 $_dbReq = $_POST[ 'dbReq' ];
 $_dbInfo = isset( $_POST[ 'dbInfo' ]) ? json_decode( $_POST [ 'dbInfo' ], true ) : null;
 

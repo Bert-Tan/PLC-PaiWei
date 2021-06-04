@@ -88,6 +88,7 @@
 <link rel="stylesheet" type="text/css" href="../master.css">
 <link rel="stylesheet" type="text/css" href="../tabmenu-h.css">
 <link rel="stylesheet" type="text/css" href="./DharmaItemsRules.css">
+<link rel="stylesheet" type="text/css" href="./bkListClass.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="../futureAlert.js"></script>
 <script src="../UsrPortal/UsrCommon.js"></script>
@@ -119,17 +120,13 @@ $(document).ready(function() {
 		height: 82vh;
 		margin-top: 0px;
 		border: 2px solid green; /* same as the active tab color */
-/*
-    	box-sizing: border-box;
-    	-moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
- */
 	}
 
 	table.dataRows, table.dataHdr {
 		width: 85%;
 		margin: auto;
 		font-size: 1.2em;
+		table-layout: auto;
 	}
 
 	table.dataRows th, table.dataRows td {
@@ -219,12 +216,12 @@ $(document).ready(function() {
 			<?php    }    ?>
 				<th data-table="addrInfoTab"><?php echo xLate( 'addrInfoTab' ); ?></th>
 			<?php 	if ( $useChn ) {	?>
-				<th data-table="invtBkTab_C"><?php echo xLate( 'bkItemsTab_C' ); ?></th>
+				<th data-table="INVT_BK_C"><?php echo xLate( 'bkItemsTab_C' ); ?></th>
 			<?php	}	?>
-				<th data-table="invtBkTab_E"><?php echo xLate( 'bkItemsTab_E' ); ?></th>
-				<th class="future" data-table="invtStatuesTab"><?php echo xLate( 'statuesTab' ); ?></th>
-				<th class="future" data-table="invtScreensTab"><?php echo xLate( 'screensTab' ); ?></th>
-				<th class="future" data-table="invtScrollsTab"><?php echo xLate( 'scrollsTab' ); ?></th>
+				<th data-table="INVT_BK_E"><?php echo xLate( 'bkItemsTab_E' ); ?></th>
+				<th class="future" data-table="INVT_STATUES"><?php echo xLate( 'statuesTab' ); ?></th>
+				<th class="future" data-table="INVT_SCREENS"><?php echo xLate( 'screensTab' ); ?></th>
+				<th class="future" data-table="INVT_SCROLLS"><?php echo xLate( 'scrollsTab' ); ?></th>
 			</tr>
 		</thead>
 	</table>

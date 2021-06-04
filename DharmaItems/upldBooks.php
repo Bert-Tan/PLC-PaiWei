@@ -15,7 +15,7 @@
 
 	require_once( '../pgConstants.php' );
 	require_once( 'dbSetup.php' );
-	require_once( 'DI_rqItems_DBfuncs.php');
+	require_once( 'DI_rqBkItems_DBfuncs.php');
 		
 	$_rptMsg = '';
 	$_totCount = 0;

@@ -14,6 +14,8 @@ var _tblName = null, _tblSize = null;
 var _pilotRow = null;
 var _alertUnsaved = null;
 
+var _tabDataFrameHeight = '69vh';
+var _tabDataFrameHeight_noAlert = '74vh';
 var _dt_diMOP = null;
 var _dt_diAlert = null;
 var _dt_diShippingTab = null;
@@ -137,33 +139,32 @@ function hdlr_tabClick() {
         $("#dt").text( _dt_diMOP );
         $("#dtAlert").text( _dt_diAlert );
         $("#tabDataFrame").load("./DharmaItemsRules.php #ruleText");
+        $("#tabDataFrame").css({ 'overflow-y': 'auto', 'height': _tabDataFrameHeight });
         break;
     case 'addrInfoTab':
         $("#dt").text( _dt_diShipping );
         $("#dtAlert").text('');
+        $("#tabDataFrame").css({ 'overflow-y': 'auto', 'height': _tabDataFrameHeight });
         loadShippingInfoForm( true );
         break;
-    case 'invtBkTab_C': // Chinese Book Items Request
+    case 'INVT_BK_C': // Chinese Book Items Request
+    case 'INVT_BK_E': // English Book Items Request
         $("#dt").text( _dt_diBkTab );
         $("#dtAlert").text('');
-        loadBkRqForm_C();    /* this function is in DI_rqBkItems.js */       
+        $("#tabDataFrame").css({ 'overflow-y': '', 'height': _tabDataFrameHeight_noAlert });
+        loadBkRqForm( _tblName, null );    /* this function is in DI_rqBkItems.js */   
         break;
-    case 'invtBkTab_E': // English Book Items Request
-        $("#dt").text( _dt_diBkTab );
-        $("#dtAlert").text('');
-        loadBkRqForm_E();    /* this function is in DI_rqBkItems.js */
-        break;
-    case 'invtStatuesTab':
+    case 'INVT_STATUES':
         $("#dt").text( _dt_diStatuesTab );
         $("#dtAlert").text('');
         alert( "Will load Statues Application Form here" );
         break;
-    case 'invtScreensTab':
+    case 'INVT_SCREENS':
         $("#dt").text( _dt_diScreensTab );
         $("#dtAlert").text('');
         alert( "Will load Screens Application Form here" );
         break;
-    case 'invtScrollsTab':
+    case 'INVT_SCROLLS':
         $("#dt").text( _dt_diScrollsTab );
         $("#dtAlert").text('');
         alert( "Will load Scrolls Application Form here" );

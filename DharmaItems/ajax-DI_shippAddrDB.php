@@ -1,17 +1,7 @@
 <?php
 	require_once( './ajax-DI_commonDB.php' );
 	require_once( 'DI_shippAddr_DBfuncs.php' );
-/*
-	require_once( '../pgConstants.php' );
-	require_once( 'dbSetup.php' );
-	require_once( 'ChkTimeOut.php' );
-	
-	$_sessType = $_SESSION[ 'sessType' ];
-	$_sessLang = $_SESSION[ 'sessLang' ];
-	$_sessUsr = $_SESSION[ 'usrName' ];
-	$_icoName = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
-	$_useChn = ( $_SESSION[ 'sessLang' ] == SESS_LANG_CHN );
-*/
+
 /**********************************************************
  *				For dbReadAddrForm					  *
  **********************************************************/
