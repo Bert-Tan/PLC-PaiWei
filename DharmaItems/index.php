@@ -61,7 +61,10 @@
 				SESS_LANG_ENG => "Buddha Image Screens Request" ),
 			'scrollsTab' => array (
 				SESS_LANG_CHN => "佛菩薩聖像捲軸<br/>申請表",
-				SESS_LANG_ENG => "Buddha Image Scrolls Request" ),	
+				SESS_LANG_ENG => "Buddha Image Scrolls Request" ),
+			'diRvwSubmit' => array (
+				SESS_LANG_CHN => "審核及提送",
+				SESS_LANG_ENG => "Review &amp; Submit" ),
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
@@ -222,6 +225,7 @@ $(document).ready(function() {
 				<th class="future" data-table="INVT_STATUES"><?php echo xLate( 'statuesTab' ); ?></th>
 				<th class="future" data-table="INVT_SCREENS"><?php echo xLate( 'screensTab' ); ?></th>
 				<th class="future" data-table="INVT_SCROLLS"><?php echo xLate( 'scrollsTab' ); ?></th>
+				<th data-table="DI_RVW_SUBMIT"><?php echo xLate( 'diRvwSubmit' ); ?></th>
 			</tr>
 		</thead>
 	</table>

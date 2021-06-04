@@ -90,6 +90,8 @@ function readDI_Param() {
                 case 'dt_diScrollsTab':
                     _dt_diScrollsTab = rspX[X];
                     break;
+                case 'dt_rvwSubmitTab':
+                    _dt_rvwSubmitTab = rspX[X];
                 } // switch
             } // for loop
             /* done all the startup house-keeping; ready to edit */
@@ -161,17 +163,25 @@ function hdlr_tabClick() {
     case 'INVT_STATUES':
         $("#dt").text( _dt_diStatuesTab );
         $("#dtAlert").text('');
+        $("#tabDataFrame").css({ 'overflow-y': '', 'height': _tabDataFrameHeight_noAlert });
         alert( "Will load Statues Application Form here" );
         break;
     case 'INVT_SCREENS':
         $("#dt").text( _dt_diScreensTab );
         $("#dtAlert").text('');
+        $("#tabDataFrame").css({ 'overflow-y': '', 'height': _tabDataFrameHeight_noAlert });
         alert( "Will load Screens Application Form here" );
         break;
     case 'INVT_SCROLLS':
         $("#dt").text( _dt_diScrollsTab );
         $("#dtAlert").text('');
+        $("#tabDataFrame").css({ 'overflow-y': '', 'height': _tabDataFrameHeight_noAlert });
         alert( "Will load Scrolls Application Form here" );
         break;
+    case 'DI_RVW_SUBMIT':
+        $("#dt").text( _dt_rvwSubmitTab );
+        $("#dtAlert").text('');
+        $("#tabDataFrame").css({ 'overflow-y': '', 'height': _tabDataFrameHeight_noAlert });
+        alert( "This is the Review & Submit Tab" );
     } // switch( _tblName )
 } // tabClick()

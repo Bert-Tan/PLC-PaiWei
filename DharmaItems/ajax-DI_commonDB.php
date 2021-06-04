@@ -33,6 +33,9 @@ function _dbName_2_htmlName ( $_dbName ) {
 		'dt_diScrollsTab' => array (
 			SESS_LANG_CHN => "請選擇佛菩薩聖像捲軸",
 			SESS_LANG_ENG => "Please Select Buddha Image Scroll to Request" ),
+		'dt_rvwSubmitTab' => array (
+			SESS_LANG_CHN => "請審核並提送申請表",
+			SESS_LANG_ENG => "Please Review and Submit Request Form" ),
 		'di_shippingFormName' => array (
 			SESS_LANG_CHN => "結緣法寶寄送地址",
 			SESS_LANG_ENG => "Dharma Items Shipping Information" ),
@@ -87,6 +90,7 @@ function readDI_Param( $dbInfo ) { // null is passed in
 	$rpt[ 'dt_diStatuesTab' ] = _dbName_2_htmlName ( 'dt_diStatuesTab' );
 	$rpt[ 'dt_diScreensTab' ] = _dbName_2_htmlName ( 'dt_diScreensTab' );
 	$rpt[ 'dt_diScrollsTab' ] = _dbName_2_htmlName ( 'dt_diScrollsTab' );
+	$rpt[ 'dt_rvwSubmitTab' ] = _dbName_2_htmlName ( 'dt_rvwSubmitTab' );
 	
 	return $rpt;
 } // function readDI_Param()
