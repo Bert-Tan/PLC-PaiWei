@@ -13,12 +13,16 @@ function hdlr_biHua_bkItems() {
     var stroke = $(this).val();
     var tblName = $(this).closest("table").attr("data-dbTblName");
 //    alert( 'Bi Hua Selected: ' + stroke + '; database Table = "' + tblName + '"' );
-
+    loadBkRqForm( tblName, stroke );
 } // function hdlr_biHua_bkItems()
 /********************************************************************************
  * Function to load the Form for Chinese Book Items Request                     *
  ********************************************************************************/
 function loadBkRqForm( tblname, stroke ) {
+// The interface - _tblName - tells the Chinese or English books
+// For English books, stroke setting has no effect
+// For Chinese books, stroke == null flags the entire list with the minimal bi-hua as default
+//      Otherwise, loadBkRqForm() loads the items with the said bi-hua
     var ajaxData = {}, dbInfo = {}, tblFldN = {}, rspX = null;
     var tabDataFrame = $("#tabDataFrame");
 
@@ -46,9 +50,14 @@ function loadBkRqForm( tblname, stroke ) {
                 case 'BkList_Tbl': // alert( rspX[X] );
                     $("#tabDataFrame").html( rspX[ X ]);
                     break;
+                case 'BkData_Rows': // alert( 'Line 53: ' + rspX[X] ); return;
+                    $("#tabDataFrame").find("*").unbind();  // will bind handlers (code below)
+                    $("#tabDataFrame tbody").empty().html( rspX[ X ] ); // replacing data rows
+                    $("#tabDataFrame select").val( stroke );    // make stroke value as the selected
+                    break;
                 } // switch( X )
             } // for()
-            // binding handlers below
+            // binding handlers now
             $("input[type=checkbox]").on( 'change', hdlr_chkbox_bkItems );
             $("select").on( 'change', hdlr_biHua_bkItems );
         }, // success handler

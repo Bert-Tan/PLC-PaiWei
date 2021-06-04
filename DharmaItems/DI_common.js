@@ -149,6 +149,10 @@ function hdlr_tabClick() {
         break;
     case 'INVT_BK_C': // Chinese Book Items Request
     case 'INVT_BK_E': // English Book Items Request
+    // Use the same interface - _tblName tells the Chinese or English books
+    // For English books, stroke setting has no effect
+    // For Chinese books, stroke == null flags the entire list with the minimal bi-hua as default
+    //      Otherwise, loadBkRqForm() loads the items with the said bi-hua
         $("#dt").text( _dt_diBkTab );
         $("#dtAlert").text('');
         $("#tabDataFrame").css({ 'overflow-y': '', 'height': _tabDataFrameHeight_noAlert });

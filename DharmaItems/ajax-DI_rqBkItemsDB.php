@@ -106,9 +106,10 @@ function constructBkListTbl( $tblName ) { // function to use CSS TBODY Scroll tr
 
 function constructBkRowsOnly() {
 	global $_bkRows;
+	$cvChkBox = "<input type=checkbox>"; // cell value: checkbox input
 
 	$tpl = new HTML_Template_IT("./Templates");
-	$tpl->loadTemplatefile("bkListTbl.tpl", true, true);
+	$tpl->loadTemplatefile("bkRowsOnly.tpl", true, true);
 	foreach ( $_bkRows as $row ) {
 		$tpl->setCurrentBlock("BL_dataRow");
 		foreach ( $row as $key => $val ) {
@@ -122,7 +123,7 @@ function constructBkRowsOnly() {
 			$tpl->parse("BL_dataCell");
 		} // foreach() loop thru data columns
 		$tpl->parse("BL_dataRow");
-	}
+	} // loop thru rows
 	$tmp = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $tpl->get() );
 	return preg_replace( "/(^\t*)/", "  ", $tmp );
 } // function constructBkRowsOnly()
@@ -137,6 +138,10 @@ function readBkList( $dbInfoX ) {
 	$tblName = $dbInfoX[ 'tblName' ];
 	$usrName = $dbInfoX[ 'usrName' ];
 	$stroke = $dbInfoX[ 'stroke' ];
+// The interface - _tblName - tells the Chinese or English books
+// For English books, stroke setting has no effect
+// For Chinese books, stroke == null flags the entire list with the minimal bi-hua as default
+//      Otherwise, loadBkRqForm() loads the items with the said bi-hua
 	$_db->query("LOCKTABLE `{$tblName}` READ;");
 	if ( ! readInvt_BK( $tblName, $stroke ) ) {
 		$_db->query("UNLOCK TABLES;");
@@ -147,7 +152,11 @@ function readBkList( $dbInfoX ) {
 
 	$_db->query("UNLOCK TABLES;");
 
-	$rpt[ 'BkList_Tbl' ] = constructBkListTbl( $tblName );
+	if ( $stroke == null ) {
+		$rpt[ 'BkList_Tbl' ] = constructBkListTbl( $tblName );
+	} else {
+		$rpt[ 'BkData_Rows' ] = constructBkRowsOnly ( $tblName );
+	}
 	return $rpt;
 } // function readBkList()
 
