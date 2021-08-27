@@ -39,6 +39,9 @@ function _dbName_2_htmlName ( $_dbName ) {
 		'Rsn' =>	array (
 			SESS_LANG_CHN => "祈福申請理由",
 			SESS_LANG_ENG => "Request<br/>Reason" ),
+		'mRsn' =>	array (
+			SESS_LANG_CHN => "回向內容",
+			SESS_LANG_ENG => "Request<br/>Reason" ),
 		'Age' => array (
 			SESS_LANG_CHN => "往生者<br/>年齡",
 			SESS_LANG_ENG => "Age Died" ),
@@ -98,30 +101,48 @@ function readSundayParam( $dbInfo ) {
 
 function cellWidth( $fldN, $tblName ) { // Sunday data table field width (%) mapping
 	$x = ''; // 回向 table fields vary
-	switch ( $fldN ) {
-		case 'R_Name':
-		case 'qWhom':
-		case 'mWhom':
-			$x = 10.5; break;
-		case 'GuanXi':
-			$x = 11; break;
-		case 'Rsn':
-			$x = 18; break;
-		case 'Age':
-			$x = 6; break;
-		case 'Deceased_D':
-			$x = 12; break;
-		case 'Deceased_P':
-			$x = 8.5; break;
-		case 'qDates':
-			$x = 34; break;
-		case 'mDates': // for 回向; at most 7 dates
-			$x = 25.5; break;		
-		/*
-			case 'GongDeZhu':
-			$x = 5.5; break;
-		*/		
-	} // switch() - End of determining Cell Width
+
+	if ($tblName == 'sundayQifu') {
+		switch ( $fldN ) {
+			case 'R_Name':
+			case 'qWhom':
+				$x = 10.5; break;
+			case 'GuanXi':
+				$x = 11; break;
+			case 'Rsn':
+				$x = 18; break;
+			case 'qDates':
+				$x = 34; break;	
+			/*
+				case 'GongDeZhu':
+				$x = 5.5; break;
+			*/		
+		} // switch() - End of determining Cell Width
+	}
+	else {
+		switch ( $fldN ) {
+			case 'R_Name':
+			case 'mWhom':
+				$x = 9; break;
+			case 'GuanXi':
+				$x = 9.5; break;			
+			case 'Age':
+				$x = 5; break;
+			case 'Deceased_D':
+				$x = 11; break;
+			case 'Deceased_P':
+				$x = 8.5; break;
+			case 'mRsn':
+				$x = 13.5; break;
+			case 'mDates': // for 回向; at most 7 dates
+				$x = 20.5; break;		
+			/*
+				case 'GongDeZhu':
+				$x = 5.5; break;
+			*/		
+		} // switch() - End of determining Cell Width
+	}
+	
 	return "width: " . $x . "%;";
 } // cellWidth()
 
