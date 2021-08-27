@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS sundayQifu
 	R_Name VARCHAR (40), /* Requestor's name */
 	qWhom VARCHAR (40),	 /* Recipient */
 	GuanXi VARCHAR (40), /* Relationship */
-	Rsn VARCHAR (80)
+	Rsn VARCHAR (255)
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS sundayMerit
@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS sundayMerit
 	GuanXi VARCHAR (40),
 	Age TINYINT,
     Deceased_D DATE,	/* Deceased Date */
-	Deceased_P VARCHAR(60) /* Deceased Place */
+	Deceased_P VARCHAR(60), /* Deceased Place */
+	mRsn VARCHAR(255)
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 /*
