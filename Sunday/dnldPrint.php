@@ -79,7 +79,7 @@
 	if ($qifuDataArray == null && $meritDataArray == null) {
 		$pdf->AddPage(); //add a page
 		//print no Qifu/Merit request msg
-		$pdf->Cell($totalWidth, 0, '本週日（'.date('Y-m-d').'）沒有祈福回向申請', 0, 0, 'L', false);
+		$pdf->Cell($totalWidth, 0, '本週日（'.getCurrentNextSundayDate().'）沒有祈福回向申請', 0, 0, 'L', false);
 	}
 	if ($qifuDataArray != null) {
 		//print Sunday Qifu data
@@ -118,10 +118,21 @@
 				'name' => 'Pure Land Center'
 			)
 		);	
+		$cc = array (
+			array (
+				'email' => 'bert.tan@comcast.net',
+				'name'  => '譚祖德'
+			),
+			array (
+				'email' => 'chunhui.guo01@gmail.com',
+				'name'  => '郭春輝'
+			)
+		);	
+
 		$subject = $pdfTitle;		
 
 		//send email
-		plcSendEmailAttachment( $libraryTo, null, $subject, $msg, null, $attachments, true);
+		plcSendEmailAttachment( $libraryTo, $cc, $subject, $msg, null, $attachments, true);
 	}
 	
 
