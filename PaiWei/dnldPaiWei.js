@@ -14,6 +14,8 @@ function getFileName(dbTblName) {
 			return  ( useChn ) ? "往生者蓮位" : "Deceased";
 		case 'DaPaiWei':
 			return  ( useChn ) ? "(一年內)往生者蓮位" : "Recently Deceased";
+		case 'DaPaiWeiRed':
+			return  ( useChn ) ? "紅色大牌位" : "RED DaPaiWei";
 	}
 
 }

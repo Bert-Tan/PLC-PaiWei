@@ -59,3 +59,11 @@ CREATE TABLE IF NOT EXISTS pw2Usr (
 	pwUsrName VARCHAR(60),		/* matches Usr.UsrName or inCareOf.UsrName */
 	PRIMARY KEY ( TblName, pwID )
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS DaPaiWeiRed
+(
+	ID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	C_Name VARCHAR (40),
+	timestamp DATE,
+	UNIQUE ( C_Name )
+) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;

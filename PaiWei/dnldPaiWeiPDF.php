@@ -55,6 +55,7 @@
 	//set PDF page orientation
 	switch ($paiweiTable) {
 		case 'DaPaiWei':
+		case 'DaPaiWeiRed':
 			$pageOrientation='P';
 			break;	
 		default:
@@ -286,6 +287,20 @@
 				$xIniReq=2.75; $xStepReq=0; $yPrefixReq=6.2; $ySuffixReq=10.4; $yTopReq=6.85; $yBottomReq=10.35;
 				$mulLineXadjustPaiwei=0.19; $mulLineXadjustReq=0.14;
 				break;	
+			case 'DaPaiWeiRed':
+				$topMargin=0.7; $leftMargin=0.0; $rightMargin=0.0; $pdfTitle='紅色大牌位'; 
+				$imgPath='img/DaPaiWei_Red.jpg'; $paiweiNumPerPage=1; $imgType='JPG'; $imgAlign='C';//center align
+				$imgWidth=0; $imgHeight=0; //TCPDF calculate image width and height automatically
+				$fontStylePaiwei='B'; $fontStyleReq='B'; $suffixReq='';
+				$fontSizePaiwei=24; $fontSizeReq=18; $fontSizePrefixReq=20;
+				$rotateXadjustPaiwei=1.0*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
+				$textXadjustPaiwei=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
+				$rotateXadjustReq=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStyleReq, $fontSizeReq, false);
+				$textXadjustReq=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStyleReq, $fontSizeReq, false);			
+				$xIniPaiwei=4.2; $xStepPaiwei=0; $yTopPaiwei=5.35; $yBottomPaiwei=8.25;					
+				$xIniReq=2.75; $xStepReq=0; $yPrefixReq=6.2; $ySuffixReq=10.4; $yTopReq=6.85; $yBottomReq=10.35;
+				$mulLineXadjustPaiwei=0.19; $mulLineXadjustReq=0.14;
+				break;
 		}		
 	}
 	
@@ -304,6 +319,7 @@
 		$paiweiFlds = ''; $reqFlds = ''; $addressFlds = '';
 		switch ($paiweiTable) {
 			case 'C001A':
+			case 'DaPaiWeiRed':
 				$paiweiFlds = "ifnull($_tblFlds[1], '') AS $_tblFlds[1]";
 				break;			
 			case 'D001A':
@@ -589,7 +605,6 @@
 
 	//print BLANK PaiWei sheet
 	function printBlankPaiweiSheet() {	
-		//?????
 		global $paiweiTable;
 		global $pdf, $ChineseFont, $fontStylePaiwei, $fontSizePrefixPaiwei;	
 		global $paiweiNumPerPage, $imgPath, $imgWidth, $imgHeight, $imgType, $imgAlign;
@@ -614,7 +629,8 @@
 			$pdf->Text($xPaiwei, $ySuffixPaiwei, $suffixPaiwei, false, false, true, 0, 1, 'L', false, '', 0, false, 'T', 'M', false);			
 	
 			switch ($paiweiTable) {
-				case 'C001A':					
+				case 'C001A':
+				case 'DaPaiWeiRed':					
 					break;			
 				case 'D001A':
 					printCommonPaiweiData($xPaiwei);
@@ -683,7 +699,10 @@
 				SESS_LANG_ENG => "Karmic Creditors name plaque" ),
 			'DaPaiWei' => array (
 				SESS_LANG_CHN => "一年內往生者大牌位",
-				SESS_LANG_ENG => "Recently Deceased name plaque" )			
+				SESS_LANG_ENG => "Recently Deceased name plaque" ),
+			'DaPaiWeiRed' => array (
+				SESS_LANG_CHN => "紅色大牌位",
+				SESS_LANG_ENG => "RED DaPaiWei" )			
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();

@@ -43,6 +43,7 @@
 		
 		switch ($_tblName) {
 			case 'C001A':
+			case 'DaPaiWeiRed':
 				array_push( $_data, array("祈福消災受益者姓名        Well-blessing Recipient\'s Name") );
 				array_push( $_data, array("C_Name") );
 				break;			
