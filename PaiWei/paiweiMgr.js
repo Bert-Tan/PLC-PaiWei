@@ -163,9 +163,15 @@ function dashboardRedirect( dbInfo ) {
 function hdlr_dataCellClick() {
 	var thisRow = $(this).closest("tr");
     var dbInfo = {};
-	dbInfo[ 'icoName' ] = thisRow.find("td[data-icoName]").attr("data-icoName");
+	var icoName = thisRow.find("td[data-icoName]").attr("data-icoName");
+	var tblName = $(this).attr("data-tblN");
+	dbInfo[ 'icoName' ] = icoName;
     dbInfo[ 'icoNameType' ] = 'icoDerived';
-    dbInfo[ 'tblName' ] = $(this).attr("data-tblN");
+	// only the 'PLC' user can see the RED DaPaiWei tab
+	if ( tblName == 'DaPaiWeiRed' && icoName != 'PLC' )
+		dbInfo[ 'tblName' ] = 'C001A';
+	else
+    	dbInfo[ 'tblName' ] = tblName;
     dashboardRedirect( dbInfo ); // dashboardRedirect() will not return here;
 } // function hdlr_dataCellClick()
 

@@ -52,6 +52,9 @@
 			'pwBIG' => array (
 				SESS_LANG_CHN => "(一年內)<br>往生者蓮位",
 				SESS_LANG_ENG => "Recently Deceased" ),
+			'pwBIGRED' => array (
+				SESS_LANG_CHN => "紅色大牌位",
+				SESS_LANG_ENG => "RED DaPaiWei" ),
 			'pwUpld' => array (
 				SESS_LANG_CHN => "上載牌位檔案",
 				SESS_LANG_ENG => "Upload CSV Files" ),
@@ -85,6 +88,7 @@
 	$sessLang = $_SESSION[ 'sessLang' ];
 	$sessType = $_SESSION[ 'sessType' ];
 	$useChn = ( $sessLang == SESS_LANG_CHN );
+	$icoName = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
 	$fontSize = ( $useChn ) ? "1.0em" : "0.9em";
 	$ltrSpacing = ( $useChn ) ? "20px" : "normal";
 	$h2TopMargin = ( $useChn ) ? "4px" : "6px";
@@ -283,9 +287,12 @@ input[type=text] {
 				<th data-tbl="L001A"><?php echo xLate( 'pwL' ); ?></th>
 				<th data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th>	
 				<th data-tbl="D001A"><?php echo xLate( 'pwD' ); ?></th>
+				<?php if ($sessType != SESS_TYP_USR && $icoName == 'PLC') { ?>
+				<th data-tbl="DaPaiWeiRed"><?php echo xLate( 'pwBIGRED' ); ?>
+				<?php } ?>
 				<th data-tbl="upld"><?php echo xLate( 'pwUpld' ); ?></th>
 				<?php if ($sessType == SESS_TYP_USR) { ?>
-					<th data-tbl='DnldPaiWei'><?php echo xLate( 'pwDnld' ); ?></th>
+				<th data-tbl='DnldPaiWei'><?php echo xLate( 'pwDnld' ); ?></th>
 				<?php } ?>				
 			</tr>
 		</thead>

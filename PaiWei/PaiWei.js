@@ -31,7 +31,7 @@ var _blankData = null; // blank data filler for W_Title & R_Title fields; they c
 var _wtList = null;	// W_Title & R_Title selection list
 var _rtList = null;
 var _icoName = null;
-var _rqTbls = [ 'D001A', 'L001A', 'Y001A', 'W001A_4', 'DaPaiWei' ];
+var _rqTbls = [ 'D001A', 'L001A', 'Y001A', 'W001A_4', 'DaPaiWei', 'DaPaiWeiRed' ];
 
 /**********************************************************
  *                    Support functions                   *
@@ -220,7 +220,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr, frameID ) {	/* dataOnly p
 
 	dataArea.empty();
 	dataArea.append( tblHdrWrapper , tblDataWrapper );
-  	
+
 	_dbInfo[ 'tblName' ] = tblName;
 	_dbInfo[ 'pgNbr' ] = pgNbr;
 	_dbInfo[ 'pwRqstr' ] = sessUsr;
@@ -1108,6 +1108,7 @@ function hdlr_tabClick() {
 		case 'C001A':
 		case 'W001A_4':
 		case 'DaPaiWei':
+		case 'DaPaiWeiRed':
 		case 'L001A':
 		case 'Y001A':
 		case 'D001A':

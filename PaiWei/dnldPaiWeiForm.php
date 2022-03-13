@@ -28,6 +28,9 @@
 			'pwBIG' => array (
 				SESS_LANG_CHN => "(一年內)往生者蓮位",
 				SESS_LANG_ENG => "Recently Deceased" ),
+			'pwBIGRED' => array (
+				SESS_LANG_CHN => "紅色大牌位",
+				SESS_LANG_ENG => "RED DaPaiWei" ),
 			'frameTitle' => array (
 				SESS_LANG_CHN => "下載牌位資料檔案",
 				SESS_LANG_ENG => "Download Name Plaque Data" ),
@@ -97,6 +100,9 @@
 					    <option value="L001A"><?php echo xLate( 'pwL' ); ?></option>
 					    <option value="Y001A"><?php echo xLate( 'pwY' ); ?></option>
 					    <option value="D001A"><?php echo xLate( 'pwD' ); ?></option>
+						<?php if ($sessType != SESS_TYP_USR) { ?>
+						<option value="DaPaiWeiRed"><?php echo xLate( 'pwBIGRED' ); ?></option>
+						<?php } ?>
 				  	</select>
 			    </td>
 			  </tr>

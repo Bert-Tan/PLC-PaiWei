@@ -59,11 +59,11 @@ function readInCareOf() { // returns a string reflecting a <select> html element
 
 function readUsrPwRows() { // returns a string reflecting PaiWei dashboard data rows
     global $_db;
-	$tblNames = array(	'C001A', 'W001A_4', 'DaPaiWei', 'L001A', 'Y001A', 'D001A' );
+	$tblNames = array(	'C001A', 'W001A_4', 'DaPaiWei', 'L001A', 'Y001A', 'D001A', 'DaPaiWeiRed' );
 	$pwTotal = array(	'C001A' => 0, 'W001A_4' => 0, 'DaPaiWei' => 0,
-						'L001A' => 0, 'Y001A' => 0, 'D001A' => 0 , 'grandTotal' => 0 );
+						'L001A' => 0, 'Y001A' => 0, 'D001A' => 0, 'DaPaiWeiRed' => 0, 'grandTotal' => 0 );
 	$pwSheets = array(	'C001A' => 0, 'W001A_4' => 0, 'DaPaiWei' => 0,
-						'L001A' => 0,'Y001A' => 0, 'D001A' => 0 , 'grandTotal' => 0 );
+						'L001A' => 0, 'Y001A' => 0, 'D001A' => 0, 'DaPaiWeiRed' => 0, 'grandTotal' => 0 );
 	
 	$sqlUsrs = "SELECT DISTINCT `pwUsrName` FROM `pw2Usr` WHERE `pwUsrName` NOT IN "
 			 . "(SELECT `UsrName` FROM `inCareOf`) ORDER BY `pwUsrName`;";
@@ -111,7 +111,7 @@ function readUsrPwRows() { // returns a string reflecting PaiWei dashboard data 
 	foreach( $tblNames as $tblName ) {
 		$pwCounts = $pwTotal[ "${tblName}" ];
 		$pwSheets[ "$tblName" ] = (int)( $pwCounts / 6 ) + ( ( $pwCounts % 6 ) > 0 );
-		if ( $tblName == "DaPaiWei" ) { $pwSheets[ "$tblName" ] = $pwCounts; }
+		if ( $tblName == "DaPaiWei" || $tblName == "DaPaiWeiRed" ) { $pwSheets[ "$tblName" ] = $pwCounts; }
 		$pwSheets[ 'grandTotal' ] += $pwSheets[ "$tblName" ];
 	}
 	/* now the Summary Row */

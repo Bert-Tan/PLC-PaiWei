@@ -14,7 +14,7 @@ function _dbName_2_htmlName ( $_dbName ) {
 	global $_sessLang;
 	$_htmlNames = array (
 		'C001A' =>	array (
-			SESS_LANG_CHN =>	"佛&nbsp;光&nbsp;祝&nbsp;照&nbsp;祈&nbsp;福&nbsp;消&nbsp;災",
+			SESS_LANG_CHN =>	"佛&nbsp;光&nbsp;祝&nbsp;照&nbsp;祈&nbsp;福&nbsp;消&nbsp;災",
 			SESS_LANG_ENG =>	"For Well-blessing & Lessening Misfortune" ),
 		'W001A' =>	array (
 			SESS_LANG_CHN =>	"佛&nbsp;力&nbsp;超&nbsp;薦&nbsp;往&nbsp;生&nbsp;親&nbsp;友",
@@ -26,7 +26,7 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_CHN =>	"佛&nbsp;力&nbsp;超&nbsp;薦&nbsp;歷&nbsp;代&nbsp;祖&nbsp;先",
 			SESS_LANG_ENG =>	"Dedicate Merit to Ancestors" ),
 		'Y001A' =>	array (
-			SESS_LANG_CHN =>	"佛&nbsp;力&nbsp;超&nbsp;薦&nbsp;累&nbsp;劫&nbsp;冤&nbsp;親&nbsp;債&nbsp;主",
+			SESS_LANG_CHN =>	"佛&nbsp;力&nbsp;超&nbsp;薦&nbsp;累&nbsp;劫&nbsp;冤&nbsp;親&nbsp;債&nbsp;主",
 			SESS_LANG_ENG =>	"Dedicate Merit to Karmic Creditors" ),
 		'D001A' =>	array (
 			SESS_LANG_CHN =>	"佛&nbsp;力&nbsp;超&nbsp;薦&nbsp;地&nbsp;基&nbsp;主",
@@ -36,6 +36,9 @@ function _dbName_2_htmlName ( $_dbName ) {
 											.	"<span style=\"color: yellow;\">(12 個月之內)</span>&nbsp;往&nbsp;生&nbsp;親&nbsp;友",
 			SESS_LANG_ENG =>	"Dedicate Merit to Recently "
 											.	"<span style=\"color: yellow;\">(within 12 months)</span> Deceased" ),
+		'DaPaiWeiRed' =>	array (
+			SESS_LANG_CHN =>	"紅&nbsp;色&nbsp;大&nbsp;牌&nbsp;位",
+			SESS_LANG_ENG =>	"RED DaPaiWei" ),
 		'C_Name' =>	array (
 			SESS_LANG_CHN =>	"佛&nbsp;光&nbsp;祝&nbsp;照&nbsp;受&nbsp;益&nbsp;者",
 			SESS_LANG_ENG =>	"Well-blessing Recipient's Name" ),
@@ -238,12 +241,12 @@ function constructTblData ( $rows, $dbTblName ) { // $rows =  $mysqlresult->fetc
 function constructTblHeader( $dbTblName ) {
 	global $_sessUsr, $_sessLang, $_icoName;
 	$fldN = getPaiWeiTblFlds( $dbTblName );
-  $tpl = new HTML_Template_IT("./Templates");
-  $tpl->loadTemplatefile("pwTblHeader.tpl", true, true);
-  $tpl->setCurrentBlock("hdr_tbl") ;
+  	$tpl = new HTML_Template_IT("./Templates");
+  	$tpl->loadTemplatefile("pwTblHeader.tpl", true, true);
+  	$tpl->setCurrentBlock("hdr_tbl") ;
 	$tpl->setVariable("numCols", sizeof($fldN) ) ;
-  $tpl->setVariable("htmlTblName", _dbName_2_htmlName( $dbTblName ) ) ;
-  $tpl->setVariable("Who", $_sessUsr ) ;
+  	$tpl->setVariable("htmlTblName", _dbName_2_htmlName( $dbTblName ) ) ;
+  	$tpl->setVariable("Who", $_sessUsr ) ;
   if ( $_icoName != null ) {
 	$tpl->setVariable("ico", ";&nbsp;&nbsp;In Care Of:&nbsp;&nbsp;{$_icoName}" ) ;
   }

@@ -13,6 +13,8 @@
 	if ( !isset( $_SESSION[ 'usrName' ] ) ) {
 		header( "location: " . $hdrURL );
 	}
+	$sessType = $_SESSION[ 'sessType' ];
+	$icoName = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
 
 ?>
 
@@ -80,6 +82,9 @@ input[type=submit] {
 						<option value="L001A">超薦歷代祖先</option>
 						<option value="Y001A">超薦累劫冤親債主</option>
 						<option value="D001A">超薦地基主</option>
+						<?php if ($sessType != SESS_TYP_USR && $icoName == 'PLC') { ?>
+						<option value="DaPaiWeiRed">紅色大牌位</option>
+						<?php } ?>
 			    	</td>
 				</tr>
 				<tr>
@@ -129,6 +134,9 @@ input[type=submit] {
 				    <option value="L001A">Ancestors</option>
 				    <option value="Y001A">Karmic Creditors</option>
 				    <option value="D001A">Site Guardians</option>
+					<?php if ($sessType != SESS_TYP_USR && $icoName == 'PLC') { ?>
+					<option value="DaPaiWeiRed">RED DaPaiWei</option>
+					<?php } ?>
 			    </td>
 			  </tr>
 			  <tr>
