@@ -147,9 +147,11 @@
 		$dbExpires = $row[ 'Expires' ];
 		
 		if ( time() > strtotime( $dbExpires ) ) {
-			$errMsg = ( $rspChn ) ? "恢復密碼的請求已過期！" : "Reset Timer Expired!";
+			$errMsg = ( $rspChn ) ? "恢復密碼的請求已過期！請重新請求。" : "Reset Timer Expired! Please Re-Submit Reset Request!";
 			$_errCount++;
 			$_errRec[] = $errMsg;
+			$sql = "DELETE FROM `UsrRst` WHERE `ID` = \"{$usrID}\"; ";
+			$_db->query( $sql ); /* Delete obsolete one */
 			return false;
 		}
 		$sql = "SELECT * FROM Usr WHERE `ID` = \"{$usrID}\" ;";
