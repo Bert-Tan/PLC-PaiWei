@@ -25,7 +25,7 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_CHN => "回&nbsp;&nbsp;向&nbsp;&nbsp;申&nbsp;&nbsp;請&nbsp;&nbsp;表",
 			SESS_LANG_ENG => "Merit Dedication Request Form" ),
 		'R_Name' =>	array (
-			SESS_LANG_CHN => "申請人姓名",
+			SESS_LANG_CHN => "申請人&nbsp;及<br/>代理申請人<br/>姓名",
 			SESS_LANG_ENG => "Requestor's<br/>Full Name" ),
 		'mWhom' =>	array (
 			SESS_LANG_CHN => "往生者全名",
@@ -37,10 +37,10 @@ function _dbName_2_htmlName ( $_dbName ) {
 			SESS_LANG_CHN => "與申請人關係",
 			SESS_LANG_ENG => "Relationship<br/>w/ Requestor" ),
 		'Rsn' =>	array (
-			SESS_LANG_CHN => "祈福申請理由",
+			SESS_LANG_CHN => "祈福申請理由&nbsp;包括<br/>指定的出席代表",
 			SESS_LANG_ENG => "Request<br/>Reason" ),
 		'mRsn' =>	array (
-			SESS_LANG_CHN => "回向內容",
+			SESS_LANG_CHN => "回向內容&nbsp;包括<br/>指定的出席代表",
 			SESS_LANG_ENG => "Request<br/>Reason" ),
 		'Age' => array (
 			SESS_LANG_CHN => "往生者<br/>年齡",
