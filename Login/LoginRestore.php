@@ -108,8 +108,8 @@
 					$msg->parse("msgBlock");
 					if ( plcSendEmailAttachment( $toMe, null, $subject, $msg->get(), null, null, true ) ) {
 						$msgTxt = ( $useChn)
-							? "恢復密碼的網鍊已經送到您註冊過的郵電地址，請由那網鍊處重新設立密碼。<br/>(<b>請同時檢查您的垃圾郵箱</b>)"
-							: "A link was sent to your registered email address; please follow it to reset.<br/>(<b>Please also check your Junk Mailbox</b>)";
+							? "恢復密碼的網鍊已經送到您註冊過的郵電地址，請由那網鍊處重新設立密碼。<br/><b><font color=\"blue\">**請同時檢查您的垃圾郵箱**</font></b>"
+							: "A link was sent to your registered email address; please follow it to reset.<br/><b><font color=\"blue\">**Please also check your Junk Mailbox**</font></b>)";
 					}
 				} // $myID set
 				break;
