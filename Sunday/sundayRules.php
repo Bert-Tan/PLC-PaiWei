@@ -93,7 +93,7 @@
 			</dd><br/>
 			<dt>申請祈福與回向的次數</dt><br/>
 			<dd>
-				申請時，請明確註明每次申請的日期。若希望祈福或回向多次者:<br/><br/>
+				申請時，請明確註明每次申請的日期。若希望祈福或回向多次者:<br/>
 				<ul style="list-style-type:square;">
 					<li><b>祈福</b>:&nbsp;最多以三次為限</li>
 					<li><b>回向</b>:&nbsp;
@@ -110,6 +110,14 @@
 						</ol>
 				</ul>
 			</dd><br/>
+			<dd><b><font color="navy">
+				*** 代理他人申請，或申請人指定代表出席者，請於申請時特別註明 ***
+				<ul style="list-style-type:square;">
+					<li>代理申請人的姓名請填於 ‘申請人姓名’ 的第二行並加括弧。</li>
+					<li>指定的出席代表者的姓名請填於 ‘祈福申請理由’ 或 ‘回向內容’ 的第二行並加括弧。</li>
+				</ul>
+				</font></b>
+			</dd>
 			<dt>申請做功德主</dt><br/>
 			<dd>
 				同修若要申請做功德主，請先送 email 到佛堂 (library@amitabhalibrary.org)，直接向譚副館長申請。
