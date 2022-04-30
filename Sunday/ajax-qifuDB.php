@@ -153,6 +153,7 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 	
 	$dateFldName = ( $dbTblName == 'sundayQifu' ) ? 'qDates' : 'mDates';
 	$dateFldWidth = cellWidth( $dateFldName, $dbTblName );
+	$rsnColIndex = ( $dbTblName == 'sundayQifu' ) ? 4 : 7; // the column index of 'Rsn' field
 
 	if ( $rows == null ) { // construct an empty data table with an empty row
 		$fldN = getDBTblFlds( $dbTblName );
@@ -182,21 +183,39 @@ function constructTblData ( $rows, $dbTblName, $refDate ) { // $rows =  $mysqlre
 		}
 		if ( strlen( $sundayRqDates ) == 0 ) continue;
 		$tpl->setCurrentBlock("data_row");
+		
 		$i = 0;
 		foreach ( $row as $key => $val ) {
-			if ( $i == 0 ) { // key field; not visible to user
+			if ( $i == 0 ) { // 'ID' field; not visible to user
 				$tpl->setVariable("tupKeyN", $key);
 				$tpl->setVariable("tupKeyV", $val);
 				$i++; continue;
 			}
-			// all other fields are visible to user
+			if ( $i == 1 ) { // 'R_Name' field; <textarea> tag; visible to user
+				$tpl->setCurrentBlock("R_Name_col");
+				$tpl->setVariable("cellWidth", cellWidth( $key, $dbTblName  ) );
+				$tpl->setVariable("dbFldN", $key);
+				$tpl->setVariable("dbFldV", $val);
+				$tpl->parse("R_Name_col");
+				$i++; continue;
+			}
+			if ( $i == $rsnColIndex ) { // 'Rsn' field; <textarea> tag; visible to user
+				$tpl->setCurrentBlock("Rsn_col");
+				$tpl->setVariable("cellWidth", cellWidth( $key, $dbTblName  ) );
+				$tpl->setVariable("dbFldN", $key);
+				$tpl->setVariable("dbFldV", $val);
+				$tpl->parse("Rsn_col");
+				$i++; continue;
+			}
+			// all other fields; <input> tag; visible to user
 			$tpl->setCurrentBlock("data_cell");
 			$tpl->setVariable("cellWidth", cellWidth( $key, $dbTblName  ) );
 			$tpl->setVariable("dbFldN", $key);
 			$tpl->setVariable("dbFldV", $val);
 			$tpl->parse("data_cell");
-		} // data fields of a row from sundayQifu or sundayMerit table
-				
+			$i++;
+		} // data fields of a row from sundayQifu or sundayMerit table		
+		
 		$tpl->setCurrentBlock("reqDateCol");
 		$tpl->setVariable("dateFldWidth", $dateFldWidth );
 		$tpl->setVariable("dateFldV", $sundayRqDates ); $sundayRqDates = '';

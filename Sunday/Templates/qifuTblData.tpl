@@ -2,12 +2,22 @@
 <table class="dataRows" data-tblname="{dbTblName}">
   <tbody>
   	<!-- BEGIN data_row -->
-    <tr data-keyn="{tupKeyN}" id="{tupKeyV}">
+    <tr data-keyn="{tupKeyN}" id="{tupKeyV}" >
+		<!-- BEGIN R_Name_col -->
+		<td style="{cellWidth}">
+			<textarea style="width: 95%; height: 90%; white-space: pre;" disabled rows="2" data-fldn="{dbFldN}" data-oldv="{dbFldV}">{dbFldV}</textarea>
+		</td>
+		<!-- END R_Name_col -->
 		<!-- BEGIN data_cell -->
 		<td style="{cellWidth}">
 			<input disabled type="text" data-fldn="{dbFldN}" data-oldv="{dbFldV}" value="{dbFldV}">
 		</td>
 		<!-- END data_cell -->
+		<!-- BEGIN Rsn_col -->
+		<td style="{cellWidth}">
+			<textarea style="width: 95%; height: 90%; white-space: pre;" disabled rows="2" data-fldn="{dbFldN}" data-oldv="{dbFldV}">{dbFldV}</textarea>
+		</td>
+		<!-- END Rsn_col -->
 		<!-- BEGIN reqDateCol -->
 		<td style="{dateFldWidth}">
 			<input disabled type="text" data-fldn="reqDates" data-oldv="{dateFldV}" value="{dateFldV}">

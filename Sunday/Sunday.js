@@ -192,9 +192,13 @@ function init_pilotRow( pRow ) {
     var insBtn = $('<input class="insBtn" type="button" value="' + insBtnTxt + '">');
     var lastTd = pRow.find("td:last");
 
+    var aa = pRow.find("textarea");
+    var bb = pRow.find("input[type=text]");
     pRow.find("input[type=text]").attr( { "data-oldv": '', "value": pilotInputTxt, "data-pmptv": '' } );
+    pRow.find("textarea").attr( { "data-oldv": '', "data-pmptv": '' } ).val( pilotInputTxt );
     pRow.find("input[data-fldn=reqDates]").attr( "value", reqDateTxt );
     pRow.find("input[type=text]").prop( "disabled", false );
+    pRow.find("textarea").prop( "disabled", false );
     /*
     pRow.find("input[type=checkbox]").attr( { "data-oldv": '', "value": '', "data-pmptv": '' } );
     pRow.find("input[type=checkbox]").prop( "disabled", false );
@@ -419,8 +423,7 @@ function hdlr_dataChg() { // on Blur
 
 function hdlr_tabClick() {
     var rqTblName = $(this).attr("data-table");
-    var dirtyCells = $("tbody input[type=text][data-changed=true]").length;
-    //var dirtyCells = $("tbody input[data-changed=true]").length;
+    var dirtyCells = $("tbody [data-changed=true]").length;
     if ( rqTblName == _tblName ) return false; /* nothing to do */
     if ( ( dirtyCells > 0 ) && ( !confirm( _alertUnsaved ) ) ) return;
     _tblName = rqTblName; /* Global: _tblName, _usrName, _icoName */
@@ -451,7 +454,7 @@ function hdlr_tabClick() {
         loadSundayDueForm();
         break;
     case 'dnldPrint':
-        location.replace( "./dnldPrint.php" );
+        location.replace( "./dnldPrint.php?view=true" );
         break;
     } // switch()
 } // function tabClick()
@@ -460,10 +463,13 @@ function hdlr_addRow() {
     var dataBody = $("table.dataRows tbody");
     var newRow = _pilotRow.clone();
     var newRowDataCells = newRow.find("input[type=text]");
+    var newRowTextareaCells = newRow.find("textarea");
     //var newCheckbox = newRow.find("input[type=checkbox]");
 
     newRowDataCells.on( 'blur', hdlr_dataChg );
     newRowDataCells.on( 'focus', hdlr_onFocus );
+    newRowTextareaCells.on( 'blur', hdlr_dataChg );
+    newRowTextareaCells.on( 'focus', hdlr_onFocus );
     /*
     newCheckbox.on( 'blur', hdlr_dataChg );
     newCheckbox.on( 'focus', hdlr_onFocus );
@@ -522,10 +528,13 @@ function hdlr_editBtn() {
     var canBtn = $('<input class="canBtn" type="button" value="' + canBtnVal + '">');
     var delBtn = $('<input class="delBtn" type="button" value="' + delBtnVal + '">');
     var dataCells = $(this).closest("tr").find("input[type=text]");
+    var textareaCells = $(this).closest("tr").find("textarea");
     //var checkbox = $(this).closest("tr").find("input[type=checkbox]");
     var lastTd = $(this).closest("td");
     dataCells.prop( 'disabled', false );
     dataCells.on('blur', hdlr_dataChg );
+    textareaCells.prop( 'disabled', false );
+    textareaCells.on('blur', hdlr_dataChg );
     /*
     checkbox.prop( 'disabled', false );
     checkbox.on('blur', hdlr_dataChg );
@@ -594,13 +603,13 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
     var insBtn = $(this);
     var thisRow = $(this).closest("tr");
     var lastTd = thisRow.find("td:last");
-    var cellsChanged = thisRow.find("input[type=text][data-changed=true]");
+    var cellsChanged = thisRow.find("[data-changed=true]");
     //var checkboxChanged = thisRow.find("input[type=checkbox][data-changed=true]");
 
     var ajaxData = {}, dbInfo = {}, tblFlds = {};
 
     if ( cellsChanged.length == 0 ) return;
-	if ( cellsChanged.length != thisRow.find("input[type=text]").length ) { // incomplete data input
+	if ( cellsChanged.length != thisRow.find("input[type=text]").length + thisRow.find("textarea").length ) { // incomplete data input
 		alert( alertText );
 		return;
     }
@@ -652,6 +661,7 @@ function hdlr_insBtn() { // alert("hdlr_insBTN() clicked"); alert( $(this).close
                             $(this).attr( {"oldv": $(this).val(), "value": $(this).val(), "data-changed": "false"} );
                         });
                         thisRow.find("input[type=text]").prop("disabled", true).removeAttr('data-pmptv');
+                        thisRow.find("textarea").prop("disabled", true).removeAttr('data-pmptv');
                         /*
                         if ( checkboxChanged.length != 0 ) {
                             checkboxChanged.each( function() {
@@ -702,13 +712,14 @@ function hdlr_updBtn() {
     var spacer = "<span>&nbsp;&nbsp;</span>";
     var thisRow = $(this).closest("tr");
     var lastTd = thisRow.find("td:last");
-    var cellsChanged = thisRow.find("input[data-changed=true]");
+    var cellsChanged = thisRow.find("[data-changed=true]");
     //var checkbox = thisRow.find("input[type=checkbox]");
     var tblFlds = {}, ajaxData = {}, dbInfo = {};
 
     if ( cellsChanged.length == 0 ) {
         alert( ackNC );
         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
+        thisRow.find("textarea").prop( "disabled", true ); // disable Edit
         //thisRow.find("input[type=checkbox]").prop( "disabled", true );
         thisRow.find("*").unbind();
         lastTd.empty().append( editBtn, spacer, delBtn );
@@ -766,6 +777,7 @@ function hdlr_updBtn() {
                         alert( ackMsg );
                         cellsChanged.attr("data-changed", "false");
                         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
+                        thisRow.find("textarea").prop( "disabled", true ); // disable Edit
                         //thisRow.find("input[type=checkbox]").prop( "disabled", true );
                         thisRow.find("*").unbind();
                         lastTd.empty().append( editBtn, spacer, delBtn );
@@ -800,6 +812,7 @@ function hdlr_updBtn() {
                         alert( errMsg ); 
                         cellsChanged.attr("data-changed", "false");
                         thisRow.find("input[type=text]").prop( "disabled", true ); // disable Edit
+                        thisRow.find("textarea").prop( "disabled", true ); // disable Edit
                         //thisRow.find("input[type=checkbox]").prop( "disabled", true );
                         thisRow.find("*").unbind();
                         lastTd.empty().append( editBtn, spacer, delBtn );
@@ -821,7 +834,7 @@ function hdlr_canBtn() {
     var editBtn = $('<input class="editBtn" type="button" value="' + editBtnVal + '">');
     var delBtn = $('<input class="delBtn" type="button" value="' + delBtnVal + '">');
     var spacer = "<span>&nbsp;&nbsp;</span>";
-    var cells = $(this).closest("tr").find("input[type=text][data-changed=true]");    
+    var cells = $(this).closest("tr").find("[data-changed=true]");    
     //var checkbox = $(this).closest("tr").find("input[type=checkbox][data-changed=true]");
     var td = $(this).closest("td");
 	if ( cells.length > 0 ) {
@@ -844,6 +857,7 @@ function hdlr_canBtn() {
     }
     */
     $(this).closest("tr").find("input[type=text]").prop( "disabled", true );
+    $(this).closest("tr").find("textarea").prop( "disabled", true );
     //$(this).closest("tr").find("input[type=checkbox]").prop( "disabled", true );
     td.find("*").unbind(); td.empty();
     td.append( editBtn, spacer, delBtn );

@@ -24,12 +24,12 @@
 	$title = '淨土念佛堂、圖書館';
 	$qifuTableTitle = '祈  福  申  請  表';
 	$meritTableTitle = '回  向  申  請  表';
-	$qifuHeaderData = array("申請人\n姓名", "受祈福\n者姓名", "與申請\n人關係", "受祈福人的狀況\n（申請理由）");
-	$meritHeaderData = array("申請人\n姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "回向內容");
+	$qifuHeaderData = array("申請人 及\n(代理申請人)\n姓名", "受祈福\n者姓名", "與申請\n人關係", "祈福申請理由 包括\n(指定的出席代表)");
+	$meritHeaderData = array("申請人及\n(代理申請人) 姓名", "往生者\n姓名", "與申請\n人關係", "往生者年齡", "往生日期", "往生地點", "回向內容 包括\n(指定的出席代表)");
 
 	//table cell column width
 	$qifuCellWidthArray = array(1.5, 1.5, 1.5, 5.5);
-	$meritCellWidthArray = array(1.1, 1.1, 1.1, 0.9, 1.3, 1.1, 3.4);
+	$meritCellWidthArray = array(1.2, 1.1, 1.0, 0.9, 1.3, 1.1, 3.4);
 
 	$totalWidth = 11 - $leftMargin - $rightMargin; //total table width
 	$totalHeight = 8.5 - $topMargin - $bottomMargin; //total page height

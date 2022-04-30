@@ -126,7 +126,7 @@ $(document).ready(function() {
 	}
  */
 	table.dataHdr th, table.dataRows td {
-		height: 22px;
+		height: 58px;
 		line-height: 1.2em;
 	}
 
