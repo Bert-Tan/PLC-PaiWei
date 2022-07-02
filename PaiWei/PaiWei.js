@@ -1054,8 +1054,8 @@ function ready_edit() {
 	_validBtn.on( 'click', validBtnHdlr );
 	_validAllBtn.on( 'click', validAllBtnHdlr );
 
-	// disable ValidAll button for DaPaiWei
-	if ( _tblName == "DaPaiWei" ) {
+	// disable ValidAll button for DaPaiWei and DaPaiWei_Red
+	if ( _tblName == "DaPaiWei" || _tblName == "DaPaiWeiRed" ) {
 		_validAllBtn.prop( "disabled", true );
 	}
 } // ready_edit()

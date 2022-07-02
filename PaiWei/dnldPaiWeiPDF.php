@@ -91,7 +91,7 @@
 	}
 	else {
 		getData(); //get data
-	
+
 		if(count($paiweiArray)==0 && count($reqArray)==0) { // NO PaiWei data to print 
 			$pdf->SetMargins(1,1);
 			$pdf->AddPage(); //add a page
@@ -425,24 +425,37 @@
 	
 	//print data
 	function printStr($str, $fontStyle, $fontSize, $x, $yTop, $yBottom, $rotateXadjust, $textXadjust, $mulLineXadjust, $dataType) {
-		global $pdf, $ChineseFont, $EnglishFont, $rotateDegree;
+		global $paiweiTable, $pdf, $ChineseFont, $EnglishFont, $rotateDegree;
 		$subStrsArray = Array();
-				
-		$strings = splitWithChinese($str); //split into Chinese and English substrings
-		$strWidths = calWidths($strings, $fontSize, $fontStyle); //calculate widths of each substring	
-		$totalWidth = array_sum($strWidths); //total width of the string
-		$maxWidth = $yBottom - $yTop; //maximal line width
-		$EnglishSplitSymbol = ( $dataType=='Address' ) ? ',' : '\s'; //multiple lines: split Address and PaiWei/requester English string with commas(',') and whitespaces('\s') respectively
-		if($totalWidth > $maxWidth)
-			$subStrsArray = splitWithWidth($strings, $strWidths, $totalWidth, $maxWidth, $fontSize, $fontStyle, $EnglishSplitSymbol);
-		else
-			array_push($subStrsArray, $strings); //2-D array, be consist with multiple lines data structure
+
+		// split 'PaiWei' data of DaPaiWei and DaPaiWei_red into multilines according to MANUALLY entered line breakers (i.e. \n <br> <br/> <br />)
+		if( $dataType == 'PaiWei' && ($paiweiTable == 'DaPaiWei' || $paiweiTable == 'DaPaiWeiRed') && (strpos($str, "\n") !== false || strpos($str, "<br>") !== false || strpos($str, "<br/>") !== false || strpos($str, "<br />") !== false) ) {
+			$lines = explode( "<br>", str_replace( ["\n", "<br/>", "<br />"], "<br>", $str ) ); // split into multilines
+			
+			$EnglishSplitSymbol = '\s'; //each line: split PaiWei English string with whitespaces('\s')
+			foreach($lines as $line) {
+				$substrings = splitWithChinese($line); //each line split into Chinese and English substrings
+				array_push($subStrsArray, $substrings); //2-D array, be consist with multiple lines data structure
+			}
+		}		
+		// split long data strings according to PDF line length
+		else {			
+			$strings = splitWithChinese($str); //split into Chinese and English substrings			
+			$strWidths = calWidths($strings, $fontSize, $fontStyle); //calculate widths of each substring
+			$totalWidth = array_sum($strWidths); //total width of the string
+			$maxWidth = $yBottom - $yTop; //maximal line width
+			$EnglishSplitSymbol = ( $dataType=='Address' ) ? ',' : '\s'; //multiple lines: split Address and PaiWei/requester English string with commas(',') and whitespaces('\s') respectively
+			if($totalWidth > $maxWidth)
+				$subStrsArray = splitWithWidth($strings, $strWidths, $totalWidth, $maxWidth, $fontSize, $fontStyle, $EnglishSplitSymbol);
+			else
+				array_push($subStrsArray, $strings); //2-D array, be consist with multiple lines data structure
+		}
 		
 		//calculate initial X position (i.e., the first line)
 		//PaiWei data: lines center-aligned (based on PaiWei's prefix/suffix string)
 		//requester/address data: lines right-aligned (based on pre-defined requester/address prefix/suffix string position)
 		$x = ( $dataType=='PaiWei' ) ? $x + (count($subStrsArray)-1)*$mulLineXadjust : $x;
-		
+
 		//print each PaiWei/requester/address line
 		for($j=0; $j<count($subStrsArray); ++$j) {
 			$subStrs = $subStrsArray[$j];
