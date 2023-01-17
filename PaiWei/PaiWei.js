@@ -702,6 +702,10 @@ function insBtnHdlr() {
 						lastTd.find(".delBtn").on( 'click', delBtnHdlr ); // bind to the Del click handler
 						lastTd.find(".dupBtn").on( 'click', dupBtnHdlr ); // bind to the Dup click handler
 						lastTd.find(".validBtn").on( 'click', validBtnHdlr ); // bind to the Valid click handler
+						// disable the Edit button of W001A_4 and DaPaiWei for regular users
+						if ( ( _tblName == "W001A_4" || _tblName == "DaPaiWei" ) && ( _sessType == SESS_TYP_USR ) ) {
+							lastTd.find(".editBtn").prop( "disabled", true );
+						}
 						alert( alertMsg );
 						return;							
 					case 'errCount':
@@ -1057,6 +1061,11 @@ function ready_edit() {
 	// disable ValidAll button for DaPaiWei and DaPaiWei_Red
 	if ( _tblName == "DaPaiWei" || _tblName == "DaPaiWeiRed" ) {
 		_validAllBtn.prop( "disabled", true );
+	}
+
+	// disable all Edit buttons of W001A_4 and DaPaiWei for regular users
+	if ( ( _tblName == "W001A_4" || _tblName == "DaPaiWei" ) && ( _sessType == SESS_TYP_USR ) ) {
+		_editBtns.prop( "disabled", true );
 	}
 } // ready_edit()
 

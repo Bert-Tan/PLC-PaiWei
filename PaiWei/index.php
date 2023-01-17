@@ -285,7 +285,7 @@ input[type=text] {
 				<th data-tbl="W001A_4"><?php echo xLate( 'pwW' ); ?></th>
 				<th data-tbl="DaPaiWei"><?php echo xLate( 'pwBIG' ); ?></th>
 				<th data-tbl="L001A"><?php echo xLate( 'pwL' ); ?></th>
-				<th data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th>	
+				<!-- <th data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th> -->	
 				<th data-tbl="D001A"><?php echo xLate( 'pwD' ); ?></th>
 				<?php if ($sessType != SESS_TYP_USR && $icoName == 'PLC') { ?>
 				<th data-tbl="DaPaiWeiRed"><?php echo xLate( 'pwBIGRED' ); ?>
