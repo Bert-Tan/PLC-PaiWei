@@ -98,7 +98,7 @@
 						<option value="W001A_4"><?php echo xLate( 'pwW' ); ?></option>
 					    <option value="DaPaiWei"><?php echo xLate( 'pwBIG' ); ?></option>
 					    <option value="L001A"><?php echo xLate( 'pwL' ); ?></option>
-					    <!-- <option value="Y001A"><?php echo xLate( 'pwY' ); ?></option> -->
+					    <option value="Y001A"><?php echo xLate( 'pwY' ); ?></option>
 					    <option value="D001A"><?php echo xLate( 'pwD' ); ?></option>
 						<?php if ($sessType != SESS_TYP_USR) { ?>
 						<option value="DaPaiWeiRed"><?php echo xLate( 'pwBIGRED' ); ?></option>
