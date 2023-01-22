@@ -74,8 +74,8 @@
 				SESS_LANG_CHN => "下載牌位列印",
 				SESS_LANG_ENG => "" ),
 			'alertMsg' => array (
-				SESS_LANG_CHN => "**** 除有特殊困難，牌位申請者須本人親自( 或由指定代表 ) 前來參加法會 ****",
-				SESS_LANG_ENG => "**** You or your designee shall be present in the retreat unless you have difficulties ****" )
+				SESS_LANG_CHN => "**** 牌位申請者須本人親自前來參加法會 ****",
+				SESS_LANG_ENG => "**** You shall be present in the retreat ****" )
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
