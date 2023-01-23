@@ -86,7 +86,8 @@
 	$reqSuffixArray = array(); //requester suffix ('叩薦'or'敬薦') data
 	$addressArray = array(); //DiJiZhu address data
 
-	if($_POST[ 'dnldUsrName' ] == 'BLANK') { // print BLANK PaiWei sheet
+	// selection overwrite rule: BLANK > ALL > users
+	if( in_array('BLANK', $_POST[ 'dnldUsrName' ]) ) { // print BLANK PaiWei sheet
 		printBlankPaiweiSheet();
 	}
 	else {
@@ -407,19 +408,30 @@
 	//get query SQL statement
 	function getSQL($_selFlds, $lastRtrtDate) {
 		global $paiweiTable;
-		if ( $_POST[ 'dnldUsrName' ] == 'ALL' ) {
+
+		// selection overwrite rule: BLANK > ALL > users
+		if ( in_array('ALL', $_POST[ 'dnldUsrName' ]) ) {
 			//group PaiWei data by pwUsrName
 			$_sql = "SELECT $_selFlds FROM {$paiweiTable} LEFT JOIN pw2Usr "
 				  . "ON (ID = pwID AND TblName = \"{$paiweiTable}\") "
 				  . "WHERE timestamp > \"{$lastRtrtDate}\" "
 				  . "ORDER BY pwUsrName, ID;";
 		} else {
-			$_dnldUsrName = $_POST[ 'dnldUsrName' ];
+			$_dnldUsrNames = $_POST[ 'dnldUsrName' ];
+			
+			$usrNameStr = "(";
+			foreach ( $_dnldUsrNames as $_dnldUsrName ) {
+				$usrNameStr = $usrNameStr . "\"". $_dnldUsrName. "\"";
+				if ( $_dnldUsrName != end($_dnldUsrNames) ) $usrNameStr = $usrNameStr . ", ";
+			}
+			$usrNameStr = $usrNameStr . ")";
+
 			$_sql	= "SELECT {$_selFlds} FROM {$paiweiTable} WHERE ID IN "
-					. "(SELECT pwID FROM pw2Usr WHERE TblName = \"{$paiweiTable}\" AND pwUsrName = \"{$_dnldUsrName}\") "
+					. "(SELECT pwID FROM pw2Usr WHERE TblName = \"{$paiweiTable}\" AND pwUsrName IN {$usrNameStr}) "
 					. "AND timestamp > \"{$lastRtrtDate}\" "
 					. "ORDER BY ID;";
 		}
+
 		return $_sql;
 	}
 	

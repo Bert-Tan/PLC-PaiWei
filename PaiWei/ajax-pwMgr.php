@@ -65,24 +65,19 @@ function readUsrPwRows() { // returns a string reflecting PaiWei dashboard data 
 	$pwSheets = array(	'C001A' => 0, 'W001A_4' => 0, 'DaPaiWei' => 0,
 						'L001A' => 0, 'Y001A' => 0, 'D001A' => 0, 'DaPaiWeiRed' => 0, 'grandTotal' => 0 );
 	
-	$sqlUsrs = "SELECT DISTINCT `pwUsrName` FROM `pw2Usr` WHERE `pwUsrName` NOT IN "
-			 . "(SELECT `UsrName` FROM `inCareOf`) ORDER BY `pwUsrName`;";
-	$sqlInCareOf = "SELECT DISTINCT `pwUsrName` FROM `pw2Usr` WHERE `pwUsrName` IN "
-				 . "(SELECT `UsrName` FROM `inCareOf`) ORDER BY `pwUsrName`;";
-
-	$_db->query( "LOCK TABLES `inCareOf` READ, `pw2Usr` READ;" );
-	$rslt = $_db->query( $sqlUsrs );
+	// 'PLC' user: list as the first user
+	$sql = "SELECT DISTINCT `pwUsrName` FROM `pw2Usr` WHERE `pwUsrName` <> 'PLC' ORDER BY  `pwUsrName`;";
+	$_db->query( "LOCK TABLES `pw2Usr` READ;" );
+	$rslt = $_db->query( $sql );
 	$usrNames = $rslt->fetch_all(MYSQLI_ASSOC);
-	$rslt = $_db->query( $sqlInCareOf );
-	$inCareOfNames = $rslt->fetch_all(MYSQLI_ASSOC);
 	$_db->query("UNLOCK TABLES;");			 
-	$allNames = array_merge( $inCareOfNames, $usrNames );
-
+	array_unshift($usrNames , array("pwUsrName" => "PLC"));
+	
 	$tpl = new HTML_Template_IT("./Templates");
 	$tpl->loadTemplatefile("pwDashboard.tpl", true, true);
 	$tpl->setCurrentBlock("dashboardBody");
 
-	foreach ( $allNames as $Name ) {
+	foreach ( $usrNames as $Name ) {
 		$icoName = $Name[ 'pwUsrName' ];
 
 		$_db->query("LOCK TABLES `pw2Usr` READ;");
