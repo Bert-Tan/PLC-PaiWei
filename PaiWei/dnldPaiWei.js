@@ -32,21 +32,21 @@ function dnldCSVBtnHdlr() {
 	var emptyPwMsg = ( _sessLang == SESS_LANG_CHN ) ? '請選擇牌位！' : 'Please select name plaque type!';
 
 	dbTblName = $("select[name=dbTblName]").val();
+	if(dbTblName == "") {
+		alert(emptyPwMsg);
+		return;
+	}
+
 	if(_sessType == SESS_TYP_USR) // user, get from session
-		dnldUsrName = _sessUsr;
+		dnldUsrName = [ _sessUsr ]; // make an array to be consistent with multiple user selection
 	else // admin user, get from user selection
-		dnldUsrName = $("select[id=dnldUsrName]").val();
-	
+		dnldUsrName = $("select[id=dnldUsrName]").val();	
 	if(dnldUsrName.length == 0) {
 		alert(emptyUsrMsg);
 		return;
 	}
 	if(dnldUsrName.length > 1) {
 		alert(moreUsrMsg);
-		return;
-	}
-	if(dbTblName == "") {
-		alert(emptyPwMsg);
 		return;
 	}	
 
@@ -86,12 +86,12 @@ function dnldCSVBtnHdlr() {
 	var emptyUsrMsg = ( _sessLang == SESS_LANG_CHN ) ? '請選擇申請人！' : 'Please select requestors!';
 	var emptyPwMsg = ( _sessLang == SESS_LANG_CHN ) ? '請選擇牌位！' : 'Please select name plaque type!';
 
-	if($("select[id=dnldUsrName]").val().length == 0) {
-		alert(emptyUsrMsg);
-		return;
-	}
 	if($("select[name=dbTblName]").val() == "") {
 		alert(emptyPwMsg);
 		return;
 	}
+	if($("select[id=dnldUsrName]").val().length == 0) {
+		alert(emptyUsrMsg);
+		return;
+	}	
 } // dnldPDFBtnHdlr()
