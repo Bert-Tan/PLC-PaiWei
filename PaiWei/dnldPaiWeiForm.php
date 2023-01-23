@@ -83,7 +83,7 @@
 						if ($sessType == SESS_TYP_USR) {
 							echo $_SESSION[ 'usrName' ];
 					?>
-							<input type="hidden" name="dnldUsrName" value="<?php echo $_SESSION[ 'usrName' ]; ?>" />
+							<input type="hidden" name="dnldUsrName[]" value="<?php echo $_SESSION[ 'usrName' ]; ?>" />
 					<?php
 						}
 						else {						
