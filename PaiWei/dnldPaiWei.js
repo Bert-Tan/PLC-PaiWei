@@ -22,22 +22,35 @@ function getFileName(dbTblName) {
 
 /**********************************************************
  * Event Handler - When the Download CSV Button is clicked *
+ * can ONLY select ONE user                                *
  **********************************************************/
 function dnldCSVBtnHdlr() {
+	var dnldUsrName = null;
+	var dbTblName = null;
+	var emptyUsrMsg = ( _sessLang == SESS_LANG_CHN ) ? '請選擇申請人！' : 'Please select requestors!';
+	var moreUsrMsg = ( _sessLang == SESS_LANG_CHN ) ? '請只選擇一個申請人！' : 'Please selec ONLY ONE requestors!';
 	var emptyPwMsg = ( _sessLang == SESS_LANG_CHN ) ? '請選擇牌位！' : 'Please select name plaque type!';
 
-	var dnldUsrName = null;
+	dbTblName = $("select[name=dbTblName]").val();
 	if(_sessType == SESS_TYP_USR) // user, get from session
 		dnldUsrName = _sessUsr;
 	else // admin user, get from user selection
-		dnldUsrName = $("select[name=dnldUsrName]").val();
-
-	var dbTblName = $("select[name=dbTblName]").val();
+		dnldUsrName = $("select[id=dnldUsrName]").val();
+	
+	if(dnldUsrName.length == 0) {
+		alert(emptyUsrMsg);
+		return;
+	}
+	if(dnldUsrName.length > 1) {
+		alert(moreUsrMsg);
+		return;
+	}
 	if(dbTblName == "") {
 		alert(emptyPwMsg);
 		return;
 	}	
 
+	dnldUsrName = dnldUsrName[0]; // only one selected user
 	_ajaxData = {};
 	_ajaxData[ 'dbTblName' ] = dbTblName;
 	_ajaxData[ 'dnldUsrName' ] = dnldUsrName;
@@ -70,8 +83,15 @@ function dnldCSVBtnHdlr() {
 // SUBMIT button, directly POST to server instead of AJAX
 // ONLY for ADMIN users
  function dnldPDFBtnHdlr() {
+	var emptyUsrMsg = ( _sessLang == SESS_LANG_CHN ) ? '請選擇申請人！' : 'Please select requestors!';
 	var emptyPwMsg = ( _sessLang == SESS_LANG_CHN ) ? '請選擇牌位！' : 'Please select name plaque type!';
 
-	if($("select[name=dbTblName]").val() == "")
+	if($("select[id=dnldUsrName]").val().length == 0) {
+		alert(emptyUsrMsg);
+		return;
+	}
+	if($("select[name=dbTblName]").val() == "") {
 		alert(emptyPwMsg);
+		return;
+	}
 } // dnldPDFBtnHdlr()
