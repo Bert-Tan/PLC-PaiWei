@@ -1197,7 +1197,7 @@ function confirmRetreat() {
 						"Are you joining the retreat yourself?";
 	var yesText = ( _sessLang == SESS_LANG_CHN ) ? "是" : "Yes";
 	var noText = ( _sessLang == SESS_LANG_CHN ) ? "否" : "No";
-	var logoutText = ( _sessLang == SESS_LANG_CHN ) ? "您將撤出！" : "You will logout!";
+	var logoutText = ( _sessLang == SESS_LANG_CHN ) ? "謝謝！ 您將撤出！" : "Thank you! You will logout!";
 
 	$( "body" ).append( "<div id='dialog-confirm'>" + confirmText + "</div>" );
 	$( "#dialog-confirm" ).dialog({
