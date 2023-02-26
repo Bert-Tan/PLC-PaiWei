@@ -112,11 +112,13 @@ function readSessParam() {
 			else {
 				$(".tabMenu th[data-tbl=ug]").trigger( 'click' );
 			}
+
+			confirmRetreat(); //trigger the retreat confirm dialog
 		}, // Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
 			alert( "readSessParam()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
-	}); // AJAX call
+	}); // AJAX call	
 } // readSessParam()
 
 function leapYear( yr ) {
@@ -1179,3 +1181,46 @@ function enableTooltip() {
 	$(document).tooltip({content: hoverMsg});
 	$(document).tooltip("enable");
 } // enableTooltip()
+
+/**********************************************************
+ * let the user confirm the current retreat               *
+ **********************************************************/
+function confirmRetreat() {
+	var confirmText = ( _sessLang == SESS_LANG_CHN ) ?
+						"現在本館只接受清明祭祖法會的牌位申請<br>" + 
+						"(5 月份館慶三時繫念法會的牌位，請於 4 月 3 日之後再申請)<br><br>" + 
+						"請問您會親自來參加清明祭祖法會嗎？" :
+						"(The Name Plaque application for the 20th Anniversary Retreat begin April 3, 2023)<br>" + 
+						"Qingming Festival Retreat Name Plaque applicants must be physically present in the retreat.<br><br>" + 
+						"Are you joining the retreat yourself?";
+	var yesText = ( _sessLang == SESS_LANG_CHN ) ? "是" : "Yes";
+	var noText = ( _sessLang == SESS_LANG_CHN ) ? "否" : "No";
+	var logoutText = ( _sessLang == SESS_LANG_CHN ) ? "您將撤出！" : "You will logout!";
+
+	$( "body" ).append( "<div id='dialog-confirm'>" + confirmText + "</div>" );
+	$( "#dialog-confirm" ).dialog({
+		draggable: false,
+		resizable: false,
+		height: "auto",
+		width: 460,
+		modal: true,
+		buttons:
+            [
+              {
+				text: yesText,
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+              },
+			  {
+				text: noText,
+				click: function() {
+					$( this ).dialog( "close" );
+					alert( logoutText );
+					location.replace( "../Login/Logout.php" );
+				}
+              }
+            ]
+	  });
+	  $(".ui-dialog-titlebar").hide();
+} // confirmRetreat()
