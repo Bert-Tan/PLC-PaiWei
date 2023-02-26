@@ -113,7 +113,9 @@ function readSessParam() {
 				$(".tabMenu th[data-tbl=ug]").trigger( 'click' );
 			}
 
-			confirmRetreat(); //trigger the retreat confirm dialog
+			if ( _sessType == SESS_TYP_USR ) {
+				confirmRetreat(); //trigger the retreat confirm dialog
+			}			
 		}, // Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
 			alert( "readSessParam()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
