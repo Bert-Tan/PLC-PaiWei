@@ -54,9 +54,10 @@ function readSessParam() {
 						return false;
 					case 'notActive':	// No retreat active; put out msg
 						alertMsg = ( _sessLang == SESS_LANG_CHN ) ?
-							"牌位申請已過期，\n或本念佛堂近期內沒有法會；\n牌位申請功能暫停！"
-						  : "Name Plaque Application deadline passed; or,\nthere is NO Planned Retreat!\nFunction deactivated";
+							"牌位申請已過期，\n或本念佛堂近期內沒有法會；\n牌位申請功能暫停！\n\n您將撤出！ 謝謝！"
+						  : "Name Plaque Application deadline passed; or,\nthere is NO Planned Retreat!\nFunction deactivated.\n\nYou will logout! Thank you!";
 						alert ( alertMsg );
+						location.replace( "../Login/Logout.php" );
 						return false;
 					case 'pwPlqDate':
 						_pwPlqDate = rspV[ X ];
