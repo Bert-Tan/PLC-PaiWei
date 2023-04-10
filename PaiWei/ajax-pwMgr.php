@@ -141,16 +141,17 @@ function loadPaiweiDashboard( $dbInfo ) {
  **********************************************************/
 function updRtData( $dbInfo ) {
 	global $_db;
-	$rpt = array();
+	$rpt = array();	
 
     if ( strlen( $dbInfo['ID'] ) == 0 ) {
 		$tupID = null;
-		$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`, `rtEvent`, `rtReason`,  `annivYear`) VALUE "
-			 . "( \"{$dbInfo['rtrtDate']}\", \"{$dbInfo['pwExpires']}\", \"{$dbInfo['rtEvent']}\", \"{$dbInfo['rtReason']}\", \"{$dbInfo['annivYear']}\");";
+		$today = date('Y-m-d');
+		$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`, `rtEvent`, `rtReason`, `rtZhaiZhu`, `rtShouDu`,  `annivYear`, `lastRtrtDate`) VALUE "
+			 . "( \"{$dbInfo['rtrtDate']}\", \"{$dbInfo['pwExpires']}\", \"{$dbInfo['rtEvent']}\", \"{$dbInfo['rtReason']}\", \"{$dbInfo['rtZhaiZhu']}\", \"{$dbInfo['rtShouDu']}\", \"{$dbInfo['annivYear']}\", \"{$today}\");";
 	} else {
 		$tupID = $dbInfo[ 'ID' ];
 		$sql = "UPDATE `pwParam` SET `pwExpires` = \"{$dbInfo[ 'pwExpires' ]}\", `rtrtDate` = \"{$dbInfo[ 'rtrtDate' ]}\", "
-			 . "`rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\", `annivYear` = \"{$dbInfo['annivYear']}\" ";
+			 . "`rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\", `rtZhaiZhu` = \"{$dbInfo['rtZhaiZhu']}\", `rtShouDu` = \"{$dbInfo['rtShouDu']}\", `annivYear` = \"{$dbInfo['annivYear']}\" ";
 		// update "lastRtrtDate" field
 		if ($dbInfo[ 'rtrtDate' ] != $dbInfo[ 'lastRtrtDate' ]) {
 			$sql = $sql . ", `lastRtrtDate` = \"{$dbInfo[ 'lastRtrtDate' ]}\" ";	
@@ -190,6 +191,8 @@ function readRtData( $dbInfo ) {
 			$rpt[ 'pwExpires' ] = "請輸入牌位申請截止日期";
 			$rpt[ 'rtEvent' ] = "";
 			$rpt[ 'rtReason' ] = "請輸入法會因緣";
+			$rpt[ 'rtZhaiZhu' ] = "請輸入法會齋主";
+			$rpt[ 'rtShouDu' ] = "請輸入法會受度人";
 			$rpt[ 'annivYear' ] = "請輸入週年年數";
 			$rpt[ 'lastRtrtDate' ] = "";
 			return $rpt;
