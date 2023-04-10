@@ -1,16 +1,23 @@
 <?php
 	require_once("../pgConstants.php");
 	require_once("dbSetup.php");
+
+	/**********************************************************
+ 	* Generate JiWen/BaiWen and ShuWen for Retreat			  *
+	* -- ThriceYearning: BaiWen and ShuWen              	  *
+	* 	-- Variable names use 'Jiwen' for BaiWen          	  *
+	* -- Other Retreats: JiWen and ShuWen               	  *
+ 	**********************************************************/
 	
 	//retreat date, type, reason, and anniversary year	
 	$rtEvent = $_POST[ 'rtEvent' ]; /* $_POST[ 'rtEvent' ] carries the above Retreat Event */
-	$rtrtDate = '';  $rtReason = ''; $annivYear = '';
+	$rtrtDate = '';  $rtReason = ''; $rtZhaiZhu = ''; $rtShouDu = ''; $annivYear = '';
 
 	//retreat information
 	$rtName = ''; $rtYear = 0; $rtMonth = 0; $rtDay = 0;
 	
 	//pdf configuration settings
-	$pageSize = ( $rtEvent == 'ThriceYearning' ) ? 'LEGAL' : 'LETTER';
+	$pageSizeJiwen = ''; $pageSizeShuwen = '';
 	$pageOrientation = 'L'; $pdfTitle = ''; $unit = 'in'; //inch
 		
 	//JiWen and ShuWen String
@@ -45,13 +52,9 @@
 	$imgYaqing = ''; //image path
 	$xAdjustYaing = 0; $yAdjustYaqing = 0; //image X and Y position adjustment
 	$imgWidthYaqing = 0; $imgHeightYaqing = 0; //image width and height	
-			
-	//set ThriceYearning ShuWen PDF page size
-	if($rtEvent == 'ThriceYearning')
-		$pageSize='LEGAL'; 
 	
 	//create new PDF document
-	$pdf = new TCPDF($pageOrientation, $unit, $pageSize, true, 'UTF-8', false);
+	$pdf = new TCPDF($pageOrientation, $unit, 'LETTER', true, 'UTF-8', false);
 
 	//set pdf configurations
 	setConfigure();
@@ -92,7 +95,7 @@
 	else {
 		//print JiWen
 		if(count($strJiwen) > 0) {
-			$pdf->AddPage();
+			$pdf->AddPage($pageOrientation, $pageSizeJiwen);
 			$pdf->SetTextColor(0, 0, 0, 100); //balck
 			//$pdf->SetTextColor(0, 255, 0); //green
 			//$pdf->SetTextColor(0, 0, 255); //blue
@@ -105,7 +108,7 @@
 			//print JiWen string
 			$pdf->SetFont($ChineseFont, $fontStyle, $fontSizeJiwen);
 			for($i=0; $i<count($strJiwen); ++$i) {
-				$x = $xIniJiwen - $i*$xStepJiwen;
+				$x = $xIniJiwen - $i*$xStepJiwen;				
 			
 				//print normal string (black text)
 				if(is_string($strJiwen[$i]))
@@ -117,7 +120,7 @@
 	
 		//print ShuWen
 		if(count($strShuwen) > 0) {
-			$pdf->AddPage();
+			$pdf->AddPage($pageOrientation, $pageSizeShuwen);
 			$pdf->SetTextColor(0, 0, 0, 100); //balck
 			//$pdf->SetTextColor(0, 255, 0); //green
 			//$pdf->SetTextColor(0, 0, 255); //blue
@@ -219,7 +222,7 @@
 
 	//set pdf configuratons
 	function setConfigure() {		
-		global $pdf, $EnglishFont, $fontStyle;
+		global $pdf, $EnglishFont, $fontStyle, $pageSizeJiwen, $pageSizeShuwen;
 		global $rtrtDate, $rtEvent, $rtReason, $annivYear, $rtName;
 		global $pdfTitle, $strJiwen, $strShuwen;
 		global $strTitleJiwen, $strTitleShuwen;
@@ -240,6 +243,7 @@
 				$pdfTitle=$year.'清明祭文疏文'; $rtName = '清明';
 				$strTitleJiwen='   祭  文';
 				$strTitleShuwen='   祭 祖 追 薦 疏 文';
+				$pageSizeJiwen = 'LETTER'; $pageSizeShuwen = 'LETTER';
 				$fontSizeJiwen=24; $fontSizeShuwen=20;
 				$fontSizeTitleJiwen=28; $fontSizeTitleShuwen = 24;
 				$rotateXadjustJiwen=1.0*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeJiwen, false);
@@ -254,6 +258,7 @@
 				$pdfTitle=$year.'中元祭文疏文'; $rtName = '中元';
 				$strTitleJiwen='   祭  文';
 				$strTitleShuwen='   祭 祖 追 薦 疏 文';
+				$pageSizeJiwen = 'LETTER'; $pageSizeShuwen = 'LETTER';
 				$fontSizeJiwen=24; $fontSizeShuwen=20;
 				$fontSizeTitleJiwen=28; $fontSizeTitleShuwen = 24;
 				$rotateXadjustJiwen=1.0*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeJiwen, false);
@@ -268,6 +273,7 @@
 				$pdfTitle=$year.'週年館慶祭文疏文'; $rtName = '週年館慶';
 				$strTitleJiwen='   祭  文';
 				$strTitleShuwen='   祭 祖 追 薦 疏 文';
+				$pageSizeJiwen = 'LETTER'; $pageSizeShuwen = 'LETTER';
 				$fontSizeJiwen=24; $fontSizeShuwen=20;
 				$fontSizeTitleJiwen=28; $fontSizeTitleShuwen = 24;
 				$rotateXadjustJiwen=1.0*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeJiwen, false);
@@ -279,11 +285,17 @@
 				$xTitleJiwen=9.7; $xTitleShuwen=10;		
 				break;
 			case 'ThriceYearning':
-				$pdfTitle=$year.'三時繫念疏文';
+				$pdfTitle=$year.'三時繫念白文疏文';
+				$strTitleJiwen='  三時繫念法會白文';
 				$strTitleShuwen='      一誠上達';
-				$fontSizeShuwen=16; $fontSizeTitleShuwen = 20;				
+				$pageSizeJiwen = 'LETTER'; $pageSizeShuwen = 'LEGAL';
+				$fontSizeJiwen=24; $fontSizeTitleJiwen=28;
+				$fontSizeShuwen=16; $fontSizeTitleShuwen = 20;
+				$rotateXadjustJiwen=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeShuwen, false);
+				$textXadjustJiwen=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeShuwen, false);
 				$rotateXadjustShuwen=1.1*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeShuwen, false);
 				$textXadjustShuwen=2.3*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeShuwen, false);				
+				$xIniJiwen=8.5; $xStepJiwen=0.6; $yTopJiwen=0.5; $xTitleJiwen=9.5;
 				$xIniShuwen=13; $xStepShuwen=0.3; $yTopShuwen=0.3; $xTitleShuwen=13.3;
 				$imgDaqing='img/DaQing.png'; $imgYaqing='img/YaQing.png';
 				$xAdjustDaqing=0.13; $yAdjustDaqing=0.06; $imgWidthDaqing=0.13; $imgHeightDaqing=0.13;
@@ -295,10 +307,10 @@
 	//search database to get data
 	function getData() {	
 		global $_db;
-		global $rtrtDate, $rtEvent, $rtReason, $annivYear;
+		global $rtrtDate, $rtEvent, $rtReason, $rtZhaiZhu, $rtShouDu, $annivYear;
 		global $rtYear, $rtMonth, $rtDay;
 
-		$_sql = "SELECT `rtrtDate`, `rtReason`, `annivYear` FROM `pwParam` "
+		$_sql = "SELECT `rtrtDate`, `rtReason`, `rtZhaiZhu`, `rtShouDu`, `annivYear` FROM `pwParam` "
 				. "WHERE `rtEvent` = \"{$rtEvent}\";";
 
 		$_db->query("LOCK TABLES `pwParam` READ;");
@@ -309,11 +321,13 @@
 		// NO user selected Retreat Event
 		if($_rslt->num_rows == 0) return;
 
-		$_suwenData = $_rslt->fetch_all(MYSQLI_ASSOC)[0];	
-		//set retreat date, reason, and anniversary year
-		$rtrtDate = $_suwenData [ 'rtrtDate' ];
-		$rtReason = $_suwenData [ 'rtReason' ];
-		$annivYear = $_suwenData [ 'annivYear' ];
+		$_rtData = $_rslt->fetch_all(MYSQLI_ASSOC)[0];
+		//set retreat date, reason, ZhaiZhu, ShouDu, and anniversary year
+		$rtrtDate = $_rtData [ 'rtrtDate' ];
+		$rtReason = $_rtData [ 'rtReason' ];
+		$rtZhaiZhu = $_rtData [ 'rtZhaiZhu' ];
+		$rtShouDu = $_rtData [ 'rtShouDu' ];
+		$annivYear = $_rtData [ 'annivYear' ];
 
 		// set retreat year, month, and day
 		$d = explode( "-", $rtrtDate );
@@ -324,12 +338,12 @@
 		// get JiWen/ShuWen content
 		switch ($rtEvent) {
 			case 'ThriceYearning':			
-				setXinianShuwen();		
+				setXinianJiwen(); setXinianShuwen();		
 				break;
 			default:		
 				setJizuJiwen(); setJizuShuwen();		
 				break;			
-		}				
+		}			
 	}
 
 	//set JiWen string of Qingming/Zhongyuan retreat
@@ -428,6 +442,38 @@
 		array_push($str, 'BLUE   '.$rtDay.'   ');
 		array_push($str, 'BLACK日');
 		array_push($strShuwen, $str);
+	}
+
+	//set JiWen/BaiWen string of Thrice Yearning retreat
+	//text with special print information (colored text or instrument symbol) are stroed in array
+	//special string format: SpedicalPrintInformation (English) + JiWen/ShuWen Text (Chinese/Number)
+	function setXinianJiwen() {	
+		global $rtReason, $rtZhaiZhu, $rtShouDu, $strJiwen;
+		
+		array_push($strJiwen, '法王利物。悲智洪深。普徧十方。冥陽靡隔。');
+		
+		$str = array();
+		array_push($str, 'BLACK今蒙齋主 ');
+		$subStrArray = explode(' ', $rtZhaiZhu);
+		foreach($subStrArray as $subStr) {
+			array_push($str, 'BLUE'.$subStr.' ');
+		}
+		array_push($strJiwen, $str);	
+
+		$str = array();
+		array_push($str, 'BLACK恭爲 ');
+		array_push($str, 'BLUE'.$rtShouDu);
+		array_push($strJiwen, $str);
+		
+		$str = array();		
+		array_push($str, 'BLACK屆逢 ');
+		array_push($str, 'BLUE'.$rtReason.' ');
+		array_push($str, 'BLACK之期。');
+		array_push($strJiwen, $str);	
+		
+		array_push($strJiwen, '特請山僧登座。依憑教法。作三時繫念佛事。');	
+		array_push($strJiwen, '迺爾神靈。遭此勝緣。自宜嚴肅威儀。');	
+		array_push($strJiwen, '來臨座下。恭聆妙法。一心受度。');
 	}
 	
 	//set ShuWen string of Thrice Yearning retreat

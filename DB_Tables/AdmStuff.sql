@@ -14,7 +14,9 @@ CREATE TABLE IF NOT EXISTS pwParam (
 	rtrtDate DATE NOT NULL,
 	pwExpires DATE NOT NULL,
 	rtEvent ENUM('Qingming','Zhongyuan','ThriceYearning','Anniversary') NOT NULL,
-	rtReason tinytext,
+	rtReason VARCHAR(255),
+	rtZhaiZhu VARCHAR(255),
+	rtShouDu VARCHAR(255),
 	annivYear VARCHAR(10),
 	lastRtrtDate DATE
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
