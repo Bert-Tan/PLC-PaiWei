@@ -514,7 +514,7 @@
 		array_push($strShuwen, $str);
 
 		$str = array();
-		array_push($str, 'BLUE淨土念佛堂暨圖書館 及四眾弟子     ');
+		array_push($str, 'BLUE淨土念佛堂及圖書館 及四眾弟子     ');
 		array_push($str, 'BLACK秉');
 		
 //		array_push($strShuwen, '淨土念佛堂及圖書館 及四眾弟子  秉');
