@@ -296,7 +296,7 @@
 				$rotateXadjustShuwen=1.1*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeShuwen, false);
 				$textXadjustShuwen=2.3*$pdf->GetStringWidth('G', $EnglishFont, $fontStyle, $fontSizeShuwen, false);				
 				$xIniJiwen=8.5; $xStepJiwen=0.6; $yTopJiwen=0.5; $xTitleJiwen=9.5;
-				$xIniShuwen=13; $xStepShuwen=0.3; $yTopShuwen=0.3; $xTitleShuwen=13.3;
+				$xIniShuwen=13.1; $xStepShuwen=0.3; $yTopShuwen=0.15; $xTitleShuwen=13.4;
 				$imgDaqing='img/DaQing.png'; $imgYaqing='img/YaQing.png';
 				$xAdjustDaqing=0.13; $yAdjustDaqing=0.06; $imgWidthDaqing=0.13; $imgHeightDaqing=0.13;
 				$xAdjustYaing=0.07; $yAdjustYaqing=0.15; $imgWidthYaqing=0.18; $imgHeightYaqing=0.24;		
@@ -505,17 +505,24 @@
 		array_push($strShuwen, $str);
 		
 		$str = array();
-		array_push($str, 'BLACK        ');
+		array_push($str, 'BLACK    ');
 		array_push($str, 'YAQING ');
-		array_push($str, 'BLACK爰有 一泗天下 南瞻部洲           ');
-		array_push($str, 'BLUE淨土念佛堂及圖書館      ');
-		array_push($str, 'BLACK瑞柏市東歐登街');
+		array_push($str, 'BLACK爰有 一泗天下 南瞻部洲     ');
+		array_push($str, 'BLACK美國伊利諾州瑞柏市東歐登街一一二〇號一〇八室');
+//		array_push($str, 'BLUE淨土念佛堂圖書館     ');
+//		array_push($str, 'BLACK瑞柏市東歐登街');
+		array_push($strShuwen, $str);
+
+		$str = array();
+		array_push($str, 'BLUE淨土念佛堂暨圖書館 及四眾弟子     ');
+		array_push($str, 'BLACK秉');
+		
+//		array_push($strShuwen, '淨土念佛堂及圖書館 及四眾弟子  秉');
 		array_push($strShuwen, $str);
 		
-		array_push($strShuwen, '一一二〇號一〇八室 及四眾弟子  秉');
-		
 		$str = array();
-		array_push($str, 'BLACK釋迦如來遺教奉行主修功德佛事沙門釋淨空 ');
+		array_push($str, 'BLACK釋迦如來遺教奉行主修功德佛事沙門 ');
+		array_push($str, 'BLACK釋悟行 ');
 		array_push($str, 'BLACK今據  ');
 		array_push($str, 'BLUE淨土念佛堂及圖書館  ');
 		array_push($str, 'BLACK執事、');
@@ -523,6 +530,7 @@
 		
 		array_push($strShuwen, '義工及同修等');
 		array_push($strShuwen, '       中華民族萬姓祖先');
+		array_push($strShuwen, '       美利堅合眾國各民族百姓祖先');
 		array_push($strShuwen, '       往生堂上眾等神靈');
 		
 		$str = array();
@@ -644,7 +652,7 @@
 		array_push($str, 'BLUE  '.$rtMonth.'  ');
 		array_push($str, 'BLACK月');
 		array_push($str, 'BLUE  '.$rtDay.'  ');
-		array_push($str, 'BLACK日  主修佛事沙門 釋淨空');		
+		array_push($str, 'BLACK日  主修佛事沙門 釋悟行');		
 		array_push($strShuwen, $str);
 		
 		$str = array();
