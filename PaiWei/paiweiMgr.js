@@ -246,6 +246,10 @@ function loadRtMgrForm() {
 						$("input[name=rtShouDu]").val( rspX[X] );
 						$("input[name=rtShouDu]").attr( 'value', rspX[X] );
 						break;
+					case 'rtVenerable':
+						$("input[name=rtVenerable]").val( rspX[X] );
+						$("input[name=rtVenerable]").attr( 'value', rspX[X] );
+						break;
 					case 'annivYear':
 						$("input[name=annivYear]").val( rspX[X] );
 						$("input[name=annivYear]").attr( 'value', rspX[X] );
@@ -264,16 +268,19 @@ function loadRtMgrForm() {
 					$("input[name=rtReason]").attr( 'data-oldV', $("input[name=rtReason]").attr( 'value' ) );
 					$("input[name=rtZhaiZhu]").attr( 'data-oldV', $("input[name=rtZhaiZhu]").attr( 'value' ) );
 					$("input[name=rtShouDu]").attr( 'data-oldV', $("input[name=rtShouDu]").attr( 'value' ) );
+					$("input[name=rtVenerable]").attr( 'data-oldV', $("input[name=rtVenerable]").attr( 'value' ) );
 					$("input[name=annivYear]").attr( 'data-oldV', $("input[name=annivYear]").attr( 'value' ) );
 					if ( $("select[name=rtEvent]").val() != "ThriceYearning" ) {
 						$("input[name=rtReason]").prop("disabled", true ).val("不適用");
 						$("input[name=rtZhaiZhu]").prop("disabled", true ).val("不適用");
 						$("input[name=rtShouDu]").prop("disabled", true ).val("不適用");
+						$("input[name=rtVenerable]").prop("disabled", true ).val("不適用");
 					}
 					else {
 						$("input[name=rtReason]").prop("disabled", false ); // Allow edit
 						$("input[name=rtZhaiZhu]").prop("disabled", false ); // Allow edit
 						$("input[name=rtShouDu]").prop("disabled", false ); // Allow edit
+						$("input[name=rtVenerable]").prop("disabled", false ); // Allow edit
 						/* do not want to set value because it could be read from the DB */
 					}
 					if ( $("select[name=rtEvent]").val() != "Anniversary" ) {
@@ -353,7 +360,14 @@ function hdlr_dataChg() {
 				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
 				return;
 			}	
-			break;		
+			break;
+		case 'rtVenerable':	
+			if ( newV == '不適用' || newV == '請輸入法會主法和尚' ) {
+				alert( "請輸入三時繫念法會主法和尚!" );
+				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
+				return;
+			}	
+			break;	
 		case 'annivYear':	
 			if ( newV == '不適用' || newV == '請輸入週年年數' ) {
 				alert( "請輸入週年館慶年數!" );
@@ -382,10 +396,12 @@ function selChange() {
 		$("input[name=rtReason]").prop("disabled", true ).val("不適用");
 		$("input[name=rtZhaiZhu]").prop("disabled", true ).val("不適用");
 		$("input[name=rtShouDu]").prop("disabled", true ).val("不適用");
+		$("input[name=rtVenerable]").prop("disabled", true ).val("不適用");
 	} else {
 		$("input[name=rtReason]").prop("disabled", false ).val("請輸入法會因緣");
 		$("input[name=rtZhaiZhu]").prop("disabled", false ).val("請輸入法會齋主");
 		$("input[name=rtShouDu]").prop("disabled", false ).val("請輸入法會受度人");
+		$("input[name=rtVenerable]").prop("disabled", false ).val("請輸入法會主法和尚");
 	}
 	if ( chgdTo != "Anniversary" ) {
 		$("input[name=annivYear]").prop("disabled", true ).val("不適用");
@@ -408,6 +424,7 @@ function updRetreatData() {
 	var rtRsn = $("input[name=rtReason]").val();
 	var rtZhaiZhu = $("input[name=rtZhaiZhu]").val();
 	var rtShouDu = $("input[name=rtShouDu]").val();
+	var rtVenerable = $("input[name=rtVenerable]").val();
 	var annivYear = $("input[name=annivYear]").val();
 
 	if ( rtEvent == "" ) {
@@ -428,6 +445,9 @@ function updRetreatData() {
 	if ( rtEvent == "ThriceYearning" && ( rtShouDu == '不適用' || rtShouDu == '請輸入法會受度人') ) {
 		alert( "請輸入三時繫念法會受度人!" ); return;
 	}
+	if ( rtEvent == "ThriceYearning" && ( rtVenerable == '不適用' || rtVenerable == '請輸入法會主法和尚') ) {
+		alert( "請輸入三時繫念法會主法和尚!" ); return;
+	}
 	if ( rtEvent == "Anniversary" && ( annivYear == '不適用' || annivYear == '請輸入週年年數') ) {
 		alert( "請輸入週年館慶年數!" ); return;
 	}
@@ -438,6 +458,7 @@ function updRetreatData() {
 		rtRsn = null;
 		rtZhaiZhu = null;
 		rtShouDu = null;
+		rtVenerable = null;
 	}
 	if ( rtEvent != "Anniversary" ) {
 		annivYear = null;
@@ -453,6 +474,7 @@ function updRetreatData() {
 	dbInfo[ 'rtReason' ] = rtRsn;
 	dbInfo[ 'rtZhaiZhu' ] = rtZhaiZhu;
 	dbInfo[ 'rtShouDu' ] = rtShouDu;
+	dbInfo[ 'rtVenerable' ] = rtVenerable;
 	dbInfo[ 'annivYear' ] = annivYear;
 	ajaxData[ 'dbReq' ] = 'dbUpdRtData';
 	ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );

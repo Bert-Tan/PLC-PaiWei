@@ -146,12 +146,12 @@ function updRtData( $dbInfo ) {
     if ( strlen( $dbInfo['ID'] ) == 0 ) {
 		$tupID = null;
 		$today = date('Y-m-d');
-		$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`, `rtEvent`, `rtReason`, `rtZhaiZhu`, `rtShouDu`,  `annivYear`, `lastRtrtDate`) VALUE "
-			 . "( \"{$dbInfo['rtrtDate']}\", \"{$dbInfo['pwExpires']}\", \"{$dbInfo['rtEvent']}\", \"{$dbInfo['rtReason']}\", \"{$dbInfo['rtZhaiZhu']}\", \"{$dbInfo['rtShouDu']}\", \"{$dbInfo['annivYear']}\", \"{$today}\");";
+		$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`, `rtEvent`, `rtReason`, `rtZhaiZhu`, `rtShouDu`, `rtVenerable`,  `annivYear`, `lastRtrtDate`) VALUE "
+			 . "( \"{$dbInfo['rtrtDate']}\", \"{$dbInfo['pwExpires']}\", \"{$dbInfo['rtEvent']}\", \"{$dbInfo['rtReason']}\", \"{$dbInfo['rtZhaiZhu']}\", \"{$dbInfo['rtShouDu']}\", \"{$dbInfo['rtVenerable']}\", \"{$dbInfo['annivYear']}\", \"{$today}\");";
 	} else {
 		$tupID = $dbInfo[ 'ID' ];
 		$sql = "UPDATE `pwParam` SET `pwExpires` = \"{$dbInfo[ 'pwExpires' ]}\", `rtrtDate` = \"{$dbInfo[ 'rtrtDate' ]}\", "
-			 . "`rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\", `rtZhaiZhu` = \"{$dbInfo['rtZhaiZhu']}\", `rtShouDu` = \"{$dbInfo['rtShouDu']}\", `annivYear` = \"{$dbInfo['annivYear']}\" ";
+			 . "`rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\", `rtZhaiZhu` = \"{$dbInfo['rtZhaiZhu']}\", `rtShouDu` = \"{$dbInfo['rtShouDu']}\", `rtVenerable` = \"{$dbInfo['rtVenerable']}\", `annivYear` = \"{$dbInfo['annivYear']}\" ";
 		// update "lastRtrtDate" field
 		if ($dbInfo[ 'rtrtDate' ] != $dbInfo[ 'lastRtrtDate' ]) {
 			$sql = $sql . ", `lastRtrtDate` = \"{$dbInfo[ 'lastRtrtDate' ]}\" ";	
@@ -193,6 +193,7 @@ function readRtData( $dbInfo ) {
 			$rpt[ 'rtReason' ] = "請輸入法會因緣";
 			$rpt[ 'rtZhaiZhu' ] = "請輸入法會齋主";
 			$rpt[ 'rtShouDu' ] = "請輸入法會受度人";
+			$rpt[ 'rtVenerable' ] = "請輸入法會主法和尚";
 			$rpt[ 'annivYear' ] = "請輸入週年年數";
 			$rpt[ 'lastRtrtDate' ] = "";
 			return $rpt;

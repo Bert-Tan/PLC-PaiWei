@@ -11,7 +11,7 @@
 	
 	//retreat date, type, reason, and anniversary year	
 	$rtEvent = $_POST[ 'rtEvent' ]; /* $_POST[ 'rtEvent' ] carries the above Retreat Event */
-	$rtrtDate = '';  $rtReason = ''; $rtZhaiZhu = ''; $rtShouDu = ''; $annivYear = '';
+	$rtrtDate = '';  $rtReason = ''; $rtZhaiZhu = ''; $rtShouDu = ''; $rtVenerable = ''; $annivYear = '';
 
 	//retreat information
 	$rtName = ''; $rtYear = 0; $rtMonth = 0; $rtDay = 0;
@@ -307,10 +307,10 @@
 	//search database to get data
 	function getData() {	
 		global $_db;
-		global $rtrtDate, $rtEvent, $rtReason, $rtZhaiZhu, $rtShouDu, $annivYear;
+		global $rtrtDate, $rtEvent, $rtReason, $rtZhaiZhu, $rtShouDu, $rtVenerable, $annivYear;
 		global $rtYear, $rtMonth, $rtDay;
 
-		$_sql = "SELECT `rtrtDate`, `rtReason`, `rtZhaiZhu`, `rtShouDu`, `annivYear` FROM `pwParam` "
+		$_sql = "SELECT `rtrtDate`, `rtReason`, `rtZhaiZhu`, `rtShouDu`, `rtVenerable`, `annivYear` FROM `pwParam` "
 				. "WHERE `rtEvent` = \"{$rtEvent}\";";
 
 		$_db->query("LOCK TABLES `pwParam` READ;");
@@ -327,6 +327,7 @@
 		$rtReason = $_rtData [ 'rtReason' ];
 		$rtZhaiZhu = $_rtData [ 'rtZhaiZhu' ];
 		$rtShouDu = $_rtData [ 'rtShouDu' ];
+		$rtVenerable = $_rtData [ 'rtVenerable' ];
 		$annivYear = $_rtData [ 'annivYear' ];
 
 		// set retreat year, month, and day
@@ -480,7 +481,7 @@
 	//text with special print information (colored text or instrument symbol) are stroed in array
 	//special string format: SpedicalPrintInformation (English) + JiWen/ShuWen Text (Chinese/Number)
 	function setXinianShuwen() {
-		global $rtReason, $rtYear, $rtMonth, $rtDay, $strShuwen;
+		global $rtReason, $rtVenerable, $rtYear, $rtMonth, $rtDay, $strShuwen;
 		
 		$str = array();
 		array_push($str, 'YAQING ');
@@ -509,20 +510,16 @@
 		array_push($str, 'YAQING ');
 		array_push($str, 'BLACK爰有 一泗天下 南瞻部洲     ');
 		array_push($str, 'BLACK美國伊利諾州瑞柏市東歐登街一一二〇號一〇八室');
-//		array_push($str, 'BLUE淨土念佛堂圖書館     ');
-//		array_push($str, 'BLACK瑞柏市東歐登街');
 		array_push($strShuwen, $str);
 
 		$str = array();
 		array_push($str, 'BLUE淨土念佛堂及圖書館 及四眾弟子     ');
 		array_push($str, 'BLACK秉');
-		
-//		array_push($strShuwen, '淨土念佛堂及圖書館 及四眾弟子  秉');
 		array_push($strShuwen, $str);
 		
 		$str = array();
 		array_push($str, 'BLACK釋迦如來遺教奉行主修功德佛事沙門 ');
-		array_push($str, 'BLACK釋悟行 ');
+		array_push($str, 'BLACK'.$rtVenerable.' ');
 		array_push($str, 'BLACK今據  ');
 		array_push($str, 'BLUE淨土念佛堂及圖書館  ');
 		array_push($str, 'BLACK執事、');
@@ -652,7 +649,7 @@
 		array_push($str, 'BLUE  '.$rtMonth.'  ');
 		array_push($str, 'BLACK月');
 		array_push($str, 'BLUE  '.$rtDay.'  ');
-		array_push($str, 'BLACK日  主修佛事沙門 釋悟行');		
+		array_push($str, 'BLACK日  主修佛事沙門 '.$rtVenerable);		
 		array_push($strShuwen, $str);
 		
 		$str = array();
