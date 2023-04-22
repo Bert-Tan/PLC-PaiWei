@@ -142,23 +142,18 @@ function loadPaiweiDashboard( $dbInfo ) {
 function updRtData( $dbInfo ) {
 	global $_db;
 	$rpt = array();	
-
+	
     if ( strlen( $dbInfo['ID'] ) == 0 ) {
 		$tupID = null;
-		$today = date('Y-m-d');
 		$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`, `rtEvent`, `rtReason`, `rtZhaiZhu`, `rtShouDu`, `rtVenerable`,  `annivYear`, `lastRtrtDate`) VALUE "
-			 . "( \"{$dbInfo['rtrtDate']}\", \"{$dbInfo['pwExpires']}\", \"{$dbInfo['rtEvent']}\", \"{$dbInfo['rtReason']}\", \"{$dbInfo['rtZhaiZhu']}\", \"{$dbInfo['rtShouDu']}\", \"{$dbInfo['rtVenerable']}\", \"{$dbInfo['annivYear']}\", \"{$today}\");";
+			 . "( \"{$dbInfo['rtrtDate']}\", \"{$dbInfo['pwExpires']}\", \"{$dbInfo['rtEvent']}\", \"{$dbInfo['rtReason']}\", \"{$dbInfo['rtZhaiZhu']}\", \"{$dbInfo['rtShouDu']}\", \"{$dbInfo['rtVenerable']}\", \"{$dbInfo['annivYear']}\", \"{$dbInfo['lastRtrtDate']}\");";
 	} else {
 		$tupID = $dbInfo[ 'ID' ];
-		$sql = "UPDATE `pwParam` SET `pwExpires` = \"{$dbInfo[ 'pwExpires' ]}\", `rtrtDate` = \"{$dbInfo[ 'rtrtDate' ]}\", "
-			 . "`rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\", `rtZhaiZhu` = \"{$dbInfo['rtZhaiZhu']}\", `rtShouDu` = \"{$dbInfo['rtShouDu']}\", `rtVenerable` = \"{$dbInfo['rtVenerable']}\", `annivYear` = \"{$dbInfo['annivYear']}\" ";
-		// update "lastRtrtDate" field
-		if ($dbInfo[ 'rtrtDate' ] != $dbInfo[ 'lastRtrtDate' ]) {
-			$sql = $sql . ", `lastRtrtDate` = \"{$dbInfo[ 'lastRtrtDate' ]}\" ";	
-		}
-		$sql = $sql . "WHERE `ID` = \"{$tupID}\";";
+		$sql = "UPDATE `pwParam` SET `pwExpires` = \"{$dbInfo[ 'pwExpires' ]}\", `rtrtDate` = \"{$dbInfo[ 'rtrtDate' ]}\", `lastRtrtDate` = \"{$dbInfo[ 'lastRtrtDate' ]}\", "
+			 . "`rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\", `rtZhaiZhu` = \"{$dbInfo['rtZhaiZhu']}\", `rtShouDu` = \"{$dbInfo['rtShouDu']}\", `rtVenerable` = \"{$dbInfo['rtVenerable']}\", `annivYear` = \"{$dbInfo['annivYear']}\" "
+			 . "WHERE `ID` = \"{$tupID}\";";
 	}
-
+	
 	$_db->query("LOCK TABLES `pwParam`;");
 	$rslt = $_db->query( $sql );
 	
@@ -190,12 +185,12 @@ function readRtData( $dbInfo ) {
 			$rpt[ 'rtrtDate' ] = "請輸入法會開始日期";
 			$rpt[ 'pwExpires' ] = "請輸入牌位申請截止日期";
 			$rpt[ 'rtEvent' ] = "";
+			$rpt[ 'lastRtrtDate' ] = "請輸入上次法會日期";
 			$rpt[ 'rtReason' ] = "請輸入法會因緣";
 			$rpt[ 'rtZhaiZhu' ] = "請輸入法會齋主";
 			$rpt[ 'rtShouDu' ] = "請輸入法會受度人";
 			$rpt[ 'rtVenerable' ] = "請輸入法會主法和尚";
 			$rpt[ 'annivYear' ] = "請輸入週年年數";
-			$rpt[ 'lastRtrtDate' ] = "";
 			return $rpt;
 		case 1:
 			$rsltArray = $rslt->fetch_all(MYSQLI_ASSOC)[0];

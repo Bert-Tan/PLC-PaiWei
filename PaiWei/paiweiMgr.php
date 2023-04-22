@@ -105,7 +105,7 @@ input[type=text] {
 
 /* for Dialog box */
 table.dialog {
- 	width: 60%;
+ 	width: 70%;
 }
 table.dialog td {
  	height: 6vh;
