@@ -234,6 +234,10 @@ function loadRtMgrForm() {
 						$("select[name=rtEvent]").val( rspX[X] );
 						$("select[name=rtEvent]").attr( 'value', rspX[X] );
 						break;
+					case 'lastRtrtDate':
+						$("input[name=lastRtrtDate]").val( rspX[X] );
+						$("input[name=lastRtrtDate]").attr( 'value', rspX[X] );
+						break;
 					case 'rtReason':
 						$("input[name=rtReason]").val( rspX[X] );
 						$("input[name=rtReason]").attr( 'value', rspX[X] );
@@ -254,8 +258,6 @@ function loadRtMgrForm() {
 						$("input[name=annivYear]").val( rspX[X] );
 						$("input[name=annivYear]").attr( 'value', rspX[X] );
 						break;	
-					case 'lastRtrtDate':
-						break;	
 					case 'ERR':
 						alert( rspX[X]);
 						return;
@@ -265,6 +267,7 @@ function loadRtMgrForm() {
 					$("input[name=rtrtDate]").attr( 'data-oldV', $("input[name=rtrtDate]").attr( 'value' ) );
 					$("input[name=pwExpires]").attr( 'data-oldV', $("input[name=pwExpires]").attr( 'value' ) );
 					$("select[name=rtEvent]").attr( 'data-oldV', $("select[name=rtEvent]").attr( 'value' ) );
+					$("input[name=lastRtrtDate]").attr( 'data-oldV', $("input[name=lastRtrtDate]").attr( 'value' ) );
 					$("input[name=rtReason]").attr( 'data-oldV', $("input[name=rtReason]").attr( 'value' ) );
 					$("input[name=rtZhaiZhu]").attr( 'data-oldV', $("input[name=rtZhaiZhu]").attr( 'value' ) );
 					$("input[name=rtShouDu]").attr( 'data-oldV', $("input[name=rtShouDu]").attr( 'value' ) );
@@ -347,6 +350,13 @@ function hdlr_dataChg() {
 				return;
 			}	
 			break;
+		case 'lastRtrtDate':
+			if ( isNaN(new Date(newV)) ) {
+				alert( "上次法會日期必須是一個有效日期!" );
+				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
+				return;
+			}	
+			break;
 		case 'rtZhaiZhu':	
 			if ( newV == '不適用' || newV == '請輸入法會齋主' ) {
 				alert( "請輸入三時繫念法會齋主!" );
@@ -417,10 +427,10 @@ function updRetreatData() {
 	}
 
 	var tupID = $("input[name=ID]").val();
-	var lastRtDate = $("input[name=rtrtDate]").attr('data-oldV');
 	var rtDate = $("input[name=rtrtDate]").val(); var rtD = new Date(rtDate);
-	var pwDate = $("input[name=pwExpires]").val(); var pwD = new Date(pwDate);
+	var pwDate = $("input[name=pwExpires]").val(); var pwD = new Date(pwDate);	
 	var rtEvent = $("select[name=rtEvent]").val();
+	var lastRtDate = $("input[name=lastRtrtDate]").val();
 	var rtRsn = $("input[name=rtReason]").val();
 	var rtZhaiZhu = $("input[name=rtZhaiZhu]").val();
 	var rtShouDu = $("input[name=rtShouDu]").val();
@@ -435,6 +445,9 @@ function updRetreatData() {
 	}
 	if ( rtD <= pwD ) {
 		alert("法會牌位申請截止日期必須早於法會開始日期！"); return;
+	}
+	if ( isNaN(new Date(lastRtDate)) ) {
+		alert( "上次法會日期必須是一個有效日期!" ); return;
 	}
 	if ( rtEvent == "ThriceYearning" && ( rtRsn == '不適用' || rtRsn == '請輸入法會因緣') ) {
 		alert( "請輸入三時繫念法會因緣!" ); return;

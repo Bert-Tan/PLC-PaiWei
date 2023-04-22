@@ -19,6 +19,6 @@ CREATE TABLE IF NOT EXISTS pwParam (
 	rtShouDu VARCHAR(255),
 	rtVenerable VARCHAR(40),
 	annivYear VARCHAR(10),
-	lastRtrtDate DATE
+	lastRtrtDate DATE NOT NULL
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
