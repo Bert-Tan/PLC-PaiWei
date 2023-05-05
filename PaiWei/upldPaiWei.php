@@ -137,13 +137,18 @@
 		for ( $i = 0; $i < sizeof( $_tupFldVs ); $i++ ) {
 			$_attrN = trim($_tupFldNs[$i]);
 			$_attrV = trim($_tupFldVs[$i]);
-			if ( $_attrN == 'deceasedDate' && !chkDate( $_attrV ) ) {
-				$_errCount++;
-				$_errRec[] = ( $useChn ) ? "第 {$_totCount} 行：往生日必須介於&nbsp;\"{$_SESSION[ 'pwPlqDate' ]}\"&nbsp;與&nbsp;\"{$_SESSION[ 'rtrtDate' ]}\"&nbsp;之間！"
+			if ( $_attrN == 'deceasedDate' ) {
+				if ( !chkDate( $_attrV ) ) {
+					$_errCount++;
+					$_errRec[] = ( $useChn ) ? "第 {$_totCount} 行：往生日必須介於&nbsp;\"{$_SESSION[ 'pwPlqDate' ]}\"&nbsp;與&nbsp;\"{$_SESSION[ 'rtrtDate' ]}\"&nbsp;之間！"
 							: ":\tError on Record {$_totCount}; Deceased Date must be a valid date between "
 							. "\"{$_SESSION[ 'pwPlqDate' ]}\" and \"{$_SESSION[ 'rtrtDate' ]}\"!";
-				$_attrErr = true;
-				break;				
+					$_attrErr = true;
+					break;
+				}
+				else { // convert `deceasedDate` to YYYY-MM-DD format
+					$_attrV = date("Y-m-d", strtotime($_attrV));
+				}								
 			} // attribute is deceasedDate
 			if ( preg_match( "%^\s*$%", $_attrV ) == 1 ) { // Field value is empty
 				if ( $_attrN != 'W_Title' && $_attrN != 'R_Title' ) {
