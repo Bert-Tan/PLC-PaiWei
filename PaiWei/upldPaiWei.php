@@ -195,7 +195,7 @@
 			// (2) otherwise, add 叩薦 or 敬薦 based on 'W_Title'
 				$_toMatch = "%\s*(叩薦|Sincerely Recommend|敬薦|Recommend)%u";
 				if ( preg_match( $_toMatch, $_attrV ) != 1 ) { // not found
-					if ( in_array( $_tupFldNs[0], $_koujianWTitles ) ) { // $_tupFldNs[0] is the value of 'W_Title'
+					if ( in_array( $_tupFldVs[0], $_koujianWTitles ) ) { // $_tupFldVs[0] is the value of 'W_Title'
 						$_toAdd = $_koujianStr;
 					}
 					else {
