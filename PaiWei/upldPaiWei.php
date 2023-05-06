@@ -22,7 +22,20 @@
 	$_totCount = 0;
 	$_blnkCount = 0;
 	define ( 'BLANKDATA', "BLANK"); // filler for allowed blank field
-	$_rqTitles = array( 'D_Requestor', 'L_Requestor', 'W_Requestor', 'Y_Requestor' );
+	$_rqTitles = array( 'D_Requestor', 'L_Requestor', 'Y_Requestor' ); // 'W_Requestor' is handled specially
+	// 'W_Title' to add 叩薦 to 'W_Requestor'
+	$_koujianWTitles = array( '先慈父', '先慈母', '先慈公公', '先慈婆婆', '先慈岳父', '先慈岳母', '老師', '先祖父', 
+								'先祖母', '先外祖父', '先外祖母', '先伯父', '世伯', '世伯母', '先伯母', '先叔父', 
+								'先嬸嬸', '世叔', '世嬸', '先姑姑', '先姑父', '世姑母', '世姑父', '先舅舅', '先舅媽', 
+								'世舅', '世舅媽', '先姨媽', '先姨父', '先伯公', '先伯婆', '先叔公', '先叔婆', '先姑婆', 
+								'先姑婆丈', '先舅公', '先舅婆', '先姨婆', '先姨婆丈', '先堂伯', '先堂伯母', '先堂叔', 
+								'先堂嬸', '先堂姑', '先堂姑父', '先堂舅舅', '先堂舅媽', '先堂姨媽', '先堂姨父', '先表伯', 
+								'先表伯母', '先表叔', '先表嬸', '先表姑', '先表姑父', '先表舅舅', '先表舅媽', '先表姨媽', 
+								'先表姨父', '先堂伯公', '先堂伯婆', '先堂叔公', '先堂嬸婆', '先堂姑婆', '先堂姑公', 
+								'先堂舅公', '先堂舅婆', '先堂姨婆', '先堂姨公', '先表伯公', '先表伯婆', '先表叔公', 
+								'先表嬸婆', '先表姑婆', '先表姑公', '先表舅公', '先表舅婆', '先表姨婆', '先表姨公', 
+								'Father', 'Mother', 'Uncle', 'Aunt', 'Grandpa', 'Grandma', 'Grand Uncle', 
+								'Grand Aunt', 'Father-in-Law', 'Mother-in-Law' );
 	
 	function removeBOM( $str="" ) { 
 	  if(substr($str, 0, 3) == pack("C*", 0xef,0xbb,0xbf)) { 
@@ -100,6 +113,8 @@
 	$_fileExt = $_pathAttr [ 'extension' ];
 	$_fileDIR = $_pathAttr [ 'dirname' ];
 	$_archiveName = $_archiveDir . "/" . $_fileBase . '.' . $_fileExt . '_' . $_pgDate . '_for_' . $_tblName;
+	$_koujianStr = ( $useChn ) ? " 叩薦" : " Sincerely Recommend";
+	$_jingjianStr = ( $useChn ) ? " 敬薦" : " Recommend";
 
 	if ( ( $_fileExt !== 'csv' && $_fileExt !== 'CSV' ) || 
 			 ( mb_check_encoding (file_get_contents( $_tmpDataFile ), 'UTF-8') == false ) ) {
@@ -160,21 +175,35 @@
 				} 
 				$_attrV = BLANKDATA; // field is either W_Title or R_Title, for which blank is allowed
 			} // Field value is empty
-			if ( in_array( $_attrN, $_rqTitles ) ) { // make 叩薦 or 敬薦 consistent
-				$_toDel = "%\s*(叩薦|敬薦)%u";
+			if ( in_array( $_attrN, $_rqTitles ) ) { // make 叩薦 or 敬薦 consistent (except for 'W_Requestor')
+				$_toDel = "%\s*(叩薦|Sincerely Recommend|敬薦|Recommend)%u";
 				$_attrV = preg_replace( $_toDel, '', $_attrV ); // if they are there, delete it
 				switch( $_attrN ) {
 				case 'D_Requestor':
 				case 'Y_Requestor':
-					$_toAdd = " 敬薦";
+					$_toAdd = $_jingjianStr;
 					break;
 				case 'L_Requestor':
-				case 'W_Requestor':
-					$_toAdd = " 叩薦";	// default
+					$_toAdd = $_koujianStr;	// default
 					break;
 				} // switch()
 				$_attrV = preg_replace( "%$%", $_toAdd, $_attrV );
 			} // End of taking care of 叩薦 or 敬薦
+			if ( $_attrN == 'W_Requestor' ) {
+			// handle 叩薦 or 敬薦 for 'W_Requestor', the logic is below:
+			// (1) if 叩薦 or 敬薦 is there, keep it
+			// (2) otherwise, add 叩薦 or 敬薦 based on 'W_Title'
+				$_toMatch = "%\s*(叩薦|Sincerely Recommend|敬薦|Recommend)%u";
+				if ( preg_match( $_toMatch, $_attrV ) != 1 ) { // not found
+					if ( in_array( $_tupFldNs[0], $_koujianWTitles ) ) { // $_tupFldNs[0] is the value of 'W_Title'
+						$_toAdd = $_koujianStr;
+					}
+					else {
+						$_toAdd = $_jingjianStr;
+					}
+					$_attrV = preg_replace( "%$%", $_toAdd, $_attrV );
+				}
+			}
 			$_tupAttrNVs[ $_attrN ] = $_attrV; // this particular attribute's (Name, Value)
 		} // formulate tuple attribute's (Name, Value) pairs in associative array format
 		if ( $_attrErr ) {
