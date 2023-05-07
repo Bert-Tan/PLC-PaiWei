@@ -24,18 +24,9 @@
 	define ( 'BLANKDATA', "BLANK"); // filler for allowed blank field
 	$_rqTitles = array( 'D_Requestor', 'L_Requestor', 'Y_Requestor' ); // 'W_Requestor' is handled specially
 	// 'W_Title' to add 叩薦 to 'W_Requestor'
-	$_koujianWTitles = array( '先慈父', '先慈母', '先慈公公', '先慈婆婆', '先慈岳父', '先慈岳母', '老師', '先祖父', 
-								'先祖母', '先外祖父', '先外祖母', '先伯父', '世伯', '世伯母', '先伯母', '先叔父', 
-								'先嬸嬸', '世叔', '世嬸', '先姑姑', '先姑父', '世姑母', '世姑父', '先舅舅', '先舅媽', 
-								'世舅', '世舅媽', '先姨媽', '先姨父', '先伯公', '先伯婆', '先叔公', '先叔婆', '先姑婆', 
-								'先姑婆丈', '先舅公', '先舅婆', '先姨婆', '先姨婆丈', '先堂伯', '先堂伯母', '先堂叔', 
-								'先堂嬸', '先堂姑', '先堂姑父', '先堂舅舅', '先堂舅媽', '先堂姨媽', '先堂姨父', '先表伯', 
-								'先表伯母', '先表叔', '先表嬸', '先表姑', '先表姑父', '先表舅舅', '先表舅媽', '先表姨媽', 
-								'先表姨父', '先堂伯公', '先堂伯婆', '先堂叔公', '先堂嬸婆', '先堂姑婆', '先堂姑公', 
-								'先堂舅公', '先堂舅婆', '先堂姨婆', '先堂姨公', '先表伯公', '先表伯婆', '先表叔公', 
-								'先表嬸婆', '先表姑婆', '先表姑公', '先表舅公', '先表舅婆', '先表姨婆', '先表姨公', 
-								'Father', 'Mother', 'Uncle', 'Aunt', 'Grandpa', 'Grandma', 'Grand Uncle', 
-								'Grand Aunt', 'Father-in-Law', 'Mother-in-Law' );
+	$_koujianWTitles = array( '先慈父', '先慈母', '先慈公公', '先慈婆婆', '先慈岳父', '先慈岳母', 
+							'先祖父', '先祖母', '先外祖父', '先外祖母', '老師', 'Father', 
+							'Mother', 'Grandpa', 'Grandma', 'Father-in-Law', 'Mother-in-Law' );
 	
 	function removeBOM( $str="" ) { 
 	  if(substr($str, 0, 3) == pack("C*", 0xef,0xbb,0xbf)) { 

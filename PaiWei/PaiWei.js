@@ -32,6 +32,10 @@ var _wtList = null;	// W_Title & R_Title selection list
 var _rtList = null;
 var _icoName = null;
 var _rqTbls = [ 'D001A', 'L001A', 'Y001A', 'W001A_4', 'DaPaiWei', 'DaPaiWeiRed' ];
+// 'W_Title' to add 叩薦 to 'W_Requestor'
+var _koujianWTitles = [ '先慈父', '先慈母', '先慈公公', '先慈婆婆', '先慈岳父', '先慈岳母', 
+						'先祖父', '先祖母', '先外祖父', '先外祖母', '老師', 'Father', 
+						'Mother', 'Grandpa', 'Grandma', 'Father-in-Law', 'Mother-in-Law' ];
 
 /**********************************************************
  *                    Support functions                   *
@@ -311,7 +315,7 @@ function addRowBtnHdlr() {
 	var recTxt2 = ( _sessLang == SESS_LANG_CHN ) ? "敬薦" : "Recommend";
 	var selEle = "<select class=\"rec\" style=\"float:right; font-size:0.9em;\">" + 
 					"<option>" + recTxt1 + "<\/option>" + 
-					"<option>" + recTxt2 + "<\/option>" +
+					"<option selected>" + recTxt2 + "<\/option>" +
 				 "<\/select>";
 	var tbody = $(".dataRows tbody");
 	var newRow = _pilotDataRow.clone();
@@ -337,7 +341,7 @@ function addRowBtnHdlr() {
 	_wTitleInput = newRow.find("input[data-fldn=W_Title]").replaceWith( _wtList );
 	_rTitleInput = newRow.find("input[data-fldn=R_Title]").replaceWith( _rtList );
 	newRowDataCells.on( 'blur', dataChgHdlr ); // bind to the data change handler
-	newRowDataCells.on( 'focus', onFocusHdlr ); // bind to the on 'focus' handler
+	newRowDataCells.on( 'focus', onFocusHdlr ); // bind to the on 'focus' handler	
 	lastTd.html( insBtn ); // place the 'Insert' button
 	lastTd.find("input[type=button]").on( 'click', insBtnHdlr ); // bind to Insert Button click handler
 	
@@ -345,6 +349,7 @@ function addRowBtnHdlr() {
 	var rTitleSelect = newRow.find("select[data-fldn=R_Title]");// find rTitle 'select' element
 	wTitleSelect.on( 'mouseover', onMouseoverHdlr ); // bind to the on 'mouseover' handler
 	rTitleSelect.on( 'mouseover', onMouseoverHdlr ); // bind to the on 'mouseover' handler
+	wTitleSelect.on( "change", selChgHdlr ); // bind to the select change handler
 	
 	if ( _sessMode == SESS_MODE_SRCH ) {
 		$(".dataBodyWrapper").find("*").unbind()
@@ -637,24 +642,24 @@ function insBtnHdlr() {
 		tblFlds[ thisRow.find("select.rTitle").attr('data-fldn') ] = rtV;
 		break;
 	case 'D001A':
-		recV = " 敬薦";
+		recV = ( _sessLang == SESS_LANG_CHN ) ? " 敬薦" : " Recommend";
 		rNameO = thisRow.find("input[data-fldn=D_Requestor]");
 		rName = rNameO.val().trim();
-		rName = rName.replace( /\s*敬薦/gu, '' ); /* delete */
+		rName = rName.replace( /\s*(叩薦|Sincerely Recommend|敬薦|Recommend)/gu, '' ); /* delete */
 		rNameO.val( rName + recV );
 		break;
 	case 'Y001A':
-		recV = " 敬薦";
+		recV = ( _sessLang == SESS_LANG_CHN ) ? " 敬薦" : " Recommend";
 		rNameO = thisRow.find("input[data-fldn=Y_Requestor]");
 		rName = rNameO.val().trim();
-		rName = rName.replace( /\s*敬薦/gu, '' ); /* delete */
+		rName = rName.replace( /\s*(叩薦|Sincerely Recommend|敬薦|Recommend)/gu, '' ); /* delete */
 		rNameO.val( rName + recV );
 		break;
 	case 'L001A':
-		recV = " 叩薦"; targetV = new RegExp( "\s*叩薦", "gu");
+		recV = ( _sessLang == SESS_LANG_CHN ) ? " 叩薦" : " Sincerely Recommend";
 		rNameO = thisRow.find("input[data-fldn=L_Requestor]");
 		rName = rNameO.val().trim();
-		rName = rName.replace( /\s*叩薦/gu, '' ).trim(); /* delete it */
+		rName = rName.replace( /\s*(叩薦|Sincerely Recommend|敬薦|Recommend)/gu, '' ).trim(); /* delete it */
 		rNameO.val( rName + recV );
 		break;
 	} // switch()
@@ -962,6 +967,7 @@ function dataChgHdlr() {	// on 'blur' handler
 								"往生日期（年-月-日）必須屆於 " + _pwPlqDate + "(含) 及 " + _rtrtDate + "(不含) 之間。"  
 							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format";
 	var fldN = $(this).attr("data-fldn");
+	var thisRow = $(this).closest("tr");	
 	
 	if ( newV.length == 0 && ( fldN == 'W_Title' || fldN == 'R_Title' ) ) { // Blank is allowed
 		$(this).val( _blankData ); // blank filler
@@ -997,11 +1003,53 @@ function dataChgHdlr() {	// on 'blur' handler
 		}
 	} // DaPaiWei and checking deceased Date
 
+	// set 叩薦 or 敬薦 based on 'W_Title'
+	if ( fldN == 'W_Title' ) {
+		var recV = null;
+		var rCell = thisRow.find("input[data-fldn=W_Requestor]");
+		var rName = rCell.val().trim();
+		rName = rName.replace( /\s*(叩薦|Sincerely Recommend|敬薦|Recommend)/gu, '' ); /* delete */
+		
+		if ( _koujianWTitles.includes( newV ) ) { // use 叩薦
+			recV = ( _sessLang == SESS_LANG_CHN ) ? " 叩薦" : " Sincerely Recommend";
+		}
+		else { // use 敬薦
+			recV = ( _sessLang == SESS_LANG_CHN ) ? " 敬薦" : " Recommend";
+		}
+
+		rCell.val( rName + recV );	
+		if ( rCell.val() != rCell.attr("data-oldv").trim() ) {
+			rCell.attr("data-changed", "true");
+		}	
+	}
+
 	$(this).val( newV );
 	if ( newV != oldV ) {
 		$(this).attr("data-changed", "true");
 	}	
 } // dataChgHdlr()
+
+/**********************************************************
+ * Event Handler - When a selected option is changed      *
+ **********************************************************/
+function selChgHdlr() {	// on select 'change' handler
+	var recTxt1 = ( _sessLang == SESS_LANG_CHN ) ? "叩薦" : "Sincerely Recommend";
+	var recTxt2 = ( _sessLang == SESS_LANG_CHN ) ? "敬薦" : "Recommend";
+	var fldN = $(this).attr("data-fldn");
+	var fldV = $(this).val().trim();
+	var thisRow = $(this).closest("tr");
+
+	// set default 叩薦 or 敬薦 option based on 'W_Title'
+	if ( fldN == 'W_Title' ) {		
+		var recSel = thisRow.find("select.rec");
+		if ( _koujianWTitles.includes( fldV ) ) { // set 叩薦
+			recSel.find("option:contains(" + recTxt1 + ")").prop('selected', true);
+		}
+		else { // set 敬薦
+			recSel.find("option:contains(" + recTxt2 + ")").prop('selected', true);					
+		}
+	}
+} // selChgHdlr()
 
 /**********************************************************
  * Event Handler - When a data cell gets focused          *
