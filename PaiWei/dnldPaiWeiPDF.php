@@ -263,7 +263,7 @@
 			case 'W001A_4':
 				$topMargin=0.7; $leftMargin=0.2; $rightMargin=0.2; $pdfTitle='往生者蓮位';
 				$imgPath='img/XiaoPaiWei.png'; $imgWidth=2.42; $imgHeight=7.5; $imgType='PNG';
-				$paiweiNumPerPage=6; $prefixPaiwei='佛力超薦'; $suffixPaiwei='往生蓮位'; $suffixReq='叩薦';
+				$paiweiNumPerPage=6; $prefixPaiwei='佛力超薦'; $suffixPaiwei='往生蓮位'; $suffixReq=' 薦';
 				$fontSizePaiwei=18; $fontSizePrefixPaiwei=20; $fontSizeReq=14; $fontSizePrefixReq=16;
 				$fontStylePaiwei='B'; $fontStyleReq='B';
 				$rotateXadjustPaiwei=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
@@ -278,7 +278,7 @@
 				$topMargin=0.5; $leftMargin=0.0; $rightMargin=0.0; $pdfTitle='大牌位'; 
 				$imgPath='img/DaPaiWei.jpg'; $paiweiNumPerPage=1; $imgType='JPG'; $imgAlign='C';//center align
 				$imgWidth=0; $imgHeight=0; //TCPDF calculate image width and height automatically
-				$fontStylePaiwei='B'; $fontStyleReq='B'; $suffixReq='叩薦';
+				$fontStylePaiwei='B'; $fontStyleReq='B'; $suffixReq=' 薦';
 				$fontSizePaiwei=24; $fontSizeReq=18; $fontSizePrefixReq=20;
 				$rotateXadjustPaiwei=1.0*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
 				$textXadjustPaiwei=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
