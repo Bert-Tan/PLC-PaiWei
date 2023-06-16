@@ -238,9 +238,17 @@ function loadRtMgrForm() {
 						$("input[name=lastRtrtDate]").val( rspX[X] );
 						$("input[name=lastRtrtDate]").attr( 'value', rspX[X] );
 						break;
+					case 'rtTemple':
+						$("input[name=rtTemple]").val( rspX[X] );
+						$("input[name=rtTemple]").attr( 'value', rspX[X] );
+						break;
 					case 'rtReason':
 						$("input[name=rtReason]").val( rspX[X] );
 						$("input[name=rtReason]").attr( 'value', rspX[X] );
+						break;
+					case 'rtVenerable':
+						$("input[name=rtVenerable]").val( rspX[X] );
+						$("input[name=rtVenerable]").attr( 'value', rspX[X] );
 						break;
 					case 'rtZhaiZhu':
 						$("input[name=rtZhaiZhu]").val( rspX[X] );
@@ -250,14 +258,6 @@ function loadRtMgrForm() {
 						$("input[name=rtShouDu]").val( rspX[X] );
 						$("input[name=rtShouDu]").attr( 'value', rspX[X] );
 						break;
-					case 'rtVenerable':
-						$("input[name=rtVenerable]").val( rspX[X] );
-						$("input[name=rtVenerable]").attr( 'value', rspX[X] );
-						break;
-					case 'annivYear':
-						$("input[name=annivYear]").val( rspX[X] );
-						$("input[name=annivYear]").attr( 'value', rspX[X] );
-						break;	
 					case 'ERR':
 						alert( rspX[X]);
 						return;
@@ -268,30 +268,19 @@ function loadRtMgrForm() {
 					$("input[name=pwExpires]").attr( 'data-oldV', $("input[name=pwExpires]").attr( 'value' ) );
 					$("select[name=rtEvent]").attr( 'data-oldV', $("select[name=rtEvent]").attr( 'value' ) );
 					$("input[name=lastRtrtDate]").attr( 'data-oldV', $("input[name=lastRtrtDate]").attr( 'value' ) );
+					$("input[name=rtTemple]").attr( 'data-oldV', $("input[name=rtTemple]").attr( 'value' ) );
 					$("input[name=rtReason]").attr( 'data-oldV', $("input[name=rtReason]").attr( 'value' ) );
+					$("input[name=rtVenerable]").attr( 'data-oldV', $("input[name=rtVenerable]").attr( 'value' ) );
 					$("input[name=rtZhaiZhu]").attr( 'data-oldV', $("input[name=rtZhaiZhu]").attr( 'value' ) );
 					$("input[name=rtShouDu]").attr( 'data-oldV', $("input[name=rtShouDu]").attr( 'value' ) );
-					$("input[name=rtVenerable]").attr( 'data-oldV', $("input[name=rtVenerable]").attr( 'value' ) );
-					$("input[name=annivYear]").attr( 'data-oldV', $("input[name=annivYear]").attr( 'value' ) );
-					if ( $("select[name=rtEvent]").val() != "ThriceYearning" ) {
-						$("input[name=rtReason]").prop("disabled", true ).val("不適用");
-						$("input[name=rtZhaiZhu]").prop("disabled", true ).val("不適用");
-						$("input[name=rtShouDu]").prop("disabled", true ).val("不適用");
-						$("input[name=rtVenerable]").prop("disabled", true ).val("不適用");
-					}
-					else {
-						$("input[name=rtReason]").prop("disabled", false ); // Allow edit
+					if ( $("select[name=rtEvent]").val() == "ThriceYearning" ) {
 						$("input[name=rtZhaiZhu]").prop("disabled", false ); // Allow edit
 						$("input[name=rtShouDu]").prop("disabled", false ); // Allow edit
-						$("input[name=rtVenerable]").prop("disabled", false ); // Allow edit
 						/* do not want to set value because it could be read from the DB */
-					}
-					if ( $("select[name=rtEvent]").val() != "Anniversary" ) {
-						$("input[name=annivYear]").prop("disabled", true ).val("不適用");
 					}
 					else {
-						$("input[name=annivYear]").prop("disabled", false ); // Allow edit
-						/* do not want to set value because it could be read from the DB */
+						$("input[name=rtZhaiZhu]").prop("disabled", true ).val("不適用");
+						$("input[name=rtShouDu]").prop("disabled", true ).val("不適用");
 					}
 				}
 				// now connect handlers
@@ -324,7 +313,7 @@ function hdlr_dataChg() {
     var x = ( oldV.length > 0 ) ? oldV : pmptV;
     var fldN = $(this).attr('data-fldN');
 
-    if ( newV.length == 0 ) {
+    if ( newV.length == 0 && fldN != 'rtVenerable' ) {
         if ( oldV.length > 0 ) { // existing data editing; but did not input any data
 			$(this).val( oldV ); // put back the existing data
         } else { // new data entry; but did not input any data
@@ -343,13 +332,6 @@ function hdlr_dataChg() {
 				return;
 			}
 			break;
-		case 'rtReason':	
-			if ( newV == '不適用' || newV == '請輸入法會因緣' ) {
-				alert( "請輸入三時繫念法會因緣!" );
-				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
-				return;
-			}	
-			break;
 		case 'lastRtrtDate':
 			if ( isNaN(new Date(newV)) ) {
 				alert( "上次法會日期必須是一個有效日期!" );
@@ -357,38 +339,33 @@ function hdlr_dataChg() {
 				return;
 			}	
 			break;
+		case 'rtReason':	
+			if ( newV == '請輸入法會因緣' ) {
+				alert( "請輸入法會因緣!" );
+				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
+				return;
+			}	
+			break;
+		case 'rtVenerable':
+			if ( newV == '請輸入法會主法和尚' ) {
+				alert( "請確認此次法會沒有主法和尚!" );
+				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
+				return;
+			}
+			break;
 		case 'rtZhaiZhu':	
-			if ( newV == '不適用' || newV == '請輸入法會齋主' ) {
+			if ( newV == '請輸入法會齋主' ) {
 				alert( "請輸入三時繫念法會齋主!" );
 				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
 				return;
 			}	
 			break;
 		case 'rtShouDu':	
-			if ( newV == '不適用' || newV == '請輸入法會受度人' ) {
+			if ( newV == '請輸入法會受度人' ) {
 				alert( "請輸入三時繫念法會受度人!" );
 				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
 				return;
 			}	
-			break;
-		case 'rtVenerable':	
-			if ( newV == '不適用' || newV == '請輸入法會主法和尚' ) {
-				alert( "請輸入三時繫念法會主法和尚!" );
-				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
-				return;
-			}	
-			break;	
-		case 'annivYear':	
-			if ( newV == '不適用' || newV == '請輸入週年年數' ) {
-				alert( "請輸入週年館慶年數!" );
-				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
-				return;
-			}
-			if ( newV.match(/^\d+$/) == null ) {
-				alert( "週年館慶年數必須是整數!" );
-				$(this).val( x );   if ( x == pmptV ) $(this).attr( 'data-pmptv', '');
-				return;
-			}
 			break;
 	} // switch()
 	
@@ -402,21 +379,18 @@ function selChange() {
 	var chgdTo = $(this).val();
 	$(this).attr( 'value', chgdTo);
 	$(this).attr( 'data-changed', 'true');
-	if ( chgdTo != "ThriceYearning" ) {
-		$("input[name=rtReason]").prop("disabled", true ).val("不適用");
-		$("input[name=rtZhaiZhu]").prop("disabled", true ).val("不適用");
-		$("input[name=rtShouDu]").prop("disabled", true ).val("不適用");
-		$("input[name=rtVenerable]").prop("disabled", true ).val("不適用");
-	} else {
-		$("input[name=rtReason]").prop("disabled", false ).val("請輸入法會因緣");
+
+	$("input[name=rtTemple]").val("淨土念佛堂及圖書館");
+	$("input[name=rtReason]").val("請輸入法會因緣");
+	$("input[name=rtVenerable]").val("請輸入法會主法和尚");
+
+	if ( chgdTo == "ThriceYearning" ) {
 		$("input[name=rtZhaiZhu]").prop("disabled", false ).val("請輸入法會齋主");
 		$("input[name=rtShouDu]").prop("disabled", false ).val("請輸入法會受度人");
-		$("input[name=rtVenerable]").prop("disabled", false ).val("請輸入法會主法和尚");
 	}
-	if ( chgdTo != "Anniversary" ) {
-		$("input[name=annivYear]").prop("disabled", true ).val("不適用");
-	} else {
-		$("input[name=annivYear]").prop("disabled", false ).val("請輸入週年年數");
+	else {
+		$("input[name=rtZhaiZhu]").prop("disabled", true ).val("不適用");
+		$("input[name=rtShouDu]").prop("disabled", true ).val("不適用");
 	}
 } // function selChange()
 
@@ -431,12 +405,12 @@ function updRetreatData() {
 	var pwDate = $("input[name=pwExpires]").val(); var pwD = new Date(pwDate);	
 	var rtEvent = $("select[name=rtEvent]").val();
 	var lastRtDate = $("input[name=lastRtrtDate]").val();
+	var rtTemple = $("input[name=rtTemple]").val();
 	var rtRsn = $("input[name=rtReason]").val();
+	var rtVenerable = $("input[name=rtVenerable]").val();	
 	var rtZhaiZhu = $("input[name=rtZhaiZhu]").val();
 	var rtShouDu = $("input[name=rtShouDu]").val();
-	var rtVenerable = $("input[name=rtVenerable]").val();
-	var annivYear = $("input[name=annivYear]").val();
-
+	
 	if ( rtEvent == "" ) {
 		alert( "請選擇法會類別！" ); return;
 	}
@@ -449,46 +423,47 @@ function updRetreatData() {
 	if ( isNaN(new Date(lastRtDate)) ) {
 		alert( "上次法會日期必須是一個有效日期!" ); return;
 	}
-	if ( rtEvent == "ThriceYearning" && ( rtRsn == '不適用' || rtRsn == '請輸入法會因緣') ) {
-		alert( "請輸入三時繫念法會因緣!" ); return;
+	if ( rtRsn == '請輸入法會因緣' ) {
+		alert( "請輸入法會因緣!" ); return;
 	}
-	if ( rtEvent == "ThriceYearning" && ( rtZhaiZhu == '不適用' || rtZhaiZhu == '請輸入法會齋主') ) {
+	if ( rtVenerable == '' || rtVenerable == '請輸入法會主法和尚' ) {
+		if ( rtEvent == "ThriceYearning" ) {
+			alert( "請輸入三時繫念法會主法和尚!" ); return;
+		}
+		else {
+			if ( confirm( "請確認此次法會沒有主法和尚!" ) ) {
+				$("input[name=rtVenerable]").val("");
+				rtVenerable = null;
+			}
+			else {
+				alert( "請輸入法會主法和尚!" ); return;
+			}
+		}
+	}
+	if ( rtEvent == "ThriceYearning" && ( rtZhaiZhu == '請輸入法會齋主') ) {
 		alert( "請輸入三時繫念法會齋主!" ); return;
 	}
-	if ( rtEvent == "ThriceYearning" && ( rtShouDu == '不適用' || rtShouDu == '請輸入法會受度人') ) {
+	if ( rtEvent == "ThriceYearning" && ( rtShouDu == '請輸入法會受度人') ) {
 		alert( "請輸入三時繫念法會受度人!" ); return;
-	}
-	if ( rtEvent == "ThriceYearning" && ( rtVenerable == '不適用' || rtVenerable == '請輸入法會主法和尚') ) {
-		alert( "請輸入三時繫念法會主法和尚!" ); return;
-	}
-	if ( rtEvent == "Anniversary" && ( annivYear == '不適用' || annivYear == '請輸入週年年數') ) {
-		alert( "請輸入週年館慶年數!" ); return;
-	}
-	if ( rtEvent == "Anniversary" && annivYear.match(/^\d+$/) == null ) {
-		alert( "週年館慶年數必須是整數!" ); return;
-	}
-	if ( rtEvent != "ThriceYearning" ) {
-		rtRsn = null;
+	}	
+
+	if ( rtEvent != "ThriceYearning" ) {		
 		rtZhaiZhu = null;
 		rtShouDu = null;
-		rtVenerable = null;
 	}
-	if ( rtEvent != "Anniversary" ) {
-		annivYear = null;
-	}
-
+	
 	var ajaxData = {}, dbInfo = {};
 	dbInfo[ 'tblName' ] = 'pwParam'; // filler; will not be used
-	dbInfo[ 'ID' ] = tupID;
-	dbInfo[ 'lastRtrtDate' ] = lastRtDate;
+	dbInfo[ 'ID' ] = tupID;	
     dbInfo[ 'rtrtDate' ] = rtDate;
 	dbInfo[ 'pwExpires' ] = pwDate;
 	dbInfo[ 'rtEvent' ] = rtEvent;
+	dbInfo[ 'rtTemple' ] = rtTemple;
 	dbInfo[ 'rtReason' ] = rtRsn;
+	dbInfo[ 'rtVenerable' ] = rtVenerable;
 	dbInfo[ 'rtZhaiZhu' ] = rtZhaiZhu;
 	dbInfo[ 'rtShouDu' ] = rtShouDu;
-	dbInfo[ 'rtVenerable' ] = rtVenerable;
-	dbInfo[ 'annivYear' ] = annivYear;
+	dbInfo[ 'lastRtrtDate' ] = lastRtDate;
 	ajaxData[ 'dbReq' ] = 'dbUpdRtData';
 	ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
 	$.ajax({

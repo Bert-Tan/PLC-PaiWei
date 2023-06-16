@@ -145,12 +145,13 @@ function updRtData( $dbInfo ) {
 	
     if ( strlen( $dbInfo['ID'] ) == 0 ) {
 		$tupID = null;
-		$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`, `rtEvent`, `rtReason`, `rtZhaiZhu`, `rtShouDu`, `rtVenerable`,  `annivYear`, `lastRtrtDate`) VALUE "
-			 . "( \"{$dbInfo['rtrtDate']}\", \"{$dbInfo['pwExpires']}\", \"{$dbInfo['rtEvent']}\", \"{$dbInfo['rtReason']}\", \"{$dbInfo['rtZhaiZhu']}\", \"{$dbInfo['rtShouDu']}\", \"{$dbInfo['rtVenerable']}\", \"{$dbInfo['annivYear']}\", \"{$dbInfo['lastRtrtDate']}\");";
+		$sql = "INSERT INTO `pwParam` ( `rtrtDate`, `pwExpires`, `rtEvent`, `rtTemple`, `rtReason`, `rtVenerable`, `rtZhaiZhu`, `rtShouDu`, `lastRtrtDate`) VALUE "
+			 . "( \"{$dbInfo['rtrtDate']}\", \"{$dbInfo['pwExpires']}\", \"{$dbInfo['rtEvent']}\", \"{$dbInfo['rtTemple']}\", \"{$dbInfo['rtReason']}\", \"{$dbInfo['rtVenerable']}\", \"{$dbInfo['rtZhaiZhu']}\", \"{$dbInfo['rtShouDu']}\", \"{$dbInfo['lastRtrtDate']}\");";
 	} else {
 		$tupID = $dbInfo[ 'ID' ];
-		$sql = "UPDATE `pwParam` SET `pwExpires` = \"{$dbInfo[ 'pwExpires' ]}\", `rtrtDate` = \"{$dbInfo[ 'rtrtDate' ]}\", `lastRtrtDate` = \"{$dbInfo[ 'lastRtrtDate' ]}\", "
-			 . "`rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\", `rtZhaiZhu` = \"{$dbInfo['rtZhaiZhu']}\", `rtShouDu` = \"{$dbInfo['rtShouDu']}\", `rtVenerable` = \"{$dbInfo['rtVenerable']}\", `annivYear` = \"{$dbInfo['annivYear']}\" "
+		$sql = "UPDATE `pwParam` SET `rtrtDate` = \"{$dbInfo[ 'rtrtDate' ]}\", `pwExpires` = \"{$dbInfo[ 'pwExpires' ]}\", `rtEvent` = \"{$dbInfo[ 'rtEvent' ]}\", "
+			 . "`rtTemple` = \"{$dbInfo[ 'rtTemple' ]}\", `rtReason` = \"{$dbInfo['rtReason']}\", `rtVenerable` = \"{$dbInfo['rtVenerable']}\", "
+			 . "`rtZhaiZhu` = \"{$dbInfo['rtZhaiZhu']}\", `rtShouDu` = \"{$dbInfo['rtShouDu']}\", `lastRtrtDate` = \"{$dbInfo[ 'lastRtrtDate' ]}\" "
 			 . "WHERE `ID` = \"{$tupID}\";";
 	}
 	
@@ -186,11 +187,11 @@ function readRtData( $dbInfo ) {
 			$rpt[ 'pwExpires' ] = "請輸入牌位申請截止日期";
 			$rpt[ 'rtEvent' ] = "";
 			$rpt[ 'lastRtrtDate' ] = "請輸入上次法會日期";
+			$rpt[ 'rtTemple' ] = "淨土念佛堂及圖書館";
 			$rpt[ 'rtReason' ] = "請輸入法會因緣";
+			$rpt[ 'rtVenerable' ] = "請輸入法會主法和尚";
 			$rpt[ 'rtZhaiZhu' ] = "請輸入法會齋主";
 			$rpt[ 'rtShouDu' ] = "請輸入法會受度人";
-			$rpt[ 'rtVenerable' ] = "請輸入法會主法和尚";
-			$rpt[ 'annivYear' ] = "請輸入週年年數";
 			return $rpt;
 		case 1:
 			$rsltArray = $rslt->fetch_all(MYSQLI_ASSOC)[0];

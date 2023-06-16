@@ -16,10 +16,8 @@
 				<td>
 					<select name="rtEvent" required value="" data-oldV="" data-fldN="rtEvent" data-changed="false">
 						<option value="">- 請選擇法會類別 -</option>
-						<option value="Qingming">清明祭祖法會</option>
-						<option value="Zhongyuan">中元祭祖法會</option>
-						<option value="ThriceYearning">三時繫念佛事法會</option>
-						<option value="Anniversary">週年館慶祭祖法會</option>
+						<option value="RespectAncestors">祭祖法會</option>						
+						<option value="ThriceYearning">三時繫念佛事法會</option>					
 					</select>
 				</td>
 				<td>
@@ -28,9 +26,23 @@
 			</tr>
 			<tr>
 				<td colspan="4" style="text-align: left; padding: 4px 10px;">
-					<span style="font-weight: bold;">三時繫念法會因緣：</span><br/>
+					<span style="font-weight: bold;">舉辦法會的道場：</span><br/>
+					<input type="text" name="rtTemple" style="display:inline-block; float:right; width:95%;"
+						value="" data-oldV="" data-fldN="rtTemple" data-changed="false">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4" style="text-align: left; padding: 4px 10px;">
+					<span style="font-weight: bold;">法會因緣：</span><br/>
 					<input type="text" name="rtReason" style="display:inline-block; float:right; width:95%;"
-						value="" data-oldV="" data-fldN="rtReason" data-changed="false" disabled>
+						value="" data-oldV="" data-fldN="rtReason" data-changed="false">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4" style="text-align: left; padding: 4px 10px;">
+					<span style="font-weight: bold;">法會主法和尚：</span><br/>
+					<input type="text" name="rtVenerable" style="display:inline-block; float:right; width:95%;"
+						value="" data-oldV="" data-fldN="rtVenerable" data-changed="false">
 				</td>
 			</tr>
 			<tr>
@@ -45,20 +57,6 @@
 					<span style="font-weight: bold;">三時繫念法會受度人：</span><br/>
 					<input type="text" name="rtShouDu" style="display:inline-block; float:right; width:95%;"
 						value="" data-oldV="" data-fldN="rtShouDu" data-changed="false" disabled>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="4" style="text-align: left; padding: 4px 10px;">
-					<span style="font-weight: bold;">三時繫念法會主法和尚：</span><br/>
-					<input type="text" name="rtVenerable" style="display:inline-block; float:right; width:95%;"
-						value="" data-oldV="" data-fldN="rtVenerable" data-changed="false" disabled>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="4" style="text-align: left; padding: 4px 10px;">
-					<span style="font-weight: bold;">週年館慶年數：</span><br/>
-					<input type="text" name="annivYear" style="display:inline-block; float:right; width:95%;"
-						value="" data-oldV="" data-fldN="annivYear" data-changed="false" disabled>
 				</td>
 			</tr>
 			<tr><td colspan="4"><input type="button" name="rtUpdData" value="更新法會資料"></td></tr>

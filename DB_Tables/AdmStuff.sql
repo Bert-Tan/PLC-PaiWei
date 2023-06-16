@@ -13,12 +13,12 @@ CREATE TABLE IF NOT EXISTS pwParam (
 	ID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	rtrtDate DATE NOT NULL,
 	pwExpires DATE NOT NULL,
-	rtEvent ENUM('Qingming','Zhongyuan','ThriceYearning','Anniversary') NOT NULL,
-	rtReason VARCHAR(255),
-	rtZhaiZhu VARCHAR(255),
-	rtShouDu VARCHAR(255),
+	rtEvent ENUM('RespectAncestors','ThriceYearning') NOT NULL,
+	rtTemple VARCHAR(60) NOT NULL,
+	rtReason VARCHAR(60) NOT NULL,
 	rtVenerable VARCHAR(40),
-	annivYear VARCHAR(10),
+	rtZhaiZhu VARCHAR(60),
+	rtShouDu VARCHAR(60),	
 	lastRtrtDate DATE NOT NULL
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
