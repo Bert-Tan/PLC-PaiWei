@@ -38,10 +38,8 @@
 						<td>
 							<select name="rtEvent" style="font-size: 1.2em;" required>
 								<option value="">-- 請選擇法會祭、疏文類別 --</option>
-								<option value="Qingming">清明祭祖法會</option>
-								<option value="Zhongyuan">中元祭祖法會</option>
+								<option value="RespectAncestors">祭祖法會</option>
 								<option value="ThriceYearning">三時繫念佛事法會</option>
-								<option value="Anniversary">週年館慶祭祖法會</option>
 							</select>
 						</td>
 						<td style="text-align: center; vertical-align: middle; padding: 1vh 0px;">
