@@ -6,7 +6,9 @@ CREATE TABLE IF NOT EXISTS admUsr (
 
 CREATE TABLE IF NOT EXISTS inCareOf (
   ID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  UsrName VARCHAR(60) NOT NULL
+  UsrName VARCHAR(60) NOT NULL,
+  UsrEmail VARCHAR(255) NOT NULL, /* email of the admin user who took care of the user most recently */
+  UNIQUE ( UsrName )
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS pwParam (

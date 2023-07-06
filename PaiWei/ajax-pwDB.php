@@ -78,6 +78,18 @@ function _dbName_2_htmlName ( $_dbName ) {
 		'Requestor' =>	array (
 			SESS_LANG_CHN =>	"未&nbsp;亡&nbsp;人&nbsp;或&nbsp;陽&nbsp;上&nbsp;啟&nbsp;請&nbsp;人&nbsp;姓&nbsp;名&nbsp;及&nbsp;關&nbsp;係",
 			SESS_LANG_ENG =>	"Survivor's / Applicant's / Requestor's Full Name &amp; Relationship" ),
+			'pwFilter' =>	array (
+			SESS_LANG_CHN =>	"篩選牌位：",
+			SESS_LANG_ENG =>	"Filter:&nbsp;" ),
+		'pwStatusAll' =>	array (
+			SESS_LANG_CHN =>	"所有&nbsp;牌位",
+			SESS_LANG_ENG =>	"&nbsp;All" ),
+		'pwStatusValid' =>	array (
+			SESS_LANG_CHN =>	"已驗證&nbsp;牌位",
+			SESS_LANG_ENG =>	"&nbsp;Validated" ),
+		'pwStatusInvalid' =>	array (
+			SESS_LANG_CHN =>	"未驗證&nbsp;牌位",
+			SESS_LANG_ENG =>	"&nbsp;Non-validated" )
 	);
 	return ( $_htmlNames[ $_dbName ][ $_sessLang ]  );
 } // _dbName_2_htmlName()
@@ -217,14 +229,14 @@ function constructTblData ( $rows, $dbTblName ) { // $rows =  $mysqlresult->fetc
 					$tpl->setVariable( "dupBtnTxt", "Duplicate");
 					$tpl->setVariable( "validBtnTxt", "Validate");
 				}
-				$validStr = $val > $lastRtrtDate ? "disabled" : "";
-				$tpl->setVariable("validStr", $validStr);
+				$validDisableStr = $val > $lastRtrtDate ? "disabled" : "";
+				$tpl->setVariable("validDisableStr", $validDisableStr);
 				$tpl->parse("dataEditCol");
 				continue;
 			}
 			
 			$tpl->setCurrentBlock("data_cell");
-			if ( $rowCount == 1 ) $tpl->setVariable("cellWidth", "{$cellWidth}%;" ) ;
+			$tpl->setVariable("cellWidth", "{$cellWidth}%;" );
 			$tpl->setVariable("dbFldN", $key); 
 			$tpl->setVariable("dbFldV", $val); 
 			$tpl->parse("data_cell");  							
@@ -247,9 +259,13 @@ function constructTblHeader( $dbTblName ) {
 	$tpl->setVariable("numCols", sizeof($fldN) ) ;
   	$tpl->setVariable("htmlTblName", _dbName_2_htmlName( $dbTblName ) ) ;
   	$tpl->setVariable("Who", $_sessUsr ) ;
-  if ( $_icoName != null ) {
-	$tpl->setVariable("ico", ";&nbsp;&nbsp;In Care Of:&nbsp;&nbsp;{$_icoName}" ) ;
-  }
+	if ( $_icoName != null ) {
+		$tpl->setVariable("ico", ";&nbsp;&nbsp;In Care Of:&nbsp;&nbsp;{$_icoName}" ) ;
+	}
+	$tpl->setVariable("pwFilter", _dbName_2_htmlName( "pwFilter" ) ) ;
+	$tpl->setVariable("pwStatusAll", _dbName_2_htmlName( "pwStatusAll" ) ) ;
+	$tpl->setVariable("pwStatusValid", _dbName_2_htmlName( "pwStatusValid" ) ) ;
+	$tpl->setVariable("pwStatusInvalid", _dbName_2_htmlName( "pwStatusInvalid" ) ) ;
 
 	$cellWidth = (int)( 72 / ( sizeof($fldN) - 1) );
 	$i = 0;

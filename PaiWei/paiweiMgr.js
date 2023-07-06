@@ -125,7 +125,8 @@ function loadPaiWeiDashboard() {
 				$("table.dataRows").find("*").unbind();
                 $("table.dataRows td[data-tblN]").on( 'click', hdlr_dataCellClick );
                 $("#icoInputBtn").on( 'click', hdlr_icoInput );
-				$("#icoSelBtn").on( 'click', hdlr_icoSelect );				
+				$("#icoSelBtn").on( 'click', hdlr_icoSelect );	
+				$("#pwStatusSel").on( 'change', hdlr_pwStatusSelChg ); // bind to the select change handler							
             }, // SUCCESS handler
             error: function ( jqXHR, textStatus, errorThrown ) {
                 alert( "loadPaiWeiDashboard()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
@@ -196,6 +197,51 @@ function hdlr_icoSelect() {
     dbInfo[ 'icoNameType' ] = 'icoSelected';
     dashboardRedirect( dbInfo ); // dashboardRedirect() will not return here;    
 } // hdlr_icoSelect()
+
+/********************************************************************************
+ * Event Handler - When the 'pwStatus' filter's selected option is changed      *
+ ********************************************************************************/
+function hdlr_pwStatusSelChg() {	
+	var pwStatus = $( this ).val();
+	var dataTbl = $( ".dataRows" );
+	var allRows = dataTbl.find( "tr" );
+	var dataRows = allRows.not( ":last" ); // except last <tr>
+	var noValidRows = dataRows.find( "td.icoTotal[pw-valid-ct='0']" ).parent(); // <tr> with no valid paiwei
+	var noInvalidRows = dataRows.find( "td.icoTotal[pw-invalid-ct='0']" ).parent(); // <tr> with no invalid paiwei
+	var sumRow = allRows.last(); // the last <tr>
+
+	switch ( pwStatus ) {
+		case 'ALL':			
+			adjustPaiweiCount( dataRows, sumRow, "pw-ct", "pw-sht" );
+			allRows.show();
+			break;
+		case 'VALID':	
+			adjustPaiweiCount( dataRows, sumRow, "pw-valid-ct", "pw-valid-sht" );
+			allRows.show();
+			noValidRows.hide();
+			break;
+		case 'INVALID':
+			adjustPaiweiCount( dataRows, sumRow, "pw-invalid-ct", "pw-invalid-sht" );
+			allRows.show();
+			noInvalidRows.hide();
+			break;
+	}
+} // hdlr_pwStatusSelChg()
+
+/*************************************************************
+ * Adjust dashboard paiwei count according to the 'pwStatus' *
+ *************************************************************/
+function adjustPaiweiCount( dataRows, sumRow, pwCtAttr, pwShtAttr ) {
+	dataRows.each( function() {
+		$( this ).find( "td" ).not( ":first" ).not( ":last" ).each( function() {
+			$( this ).text( $( this ).attr( pwCtAttr ) );
+		});
+	});
+	sumRow.find( "td" ).not( ":first" ).not( ":last" ).each( function() {
+		$( this ).text( $( this ).attr( pwCtAttr ) + " 【" + $( this ).attr( pwShtAttr ) + "】" );
+	});
+} // adjustPaiweiCount()
+
 
 function loadRtMgrForm() {
 	$("#tabDataFrame").load("./Templates/rtMgrForm.htm", function() {
@@ -287,7 +333,7 @@ function loadRtMgrForm() {
 				$("#retreatUpd").find("*").unbind();
 				$("#retreatUpd input[type=text]").on( 'focus', hdlr_onFocus );
 				$("#retreatUpd input[type=text]").on( 'blur', hdlr_dataChg );
-				$("#retreatUpd select").on( "change", selChange );
+				$("#retreatUpd select").on( 'change', hdlr_rtEventSelChg );
 				$("#retreatUpd input[name=rtUpdData]").on( "click", updRetreatData );
 			}, // Success Handler
 			error: function ( jqXHR, textStatus, errorThrown ) {
@@ -375,7 +421,10 @@ function hdlr_dataChg() {
     }
 } // function hdlr_dataChg()
 
-function selChange() {		
+/*********************************************************************
+ * Event Handler - When the 'rtEvent' selected option is changed     *
+ *********************************************************************/
+function hdlr_rtEventSelChg() {		
 	var chgdTo = $(this).val();
 	$(this).attr( 'value', chgdTo);
 	$(this).attr( 'data-changed', 'true');
@@ -392,7 +441,7 @@ function selChange() {
 		$("input[name=rtZhaiZhu]").prop("disabled", true ).val("不適用");
 		$("input[name=rtShouDu]").prop("disabled", true ).val("不適用");
 	}
-} // function selChange()
+} // function hdlr_rtEventSelChg()
 
 function updRetreatData() {
 	var dirtyCells = $("#retreatUpd input[data-changed=true]").length + $("#retreatUpd select[data-changed=true]").length;

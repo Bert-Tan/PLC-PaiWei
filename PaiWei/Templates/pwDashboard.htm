@@ -12,9 +12,17 @@
                     style="font-size: 1.3em; letter-spacing: 5px;
                         border-left: none; border-right: none;">
                     蓮友所申請牌位匯總表<br/>
+                    <span style="letter-spacing: normal; font-size: 0.8em;">篩選牌位：</span>
+                    <select id="pwStatusSel" name="pwStatus" style="font-size: 0.75em; width: 30%;">
+                        <!-- $pwStatus: ENUM('ALL','VALID', 'INVALID') DEFAULT 'ALL' -->
+                        <option value="ALL">所有&nbsp;牌位</option>
+                        <option value="VALID">已驗證&nbsp;牌位</option>
+                        <option value="INVALID">未驗證&nbsp;牌位</option>
+                    </select>
+                    <br/>
                     <span style="letter-spacing: normal; font-size: 0.8em;">
 					(點選任何數字格，即可躍至該蓮友該項牌位的申請表來作處理。)
-                    </span>
+                    </span>                    
                 </th>
                 <th colspan="2" style="border-left: none;">
                     <input type=text id="toBeReplaced" name="icoName" value="Replace with dropdown list"><br/>
@@ -35,6 +43,7 @@
 				<th>地基主蓮位</th>
                 <th>紅色大牌位</th>
 				<th>總&nbsp;&nbsp;計</th>
+                <th>未驗證牌位<br/>郵件告知</th>
             </tr>
         </thead>
     </table>
