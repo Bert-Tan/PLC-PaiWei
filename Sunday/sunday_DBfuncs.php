@@ -96,7 +96,7 @@ function insertSundayTuple( $tblName, $tupNVs, $usr ) {
 		$tupID = $rslt->fetch_all(MYSQLI_ASSOC)[0]['ID'];
 	}
 	if ( !$tupID ) { // not exist; insert now
-		$sql = "INSERT INTO `{$tblName}` {$tupAttrs} VALUE {$tupVals};";
+		$sql = "INSERT INTO `{$tblName}` {$tupAttrs} VALUES {$tupVals};";
 		$rslt = $_db->query( $sql );
 		$tupID = $_db->insert_id;
 	}
@@ -107,16 +107,16 @@ function insertSundayTuple( $tblName, $tupNVs, $usr ) {
 		$reqDateValues .= "( \"{$tblName}\", \"{$tupID}\", \"{$reqDate}\" )";
 		$i++;
 	}
-	$sql = "INSERT into `sundayRq2Days` (`TblName`, `rqID`, `RqDate`) VALUE {$reqDateValues};";
+	$sql = "INSERT into `sundayRq2Days` (`TblName`, `rqID`, `RqDate`) VALUES {$reqDateValues};";
 	$rslt = $_db->query( $sql );
 	/*
 	// taking care of sundayRq2GongDeZhu table
 	$now = date("Y-m-d H:i:s");
-	$sql = "INSERT into `sundayRq2GongDeZhu` (`TblName`, `rqID`, `GongDeZhu`, `rqTime`) VALUE (\"{$tblName}\",  \"{$tupID}\", \"{$gongDeZhu}\", \"{$now}\");";
+	$sql = "INSERT into `sundayRq2GongDeZhu` (`TblName`, `rqID`, `GongDeZhu`, `rqTime`) VALUES (\"{$tblName}\",  \"{$tupID}\", \"{$gongDeZhu}\", \"{$now}\");";
 	$rslt = $_db->query( $sql );
 	*/
 	// taking care of sundayRq2Usr table
-	$sql = "INSERT into `sundayRq2Usr` (`TblName`, `rqID`, `UsrName`) VALUE (\"{$tblName}\",  \"{$tupID}\", \"{$usr}\");";
+	$sql = "INSERT into `sundayRq2Usr` (`TblName`, `rqID`, `UsrName`) VALUES (\"{$tblName}\",  \"{$tupID}\", \"{$usr}\");";
 	$rslt = $_db->query( $sql );	
 
 	return $tupID;
@@ -161,7 +161,7 @@ function updateSundayTuple( $tblName, $tupNVs, $usr, $refDate ) {
 			$reqDateValues .= "( \"{$tblName}\", \"{$tupID}\", \"{$reqDate}\" )";
 			$i++;
 		}
-		$sql = "INSERT into `sundayRq2Days` (`TblName`, `rqID`, `RqDate`) VALUE {$reqDateValues};";
+		$sql = "INSERT into `sundayRq2Days` (`TblName`, `rqID`, `RqDate`) VALUES {$reqDateValues};";
 		$rslt = $_db->query( $sql );
 	}
 	/*

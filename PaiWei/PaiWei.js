@@ -247,6 +247,7 @@ function loadTblData( tblName, pgNbr, numRec, sessUsr, frameID ) {	/* dataOnly p
 						$(".dataHdrWrapper").find("*").unbind();
 						$(".dataHdrWrapper").empty();
 						$(".dataHdrWrapper").html( rspV[ X ]);
+						$("#pwStatusSel").on( 'change', pwStatusSelChgHdlr ); // bind to the select change handler
 						break;
 					case 'myData':
 						$(".dataBodyWrapper").find("*").unbind();
@@ -304,6 +305,33 @@ function myPaiWeiUpLoad ( e ) {
 	}); // AJAX Call
 } // myPaiWeiUpLoad()
 
+/********************************************************************************
+ * Event Handler - When the 'pwStatus' filter's selected option is changed      *
+ ********************************************************************************/
+function pwStatusSelChgHdlr() {
+	var pwStatus = $( this ).val();
+	var dataTbl = $( ".dataRows" );
+	var disabledValidBtns = dataTbl.find( "input.validBtn:disabled" );
+	var enabledValidBtns = dataTbl.find( "input.validBtn:enabled" );
+	var allRows = dataTbl.find( "tr" );
+	var validRows = disabledValidBtns.parent().parent();
+	var invalidRows = enabledValidBtns.parent().parent();
+
+	switch ( pwStatus ) {
+		case 'ALL':
+			allRows.show();
+			break;
+		case 'VALID':
+			allRows.hide();
+			validRows.show();
+			break;
+		case 'INVALID':
+			allRows.hide();
+			invalidRows.show();
+			break; 
+	}
+} // pwStatusSelChgHdlr()
+
 /**********************************************************
  * Event Handler - When the Add_a_Row Button is clicked   *
  **********************************************************/
@@ -349,7 +377,7 @@ function addRowBtnHdlr() {
 	var rTitleSelect = newRow.find("select[data-fldn=R_Title]");// find rTitle 'select' element
 	wTitleSelect.on( 'mouseover', onMouseoverHdlr ); // bind to the on 'mouseover' handler
 	rTitleSelect.on( 'mouseover', onMouseoverHdlr ); // bind to the on 'mouseover' handler
-	wTitleSelect.on( "change", selChgHdlr ); // bind to the select change handler
+	wTitleSelect.on( "change", wTitleSelChgHdlr ); // bind to the select change handler
 	
 	if ( _sessMode == SESS_MODE_SRCH ) {
 		$(".dataBodyWrapper").find("*").unbind()
@@ -1029,10 +1057,10 @@ function dataChgHdlr() {	// on 'blur' handler
 	}	
 } // dataChgHdlr()
 
-/**********************************************************
- * Event Handler - When a selected option is changed      *
- **********************************************************/
-function selChgHdlr() {	// on select 'change' handler
+/*********************************************************************
+ * Event Handler - When the 'wTitle' selected option is changed      *
+ *********************************************************************/
+function wTitleSelChgHdlr() {
 	var recTxt1 = ( _sessLang == SESS_LANG_CHN ) ? "叩薦" : "Sincerely Recommend";
 	var recTxt2 = ( _sessLang == SESS_LANG_CHN ) ? "敬薦" : "Recommend";
 	var fldN = $(this).attr("data-fldn");
@@ -1049,7 +1077,7 @@ function selChgHdlr() {	// on select 'change' handler
 			recSel.find("option:contains(" + recTxt2 + ")").prop('selected', true);					
 		}
 	}
-} // selChgHdlr()
+} // wTitleSelChgHdlr()
 
 /**********************************************************
  * Event Handler - When a data cell gets focused          *

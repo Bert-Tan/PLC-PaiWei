@@ -27,7 +27,7 @@
 				SESS_LANG_ENG => "" ),
 			'PaiWeiDash' => array (
 				SESS_LANG_CHN => "處理蓮友牌位",
-				SESS_LANG_ENG => "" ),			
+				SESS_LANG_ENG => "" ),		
 			'alertMsg' => array (
 				SESS_LANG_CHN => "**** 除有特殊困難，牌位申請者須本人親自( 或由指定代表 ) 前來參加法會 ****",
 				SESS_LANG_ENG => "**** You or your designee shall be present in the retreat unless you have difficulties ****" )
@@ -182,6 +182,15 @@ table.dataHdr th select {
 table.dataHdr th[data-icoName], table.dataRows td[data-icoName] {
 	width: 120pt;
 }
+table.dataRows tr input[type=button] {
+ 	margin-top: 3px;
+ 	display: inline-block;
+	text-align: center; 
+ 	border: 1px solid blue;
+ 	border-radius: 6px;
+	background-color: aqua;
+	font-size: 1.0em;
+}
 </style>
 </head>
 <body>
@@ -193,7 +202,6 @@ table.dataHdr th[data-icoName], table.dataRows td[data-icoName] {
 				<th data-table="DnldJiWen"><?php echo xLate( 'DnldJiWen' ); ?></th>
 				<th data-table="DnldPaiWei"><?php echo xLate( 'DnldPaiWei' ); ?></th>
 				<th data-table="PaiWeiDash"><?php echo xLate( 'PaiWeiDash' ); ?></th>
-			</tr>
 		</thead>
 	</table>
 	<div class="dataArea">

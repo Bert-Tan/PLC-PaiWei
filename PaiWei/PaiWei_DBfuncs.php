@@ -282,7 +282,7 @@ function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 	} // switch()
 
 	if ( !$tupID ) {
-		$sql = "INSERT INTO {$pwTable} {$tupAttrs} VALUE {$tupVal};";
+		$sql = "INSERT INTO {$pwTable} {$tupAttrs} VALUES {$tupVal};";
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
 			if ( DEBUG ) {
@@ -313,8 +313,8 @@ function insertPaiWeiTuple( $pwTable, $pwTupNVs, $usr, $recNo ) {
 	}
 	switch ( $rslt->num_rows ) { // Should be 0 or 1
 	case 0: // Not in pw2Usr Table; insert now
-		$sql	= "INSERT into pw2Usr ( `TblName`, `pwID`, `pwUsrName` ) "
-					.	"VALUE ( \"{$pwTable}\", \"{$tupID}\", \"{$usr}\" );";
+		$sql	= "INSERT INTO pw2Usr ( `TblName`, `pwID`, `pwUsrName` ) "
+					.	"VALUES ( \"{$pwTable}\", \"{$tupID}\", \"{$usr}\" );";
 		$rslt = $_db->query( $sql );
 		if ( $_db->errno ) {
 			if ( DEBUG ) {

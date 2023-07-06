@@ -15,7 +15,7 @@
 		$rpt = array();
         if ( strlen( $dbInfo['ID'] ) == 0 ) {
 			$tupID = null;
-			$sql = "INSERT INTO `sundayParam` ( `expHH`, `expMM` ) VALUE "
+			$sql = "INSERT INTO `sundayParam` ( `expHH`, `expMM` ) VALUES "
 				 . "( \"{$dbInfo['expHH']}\", \"{$dbInfo['expMM']}\" );";
 		} else {
 			$tupID = $dbInfo[ 'ID' ];
@@ -162,7 +162,7 @@
 		$_db->query("UNLOCK TABLES;");
 		if ( $rslt->num_rows > 0 ) return; // nothing to do
 		// Add it into inCareOf table, if not existent
-		$sql = "INSERT INTO `inCareOf` ( `UsrName` ) VALUE ( \"{$icoName}\" ) "
+		$sql = "INSERT INTO `inCareOf` ( `UsrName` ) VALUES ( \"{$icoName}\" ) "
 			 . "ON DUPLICATE KEY UPDATE `UsrName` = \"{$icoName}\";";
 		$_db->query("LOCK TABLES `inCareOf` WRITE;");
 		$_db->query( $sql );
