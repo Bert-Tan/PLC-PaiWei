@@ -74,8 +74,8 @@
 				SESS_LANG_CHN => "下載牌位列印",
 				SESS_LANG_ENG => "" ),
 			'alertMsg' => array (
-				SESS_LANG_CHN => "**** 除有特殊困難，牌位申請者須本人親自( 或由指定代表 ) 前來參加法會 ****",
-				SESS_LANG_ENG => "**** You or your designee shall be present in the retreat unless you have difficulties ****" )
+				SESS_LANG_CHN => "**** 牌位申請者須本人親自前來參加法會 ****",
+				SESS_LANG_ENG => "**** You shall be present in the retreat ****" )
 		);
 		return $htmlNames[ $what ][ $sessLang ];
 	} // function xLate();
@@ -120,6 +120,7 @@ $(document).ready(function() {
 	});
 
 	$(".tabMenu th").on( 'click', hdlr_tabClick );
+	$(".tabMenu th[data-tbl=Y001A]").off( 'click' );
 	$(".tabMenu th.future").unbind().on( 'click', futureAlert );
 
 	readSessParam(); //active coorresponding tab in readSessParam()
@@ -285,7 +286,7 @@ input[type=text] {
 				<th data-tbl="W001A_4"><?php echo xLate( 'pwW' ); ?></th>
 				<th data-tbl="DaPaiWei"><?php echo xLate( 'pwBIG' ); ?></th>
 				<th data-tbl="L001A"><?php echo xLate( 'pwL' ); ?></th>
-				<th data-tbl="Y001A"><?php echo xLate( 'pwY' ); ?></th>	
+				<th data-tbl="Y001A" style="pointer-events:none; color:gray"><?php echo xLate( 'pwY' ); ?></th>
 				<th data-tbl="D001A"><?php echo xLate( 'pwD' ); ?></th>
 				<?php if ($sessType != SESS_TYP_USR && $icoName == 'PLC') { ?>
 				<th data-tbl="DaPaiWeiRed"><?php echo xLate( 'pwBIGRED' ); ?>
