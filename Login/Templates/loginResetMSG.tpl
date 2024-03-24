@@ -27,6 +27,7 @@
 	謝謝<br/><br/>淨土念佛堂
 	</span>
 	<!-- END ChnTxt -->
+	</div>
 </BODY>
 </HTML>
 <!-- END msgBlock -->

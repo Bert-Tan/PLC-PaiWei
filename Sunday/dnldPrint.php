@@ -132,7 +132,7 @@
 		$subject = $pdfTitle;		
 
 		//send email
-		plcSendEmailAttachment( $libraryTo, $cc, $subject, $msg, null, $attachments, true);
+		plcSendEmailAttachment( $libraryTo, $cc, null, null, $subject, $msg, null, $attachments, true);
 	}
 	
 

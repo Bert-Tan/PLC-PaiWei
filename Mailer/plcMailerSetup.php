@@ -75,10 +75,10 @@ if ( $_os == 'DAR' || $_os == 'WIN' ) {
 $mail->setFrom( FROM_ADDR, APPEARANCE );
 $mail->addReplyTo( REPLY_TO, APPEARANCE );
 
-function plcSendEmailAttachment( $to, $cc, $subject, $html_msg, $txt_msg, $attachments, $dkim ) {
+function plcSendEmailAttachment( $to, $cc, $bcc, $replyTo, $subject, $html_msg, $txt_msg, $attachments, $dkim ) {
     global $mail;
     /*
-     * $to, $cc:    Array of recipients. each element has ( <email>, <name> )
+     * $to, $cc, $bcc, $replyTo:    Array of recipients. each element has ( <email>, <name> )
      * $html_msg:   Message Body in HTML format
      * $txt_msg:    Message Body in plain text format
      * $attachments: Array of files, each element has ( <full path to the file>, <filename to appear> )
@@ -104,6 +104,22 @@ function plcSendEmailAttachment( $to, $cc, $subject, $html_msg, $txt_msg, $attac
     if ( ( $cc != null ) && ( sizeof( $cc ) > 0 ) ) {
         foreach ( $cc as $recipient ) {
             $mail->addCC( $recipient[ 'email' ], $recipient[ 'name' ] );     // Add a recipient; name is optional
+        }
+    }
+
+    // Bcc Recipients
+    if ( ( $bcc != null ) && ( sizeof( $bcc ) > 0 ) ) {
+        foreach ( $bcc as $recipient ) {
+            $mail->addBCC( $recipient[ 'email' ], $recipient[ 'name' ] );     // Add a recipient; name is optional
+        }
+    }
+
+    // Reply-to Recipients
+    if ( ( $replyTo != null ) && ( sizeof( $replyTo ) > 0 ) ) {
+        // remove default reply-to and use user-defined reply-tos
+        $mail->clearReplyTos();
+        foreach ( $replyTo as $recipient ) {
+            $mail->addReplyTo( $recipient[ 'email' ], $recipient[ 'name' ] );     // Add a recipient; name is optional
         }
     }
     
@@ -135,6 +151,6 @@ function plcSendEmailAttachment( $to, $cc, $subject, $html_msg, $txt_msg, $attac
 } // function plcSendEmailAttachment()
 
 // test call to the function
-    //plcSendEmailAttachment( $prtTo, null, $testSubject, $testHtml_Msg, $testTxt_Msg, $testAttachments, false );
+    //plcSendEmailAttachment( $prtTo, null, null, null, $testSubject, $testHtml_Msg, $testTxt_Msg, $testAttachments, false );
    
 ?>

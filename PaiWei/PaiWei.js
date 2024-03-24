@@ -929,10 +929,12 @@ function updBtnHdlr() {
 /**********************************************************
  * Event Handler - When an Valid Button is clicked       *
  **********************************************************/
-function validBtnHdlr() {	
+function validBtnHdlr() {
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? 
-								"往生日期（年-月-日）必須屆於 " + _pwPlqDate + "(含) 及 " + _rtrtDate + "(不含) 之間。"  
-							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format";
+								"往生日期（年-月-日）必須屆於 " + _pwPlqDate + "(含) 及 " + _rtrtDate + "(不含) 之間。"
+								+ "如往生日期已超過一年，請自行將此牌位加入「往生者蓮位」。"
+							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format. "
+							    + "You may add a \"Deceased\" name plaque instead.";
 
 	var tblFlds = {};
 	var validBtn = $(this);
@@ -992,8 +994,10 @@ function dataChgHdlr() {	// on 'blur' handler
 	var oldV = $(this).attr("data-oldv").trim();
 	var emptyText = ( _sessLang == SESS_LANG_CHN ) ? "該項牌位資料不應空白！" : "This field shall not be empty!";
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? 
-								"往生日期（年-月-日）必須屆於 " + _pwPlqDate + "(含) 及 " + _rtrtDate + "(不含) 之間。"  
-							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format";
+								"往生日期（年-月-日）必須屆於 " + _pwPlqDate + "(含) 及 " + _rtrtDate + "(不含) 之間。"
+								+ "如往生日期已超過一年，請自行將此牌位加入「往生者蓮位」。"
+							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format. "
+							    + "You may add a \"Deceased\" name plaque instead.";
 	var fldN = $(this).attr("data-fldn");
 	var thisRow = $(this).closest("tr");	
 	

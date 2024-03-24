@@ -91,7 +91,7 @@
 							'name'	=> ''
 						)
 					);
-					$subject = 'Login/Password Recovery 恢復登錄密碼';
+					$subject = 'Login Password Recovery 恢復登錄密碼';
 					$txtBlock = ( $useChn ) ? "ChnTxt" : "EngTxt";
 					$dateTxt = date(DateFormatLtr);
 					if ( $useChn ) $dateTxt = mmddyyyy2Chn( $dateTxt );
@@ -106,7 +106,7 @@
 					$msg->setVariable("reset_param", $href_param );
 					$msg->parse("{$txtBlock}");
 					$msg->parse("msgBlock");
-					if ( plcSendEmailAttachment( $toMe, null, $subject, $msg->get(), null, null, true ) ) {
+					if ( plcSendEmailAttachment( $toMe, null, null, null, $subject, $msg->get(), null, null, true ) ) {
 						$msgTxt = ( $useChn)
 							? "恢復密碼的網鍊已經送到您註冊過的郵電地址，請由那網鍊處重新設立密碼。<br/><b><font color=\"blue\">**請同時檢查您的垃圾郵箱**</font></b>"
 							: "A link was sent to your registered email address; please follow it to reset.<br/><b><font color=\"blue\">**Please also check your Junk Mailbox**</font></b>)";
