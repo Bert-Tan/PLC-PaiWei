@@ -931,10 +931,8 @@ function updBtnHdlr() {
  **********************************************************/
 function validBtnHdlr() {
 	var errText = ( _sessLang == SESS_LANG_CHN ) ? 
-								"往生日期（年-月-日）必須屆於 " + _pwPlqDate + "(含) 及 " + _rtrtDate + "(不含) 之間。"
-								+ "如往生日期已超過一年，請自行將此牌位加入「往生者蓮位」。"
-							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format. "
-							    + "You may add a \"Deceased\" name plaque instead.";
+								"往生日期（年-月-日）必須屆於 " + _pwPlqDate + "(含) 及 " + _rtrtDate + "(不含) 之間。"  
+							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format";
 
 	var tblFlds = {};
 	var validBtn = $(this);
