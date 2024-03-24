@@ -1,13 +1,39 @@
 <?php
 	require_once( '../pgConstants.php' );
 	require_once( 'dbSetup.php' );
+	require_once( 'PaiWei_DBfuncs.php' );
 	require_once( 'ChkTimeOut.php' );
+	require_once( 'plcMailerSetup.php' );
 	
 	$_sessType = $_SESSION[ 'sessType' ];
 	$_sessLang = $_SESSION[ 'sessLang' ];
 	$_sessUsr = $_SESSION[ 'usrName' ];	
 	$_icoName = isset($_SESSION[ 'icoName' ]) ? $_SESSION[ 'icoName' ] : null;
 	$useChn = ( $_SESSION[ 'sessLang' ] == SESS_LANG_CHN );	
+
+function _dbName_2_emailName ( $_dbName ) { // used to construct email msg (with both Chinese and English)
+	$_emailNames = array (
+		'C001A' => '祈福消災牌位 Well Blessing Name Plaques',
+		'W001A_4' => '往生者蓮位 Deceased Name Plaques',
+		'L001A' => '歷代祖先蓮位 Ancestors Name Plaques',
+		'Y001A' => '累劫冤親債主蓮位 Karmic Creditors Name Plaques',
+		'D001A' => '地基主蓮位 Site Guardians Name Plaques',
+		'DaPaiWei' => '(一年內)往生者蓮位 Recently Deceased Name Plaques',
+		'DaPaiWeiRed' => '紅色大牌位',
+		'C_Name' => '佛光祝照受益者 Well-blessing Recipient\'s Name',
+		'W_Title' => '往生親友稱謂 Title of the Deceased',
+		'W_Name' => '往生親友姓名 Full Name of the Deceased',
+		'deceasedDate' => '往生日期 Deceased Date',
+		'R_Title' => '陽上啟請人稱謂 Requestor\'s Title',
+		'W_Requestor' => '陽上啟請人姓名 Requestor\'s Full Name',
+		'L_Name' => '祖先姓氏 Ancestor\'s Surname',
+		'L_Requestor' => '後代子孫啟請人 Decendent Requestor\'s Full Name',
+		'Y_Requestor' => '陽上有緣啟請人 Requestor\'s Full Name',
+		'D_Name' => '地基主神靈所在地 Address of the Site Being Blessed by the Site Guardians',
+		'D_Requestor' => '陽上啟請人 Requestor\'s Full Name'
+	);
+	return ( $_emailNames[ $_dbName ] );
+} // _dbName_2_emailName()
 
 
 function readInCareOf() { // returns a string reflecting a <select> html element
@@ -59,7 +85,7 @@ function readInCareOf() { // returns a string reflecting a <select> html element
 
 function readUsrPwRows() { // returns a string reflecting PaiWei dashboard data rows
     global $_db;
-	$_lastRtrtDate = $_SESSION[ 'lastRtrtDate' ];
+	$lastRtrtDate = $_SESSION[ 'lastRtrtDate' ];
 
 	$tblNames = array(	'C001A', 'W001A_4', 'DaPaiWei', 'L001A', 'Y001A', 'D001A', 'DaPaiWeiRed' );
 	$pwTotal = array(	'C001A' => 0, 'W001A_4' => 0, 'DaPaiWei' => 0, 'L001A' => 0, 'Y001A' => 0,
@@ -103,7 +129,7 @@ function readUsrPwRows() { // returns a string reflecting PaiWei dashboard data 
 			$_db->query("LOCK TABLES `pw2Usr` READ, `${tblName}` READ;");
 			$sql = "SELECT COUNT(*) FROM `pw2Usr` INNER JOIN `${tblName}` ON `pw2Usr`.`pwID` = `${tblName}`.`ID` "
 				 . "WHERE `pw2Usr`.`pwUsrName` = \"${icoName}\" AND `pw2Usr`.`TblName` = \"${tblName}\" "
-				 . "AND `${tblName}`.`timestamp` > \"${_lastRtrtDate}\";";
+				 . "AND `${tblName}`.`timestamp` > \"${lastRtrtDate}\";";
 			$rslt = $_db->query($sql);
 			$_db->query("UNLOCK TABLES;");
 			$pwValidCt = $rslt->fetch_row()[0];
@@ -273,7 +299,7 @@ function readRtData( $dbInfo ) {
 
 function setIcoName( $icoName ) {
 	global $_db, $_SESSION;
-	$adminEmail = $_SESSION[ 'usrEmail' ];
+	$adminUsrEmail = $_SESSION[ 'usrEmail' ];
 
 	// first check existence in the Usr table
 	$_db->query("LOCK TABLES `Usr` READ;");
@@ -283,8 +309,8 @@ function setIcoName( $icoName ) {
 	if ( $rslt->num_rows > 0 ) return; // nothing to do
 
 	// Add it into inCareOf table, if not exist; update email if exist
-	$sql = "INSERT INTO `inCareOf` ( `UsrName`, `UsrEmail` ) VALUES ( \"{$icoName}\", \"{$adminEmail}\" ) "
-		 . "ON DUPLICATE KEY UPDATE `UsrEmail` = \"{$adminEmail}\";";
+	$sql = "INSERT INTO `inCareOf` ( `UsrName`, `UsrEmail` ) VALUES ( \"{$icoName}\", \"{$adminUsrEmail}\" ) "
+		 . "ON DUPLICATE KEY UPDATE `UsrEmail` = \"{$adminUsrEmail}\";";
 	$_db->query("LOCK TABLES `inCareOf` WRITE;");
 	$_db->query( $sql );
 	$_db->query("UNLOCK TABLES;");
@@ -292,7 +318,7 @@ function setIcoName( $icoName ) {
 
 function updateIcoEmail( $icoName ) {
 	global $_db, $_SESSION;
-	$adminEmail = $_SESSION[ 'usrEmail' ];
+	$adminUsrEmail = $_SESSION[ 'usrEmail' ];
 
 	// first check existence in the Usr table
 	$_db->query("LOCK TABLES `Usr` READ;");
@@ -302,14 +328,14 @@ function updateIcoEmail( $icoName ) {
 	if ( $rslt->num_rows > 0 ) return; // nothing to do
 
 	// update ico email
-	$sql = "UPDATE `inCareOf` SET `UsrEmail` = \"{$adminEmail}\" WHERE `UsrName` = \"{$icoName}\";";
+	$sql = "UPDATE `inCareOf` SET `UsrEmail` = \"{$adminUsrEmail}\" WHERE `UsrName` = \"{$icoName}\";";
 	$_db->query("LOCK TABLES `inCareOf` WRITE;");
 	$_db->query( $sql );
 	$_db->query("UNLOCK TABLES;");
 } // function updateIcoEmail()
 
 /**********************************************************
- *				For dashboardRedirect			   			  *
+ *				For dashboardRedirect			   	  	  *
  **********************************************************/
 function dashboardRedirect( $dbInfo ) {
 	global $_SESSION;
@@ -350,6 +376,232 @@ function readSessParam( ) {
 	return $rpt;	
 } // function readSessParam()
 
+
+function emailInvalidPw( $icoName, $tblNames, $pwExpires, $rtReason, $rtEvent, &$emailContent, &$responseMsg ) {
+	global $_db, $_SESSION;
+	$adminUsrEmail = $_SESSION[ 'usrEmail' ];
+	$adminUsrName = $_SESSION[ 'usrName' ];
+	$lastRtrtDate = $_SESSION[ 'lastRtrtDate' ];
+
+	$msg = new HTML_Template_IT("./Templates");
+	$msg->loadTemplatefile("invalidPwMSG.tpl", true, true);
+	$msg->setCurrentBlock("msgBlock");
+	$msg->setCurrentBlock("Txt");
+	$msg->setVariable("usrName", $icoName );
+	
+	$rtNameChn = ''; $rtNameEng = ''; $year = date('Y');
+	if ( $rtEvent == 'RespectAncestors' ) { // 祭祖法會
+		if ( strpos($rtReason, '清明') !== false ) {
+			$rtNameChn = $year . ' 清明'. '祭祖法會';
+			$rtNameEng = $year . ' QingMing Festival'. ' Retreat';
+		}
+		elseif ( strpos($rtReason, '中元') !== false ) {
+			$rtNameChn = $year . ' 中元'. '祭祖法會';
+			$rtNameEng = $year . ' ZhongYuan Festival'. ' Retreat';
+		}
+		else {
+			//$rtNameChn = $year . ' sdsd'. '祭祖法會';
+			$rtNameChn = $year . ' '. str_replace('祭祖', '', $rtReason). '祭祖法會';
+			$rtNameEng = $year . ' Paying Respect to Ancestors'. ' Retreat';
+		}			
+	}
+	elseif ( $rtEvent == 'ThriceYearning' ) {  // 三時繫念法會
+		if ( strpos($rtReason, '週年') !== false ) {
+			$rtNameChn = $year . ' '. str_replace('淨土念佛堂及圖書館', '', $rtReason). '三時繫念法會';
+			$rtNameEng = $year . ' Anniversary Celebration'. ' Thrice Yearning Retreat';
+		}
+		else {
+			$rtNameChn = $year . ' '. str_replace('淨土念佛堂及圖書館', '', $rtReason). '三時繫念法會';
+			$rtNameEng = $year . ' Thrice Yearning Retreat';
+		}
+	}
+	$msg->setVariable("rtNameChn", $rtNameChn );
+
+	$msg->setVariable("rtNameEng", $rtNameEng );
+	$msg->setVariable("pwExpireDate", $pwExpires );
+	$msg->setVariable("adminUsrEmail", $adminUsrEmail );
+	$msg->parse("Txt");
+
+	$totalInvalidPwCt = 0;
+	foreach ( $tblNames as $tblName ) {
+		$fldN = getPaiWeiTblFlds( $tblName );
+
+		// query INVALID paiwei
+		$_db->query("LOCK TABLES `pw2Usr` READ, `${tblName}` READ;");
+		$sql = "SELECT `${tblName}`.* FROM `pw2Usr` INNER JOIN `${tblName}` ON `pw2Usr`.`pwID` = `${tblName}`.`ID` "
+			 . "WHERE `pw2Usr`.`pwUsrName` = \"${icoName}\" AND `pw2Usr`.`TblName` = \"${tblName}\" "
+			 . "AND `${tblName}`.`timestamp` <= \"${lastRtrtDate}\";";
+		$rslt = $_db->query($sql);		
+		$rows = $rslt->fetch_all( MYSQLI_ASSOC );
+		$invalidPwCt = $rslt->num_rows;
+		$rslt->free();
+		$_db->query("UNLOCK TABLES;");
+
+		$totalInvalidPwCt += $invalidPwCt;
+		if ( $invalidPwCt == 0 ) continue;
+
+		$msg->setCurrentBlock("PaiWei");
+		$msg->setVariable("tblName", _dbName_2_emailName( $tblName ) );
+
+		$msg->setCurrentBlock("hdr_row");
+		//$fldN = getPaiWeiTblFlds( $tblName );
+		foreach ( $fldN as $key ) {
+			// 'ID' and 'timestamp' fields are not visible to the users
+			if ( $key == 'ID' || $key == 'timestamp' ) continue;
+			
+			$msg->setCurrentBlock("hdr_cell");
+			$msg->setVariable("fldName", _dbName_2_emailName( $key ) );
+    		$msg->parse("hdr_cell");	
+		}
+		$msg->parse("hdr_row");
+
+		foreach ( $rows as $row ) {
+			$msg->setCurrentBlock("data_row");
+
+			foreach ( $row as $key => $val ) {
+				// 'ID' and 'timestamp' fields are not visible to the users
+				if ( $key == 'ID' || $key == 'timestamp' ) continue;				
+
+				$msg->setCurrentBlock("data_cell");
+				$msg->setVariable("fldValue", $val);
+				$msg->parse("data_cell");				
+			} // row
+			$msg->parse("data_row");		  
+		} // $rows
+
+		$msg->parse("PaiWei");
+	} // tblNames
+	$msg->parse("msgBlock");
+	
+	/*
+	// print email for test only
+	$emailContent = $msg->get();
+	return false;
+	*/
+
+	if ( $totalInvalidPwCt == 0 ) {
+		$responseMsg = "${icoName} 已驗證 所有 牌位！\n\n請刷新網頁獲取最新的牌位匯總信息。";
+		return false;
+	}
+
+	/* send email */
+	// query icoEmail
+	$icoEmail = '';
+	$_db->query("LOCK TABLES `Usr` READ;");
+	$sql = "SELECT `UsrEmail` FROM `Usr` WHERE `UsrName` = \"${icoName}\";";
+	$rslt = $_db->query($sql);
+	$_db->query("UNLOCK TABLES;");
+	if ( $rslt->num_rows > 0 ) {
+		$icoEmail = $rslt->fetch_all( MYSQLI_NUM )[0][0];
+	}
+	else {
+		$_db->query("LOCK TABLES `inCareOf` READ;");
+		$sql = "SELECT `UsrEmail` FROM `inCareOf` WHERE `UsrName` = \"${icoName}\";";
+		$rslt = $_db->query($sql);
+		$_db->query("UNLOCK TABLES;");
+		if ( $rslt->num_rows > 0 ) {
+			$icoEmail = $rslt->fetch_all( MYSQLI_NUM )[0][0];
+		}
+	}
+
+	$to = array(
+		array (
+			'email' => $icoEmail,
+			'name'	=> $icoName
+		)
+	);
+	$cc = array(
+		array (
+			'email' => $adminUsrEmail,
+			'name'	=> $adminUsrName
+		)
+	);
+	$replyTo = array(
+		array (
+			'email' => $adminUsrEmail,
+			'name'	=> $adminUsrName
+		)
+	);
+	$subject = '驗證牌位 VALIDATE Name Plaques';
+	$html_msg = $msg->get();
+	
+	if ( plcSendEmailAttachment( $to, $cc, null, $replyTo, $subject, $html_msg, null, null, true ) ) {
+		return true;
+	}
+	return false;
+} // function emailInvalidPw
+
+/**********************************************************
+ *				For notifyInvalidPw			   		   	  *
+ **********************************************************/
+function notifyInvalidPw( $dbInfo ) {
+	$rpt = array (); $emailContent = null; $responseMsg = null;
+
+	if ( emailInvalidPw( $dbInfo[ 'icoName' ], $dbInfo[ 'tblNames' ], $dbInfo[ 'pwExpires' ], $dbInfo[ 'rtReason' ], $dbInfo[ 'rtEvent' ], $emailContent, $responseMsg ) )
+		$responseMsg = "告知 " . $dbInfo[ 'icoName' ] . " 郵件發送完畢！";
+	else {		
+		if ( $responseMsg == null ) {
+		/* $responseMsg == null: email sent failed
+		 * otherwise: dashboard invalidPWCt out-of-date, NOT "email sent failed"
+		*/
+			$responseMsg = "告知 " . $dbInfo[ 'icoName' ] . " 失敗！\n\n請重試或通過其它方式告知。";
+		}
+	}
+	
+	if ( $emailContent != null ) $rpt[ 'printEmailContent' ] = $emailContent;
+	if ( $responseMsg != null ) $rpt[ 'responseMsg' ] = $responseMsg;
+	return $rpt;
+} // function notifyInvalidPw()
+
+/**********************************************************
+ *				For notifyAllInvalidPw			   		  *
+ **********************************************************/
+function notifyAllInvalidPw( $dbInfo ) {
+	$rpt = array (); $emailContent = null; $responseMsg = null;
+	$successCount = 0; $outofdateCount = 0; $failedIcoNames = array ();
+
+	// usrNames who have INVALID paiwei
+	$icoNames = $dbInfo[ 'icoNames' ];
+	// each element is an array of pwTblNames (with INVALID paiwei) for the coresponding usrName (i.e. element key)
+	$invalidPwTblNames = $dbInfo[ 'tblNames' ];
+	
+	foreach ( $icoNames as $icoName ) {
+		$emailContent = null; $responseMsg = null;		
+
+		if ( emailInvalidPw( $icoName, $invalidPwTblNames[ $icoName ], $dbInfo[ 'pwExpires' ], $dbInfo[ 'rtReason' ], $dbInfo[ 'rtEvent' ], $emailContent, $responseMsg ) )
+			$successCount ++;
+		else {
+			if ( $responseMsg == null ) {
+				/* $responseMsg == null: email sent failed
+		 		 * otherwise: dashboard invalidPWCt out-of-date, NOT "email sent failed"
+				*/								
+				array_push( $failedIcoNames, $icoName);
+			}
+			else $outofdateCount ++;
+		}			
+	}
+
+	$emailContent = null; $responseMsg = null;
+	if ( $successCount > 0 ) { $responseMsg = "告知 $successCount 位同修郵件發送完畢！"; }
+	if ( $outofdateCount > 0 ) {
+		$txt = "$outofdateCount 位同修已驗證 所有 牌位！\n請刷新網頁獲取最新的牌位匯總信息。";
+		if ( $responseMsg == null ) $responseMsg = $txt;
+		else $responseMsg .= "\n\n". $txt;
+		
+	}
+	if ( ! empty ( $failedIcoNames ) ) {
+		$txt = "告知以下 ". count( $failedIcoNames ) ." 位同修失敗！請重試或通過其它方式告知。";
+		if ( $responseMsg == null ) $responseMsg = $txt;
+		else $responseMsg .= "\n\n". $txt;
+		foreach ( $failedIcoNames as $failedIcoName ) { $responseMsg .= "\n" . $failedIcoName; }
+	}
+
+	if ( $responseMsg == null ) $responseMsg = "請刷新網頁獲取最新的牌位匯總信息！";
+	$rpt[ 'responseMsg' ] = $responseMsg;
+	return $rpt;
+} // function notifyAllInvalidPw()
+
+
 /**********************************************************
  *					Main Functional Code		    	   *
  **********************************************************/
@@ -372,6 +624,12 @@ switch ( $_dbReq ) {
 	case 'dashboardRedirect':
 		echo json_encode( dashboardRedirect( $_dbInfo ), JSON_UNESCAPED_UNICODE );
 		exit;
+	case 'notifyInvalidPw':
+		echo json_encode( notifyInvalidPw( $_dbInfo ), JSON_UNESCAPED_UNICODE );
+		break;
+	case 'notifyAllInvalidPw':
+		echo json_encode( notifyAllInvalidPw( $_dbInfo ), JSON_UNESCAPED_UNICODE );
+		break;
 } // switch()
 
 $_db->close();

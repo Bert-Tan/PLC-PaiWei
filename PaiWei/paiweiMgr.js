@@ -1,15 +1,18 @@
 /**********************************************************
- *                    Global variables                    *
- **********************************************************/
- var SESS_LANG_CHN = 1;	// These variables are used as CONSTANTS
- var SESS_TYP_USR = 0;
- var SESS_TYP_MGR = 1;
- var SESS_TYP_WEBMASTER = 2;
+*                    Global variables                    *
+**********************************************************/
+var SESS_LANG_CHN = 1;	// These variables are used as CONSTANTS
+var SESS_TYP_USR = 0;
+var SESS_TYP_MGR = 1;
+var SESS_TYP_WEBMASTER = 2;
  
- var _sessUsr = null, _sessType = null, _sessLang = null;
+var _sessUsr = null, _sessType = null, _sessLang = null;
+var _pwExpires = null, _rtReason = null, _rtEvent = null;
 
 var _activeTab = null;
 var _alertUnsaved = '未保存的更動會被丟棄！';
+
+var _pwTblNames = [ "C001A", "W001A_4", "DaPaiWei", "L001A", "Y001A", "D001A", "DaPaiWeiRed" ];
 
 function isJSON( str ) {
 	try {
@@ -126,7 +129,9 @@ function loadPaiWeiDashboard() {
                 $("table.dataRows td[data-tblN]").on( 'click', hdlr_dataCellClick );
                 $("#icoInputBtn").on( 'click', hdlr_icoInput );
 				$("#icoSelBtn").on( 'click', hdlr_icoSelect );	
-				$("#pwStatusSel").on( 'change', hdlr_pwStatusSelChg ); // bind to the select change handler							
+				$("#pwStatusSel").on( 'change', hdlr_pwStatusSelChg ); // bind to the select change handler
+				$(".notifyBtn").on( 'click', hdlr_notifyBtn );		
+				$("#notifyAllBtn").on( 'click', hdlr_notifyAllBtn );				
             }, // SUCCESS handler
             error: function ( jqXHR, textStatus, errorThrown ) {
                 alert( "loadPaiWeiDashboard()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
@@ -242,6 +247,127 @@ function adjustPaiweiCount( dataRows, sumRow, pwCtAttr, pwShtAttr ) {
 	});
 } // adjustPaiweiCount()
 
+/******************************************************
+ * Event Handler - When a 'notifyBtn' is clicked      *
+ ******************************************************/
+function hdlr_notifyBtn() {
+	var current = new Date();
+	var year = current.getFullYear();
+	var month = `0${current.getMonth() + 1}`.slice(-2);
+	var day = `0${current.getDate()}`.slice(-2);
+	var today = `${year}-${month}-${day}`;
+	if ( today > _pwExpires ) {
+		alert ( "牌位申請已過期，\n或本念佛堂近期內沒有法會；\n「告知」功能暫停！" );
+		return;
+	}
+
+	var thisRow = $( this ).closest( "tr" );
+	var icoName = thisRow.find( "td:first" ).attr( "data-icoName" );
+
+	// get pwTbls (1-D array), which have INVALID paiwei, for the user
+	var invalidPwTblNamesTheUsr = _pwTblNames.slice();
+	// remove pwTbls which don't have INVALID paiwei
+	thisRow.find( "td[pw-invalid-ct='0']" ).each( function() {
+		invalidPwTblNamesTheUsr.splice( invalidPwTblNamesTheUsr.indexOf( $( this ).attr( "data-tblN" ) ), 1 );
+	} );
+	
+	var ajaxData = {}, dbInfo = {};
+	dbInfo[ 'icoName' ] = icoName;
+	dbInfo[ 'tblNames' ] = invalidPwTblNamesTheUsr; // pwTbls which have INVALID paiwei	
+	dbInfo[ 'pwExpires' ] = _pwExpires;
+	dbInfo[ 'rtReason' ] = _rtReason;
+	dbInfo[ 'rtEvent' ] = _rtEvent;
+    ajaxData[ 'dbReq' ] = 'notifyInvalidPw';
+	ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
+    $.ajax({
+		url: './ajax-pwMgr.php',
+		method: 'post',
+		data: ajaxData,
+        success: function ( rsp ) {
+            var rspX = isJSON( rsp );
+            if ( ! rspX ) { alert ( rsp ); return false; }
+            for ( X in rspX ) {
+                switch (X) {
+                case 'responseMsg':
+                    alert( rspX[X] );
+                    return;
+				case 'printEmailContent': // print email for test only
+					var x = window.open();
+					x.document.write( rspX[X] );
+					return;
+                } // switch();
+            }
+        }, // SUCCESS HANDLER
+        error: function ( jqXHR, textStatus, errorThrown ) {
+            alert( "hdlr_notifyBtn()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+        } // error handler
+    }); // AJAX Call
+} // hdlr_notifyBtn()
+
+/***********************************************************
+ * Event Handler - When the 'notifyAllBtn' is clicked      *
+ ***********************************************************/
+function hdlr_notifyAllBtn() {
+	var current = new Date();
+	var year = current.getFullYear();
+	var month = `0${current.getMonth() + 1}`.slice(-2);
+	var day = `0${current.getDate()}`.slice(-2);
+	var today = `${year}-${month}-${day}`;
+	if ( today > _pwExpires ) {
+		alert ( "牌位申請已過期，\n或本念佛堂近期內沒有法會；\n「全部告知」功能暫停！" );
+		return;
+	}
+
+	// usrNames who have INVALID paiwei
+	var icoNames = [];
+	// each element is an array of pwTblNames (with INVALID paiwei) for the coresponding usrName (i.e. element key)
+	var invalidPwTblNames = {};
+
+	// fulfill 'icoNames' and 'invalidPwTblNames'
+	var pwDataRows = $( this ).closest( "tr" ).siblings();
+	var invalidPwDataRows = pwDataRows.find( "input.notifyBtn:enabled" ).closest( "tr" );	
+	invalidPwDataRows.each( function() {
+		var icoName = $( this ).find( "td:first" ).attr( "data-icoName" );
+		var invalidPwTblNamesPerUsr = _pwTblNames.slice();
+
+		// remove pwTbls which don't have INVALID paiwei
+		$( this ).find( "td[pw-invalid-ct='0']" ).each( function() {
+			invalidPwTblNamesPerUsr.splice( invalidPwTblNamesPerUsr.indexOf( $( this ).attr( "data-tblN" ) ), 1 );
+		} );
+
+		icoNames.push( icoName );
+		invalidPwTblNames[ icoName ] = invalidPwTblNamesPerUsr;
+	} );	
+
+	var ajaxData = {}, dbInfo = {};
+	dbInfo[ 'icoNames' ] = icoNames;
+	dbInfo[ 'tblNames' ] = invalidPwTblNames;	
+	dbInfo[ 'pwExpires' ] = _pwExpires;
+	dbInfo[ 'rtReason' ] = _rtReason;
+	dbInfo[ 'rtEvent' ] = _rtEvent;
+    ajaxData[ 'dbReq' ] = 'notifyAllInvalidPw';
+	ajaxData[ 'dbInfo' ] = JSON.stringify( dbInfo );
+    $.ajax({
+		url: './ajax-pwMgr.php',
+		method: 'post',
+		data: ajaxData,
+        success: function ( rsp ) {
+            var rspX = isJSON( rsp );
+            if ( ! rspX ) { alert ( rsp ); return false; }
+            for ( X in rspX ) {
+                switch (X) {
+                case 'responseMsg':
+                    alert( rspX[X] );
+                    return;
+                } // switch();
+            }
+        }, // SUCCESS HANDLER
+        error: function ( jqXHR, textStatus, errorThrown ) {
+            alert( "hdlr_notifyAllBtn()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
+        } // error handler
+    }); // AJAX Call
+} // hdlr_notifyAllBtn()
+
 
 function loadRtMgrForm() {
 	$("#tabDataFrame").load("./Templates/rtMgrForm.htm", function() {
@@ -275,10 +401,12 @@ function loadRtMgrForm() {
 					case 'pwExpires':
 						$("input[name=pwExpires]").val( rspX[X] );
 						$("input[name=pwExpires]").attr( 'value', rspX[X] );
+						_pwExpires = rspX[X];
 						break;
 					case 'rtEvent':
 						$("select[name=rtEvent]").val( rspX[X] );
 						$("select[name=rtEvent]").attr( 'value', rspX[X] );
+						_rtEvent = rspX[X];
 						break;
 					case 'lastRtrtDate':
 						$("input[name=lastRtrtDate]").val( rspX[X] );
@@ -291,6 +419,7 @@ function loadRtMgrForm() {
 					case 'rtReason':
 						$("input[name=rtReason]").val( rspX[X] );
 						$("input[name=rtReason]").attr( 'value', rspX[X] );
+						_rtReason = rspX[X];
 						break;
 					case 'rtVenerable':
 						$("input[name=rtVenerable]").val( rspX[X] );
