@@ -117,15 +117,11 @@ function readSessParam() {
 			else {
 				$(".tabMenu th[data-tbl=ug]").trigger( 'click' );
 			}
-
-			if ( _sessType == SESS_TYP_USR ) {
-				confirmRetreat(); //trigger the retreat confirm dialog
-			}			
 		}, // Success Handler
 		error: function (jqXHR, textStatus, errorThrown) {
 			alert( "readSessParam()\tError Status:\t"+textStatus+"\t\tMessage:\t\t"+errorThrown+"\n" );
 		} // End of ERROR Handler							
-	}); // AJAX call	
+	}); // AJAX call
 } // readSessParam()
 
 function leapYear( yr ) {
@@ -636,12 +632,10 @@ function validAllBtnHdlr() {
 function insBtnHdlr() {
 	var insBtn = $(this);
 	var editBtnText = ( _sessLang == SESS_LANG_CHN ) ? '更改' : 'Edit';
-	var delBtnText = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Delete';
-	var dupBtnText = ( _sessLang == SESS_LANG_CHN ) ? '複製' : 'Duplicate';
+	var delBtnText = ( _sessLang == SESS_LANG_CHN ) ? '刪除' : 'Del';
+	var dupBtnText = ( _sessLang == SESS_LANG_CHN ) ? '複製' : 'Dup';
 	var validBtnText = ( _sessLang == SESS_LANG_CHN ) ? '驗證' : 'Validate';
 	var alertText = ( _sessLang == SESS_LANG_CHN ) ? "請輸入完整的牌位資料" : "Please enter complete plaque data";
-	var wTitleAlertText = ( _sessLang == SESS_LANG_CHN ) ? "請選擇 往生親友稱謂" : "Please select the Title of the Deceased";
-	var rTitleAlertText = ( _sessLang == SESS_LANG_CHN ) ? "請選擇 陽上啟請人稱謂" : "Please select the Requestor's Title";
 	var myEditBtns = '<input class="editBtn" type="button" value="' + editBtnText + '">&nbsp;&nbsp;&nbsp;' +
 					 '<input class="delBtn" type="button" value="' + delBtnText + '"><br><br>' +
 					 '<input class="validBtn" type="button" value="' + validBtnText + '" disabled>&nbsp;&nbsp;&nbsp;' + 
@@ -649,8 +643,6 @@ function insBtnHdlr() {
 	var thisRow = $(this).closest("tr");
 	var cellsChanged = thisRow.find("input[data-changed=true]");
 	var noDropdown = ( thisRow.find("select").length == 0 );
-	var wTitleSelection = thisRow.find("select[data-fldn=W_Title]").find(":selected").text();
-	var rTitleSelection = thisRow.find("select[data-fldn=R_Title]").find(":selected").text();
 	var recV = null;
 	var rName = null;
 	var tblFlds = {};
@@ -660,15 +652,7 @@ function insBtnHdlr() {
 		alert( alertText );
 		return;
 	}
-	if ( wTitleSelection == "往生者稱謂" || wTitleSelection == "Deceased Title" ) {
-		alert( wTitleAlertText );
-		return;
-	}
-	if ( rTitleSelection == "請選您的稱謂" || rTitleSelection == "Your Title" ) {
-		alert( rTitleAlertText );
-		return;
-	}
-
+	
 	switch ( _tblName ) { // taking care of 叩薦 or 敬薦; combine it with the Requestor's Name
 	case 'W001A_4':
 	case 'DaPaiWei':
@@ -752,11 +736,6 @@ function insBtnHdlr() {
 						lastTd.find(".delBtn").on( 'click', delBtnHdlr ); // bind to the Del click handler
 						lastTd.find(".dupBtn").on( 'click', dupBtnHdlr ); // bind to the Dup click handler
 						lastTd.find(".validBtn").on( 'click', validBtnHdlr ); // bind to the Valid click handler
-						// disable the 'Edit' and 'Duplicate' buttons of W001A_4 and DaPaiWei for regular users
-						if ( ( _tblName == "W001A_4" || _tblName == "DaPaiWei" ) && ( _sessType == SESS_TYP_USR ) ) {
-							lastTd.find(".editBtn").prop( "disabled", true );
-							lastTd.find(".dupBtn").prop( "disabled", true );
-						}
 						alert( alertMsg );
 						return;							
 					case 'errCount':
@@ -956,16 +935,11 @@ function validBtnHdlr() {
 								+ "如往生日期已超過一年，請自行將此牌位加入「往生者蓮位」。"
 							: "Deceased Date must be between " + _pwPlqDate + " and " + _rtrtDate + " in YYYY-MM-DD format. "
 							    + "You may add a \"Deceased\" name plaque instead.";
-	var restristedPaiWeiText = ( _sessLang == SESS_LANG_CHN ) ?
-							"申請牌位僅限定為參與者及配偶的直系親屬及兄弟姐妹"
-							: "The name plaque must belong to the requestor's immediate family member.";
 
 	var tblFlds = {};
 	var validBtn = $(this);
 	var thisRow = $(this).closest("tr");
 	_ajaxData = {}; _dbInfo = {};
-	var wTitleCell = thisRow.find("input[data-fldn=W_Title]");
-	var rTitleCell = thisRow.find("input[data-fldn=R_Title]");
 
 	// DaPaiWei and checking deceased Date (within 12 months)
 	if (_tblName == "DaPaiWei") {		
@@ -973,13 +947,6 @@ function validBtnHdlr() {
 		if ( !chkDate( deceasedDate ) ) {
 			alert( errText );			
 			return;			
-		}
-	}
-	// Restrict W001A_4 and DaPaiWei to be the requestor's immediate family member
-	if ( _tblName == "W001A_4" || _tblName == "DaPaiWei" ) {
-		if ( _wtList.includes(wTitleCell.val()) == false || _rtList.includes(rTitleCell.val()) == false ) {
-			alert( restristedPaiWeiText );
-			return;
 		}
 	}
 
@@ -1168,15 +1135,9 @@ function ready_edit() {
 	_validBtn.on( 'click', validBtnHdlr );
 	_validAllBtn.on( 'click', validAllBtnHdlr );
 
-	// disable ValidAll button for W001A_4, DaPaiWei and DaPaiWei_Red
-	if ( _tblName == "W001A_4" || _tblName == "DaPaiWei" || _tblName == "DaPaiWeiRed" ) {
+	// disable ValidAll button for DaPaiWei and DaPaiWei_Red
+	if ( _tblName == "DaPaiWei" || _tblName == "DaPaiWeiRed" ) {
 		_validAllBtn.prop( "disabled", true );
-	}
-
-	// disable all 'Edit' and 'Duplicate' buttons of W001A_4 and DaPaiWei for regular users
-	if ( ( _tblName == "W001A_4" || _tblName == "DaPaiWei" ) && ( _sessType == SESS_TYP_USR ) ) {
-		_editBtns.prop( "disabled", true );
-		_dupBtns.prop( "disabled", true );
 	}
 } // ready_edit()
 
@@ -1264,46 +1225,3 @@ function enableTooltip() {
 	$(document).tooltip({content: hoverMsg});
 	$(document).tooltip("enable");
 } // enableTooltip()
-
-/**********************************************************
- * let the user confirm the current retreat               *
- **********************************************************/
-function confirmRetreat() {
-	var confirmText = ( _sessLang == SESS_LANG_CHN ) ?
-						"現在本館只接受清明祭祖法會的牌位申請<br>" + 
-						"(5 月份館慶三時繫念法會的牌位，請於 4 月 3 日之後再申請)<br><br>" + 
-						"請問您會親自來參加清明祭祖法會嗎？" :
-						"(The Name Plaque application for the 20th Anniversary Retreat begin April 3, 2023)<br>" + 
-						"Qingming Festival Retreat Name Plaque applicants must be physically present in the retreat.<br><br>" + 
-						"Are you joining the retreat yourself?";
-	var yesText = ( _sessLang == SESS_LANG_CHN ) ? "是" : "Yes";
-	var noText = ( _sessLang == SESS_LANG_CHN ) ? "否" : "No";
-	var logoutText = ( _sessLang == SESS_LANG_CHN ) ? "謝謝！ 您將撤出！" : "Thank you! You will logout!";
-
-	$( "body" ).append( "<div id='dialog-confirm'>" + confirmText + "</div>" );
-	$( "#dialog-confirm" ).dialog({
-		draggable: false,
-		resizable: false,
-		height: "auto",
-		width: 460,
-		modal: true,
-		buttons:
-            [
-              {
-				text: yesText,
-				click: function() {
-					$( this ).dialog( "close" );
-				}
-              },
-			  {
-				text: noText,
-				click: function() {
-					$( this ).dialog( "close" );
-					alert( logoutText );
-					location.replace( "../Login/Logout.php" );
-				}
-              }
-            ]
-	  });
-	  $(".ui-dialog-titlebar").hide();
-} // confirmRetreat()

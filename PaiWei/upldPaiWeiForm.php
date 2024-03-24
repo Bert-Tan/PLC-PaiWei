@@ -80,7 +80,7 @@ input[type=submit] {
 						<option value="W001A_4">超薦往生超過一年的親友</option>
 						<option value="DaPaiWei">超薦一年(12個月)之內往生的親友</option>
 						<option value="L001A">超薦歷代祖先</option>
-						<!-- <option value="Y001A">超薦累劫冤親債主</option> -->
+						<option value="Y001A">超薦累劫冤親債主</option>
 						<option value="D001A">超薦地基主</option>
 						<?php if ($sessType != SESS_TYP_USR && $icoName == 'PLC') { ?>
 						<option value="DaPaiWeiRed">紅色大牌位</option>
@@ -132,7 +132,7 @@ input[type=submit] {
 					  <option value="W001A_4">Deceased</option>
 				    <option value="DaPaiWei">Recently Deceased (within 12 months)</option>
 				    <option value="L001A">Ancestors</option>
-				    <!-- <option value="Y001A">Karmic Creditors</option> -->
+				    <option value="Y001A">Karmic Creditors</option>
 				    <option value="D001A">Site Guardians</option>
 					<?php if ($sessType != SESS_TYP_USR && $icoName == 'PLC') { ?>
 					<option value="DaPaiWeiRed">RED DaPaiWei</option>
