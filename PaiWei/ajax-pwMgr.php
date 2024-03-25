@@ -522,7 +522,7 @@ function emailInvalidPw( $icoName, $tblNames, $pwExpires, $rtReason, $rtEvent, &
 			'name'	=> $adminUsrName
 		)
 	);
-	$subject = '驗證牌位 VALIDATE Name Plaques';
+	$subject = '驗證牌位 VALIDATE Name Plaques -- '. $icoName;
 	$html_msg = $msg->get();
 	
 	if ( plcSendEmailAttachment( $to, $cc, null, $replyTo, $subject, $html_msg, null, null, true ) ) {
