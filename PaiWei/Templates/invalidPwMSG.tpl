@@ -32,7 +32,7 @@ th, td {
 	<div>
 	<br/><span class="smallGray">(English readers please scroll down)<br/><br/></span>
 	
-	淨土念佛堂的網站用戶 <<i>{usrName}</i>>：<br/><br/>
+	淨土念佛堂的網站用戶 <i>{usrName}</i>：<br/><br/>
 
 	本念佛堂即將舉行的 <i>{rtNameChn}</i>，您有<b>尚未驗證</b>的牌位，請見列表於下。<br/><br/>
 
@@ -45,7 +45,7 @@ th, td {
 	阿彌陀佛！<br/>
 	淨土念佛堂法會牌位組<br/><br/><br/>
 	
-	Dear Pure Land Center User with login ID <<i>{usrName}</i>>,<br/><br/>
+	Dear Pure Land Center User with login ID <i>{usrName}</i>,<br/><br/>
 	
 	For the upcoming <i>{rtNameEng}</i>, you still have <b>UNVALIDATED</b> Name Plaques listed below.<br/><br/>
 	
