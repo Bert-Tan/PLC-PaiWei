@@ -20,30 +20,48 @@ th, td {
 	font-weight: bold;
 	color: red;
 }
+.smallGray {
+	font-size: 0.9em;
+	color: gray;
+}
 </style>
 </HEAD>
 <BODY> 
 	<div style="margin-left: 15px; font-size: 1.1em; font-family: arial;">
 	<!-- BEGIN Txt -->
 	<div>
-	淨土念佛堂的網站用戶 <i>{usrName}</i>：<br/>
-	Dear Pure Land Center User <i>{usrName}</i>,<br/><br/>
+	<br/><span class="smallGray">(English readers please scroll down)<br/><br/></span>
+	
+	淨土念佛堂的網站用戶 <i>{usrName}</i>：<br/><br/>
 
-	本念佛堂即將舉行的 <i>{rtNameChn}</i>，您有<b>未驗證</b>的牌位，請見下面的列表。<br/>
-	For the incoming <i>{rtNameEng}</i>, you have <b>UNVALIDATED</b> Name Plaques that are listed below.<br/><br/>
+	本念佛堂即將舉行的 <i>{rtNameChn}</i>，您有<b>尚未驗證</b>的牌位，請見列表於下。<br/><br/>
 
-	本念佛堂<span class="boldRed">不會</span>列印<b>未驗證</b>的牌位，請您務必于 <span class="boldRed">{pwExpireDate}</span> 前登録 <a href="https://www.amitabhalibrary.org/admin/PaiWei/paiweiWrapper.php?l=c" target="_blank">該網站</a> 驗證或修改牌位。<br/>
-	The Center will <span class="boldRed">NOT</span> print <b>UNVALIDATED</b> Name Plaques. Please use <a href="https://www.amitabhalibrary.org/admin/PaiWei/paiweiWrapper.php?l=e" target="_blank">this link</a> to validate or edit name plaques by <span class="boldRed">{pwExpireDate}</span>.<br/><br/>
+	本念佛堂法會<span class="boldRed">不會</span>列印供奉<b>未驗證</b>的牌位，請您務必於 <span class="boldRed">{pwExpireDate}</span> 之前登録 <a href="https://www.amitabhalibrary.org/admin/PaiWei/paiweiWrapper.php?l=c" target="_blank">該網站</a> 驗證或修改牌位。<br/><br/>
+	
+	如有問題，請與本念佛堂的義工 <a href="mailto:{adminUsrEmail}" target="_blank">{adminUsrEmail}</a> 聯絡。<br/><br/>
 
-	如有問題，請與本念佛堂的義工 <a href="mailto:{adminUsrEmail}" target="_blank">{adminUsrEmail}</a> 聯絡。<br/>
-	Please contact the name-plaque administrator via <a href="mailto:{adminUsrEmail}" target="_blank">{adminUsrEmail}</a> if having problems.<br/><br/>
+	謝謝。<br/><br/>
 
 	阿彌陀佛！<br/>
-	Amituofo!<br/><br/><br/>
+	淨土念佛堂法會牌位組<br/><br/><br/>
+	
+	Dear Pure Land Center User with login ID <i>{usrName}</i>,<br/><br/>
+	
+	For the upcoming <i>{rtNameEng}</i>, you still have <b>UNVALIDATED</b> Name Plaques listed below.<br/><br/>
+	
+	The center will <span class="boldRed">NOT</span> print and offer <b>UNVALIDATED</b> Name Plaques in the retreat. Please use <a href="https://www.amitabhalibrary.org/admin/PaiWei/paiweiWrapper.php?l=e" target="_blank">this link</a> to validate or edit them by <span class="boldRed">{pwExpireDate}</span>.<br/><br/>
+		
+	Please contact the administrator, email: <a href="mailto:{adminUsrEmail}" target="_blank">{adminUsrEmail}</a>, for any questions.<br/><br/>
+
+	Thank you.<br/><br/>
+
+	Amituofo!<br/>
+	Retreat Administration of Pure Land Center<br/><br/><br/>
 	</div>
 	<!-- END Txt -->
 
-	<!-- BEGIN PaiWei -->    
+	<span class="smallGray">--------------- 未驗證的牌位 UNVALIDATED Name Plaques ---------------<br/><br/></span>
+	<!-- BEGIN PaiWei -->	
 	<b>{tblName}:</b><br/>
 	<table>      
 		<!-- BEGIN hdr_row -->
@@ -63,13 +81,7 @@ th, td {
 	</table>
 	<br/>
 	<!-- END PaiWei -->
-
-	
 	<br/>
-	<span style="color: gray;">
-	淨土念佛堂<br/>
-	Pure Land Center<br/>
-	</span>
 	</div>		
 </BODY>
 </HTML>
