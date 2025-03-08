@@ -94,7 +94,7 @@ function readUsrPwRows() { // returns a string reflecting PaiWei dashboard data 
 							'D001A' => 0, 'DaPaiWeiRed' => 0, 'grandTotal' => 0 );
 	$pwInvalidTotal = array(	'C001A' => 0, 'W001A_4' => 0, 'DaPaiWei' => 0, 'L001A' => 0, 'Y001A' => 0,
 								'D001A' => 0, 'DaPaiWeiRed' => 0, 'grandTotal' => 0 );
-	$pwCtPerSheet = array(	'C001A' => 6, 'W001A_4' => 6, 'DaPaiWei' => 1, 'L001A' => 6, 'Y001A' => 6,
+	$pwCtPerSheet = array(	'C001A' => 5, 'W001A_4' => 6, 'DaPaiWei' => 1, 'L001A' => 6, 'Y001A' => 6,
 							'D001A' => 6, 'DaPaiWeiRed' => 1 );
 	
 	// 'PLC' user: list as the first user

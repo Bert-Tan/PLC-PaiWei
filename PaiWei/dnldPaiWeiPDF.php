@@ -9,7 +9,7 @@
 	$paiweiTable = $_POST [ 'dbTblName' ]; //PaiWei type
 	
 	//pdf configuration settings
-	$pageSize = 'LEGAL'; $unit = 'in'; //inch
+	$pageSize = ''; $unit = 'in'; //inch
 	$pageOrientation = ''; $topMargin = 0; $leftMargin = 0; $rightMargin = 0;
 	$pdfTitle = '';
 	//paiwei image
@@ -52,13 +52,22 @@
 	//multiple lines X position adjust settings
 	$mulLineXadjustPaiwei = 0; $mulLineXadjustReq = 0; $mulLineXadjustAddress = 0;	
 	
-	//set PDF page orientation
+	//set PDF page size and page orientation
 	switch ($paiweiTable) {
 		case 'DaPaiWei':
-		case 'DaPaiWeiRed':
+			$pageSize = 'LEGAL';
 			$pageOrientation='P';
-			break;	
+			break;
+		case 'DaPaiWeiRed':
+			$pageSize = 'LETTER';
+			$pageOrientation='P';
+			break;
+		case 'C001A':
+			$pageSize = 'LETTER';
+			$pageOrientation='L';
+			break;
 		default:
+			$pageSize = 'LEGAL';
 			$pageOrientation='L';
 			break;
 	}
@@ -204,6 +213,16 @@
 		
 		switch ($paiweiTable) {
 			case 'C001A':
+				$topMargin=0.7; $leftMargin=0.1; $rightMargin=0.1; $pdfTitle='祈福消災牌位';
+				$imgPath='img/XiaoPaiWei.png'; $imgWidth=2.3; $imgHeight=7.5; $imgType='PNG';
+				$paiweiNumPerPage=5; $prefixPaiwei='佛光注照'; $suffixPaiwei='長生祿位';
+				$fontSizePaiwei=18; $fontSizePrefixPaiwei=20; $fontStylePaiwei='B';
+				$rotateXadjustPaiwei=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
+				$textXadjustPaiwei=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
+				$xIniPaiwei=9.77; $xStepPaiwei=2.15; $yPrefixPaiwei=2.0; $ySuffixPaiwei=5.5; $yTopPaiwei=3.2; $yBottomPaiwei=5.45;
+				$mulLineXadjustPaiwei=0.13;
+				/*
+				// LEGAL paper size settings
 				$topMargin=0.7; $leftMargin=0.2; $rightMargin=0.2; $pdfTitle='祈福消災牌位';
 				$imgPath='img/XiaoPaiWei.png'; $imgWidth=2.42; $imgHeight=7.5; $imgType='PNG';
 				$paiweiNumPerPage=6; $prefixPaiwei='佛光注照'; $suffixPaiwei='長生祿位';
@@ -211,7 +230,8 @@
 				$rotateXadjustPaiwei=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
 				$textXadjustPaiwei=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
 				$xIniPaiwei=12.64; $xStepPaiwei=2.265; $yPrefixPaiwei=2.0; $ySuffixPaiwei=5.5; $yTopPaiwei=3.2; $yBottomPaiwei=5.45;
-				$mulLineXadjustPaiwei=0.13;	
+				$mulLineXadjustPaiwei=0.13;
+				*/
 				break;			
 			case 'D001A':
 				$topMargin=0.7; $leftMargin=0.2; $rightMargin=0.2; $pdfTitle='地基主蓮位';
@@ -291,6 +311,20 @@
 			case 'DaPaiWeiRed':
 				$topMargin=0.7; $leftMargin=0.0; $rightMargin=0.0; $pdfTitle='紅色大牌位'; 
 				$imgPath='img/DaPaiWei_Red.jpg'; $paiweiNumPerPage=1; $imgType='JPG'; $imgAlign='C';//center align
+				$imgWidth=4.2; $imgHeight=9.7; //TCPDF calculate image width and height automatically
+				$fontStylePaiwei='B'; $fontStyleReq='B'; $suffixReq='';
+				$fontSizePaiwei=22; $fontSizeReq=16; $fontSizePrefixReq=18;
+				$rotateXadjustPaiwei=1.0*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
+				$textXadjustPaiwei=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
+				$rotateXadjustReq=1.05*$pdf->GetStringWidth('G', $EnglishFont, $fontStyleReq, $fontSizeReq, false);
+				$textXadjustReq=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStyleReq, $fontSizeReq, false);			
+				$xIniPaiwei=4.2; $xStepPaiwei=0; $yTopPaiwei=4.1; $yBottomPaiwei=6.5;					
+				$xIniReq=2.75; $xStepReq=0; $yPrefixReq=6.2; $ySuffixReq=10.4; $yTopReq=6.85; $yBottomReq=10.35;
+				$mulLineXadjustPaiwei=0.19; $mulLineXadjustReq=0.14;
+				/*
+				// LEGAL paper size settings
+				$topMargin=0.7; $leftMargin=0.0; $rightMargin=0.0; $pdfTitle='紅色大牌位'; 
+				$imgPath='img/DaPaiWei_Red.jpg'; $paiweiNumPerPage=1; $imgType='JPG'; $imgAlign='C';//center align
 				$imgWidth=0; $imgHeight=0; //TCPDF calculate image width and height automatically
 				$fontStylePaiwei='B'; $fontStyleReq='B'; $suffixReq='';
 				$fontSizePaiwei=24; $fontSizeReq=18; $fontSizePrefixReq=20;
@@ -301,6 +335,7 @@
 				$xIniPaiwei=4.2; $xStepPaiwei=0; $yTopPaiwei=5.35; $yBottomPaiwei=8.25;					
 				$xIniReq=2.75; $xStepReq=0; $yPrefixReq=6.2; $ySuffixReq=10.4; $yTopReq=6.85; $yBottomReq=10.35;
 				$mulLineXadjustPaiwei=0.19; $mulLineXadjustReq=0.14;
+				*/
 				break;
 		}		
 	}
@@ -402,7 +437,7 @@
 			}
 		}
 
-		$_db->close();		
+		$_db->close();
 	}	
 	
 	//get query SQL statement
