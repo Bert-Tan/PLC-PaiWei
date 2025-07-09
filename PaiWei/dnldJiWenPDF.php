@@ -13,6 +13,9 @@
 	$rtEvent = $_POST[ 'rtEvent' ];
 	$rtrtDate = ''; $rtTemple;  $rtReason = ''; $rtVenerable = ''; $rtZhaiZhu = ''; $rtShouDu = '';
 
+	//Chinese Character: use traditional Chinese or simplified Chinese characters
+	$useTradChnChar = $_POST[ 'ChineseCharacter' ] == 'TraditionalChinese' ? true : false;	
+
 	//retreat information
 	// the value of $rtName could be '清明', '中元', or 'xx週年館慶'
 	$rtName = ''; $rtYear = 0; $rtMonth = 0; $rtDay = 0;
@@ -232,13 +235,14 @@
 		global $imgDaqing, $imgYaqing;
 		global $xAdjustDaqing, $yAdjustDaqing, $imgWidthDaqing, $imgHeightDaqing;
 		global $xAdjustYaing, $yAdjustYaqing, $imgWidthYaqing, $imgHeightYaqing;
+		global $useTradChnChar;
 		
 		$year = date("Y");
 		switch ($rtEvent) {
 			case 'RespectAncestors':
 				$pdfTitle=$year.$rtName.'祭文疏文';
-				$strTitleJiwen='   祭  文';
-				$strTitleShuwen='   祭 祖 追 薦 疏 文';
+				$strTitleJiwen = $useTradChnChar ? '   祭  文' : '   祭  文';
+				$strTitleShuwen = $useTradChnChar ? '   祭 祖 追 薦 疏 文' : '   祭 祖 追 荐 疏 文';
 				$pageSizeJiwen = 'LETTER'; $pageSizeShuwen = 'LETTER';
 				$fontSizeJiwen=24; $fontSizeShuwen=19;
 				$fontSizeTitleJiwen=28; $fontSizeTitleShuwen = 22;
@@ -321,9 +325,9 @@
 	//text with special print information (colored text or instrument symbol) are stroed in array
 	//special string format: SpedicalPrintInformation (English) + JiWen/ShuWen Text (Chinese/Number)
 	function setJizuJiwen() {		
-		global $rtName, $rtTemple, $rtYear, $rtMonth, $rtDay, $strJiwen;
+		global $rtName, $rtTemple, $rtYear, $rtMonth, $rtDay, $strJiwen, $useTradChnChar;
 
-		array_push($strJiwen, '  維');
+		array_push($strJiwen, $useTradChnChar ? '  維' : '  维');
 		
 		$str = array();
 		array_push($str, 'BLACK西元');
@@ -338,86 +342,86 @@
 		
 		$str = array();
 		array_push($str, 'BLUE'.$rtName.'  ');	
-		array_push($str, 'BLACK祭祖之日');
+		array_push($str, $useTradChnChar ? 'BLACK祭祖之日' : 'BLACK祭祖之日');
 		array_push($strJiwen, $str);
 
 		$str = array();
 		array_push($str, 'BLUE'.$rtTemple.' ');
-		array_push($str, 'BLACK執事、義工及同修等 ');	
+		array_push($str, $useTradChnChar ? 'BLACK執事、義工及同修等 ' : 'BLACK执事、义工及同修等 ');	
 		array_push($strJiwen, $str);	
 		
-		array_push($strJiwen, '四眾弟子 謹以香花蔬果  致祭於');	
-		array_push($strJiwen, '先亡尊親眷屬之靈 曰');	
-		array_push($strJiwen, '人生幻化 世緣無常  昔為親眷 今別存亡');	
-		array_push($strJiwen, '音容在目 懿行難忘  恩德未絕 思之心傷');	
-		array_push($strJiwen, '念諸眷親 各有宿因  緣業受報 聖劣攸分');	
-		array_push($strJiwen, '或修佛法 念一功純  蒙佛接引 諸善等倫');	
-		array_push($strJiwen, '或樂善施 敦品勵身  德積福厚 報生天人');	
-		array_push($strJiwen, '亦有癡迷 執著貪瞋  惑深業重 未脫苦津');	
-		array_push($strJiwen, '茲開法會 蓮眾同臻  誦經念佛 薦拔是申');	
-		array_push($strJiwen, '靈兮有知 應忻應聞  仗佛法力 永免沈淪');	
-		array_push($strJiwen, '爐香靄靄 清茗盈樽  鮮花郁郁 青果敷陳');	
-		array_push($strJiwen, '掬誠奉奠 來格來歆');	
-		array_push($strJiwen, '尚饗');	
+		array_push($strJiwen, $useTradChnChar ? '四眾弟子 謹以香花蔬果  致祭於' : '四众弟子 谨以香花蔬果  致祭于');	
+		array_push($strJiwen, $useTradChnChar ? '先亡尊親眷屬之靈 曰' : '先亡尊亲眷属之灵 曰');	
+		array_push($strJiwen, $useTradChnChar ? '人生幻化 世緣無常  昔為親眷 今別存亡' : '人生幻化 世缘无常  昔为亲眷 今别存亡');
+		array_push($strJiwen, $useTradChnChar ? '音容在目 懿行難忘  恩德未絕 思之心傷' : '音容在目 懿行难忘  恩德未绝 思之心伤');
+		array_push($strJiwen, $useTradChnChar ? '念諸眷親 各有宿因  緣業受報 聖劣攸分' : '念诸眷亲 各有宿因  缘业受报 圣劣攸分');
+		array_push($strJiwen, $useTradChnChar ? '或修佛法 念一功純  蒙佛接引 諸善等倫' : '或修佛法 念一功纯  蒙佛接引 诸善等伦');
+		array_push($strJiwen, $useTradChnChar ? '或樂善施 敦品勵身  德積福厚 報生天人' : '或乐善施 敦品励身  德积福厚 报生天人');
+		array_push($strJiwen, $useTradChnChar ? '亦有癡迷 執著貪瞋  惑深業重 未脫苦津' : '亦有痴迷 执着贪瞋  惑深业重 未脱苦津');
+		array_push($strJiwen, $useTradChnChar ? '茲開法會 蓮眾同臻  誦經念佛 薦拔是申' : '兹开法会 莲众同臻  诵经念佛 荐拔是申');
+		array_push($strJiwen, $useTradChnChar ? '靈兮有知 應忻應聞  仗佛法力 永免沈淪' : '灵兮有知 应忻应闻  仗佛法力 永免沉沦');
+		array_push($strJiwen, $useTradChnChar ? '爐香靄靄 清茗盈樽  鮮花郁郁 青果敷陳' : '炉香霭霭 清茗盈樽  鲜花郁郁 青果敷陈');
+		array_push($strJiwen, $useTradChnChar ? '掬誠奉奠 來格來歆' : '掬诚奉奠 来格来歆');
+		array_push($strJiwen, $useTradChnChar ? '尚饗' : '尚飨');
 	}
 	
 	//set ShuWen string of 祭祖 retreat
 	//text with special print information (colored text or instrument symbol) are stroed in array
 	//special string format: SpedicalPrintInformation (English) + JiWen/ShuWen Text (Chinese/Number)
 	function setJizuShuwen() {
-		global $rtName, $rtTemple, $rtVenerable, $rtYear, $rtMonth, $rtDay, $strShuwen;
+		global $rtName, $rtTemple, $rtVenerable, $rtYear, $rtMonth, $rtDay, $strShuwen, $useTradChnChar;
 				
-		array_push($strShuwen, '  一 誠 上 達');
-		array_push($strShuwen, '爰有娑婆世界南瞻部洲 美國 伊利諾州 瑞柏市');
+		array_push($strShuwen, $useTradChnChar ? '  一 誠 上 達' : '  一 诚 上 达');
+		array_push($strShuwen, $useTradChnChar ? '爰有娑婆世界南瞻部洲 美國 伊利諾州 瑞柏市' : '爰有娑婆世界南瞻部洲 美国 伊利诺州 瑞柏市');
 
 		$str = array();
 		array_push($str, 'BLUE'.$rtTemple.'  ');
 		if ( $rtVenerable != '' ) {
-			array_push($str, 'BLACK主修法事沙門  ');
+			array_push($str, $useTradChnChar ? 'BLACK主修法事沙門  ' : 'BLACK主修法事沙门  ');
 			array_push($str, 'BLUE'.$rtVenerable.' ');
 		}
 		else {
-			array_push($str, 'BLACK執事 義工及同修等 四眾弟子');
+			array_push($str, $useTradChnChar ? 'BLACK執事 義工及同修等 四眾弟子' : 'BLACK执事 义工及同修等 四众弟子');
 		}
 		array_push($strShuwen, $str);
 
 		if ( $rtVenerable != '' ) {
-			array_push($strShuwen, '暨 執事 義工及同修等 四眾弟子');
+			array_push($strShuwen, $useTradChnChar ? '暨 執事 義工及同修等 四眾弟子' : '暨 执事 义工及同修等 四众弟子');
 		}
 
-		array_push($strShuwen, '  合詞一心 至誠頂禮拜疏');
-		array_push($strShuwen, '本師釋迦牟尼佛');
-		array_push($strShuwen, '極樂世界阿彌陀佛');
-		array_push($strShuwen, '觀世音菩薩');
-		array_push($strShuwen, '大勢至菩薩');
-		array_push($strShuwen, '清淨大海眾菩薩');
-		array_push($strShuwen, '十方常住三寶');
-		array_push($strShuwen, '伽藍聖眾');
-		array_push($strShuwen, '護法神祇尊前');
-		array_push($strShuwen, '竊維大法垂世 十方咸被莊嚴');
-		array_push($strShuwen, '慈光涵虛 九有俱蒙攝受 會看濁惡穢土 遍開寶蓮');
-		array_push($strShuwen, '能教昏迷眾生 皆覩明炬 弟子眾等 無常幻相');
-		array_push($strShuwen, '聞法幸修 罔極之恩 應思追報');
+		array_push($strShuwen, $useTradChnChar ? '  合詞一心 至誠頂禮拜疏' : '  合词一心 至诚顶礼拜疏');
+		array_push($strShuwen, $useTradChnChar ? '本師釋迦牟尼佛' : '本师释迦牟尼佛');
+		array_push($strShuwen, $useTradChnChar ? '極樂世界阿彌陀佛' : '极乐世界阿弥陀佛');
+		array_push($strShuwen, $useTradChnChar ? '觀世音菩薩' : '观世音菩萨');
+		array_push($strShuwen, $useTradChnChar ? '大勢至菩薩' : '大势至菩萨');
+		array_push($strShuwen, $useTradChnChar ? '清淨大海眾菩薩' : '清净大海众菩萨');
+		array_push($strShuwen, $useTradChnChar ? '十方常住三寶' : '十方常住三宝');
+		array_push($strShuwen, $useTradChnChar ? '伽藍聖眾' : '伽蓝圣众');
+		array_push($strShuwen, $useTradChnChar ? '護法神祇尊前' : '护法神祇尊前');
+		array_push($strShuwen, $useTradChnChar ? '竊維大法垂世 十方咸被莊嚴' : '窃维大法垂世 十方咸被庄严');
+		array_push($strShuwen, $useTradChnChar ? '慈光涵虛 九有俱蒙攝受 會看濁惡穢土 遍開寶蓮' : '慈光涵虚 九有俱蒙摄受 会看浊恶秽土 遍开宝莲');
+		array_push($strShuwen, $useTradChnChar ? '能教昏迷眾生 皆覩明炬 弟子眾等 無常幻相' : '能教昏迷众生 皆睹明炬 弟子众等 无常幻相');
+		array_push($strShuwen, $useTradChnChar ? '聞法幸修 罔極之恩 應思追報' : '闻法幸修 罔极之恩 应思追报');
 		
 		$str = array();	
-		array_push($str, 'BLACK茲值本念佛堂  ');
+		array_push($str, $useTradChnChar ? 'BLACK茲值本念佛堂  ' : 'BLACK兹值本念佛堂  ');
 		array_push($str, 'BLUE'.$rtName.'  ');
-		array_push($str, 'BLACK祭祖之日');
+		array_push($str, $useTradChnChar ? 'BLACK祭祖之日' : 'BLACK祭祖之日');
 		if ( $rtVenerable != '' ) {
-			array_push($str, 'BLACK 淨掃會徑 廣邀學人');
+			array_push($str, $useTradChnChar ? 'BLACK 淨掃會徑 廣邀學人' : 'BLACK 净扫会径 广邀学人');
 		}		
 		array_push($strShuwen, $str);
 
 		if ( $rtVenerable == '' ) {
-		array_push($strShuwen, '淨掃會徑 廣邀學人');
+		array_push($strShuwen, $useTradChnChar ? '淨掃會徑 廣邀學人' : '净扫会径 广邀学人');
 		}
 		
-		array_push($strShuwen, '恭諷三藏之靈文 虔修百味之供養');
-		array_push($strShuwen, '各為過去父母 求超蓮邦 並祈當前眷親 同滅罪障');
-		array_push($strShuwen, '八德池上 芳名一例高標 二課誦中 實相全由密證');
-		array_push($strShuwen, '久賴智悲護念 定鑒此心 全將性命皈依 必成斯願');
-		array_push($strShuwen, '      謹此拜疏 伏乞');
-		array_push($strShuwen, '垂恩攝受    時維');
+		array_push($strShuwen, $useTradChnChar ? '恭諷三藏之靈文 虔修百味之供養' : '恭讽三藏之灵文 虔修百味之供养');
+		array_push($strShuwen, $useTradChnChar ? '各為過去父母 求超蓮邦 並祈當前眷親 同滅罪障' : '各为过去父母 求超莲邦 并祈当前眷亲 同灭罪障');
+		array_push($strShuwen, $useTradChnChar ? '八德池上 芳名一例高標 二課誦中 實相全由密證' : '八德池上 芳名一例高标 二课诵中 实相全由密证');
+		array_push($strShuwen, $useTradChnChar ? '久賴智悲護念 定鑒此心 全將性命皈依 必成斯願' : '久赖智悲护念 定鉴此心 全将性命皈依 必成斯愿');
+		array_push($strShuwen, $useTradChnChar ? '      謹此拜疏 伏乞' : '      谨此拜疏 伏乞');
+		array_push($strShuwen, $useTradChnChar ? '垂恩攝受    時維' : '垂恩摄受    时维');
 
 		$str = array();
 		array_push($str, 'BLACK公元');
@@ -428,18 +432,18 @@
 		array_push($str, 'BLUE   '.$rtDay.'   ');
 		array_push($str, 'BLACK日   ');
 		if ( $rtVenerable != '' ) {
-			array_push($str, 'BLACK主修法事沙門  ');
+			array_push($str, $useTradChnChar ? 'BLACK主修法事沙門  ' : 'BLACK主修法事沙门  ');
 			array_push($str, 'BLUE'.$rtVenerable.' ');
 		}
 		array_push($strShuwen, $str);
 
 		$str = array();
-		array_push($str, 'BLACK修齋弟子 ');
+		array_push($str, $useTradChnChar ? 'BLACK修齋弟子 ' : 'BLACK修斋弟子 ');
 		array_push($str, 'BLUE'.$rtTemple.'  ');
-		array_push($str, 'BLACK執事 義工及同修等');
+		array_push($str, $useTradChnChar ? 'BLACK執事 義工及同修等' : 'BLACK执事 义工及同修等');
 		array_push($strShuwen, $str);
 
-		array_push($strShuwen, '四眾弟子   上叩');
+		array_push($strShuwen, $useTradChnChar ? '四眾弟子   上叩' : '四众弟子   上叩');
 	}
 
 	//set BaiWen string of 三時繫念 retreat

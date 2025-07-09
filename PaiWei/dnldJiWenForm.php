@@ -32,7 +32,7 @@
 		</h2>		
 		<form action="dnldJiWenPDF.php" method="post" id="dnldJiWen" style="font-weight:bold; padding: 10px;" target="_blank">
 			<table class="dialog">
-				<thead><th>法會祭、疏文類別</th><th>下載列印指令</th></thead>
+				<thead><th>法會祭、疏文類別</th><th>正體、簡體 中文字</th></thead>
 				<tbody>
 					<tr>
 						<td>
@@ -42,8 +42,16 @@
 								<option value="ThriceYearning">三時繫念佛事法會</option>
 							</select>
 						</td>
-						<td style="text-align: center; vertical-align: middle; padding: 1vh 0px;">
-							<input type="submit" value="下  載" name="submit">
+						<td>
+							<select name="ChineseCharacter" style="font-size: 1.2em;" required>
+								<option value="TraditionalChinese" selected>正 體 中 文</option>
+								<option value="SimplifiedChinese">簡 體 中 文</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" style="text-align: center; vertical-align: middle; padding: 1vh 0px;">
+							<input type="submit" value="下 載 祭 文 與 疏 文" name="submit">
 						</td>
 					</tr>
 				</tbody>
