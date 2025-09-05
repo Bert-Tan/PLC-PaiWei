@@ -59,11 +59,13 @@
 			$pageOrientation='P';
 			break;
 		case 'DaPaiWeiRed':
-			$pageSize = 'LEGAL';
+			//$pageSize = 'LEGAL';
+			$pageSize = 'LETTER';
 			$pageOrientation='P';
 			break;
 		case 'C001A':
-			$pageSize = 'LEGAL';
+			//$pageSize = 'LEGAL';
+			$pageSize = 'LETTER';
 			$pageOrientation='L';
 			break;
 		default:
@@ -213,6 +215,7 @@
 		
 		switch ($paiweiTable) {
 			case 'C001A':
+				/*
 				// LEGAL paper size settings
 				$topMargin=0.7; $leftMargin=0.2; $rightMargin=0.2; $pdfTitle='祈福消災牌位';
 				$imgPath='img/XiaoPaiWei.png'; $imgWidth=2.42; $imgHeight=7.5; $imgType='PNG';
@@ -222,7 +225,7 @@
 				$textXadjustPaiwei=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
 				$xIniPaiwei=12.64; $xStepPaiwei=2.265; $yPrefixPaiwei=2.0; $ySuffixPaiwei=5.5; $yTopPaiwei=3.2; $yBottomPaiwei=5.45;
 				$mulLineXadjustPaiwei=0.13;
-				/*
+				*/
 				// LETTER paper size settings
 				$topMargin=0.7; $leftMargin=0.1; $rightMargin=0.1; $pdfTitle='祈福消災牌位';
 				$imgPath='img/XiaoPaiWei.png'; $imgWidth=2.3; $imgHeight=7.5; $imgType='PNG';
@@ -232,7 +235,6 @@
 				$textXadjustPaiwei=2.2*$pdf->GetStringWidth('G', $EnglishFont, $fontStylePaiwei, $fontSizePaiwei, false);
 				$xIniPaiwei=9.77; $xStepPaiwei=2.15; $yPrefixPaiwei=2.0; $ySuffixPaiwei=5.5; $yTopPaiwei=3.2; $yBottomPaiwei=5.45;
 				$mulLineXadjustPaiwei=0.13;
-				*/
 				break;			
 			case 'D001A':
 				$topMargin=0.7; $leftMargin=0.2; $rightMargin=0.2; $pdfTitle='地基主蓮位';
@@ -310,6 +312,7 @@
 				$mulLineXadjustPaiwei=0.19; $mulLineXadjustReq=0.14;
 				break;	
 			case 'DaPaiWeiRed':
+				/*
 				// LEGAL paper size settings
 				$topMargin=0.7; $leftMargin=0.0; $rightMargin=0.0; $pdfTitle='紅色大牌位'; 
 				$imgPath='img/DaPaiWei_Red.jpg'; $paiweiNumPerPage=1; $imgType='JPG'; $imgAlign='C';//center align
@@ -323,7 +326,7 @@
 				$xIniPaiwei=4.2; $xStepPaiwei=0; $yTopPaiwei=5.35; $yBottomPaiwei=8.25;					
 				$xIniReq=2.75; $xStepReq=0; $yPrefixReq=6.2; $ySuffixReq=10.4; $yTopReq=6.85; $yBottomReq=10.35;
 				$mulLineXadjustPaiwei=0.19; $mulLineXadjustReq=0.14;
-				/*
+				*/
 				// LETTER paper size settings
 				$topMargin=0.7; $leftMargin=0.0; $rightMargin=0.0; $pdfTitle='紅色大牌位'; 
 				$imgPath='img/DaPaiWei_Red.jpg'; $paiweiNumPerPage=1; $imgType='JPG'; $imgAlign='C';//center align
@@ -337,7 +340,6 @@
 				$xIniPaiwei=4.2; $xStepPaiwei=0; $yTopPaiwei=4.1; $yBottomPaiwei=6.5;					
 				$xIniReq=2.75; $xStepReq=0; $yPrefixReq=6.2; $ySuffixReq=10.4; $yTopReq=6.85; $yBottomReq=10.35;
 				$mulLineXadjustPaiwei=0.19; $mulLineXadjustReq=0.14;
-				*/
 				break;
 		}		
 	}
