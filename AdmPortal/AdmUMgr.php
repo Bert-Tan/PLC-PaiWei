@@ -163,7 +163,7 @@ input[type=button] {
 </style>
 </head>
 <body>
-	<?php require_once("./AdmPgHeader.htm"); ?>
+	<?php require_once("./AdmPgHeader.php"); ?>
 	<div class="dataArea">
 		<h1 class="dataTitle">淨土念佛堂用戶管理</h1>
 		<table class="dataHdr">

@@ -113,21 +113,25 @@
 		}
 
 		$libraryTo = array (
-			array (				
+			array (
 				'email' => 'library@amitabhalibrary.org',
 				'name' => 'Pure Land Center'
 			)
 		);	
 		$cc = array (
 			array (
-				'email' => 'bert.tan@comcast.net',
-				'name'  => '譚祖德'
+				'email' => 'library@amitabhalibrary.org',
+				'name' => 'Pure Land Center'
+			),
+			array (
+				'email' => 'lisu@lisutancpas.com',
+				'name'  => '林麗淑'
 			),
 			array (
 				'email' => 'chunhui.guo01@gmail.com',
 				'name'  => '郭春輝'
 			)
-		);	
+		);
 
 		$subject = $pdfTitle;		
 
